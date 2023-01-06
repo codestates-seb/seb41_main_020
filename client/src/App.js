@@ -6,3 +6,5 @@ function App() {
 }
 
 export default App;
+
+// axios, styled component, (RTK, zustand), tanstack-query, React Router
