@@ -37,6 +37,15 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
+    public static class GetResponse {
+        private Long id;
+        private String email;
+        private List<String> roles;
+        private List<MemberProfileDto> profile;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class PostResponse {
         private Long id;
         private String email;
@@ -47,8 +56,10 @@ public class MemberDto {
     @Getter
     @AllArgsConstructor
     public static class PatchResponse {
-
-
+        private String nickname;
+        private String address;
+        private String image;
+        private String introduction;
     }
 
 }
