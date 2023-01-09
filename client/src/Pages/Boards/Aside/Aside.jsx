@@ -6,17 +6,17 @@ import { primary, dtFontSize } from "../../../styles/mixins";
 const Side = styled.aside`
   background-color: black;
   display: flex;
-  border-right: 1px solid #e0e0e0;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   width: 20%;
+  height: 100vh;
 `;
 
 const SideList = styled.div`
   background-color: white;
   margin-top: 30px;
-  width: 90px;
+  width: 100px;
+  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -26,6 +26,8 @@ const SideList = styled.div`
     padding-top: 10px;
     padding-bottom: 10px;
     display: block;
+    font-weight: 600;
+    font-size: ${dtFontSize.medium};
   }
 
   .thisLinkNav {
@@ -34,8 +36,9 @@ const SideList = styled.div`
     color: ${primary.primary500};
     padding-top: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid ${primary.primary500};
-    font-size: ${dtFontSize.small};
+    border-bottom: 3px solid ${primary.primary500};
+    font-size: ${dtFontSize.medium};
+    font-weight: 600;
   }
 `;
 
