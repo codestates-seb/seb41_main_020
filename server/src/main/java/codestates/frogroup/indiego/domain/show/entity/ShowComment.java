@@ -28,7 +28,7 @@ public class ShowComment extends BaseTime {
     private Member member;
 
     @Column(nullable = false)
-    private Integer score;
+    private Double score;
 
     @Column(nullable = false)
     private String comment;
