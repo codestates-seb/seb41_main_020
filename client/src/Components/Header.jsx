@@ -14,31 +14,56 @@ const HeaderContainer = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  width: 210px;
+  width: 14%;
   height: max-content;
 
   img {
     margin-left: 19%;
   }
+
+  @media screen and (max-width: 1000px) {
+    img {
+      width: 130px;
+      margin-left: 10%;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const HeaderLinkContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   width: 45%;
   height: 62px;
+  margin-left: 5%;
 
   h2 {
-    width: max-content;
+    min-width: max-content;
+    height: max-content;
+    text-align: center;
+    height: 100%;
+    max-height: max-content;
     font-size: ${dtFontSize.medium};
-    padding: 0 4%;
+    padding: 3% 4%;
     margin-right: 1.4%;
     color: ${primary.primary500};
     font-weight: 800;
 
-    @media screen and (max-width: 1200px) {
+    &:hover {
+      background-color: ${primary.primary500};
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 80%;
       font-size: ${dtFontSize.small};
+      padding: 4% 4%;
     }
   }
 `;
@@ -95,7 +120,7 @@ export default function Header() {
   return (
     <HeaderContainer>
       <LogoContainer>
-        <img src={logo} alt="logo"></img>
+        <img width={153} src={logo} alt="logo"></img>
       </LogoContainer>
       <HeaderLinkContainer>
         <h2>티켓팅</h2>
