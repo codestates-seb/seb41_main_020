@@ -72,7 +72,7 @@ public class ArticleDto {
 
         private List<ArticleCommentDto.Response> articleComments;
 
-        private Long articleCommentCount;
+        private Integer articleCommentCount;
 
     }
 
