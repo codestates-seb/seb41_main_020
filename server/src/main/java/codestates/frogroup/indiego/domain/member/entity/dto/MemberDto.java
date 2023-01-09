@@ -22,8 +22,8 @@ public class MemberDto {
         private String password;
         @NotBlank(message = "이름은 공백이 아니어야 합니다.")
         private String nickname;
-        @NotBlank(message = "권한은 공백이 아니어야 합니다.")
-        private String role;
+        //@NotBlank(message = "권한은 공백이 아니어야 합니다.")
+        private String roles;
     }
 
     @Getter
