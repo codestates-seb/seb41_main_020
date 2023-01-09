@@ -32,7 +32,7 @@ public class ShowBoard {
 
     @Column(nullable = false)
     private LocalDate showAt; // 공연날짜
-    
+
     private String detailImage;
 
 }
