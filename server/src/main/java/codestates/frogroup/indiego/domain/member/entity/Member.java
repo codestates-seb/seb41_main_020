@@ -1,12 +1,11 @@
 package codestates.frogroup.indiego.domain.member.entity;
 
 import codestates.frogroup.indiego.domain.common.auditing.BaseTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -27,5 +26,25 @@ public class Member extends BaseTime {
 
     @Embedded
     private Profile profile;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
+    @Builder
+    public Member(Long id, String email, String password, Profile profile, String roles){
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.profile = profile;
+        this.roles.add(roles);
+    }
+
+    public void setPassword(String encryptedPassword){
+        this.password = encryptedPassword;
+    }
+
+    public void setRoles(List<String> roles){
+        this.roles = roles;
+    }
 
 }

@@ -40,7 +40,8 @@ public class StubData {
                 "종로구",
                 "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
                 "홍길동 입니다!"
-        )
+            ),
+            roles
     );
 
     public Article article = new Article(
