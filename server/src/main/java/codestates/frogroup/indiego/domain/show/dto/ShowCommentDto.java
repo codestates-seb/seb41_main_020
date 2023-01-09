@@ -1,12 +1,8 @@
 package codestates.frogroup.indiego.domain.show.dto;
 
-import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.show.entity.Show;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.persistence.*;
 
 public class ShowCommentDto {
 

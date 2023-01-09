@@ -1,7 +1,6 @@
 package codestates.frogroup.indiego.domain.member.entity.dto;
 
 
-import codestates.frogroup.indiego.domain.member.entity.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
