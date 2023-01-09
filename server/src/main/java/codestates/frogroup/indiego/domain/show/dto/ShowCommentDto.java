@@ -11,7 +11,7 @@ public class ShowCommentDto {
     public static class Post{
         private Long id;
         private ShowDto.Post show;
-        private Integer score;
+        private Double score;
         private String comment;
     }
 
@@ -21,7 +21,7 @@ public class ShowCommentDto {
     public static class Patch{
         private Long id;
         private ShowDto.Patch show;
-        private Integer score;
+        private Double score;
         private String comment;
     }
 
@@ -31,7 +31,7 @@ public class ShowCommentDto {
     public static class Response{
         private Long id;
         private ShowDto.Response show;
-        private Integer score;
+        private Double score;
         private String comment;
     }
 }
