@@ -28,7 +28,6 @@
           "curly" : "error",
           "eqeqeq" : "error",
           "func-name-matching" : "error",
-          "id-length" : "error",
           "init-declarations" : "error",
           "no-extra-boolean-cast" : "off"
     }
