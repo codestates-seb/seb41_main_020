@@ -14,6 +14,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,26 +24,36 @@ public class ShowDto {
     @Getter
     @AllArgsConstructor
     public static class Post{
-        private Long id;
         //ShowBoard
         //Board
+        @NotNull
         private String title;
+        @NotNull
         private String content;
         private String image;
+        @NotNull
         private String category;
         //board end
+        @NotNull
         private Integer price;
+        @NotNull
         private String address;
+        @NotNull
         private LocalDate expiredAt; // 만료날짜
+        @NotNull
         private LocalDate showAt; // 공연날짜
         private String detailImage;
         //showboard end
+        @NotNull
         private Double latitude;
+        @NotNull
         private Double longitude;
 
         //check
+        @NotNull
         private String status;
-        private Double scoreAverage; // 평균별점
+        //private double scoreAverage; // 평균별점
+        @NotNull
         private Integer total; // 정원
     }
 

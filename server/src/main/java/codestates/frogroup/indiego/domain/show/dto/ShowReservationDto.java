@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
+
 public class ShowReservationDto {
 
     @Getter
     @AllArgsConstructor
     public static class Post{
-        private Long id;
-
+        @NotNull
         private Integer showId;
-
+        @NotNull
         private Integer ticketCount;
     }
 
@@ -36,5 +37,6 @@ public class ShowReservationDto {
         private Integer showId;
 
         private Integer ticketCount;
+
     }
 }

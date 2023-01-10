@@ -4,13 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
+
 public class ShowCommentDto {
 
     @Getter
     @AllArgsConstructor
     public static class Post{
+        @NotNull
         private Long id;
-        private Double score;
+        @NotNull
+        private double score;
+        @NotNull
         private String comment;
     }
 
