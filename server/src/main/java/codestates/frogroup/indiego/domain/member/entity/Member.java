@@ -25,6 +25,7 @@ public class Member extends BaseTime {
     private String password;
 
     @Embedded
+    @Setter
     private Profile profile;
 
     @ElementCollection(fetch = FetchType.EAGER)

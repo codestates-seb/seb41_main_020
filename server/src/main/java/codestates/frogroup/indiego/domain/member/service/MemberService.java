@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -37,9 +36,10 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
-        Member findMember = findVerifiedMember(member.getId());
-        Member updatedMember = beanUtils.copyNonNullProperties(member, findMember);
+    public Member updateMember(Member member, Long memberId) {
+        Member findMember = findVerifiedMember(memberId);
+
+        Member updatedMember = beanUtils.copyNonNullProperties(member, findMember); // TODO: 사용 방법 알 필요가있음 //새로운 객체
 
         return memberRepository.save(updatedMember);
     }
