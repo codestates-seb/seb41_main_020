@@ -11,7 +11,7 @@ public class ShowReservationDto {
     public static class Post{
         private Long id;
 
-        private ShowDto.Post show;
+        private Integer showId;
 
         private Integer ticketCount;
     }
@@ -22,7 +22,7 @@ public class ShowReservationDto {
     public static class Patch{
         private Long id;
 
-        private ShowDto.Patch show;
+        private Integer showId;
 
         private Integer ticketCount;
     }
@@ -33,7 +33,7 @@ public class ShowReservationDto {
     public static class Response{
         private Long id;
 
-        private ShowDto.Response show;
+        private Integer showId;
 
         private Integer ticketCount;
     }

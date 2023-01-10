@@ -89,9 +89,9 @@ public class StubData {
 
     public Coordinate coordinate = new Coordinate(37.58481899015186, 127.00088309891716 );
 
-    public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 4.67, 30);
+    public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 0.00, 30);
 
-    public ShowComment showComment = new ShowComment(1L, show, member, show.getScoreAverage(), "감동적입니다.");
+    public ShowComment showComment = new ShowComment(1L, show, member, 5.0, "감동적입니다.");
 
     /**
      * Member Response
@@ -210,8 +210,9 @@ public class StubData {
     /**
      * Show Response
      */
-    public ShowDto.Response getShowResponse(){
-        return new ShowDto.Response(
+
+    public ShowDto.postResponse postShowResponse(){
+        return new ShowDto.postResponse(
                 show.getId(),
                 board.getTitle(),
                 board.getContent(),
@@ -229,12 +230,60 @@ public class StubData {
                 show.getTotal()
         );
     }
+    public ShowDto.Response getShowResponse(){
+        return new ShowDto.Response(
+                show.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getImage(),
+                board.getCategory(),
+                showBoard.getPrice(),
+                showBoard.getAddress(),
+                showBoard.getExpiredAt(),
+                showBoard.getShowAt(),
+                showBoard.getDetailImage(),
+                show.getCoordinate().getLatitude(),
+                show.getCoordinate().getLongitude(),
+                Show.ShowStatus.SALE.getStatus(),
+                show.getScoreAverage(),
+                show.getTotal(),
+                getShowCommentResponse()
+        );
+    }
+
+    public ShowDto.Response getPatchResponse(){
+        return new ShowDto.Response(
+                show.getId(),
+                board.getTitle(),
+                "개구리들의 락페스티벌에 초대합니다.",
+                board.getImage(),
+                "락",
+                showBoard.getPrice(),
+                showBoard.getAddress(),
+                showBoard.getExpiredAt(),
+                showBoard.getShowAt(),
+                showBoard.getDetailImage(),
+                show.getCoordinate().getLatitude(),
+                show.getCoordinate().getLongitude(),
+                Show.ShowStatus.SALE.getStatus(),
+                show.getScoreAverage(),
+                show.getTotal(),
+                getShowCommentResponse()
+        );
+    }
 
     public ShowCommentDto.Response getShowCommentResponse(){
         return new ShowCommentDto.Response(
                 show.getId(),
-                getShowResponse(),
-                show.getScoreAverage(),
+                5.0,
+                showComment.getComment()
+        );
+    }
+
+    public ShowCommentDto.Response getPatchShowCommentResponse(){
+        return new ShowCommentDto.Response(
+                show.getId(),
+                4.0,
                 showComment.getComment()
         );
     }
@@ -242,8 +291,16 @@ public class StubData {
     public ShowReservationDto.Response getShowReservationResponse(){
         return new ShowReservationDto.Response(
                 show.getId(),
-                getShowResponse(),
-                show.getTotal()
+                1,
+                1
+        );
+    }
+
+    public ShowReservationDto.Response getPatchShowReservationResponse(){
+        return new ShowReservationDto.Response(
+                show.getId(),
+                1,
+                2
         );
     }
 }
