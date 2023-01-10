@@ -30,7 +30,6 @@ public class LoginMemberIdResolver implements HandlerMethodArgumentResolver {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal == "anonymousUser") {
-
             throw new BusinessLogicException(ExceptionCode.ANONYMOUS_USER);
             //return -1L;
         }
