@@ -32,11 +32,10 @@ public class MemberService {
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
-        member.setPassword(encryptedPassword); // TODO: Security 활성화시 주석해제
+        member.setPassword(encryptedPassword);
 
         List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
         member.setRoles(roles);
-        // member.setRoles(member.getRoles()); // TODO: Security 활성화시 삭제 포인트
         createProfileImage(member);
 
         return memberRepository.save(member);
@@ -45,8 +44,10 @@ public class MemberService {
     // OAuth2 인증 완료후 회원가입 및 업데이트
     public Member createOauth2Member(OAuthUserProfile userProfile, List<String> roles) {
         Member member = memberRepository.findByEmail(userProfile.getEmail())
-                .map(m -> m.oauthUpdate(userProfile.getName(), userProfile.getEmail(), roles)) // 변경감지 Update
-                .orElse(userProfile.createOauth2Member(userProfile.getName(), userProfile.getEmail(),roles));
+                .map(m -> m.oauthUpdate(userProfile.getName(), userProfile.getEmail(),
+                        userProfile.getImage(), roles)) // DB에 회원이 있을때
+                .orElse(userProfile.createOauth2Member(userProfile.getName(),
+                        userProfile.getEmail(), userProfile.getImage(), roles)); // DB에 회원이 없을때
         return memberRepository.save(member);
     }
 

@@ -9,6 +9,7 @@ public enum OAuthAttributes {
         return new OAuthUserProfile(
                 (String) attributes.get("name"),
                 (String) attributes.get("email"),
+                (String) attributes.get("picture"),
                 String.valueOf(attributes.get("sub"))
         );
     }),
@@ -17,6 +18,7 @@ public enum OAuthAttributes {
         return new OAuthUserProfile(
                 (String) response.get("name"),
                 (String) response.get("email"),
+                (String) response.get("profile_image"),
                 String.valueOf(response.get("id"))
         );
     }),
@@ -26,6 +28,7 @@ public enum OAuthAttributes {
         return new OAuthUserProfile(
                 (String) profile.get("nickname"),
                 (String) kakaoAccount.get("email"),
+                (String) profile.get("profile_image_url"),
                 String.valueOf(attributes.get("id"))
         );
     });

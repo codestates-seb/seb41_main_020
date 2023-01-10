@@ -32,7 +32,6 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName(); // OAuth 로그인 시 키(pk)가 되는 값 (ex. reponse, id, sub)
         Map<String, Object> attributes = oAuth2User.getAttributes(); // OAuth 서비스의 유저 정보들
-
         OAuthUserProfile oAuthUserProfile = OAuthAttributes.extract(registrationId, attributes); // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
 
         List<String> roles = customAuthorityUtils.createRoles(Roles.PERFORMER.toString()); // OAuth2 사용자의 권한 강제 부여
