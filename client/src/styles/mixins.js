@@ -36,20 +36,20 @@ export const sub = {
 
 export const misc = {
   red: "#A02409",
+  lightred: "#D0310E",
   orange: "#F56700",
 };
 
 export const dtFontSize = {
-  xxlarge: "40px",
-  xlarge: "36px",
-  large: "24px",
-  medium: "20px",
-  small: "16px",
-  xsmall: "12px",
+  xxlarge: "32px",
+  xlarge: "24px",
+  large: "20px",
+  medium: "16px",
+  small: "14px",
+  xsmall: "11px",
 };
 
 export const mbFontSize = {
-  xxlarge: "24px",
   xlarge: "20px",
   large: "16px",
   medium: "14px",
