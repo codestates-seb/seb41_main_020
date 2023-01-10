@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum ExceptionCode {
     // MEMBER
+    MEMBER_IS_NOT_SAME(400, "Member is not the same"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
 

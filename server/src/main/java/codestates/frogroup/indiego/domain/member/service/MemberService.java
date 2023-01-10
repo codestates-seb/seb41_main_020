@@ -9,6 +9,7 @@ import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.security.auth.oauth.OAuthUserProfile;
 import codestates.frogroup.indiego.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class MemberService {
@@ -51,9 +53,7 @@ public class MemberService {
     public Member updateMember(Member member, Long memberId) {
         Member findMember = findVerifiedMember(memberId);
 
-        Member updatedMember = beanUtils.copyNonNullProperties(member, findMember); // TODO: 사용 방법 알 필요가있음 //새로운 객체
-
-        return memberRepository.save(updatedMember);
+        return beanUtils.copyNonNullProperties(member, findMember); // TODO: 사용 방법 알 필요가있음
     }
 
     public void deleteMember(Long memberId) {
@@ -62,11 +62,28 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
-    public Member findVerifiedMember(long memberId) {
+    public Member verifiedMemberId(Long memberId, Long loginMemberId){
+
+        log.info("memberId = {}, loginMemberId = {}",memberId,loginMemberId);
+        if(memberId.longValue() != loginMemberId.longValue()){
+            log.info("너 왜안들어와?");
+            throw new BusinessLogicException(ExceptionCode.MEMBER_IS_NOT_SAME);
+        }
+        return findVerifiedMember(memberId);
+    }
+
+    public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
+
+    public Member findVerifiedMember(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        return optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);

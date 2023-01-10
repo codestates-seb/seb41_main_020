@@ -12,6 +12,7 @@ import org.mapstruct.ReportingPolicy;
 public interface MemberMapper {
 
     @Mapping(source = "nickname", target = "profile.nickname")
+    @Mapping(source = "role", target = "roles")
     Member memberPostDtoToMember(MemberDto.Post memberPostDto);
 
     @Mapping(source = "nickname", target = "profile.nickname")
