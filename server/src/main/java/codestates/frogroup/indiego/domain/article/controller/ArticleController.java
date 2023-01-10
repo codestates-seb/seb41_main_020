@@ -1,6 +1,12 @@
 package codestates.frogroup.indiego.domain.article.controller;
 
+import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
+import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
+import codestates.frogroup.indiego.domain.article.service.ArticleService;
+import codestates.frogroup.indiego.domain.article.service.ArticleServiceImpl;
+import codestates.frogroup.indiego.domain.member.entity.Member;
+import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PageInfo;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
@@ -12,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -21,32 +28,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleController {
 
-//    private final ArticleService articleService;
-
+    private final ArticleServiceImpl articleService;
+    private final ArticleMapper mapper;
+    // TODO: 임시용 추후 삭제
+    private final MemberRepository memberRepository;
 
     /**
      * 게시글 작성
      */
     @PostMapping
-    public ResponseEntity postArticle() {
+    public ResponseEntity postArticle(@Valid @RequestBody ArticleDto.Post articlePostDto) {
 
-        StubData stubData = new StubData();
-        ArticleDto.Response response = stubData.getArticlePostResponse();
+        // TODO: 임시용 추후 삭제
+        Member member = new StubData().member;
+        memberRepository.save(member);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+        Article createdArticle = articleService.createArticle(mapper.articlePostToArticle(articlePostDto), member.getId());
+
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.articleToArticleResponse(createdArticle)), HttpStatus.CREATED);
     }
 
     /**
      * 게시글 수정
      */
-    @PatchMapping("/{id}")
-    public ResponseEntity patchArticle() {
-
-        StubData stubData = new StubData();
-        ArticleDto.Response response = stubData.getArticleResponse();
-
-        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
-    }
+//    @PatchMapping("/{id}")
+//    public ResponseEntity patchArticle(@PathVariable("id") Long id,
+//                                       @Valid @RequestBody ArticleDto.Patch articlePatchDto) {
+//
+//        // TODO: 임시용 추후 삭제
+//        Member member = new StubData().member;
+//        memberRepository.save(member);
+//
+//        articleService.updateArticle(mapper.articlePatchToArticle(articlePatchDto), id);
+//
+//
+//        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+//    }
 
     /**
      * 게시글 전체 조회
