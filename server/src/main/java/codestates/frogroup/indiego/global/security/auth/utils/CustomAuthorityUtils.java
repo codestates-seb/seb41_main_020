@@ -33,7 +33,9 @@ public class CustomAuthorityUtils {
             return PERFORMER_ROLES_STRING;
         } else if(role.equals(Roles.USER.toString())){
             return USER_ROLES_STRING;
+        } else if(role.equals(Roles.GUEST.toString())){
+            return GUEST_ROLES_STRING;
         }
-        return GUEST_ROLES_STRING;
+        return null;
     }
 }

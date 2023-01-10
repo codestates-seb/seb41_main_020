@@ -1,5 +1,7 @@
 package codestates.frogroup.indiego.global.security.auth.loginresolver;
 
+import codestates.frogroup.indiego.global.exception.BusinessLogicException;
+import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +30,8 @@ public class LoginMemberEmailResolver implements HandlerMethodArgumentResolver {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal == "anonymousUser") {
-            return -1L;
+            throw new BusinessLogicException(ExceptionCode.ANONYMOUS_USER);
+            // return -1L;
         }
 
         AuthMember castedPrincipal = (AuthMember) principal;

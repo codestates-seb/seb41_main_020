@@ -107,6 +107,7 @@ public class TokenProvider {
 						.toString()
 						.replace("[","")
 						.replace("]","")
+						.replace(" ","")
 						.split(","))
 			.collect(Collectors.toList());
 

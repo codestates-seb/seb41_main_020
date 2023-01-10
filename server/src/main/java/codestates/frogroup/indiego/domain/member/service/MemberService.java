@@ -31,13 +31,8 @@ public class MemberService {
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
-        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-        member.setPassword(encryptedPassword);
-
-        List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
-        member.setRoles(roles);
-        createProfileImage(member);
-
+        makeSecretPassword(member);
+        createRoles(member);
         return memberRepository.save(member);
     }
 
@@ -63,14 +58,11 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
-    public Member verifiedMemberId(Long memberId, Long loginMemberId){
-
-        log.info("memberId = {}, loginMemberId = {}",memberId,loginMemberId);
+    public void verifiedMemberId(Long memberId, Long loginMemberId){
         if(memberId.longValue() != loginMemberId.longValue()){
-            log.info("너 왜안들어와?");
+            log.info("memberId = {}, loginMemberId = {}",memberId,loginMemberId);
             throw new BusinessLogicException(ExceptionCode.MEMBER_IS_NOT_SAME);
         }
-        return findVerifiedMember(memberId);
     }
 
     public Member findVerifiedMember(Long memberId) {
@@ -91,6 +83,19 @@ public class MemberService {
         if (member.isPresent()){
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
         }
+    }
+
+    public void makeSecretPassword(Member member){
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+    }
+    public void createRoles(Member member){
+        List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
+        if(roles == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_ROLE_DOES_NOT_HAVE);
+        }
+        member.setRoles(roles);
+        createProfileImage(member);
     }
 
     public ProfileImage createProfileImage(Member member){

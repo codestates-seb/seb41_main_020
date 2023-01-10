@@ -50,7 +50,8 @@ public class MemberController {
     public ResponseEntity getMyMember(@Positive @PathVariable("member-id") Long memberId,
                                       @LoginMemberId Long loginMemberId){
 
-        Member verifiedMember = memberService.verifiedMemberId(memberId, loginMemberId);
+        memberService.verifiedMemberId(memberId, loginMemberId);
+        Member verifiedMember = memberService.findVerifiedMember(memberId);
         MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
 
         // StubData stubData = new StubData();
@@ -59,10 +60,11 @@ public class MemberController {
 
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@RequestBody MemberDto.Patch memberPatchDto,
-                                      @Positive @PathVariable("member-id") Long memberId ){
+                                      @Positive @PathVariable("member-id") Long memberId,
+                                      @LoginMemberId Long loginMemberId){
 
+        memberService.verifiedMemberId(memberId, loginMemberId);
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
-
         Member updateMember = memberService.updateMember(member,memberId);
         MemberDto.PatchResponse patchResponse = memberMapper.memberToPatchResponse(updateMember);
 
@@ -71,8 +73,10 @@ public class MemberController {
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@Positive @PathVariable("member-id") Long memberId){
-//        memberService.deleteMember(memberId);
+    public ResponseEntity deleteMember(@Positive @PathVariable("member-id") Long memberId,
+                                       @LoginMemberId Long loginMemberId){
+        memberService.verifiedMemberId(memberId, loginMemberId);
+        memberService.deleteMember(memberId);
         return new ResponseEntity<>(new SingleResponseDto<>("회원탈퇴가 완료되었습니다"), HttpStatus.CREATED);
     }
 }
