@@ -5,14 +5,17 @@ import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
+import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ShowDto {
 
@@ -97,8 +100,9 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+        private List<ShowCommentDto.Response> comments;
 
-        private ShowCommentDto.Response comment;
+        private boolean isBookmarked;
     }
 
     @Getter

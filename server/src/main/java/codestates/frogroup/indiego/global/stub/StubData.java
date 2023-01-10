@@ -19,6 +19,7 @@ import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class StubData {
@@ -92,6 +93,9 @@ public class StubData {
     public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 0.00, 30);
 
     public ShowComment showComment = new ShowComment(1L, show, member, 5.0, "감동적입니다.");
+
+
+
 
     /**
      * Member Response
@@ -231,6 +235,12 @@ public class StubData {
         );
     }
     public ShowDto.Response getShowResponse(){
+        List<ShowCommentDto.Response> showComments = new ArrayList<>();
+        showComments.add(new ShowCommentDto.Response(
+                showComment.getId(),
+                showComment.getScore(),
+                showComment.getComment()
+        ));
         return new ShowDto.Response(
                 show.getId(),
                 board.getTitle(),
@@ -247,11 +257,20 @@ public class StubData {
                 Show.ShowStatus.SALE.getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
-                getShowCommentResponse()
+                showComments,
+                true
+
         );
     }
 
     public ShowDto.Response getPatchResponse(){
+        List<ShowCommentDto.Response> showComments = new ArrayList<>();
+        showComments.add(new ShowCommentDto.Response(
+                showComment.getId(),
+                showComment.getScore(),
+                showComment.getComment()
+        ));
+
         return new ShowDto.Response(
                 show.getId(),
                 board.getTitle(),
@@ -268,7 +287,8 @@ public class StubData {
                 Show.ShowStatus.SALE.getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
-                getShowCommentResponse()
+                showComments,
+                true
         );
     }
 
