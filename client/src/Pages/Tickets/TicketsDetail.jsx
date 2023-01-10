@@ -1,5 +1,6 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import Header from "../../Components/Header.jsx";
+import TicketsDetailTap from "../../Components/TicketsDetail/TicketsDetailTapMenu.jsx";
 import NaverMapIcon from "../../assets/naverMapIcon.png";
 import KakaoMapIcon from "../../assets/kakaoMapIcon.png";
 
@@ -333,7 +334,7 @@ const TopRightContainer = styled.div`
 export default function TicketsDetail() {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <Container>
         <ContentContainer>
           <ContentHeaderContainer>
@@ -409,6 +410,7 @@ export default function TicketsDetail() {
               </div>
             </TopRightContainer>
           </ContentTopContainer>
+          <TicketsDetailTap />
         </ContentContainer>
       </Container>
     </>
