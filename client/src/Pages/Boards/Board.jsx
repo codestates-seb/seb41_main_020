@@ -2,27 +2,28 @@ import React from "react";
 import styled from "styled-components";
 import Aside from "./Aside/Aside.jsx";
 import Header from "../../Components/Header.jsx";
-import { primary, dtFontSize, sub } from "../../styles/mixins.js";
+import { primary, dtFontSize, sub, secondary } from "../../styles/mixins.js";
 import BoardDummy from "../../DummyData/BoardDummy.js";
 import heart from "../../assets/heart.svg";
 import pen from "../../assets/pen.svg";
 import right from "../../assets/right.svg";
 import left from "../../assets/left.svg";
+import OKButton from "../../Components/OKButton.jsx";
 
-const Wrapper = styled.div`
-  width: 1200px;
+export const Wrapper = styled.div`
+  width: 80vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
 `;
 
-const PageWrapper = styled.div`
+export const PageWrapper = styled.div`
   margin-top: 20px;
   display: flex;
   text-align: center;
 `;
 
-const BoardWrapper = styled.div`
+export const BoardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -39,9 +40,13 @@ const BoardWrapper = styled.div`
     font-size: ${dtFontSize.medium};
     margin-top: 10px;
     color: ${sub.sub300};
-    border-bottom: 3px solid ${sub.sub300};
     text-align: left;
-    padding-bottom: 30px;
+    margin-bottom: 30px;
+  }
+
+  .lineDiv {
+    height: 3px;
+    background-color: ${sub.sub300};
   }
 `;
 
@@ -118,36 +123,69 @@ const BoardItemCreateInfo = styled.div`
 `;
 
 const WriteButtonDiv = styled.div`
-  text-align: right;
-  .writeButton {
-    background-color: ${primary.primary300};
-    border-color: ${primary.primary300};
-    color: ${sub.sub100};
-    border-radius: 20%;
-    width: 120px;
-    height: 35px;
-    font-size: ${dtFontSize.small};
-    margin-top: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
 
-    .pencelImage {
-      width: 20px;
-      margin-right: 10px;
-    }
+  & :hover {
+    background-color: ${secondary.secondary500};
+  }
+`;
+
+const WriteButton = styled(OKButton)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 35px;
+
+  .pencelImage {
+    margin-right: 10px;
+    width: 20px;
+  }
+
+  .WriteButtonSpan {
+    font-size: ${dtFontSize.medium};
+    color: ${sub.sub100};
   }
 `;
 
 const PageNationDiv = styled.div`
-  background-color: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+
+  .movePageButton {
+    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+    background-color: ${sub.sub500};
+    border: none;
+    padding: 0;
+
+    .arrowLeftImage {
+      width: 6px;
+    }
+
+    .arrowRightImage {
+      width: 6px;
+      margin-left: 1px;
+    }
+  }
+
   .pageButton {
-    background-color: green;
-    border-color: white;
+    background-color: white;
+    border: none;
     color: ${sub.sub900};
     font-size: ${dtFontSize.medium};
     width: 20px;
     height: 35px;
+    margin-left: 5px;
     margin-right: 5px;
+    padding: 0;
   }
 `;
 
@@ -172,6 +210,7 @@ export default function Board() {
           <div className="titleInfo">
             자유로운 주제로 글과 의견을 공유하는 게시판입니다.
           </div>
+          <div className="lineDiv"></div>
           {BoardDummy.map((it) => (
             <BoardItem key={it.id}>
               <div className="likeDiv">
@@ -196,18 +235,22 @@ export default function Board() {
             </BoardItem>
           ))}
           <WriteButtonDiv>
-            <button className="writeButton">
+            <WriteButton>
               <img className="pencelImage" src={pen} alt="pen"></img>
-              글올리기
-            </button>
+              <span className="WriteButtonSpan">글 올리기</span>
+            </WriteButton>
           </WriteButtonDiv>
           <PageNationDiv>
-            <img src="right" alt="이전 버튼" />
+            <button className="movePageButton">
+              <img className="arrowLeftImage" src={left} alt="이전 버튼" />
+            </button>
             <button className="pageButton">1</button>
             <button className="pageButton">2</button>
             <button className="pageButton">3</button>
             <button className="pageButton">4</button>
-            <img width={20} src="left" alt="다음 버튼" />
+            <button className="movePageButton">
+              <img className="arrowRightImage" src={right} alt="다음 버튼" />
+            </button>
           </PageNationDiv>
           <SearchBarDiv>
             <input placeholder="검색어를 입력하세요." />

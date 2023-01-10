@@ -20,6 +20,7 @@ const SideList = styled.div`
   flex-direction: column;
 
   .linkNav {
+    border-bottom: 3px solid transparent;
     text-decoration-line: none;
     color: ${primary.primary500};
     padding-top: 10px;
@@ -53,18 +54,21 @@ const Aside = () => {
         >
           자유게시판
         </Link>
+        <br />
         <Link
           className={pathname === "/board/employ" ? "thisLinkNav" : "linkNav"}
           to="/board/employ"
         >
           구인게시판
         </Link>
+        <br />
         <Link
           className={pathname === "/board/request" ? "thisLinkNav" : "linkNav"}
           to="/board/request"
         >
           요청게시판
         </Link>
+        <br />
         <Link
           className={
             pathname === "/board/advertise" ? "thisLinkNav" : "linkNav"
@@ -73,6 +77,7 @@ const Aside = () => {
         >
           홍보게시판
         </Link>
+        <br />
       </SideList>
     </Side>
   );
