@@ -9,7 +9,6 @@ import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.Profile;
 import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberProfileDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowCommentDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
@@ -27,21 +26,23 @@ public class StubData {
     /**
      * Entity
      */
-
     public List<String> roles = new ArrayList<>(List.of("PERFORMER"));
 
 
     public Member member = new Member(
         1L,
-        "hgd123@naver.com",
+        "hgd1234@naver.com",
         "ghdrlfehd1234!",
         new Profile(
                 "홍길동",
                 "종로구",
                 "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
                 "홍길동 입니다!"
-        )
+            ),
+            roles
     );
+
+    public List<ArticleComment> articleComments = new ArrayList<>();
 
     public Article article = new Article(
             1L,
@@ -49,11 +50,12 @@ public class StubData {
             new Board(
                     "거 재밌는 공연 추천좀 해보셔",
                     "강서구에 재밌는 공연 뭐있슈?",
-                    null,
+                    "",
                     "자유 게시판"
             ),
             1234L,
-            12L
+            12L,
+            articleComments
     );
 
     public ArticleComment articleComment = new ArticleComment(
@@ -63,6 +65,15 @@ public class StubData {
             "오늘 오후 6시에 인디고 고등학교 체육관에서 밴드공연 있어요",
             20L
     );
+
+    public ArticleComment articleComment2 = new ArticleComment(
+            2L,
+            member,
+            article,
+            "오늘 오후 8시에 인디고 중학교 체육관에서 연극 있어요",
+            20L
+    );
+
 
     public Board board = new Board("개구리의 합창", "한겨울에 하는 개굴단의 합창! 해오름 소극장으로 여러분을 초대합니다. ",
             "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
@@ -93,7 +104,7 @@ public class StubData {
                 member.getEmail(),
                 roles,
                 new ArrayList<>(List.of(
-                        new MemberProfileDto(member.getProfile().getNickname(),
+                        new Profile(member.getProfile().getNickname(),
                         member.getProfile().getAddress(),
                         member.getProfile().getImage(),
                         member.getProfile().getIntroduction())))
@@ -125,6 +136,24 @@ public class StubData {
     /**
      * Article Response
      */
+    public ArticleDto.Response getArticlePostResponse() {
+
+        return new ArticleDto.Response(
+                1L,
+                member.getProfile().getNickname(),
+                article.getBoard().getTitle(),
+                article.getBoard().getContent(),
+                article.getBoard().getImage(),
+                article.getBoard().getCategory(),
+                1234L,
+                123L,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                null,
+                null
+        );
+    }
+
     public ArticleDto.Response getArticleResponse() {
 
         return new ArticleDto.Response(
@@ -143,7 +172,7 @@ public class StubData {
         );
     }
 
-    private List<ArticleCommentDto.Response> getArticleCommentResponses() {
+    public List<ArticleCommentDto.Response> getArticleCommentResponses() {
         return List.of(
                 new ArticleCommentDto.Response(
                         1L,
@@ -153,8 +182,29 @@ public class StubData {
                         articleComment.getComment(),
                         articleComment.getLikeCount(),
                         LocalDateTime.now()
+                ),
+                new ArticleCommentDto.Response(
+                        2L,
+                        article.getId(),
+                        member.getProfile().getNickname(),
+                        member.getProfile().getImage(),
+                        articleComment2.getComment(),
+                        articleComment2.getLikeCount(),
+                        LocalDateTime.now()
                 )
         );
+    }
+
+    public ArticleCommentDto.Response getArticleCommentResponse() {
+        return new ArticleCommentDto.Response(
+                    1L,
+                    article.getId(),
+                    member.getProfile().getNickname(),
+                    member.getProfile().getImage(),
+                    articleComment.getComment(),
+                    0L,
+                    LocalDateTime.now()
+            );
     }
 
     /**
