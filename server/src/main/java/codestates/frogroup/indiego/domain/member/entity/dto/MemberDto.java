@@ -1,7 +1,9 @@
 package codestates.frogroup.indiego.domain.member.entity.dto;
 
 
+import codestates.frogroup.indiego.domain.member.entity.Profile;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
@@ -22,17 +24,19 @@ public class MemberDto {
         private String password;
         @NotBlank(message = "이름은 공백이 아니어야 합니다.")
         private String nickname;
-        //@NotBlank(message = "권한은 공백이 아니어야 합니다.")
+        @NotBlank(message = "권한은 공백이 아니어야 합니다.")
         private String roles;
     }
 
     @Getter
     @AllArgsConstructor
     public static class Patch {
+
         private String nickname;
         private String address;
         private String image;
         private String introduction;
+
     }
 
     @Getter
@@ -41,7 +45,15 @@ public class MemberDto {
         private Long id;
         private String email;
         private List<String> roles;
-        private List<MemberProfileDto> profile;
+        private List<Profile> profile;
+
+        @Builder
+        public GetResponse(Long id, String email, List<String> roles, Profile profile){
+            this.id = id;
+            this.email = email;
+            this.roles = roles;
+            this.profile = List.of(profile);
+        }
     }
 
     @Getter
