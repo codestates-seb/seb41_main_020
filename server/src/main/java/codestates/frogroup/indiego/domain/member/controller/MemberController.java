@@ -31,6 +31,7 @@ public class MemberController {
 //        Member member = memberMapper.memberPostDtoToMember(memberPostDto);
 //        Member saveMember = memberService.createMember(member);
 //        MemberDto.PostResponse postResponse = memberMapper.memberToPostResponse(saveMember);
+
         StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(stubData.getMemberPostResponse()), HttpStatus.CREATED);
     }
@@ -40,6 +41,7 @@ public class MemberController {
 
 //        Member verifiedMember = memberService.findVerifiedMember(memberId);
 //        MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
+
         StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(stubData.getMemberPostResponse()), HttpStatus.CREATED);
     }
@@ -52,6 +54,7 @@ public class MemberController {
 //
 //        Member updateMember = memberService.updateMember(member,memberId);
 //        MemberDto.PatchResponse patchResponse = memberMapper.memberToPatchResponse(updateMember);
+
         StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(stubData.getMemberPatchResponse()), HttpStatus.CREATED);
     }

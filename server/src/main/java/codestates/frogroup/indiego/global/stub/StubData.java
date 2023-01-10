@@ -9,7 +9,6 @@ import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.Profile;
 import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberProfileDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowCommentDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
@@ -33,7 +32,7 @@ public class StubData {
 
     public Member member = new Member(
         1L,
-        "hgd123@naver.com",
+        "hgd1234@naver.com",
         "ghdrlfehd1234!",
         new Profile(
                 "홍길동",
@@ -94,7 +93,7 @@ public class StubData {
                 member.getEmail(),
                 roles,
                 new ArrayList<>(List.of(
-                        new MemberProfileDto(member.getProfile().getNickname(),
+                        new Profile(member.getProfile().getNickname(),
                         member.getProfile().getAddress(),
                         member.getProfile().getImage(),
                         member.getProfile().getIntroduction())))
