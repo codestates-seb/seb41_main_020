@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { primary, dtFontSize } from "../../../styles/mixins";
 
 const Side = styled.aside`
-  background-color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
