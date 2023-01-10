@@ -48,4 +48,11 @@ public class Member extends BaseTime {
         this.roles = roles;
     }
 
+    public Member oauthUpdate(String name, String email, List<String> roles) {
+        this.profile.setNickname(name);
+        this.email = email;
+        this.roles = roles;
+        return this;
+    }
+
 }
