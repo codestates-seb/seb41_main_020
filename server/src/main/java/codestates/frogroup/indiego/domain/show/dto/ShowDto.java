@@ -42,6 +42,7 @@ public class ShowDto {
         private Integer total; // 정원
     }
 
+
     @Getter
     @Setter
     @AllArgsConstructor
@@ -67,6 +68,8 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+
+        private ShowCommentDto.Response comment;
     }
 
     @Getter
@@ -94,7 +97,36 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+
+        private ShowCommentDto.Response comment;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class postResponse{
+        private Long id;
+        //ShowBoard
+        //Board
+        private String title;
+        private String content;
+        private String image;
+        private String category;
+        //board end
+        private Integer price;
+        private String address;
+        private LocalDate expiredAt; // 만료날짜
+        private LocalDate showAt; // 공연날짜
+        private String detailImage;
+        //showboard end
+        private Double latitude;
+        private Double longitude;
+
+        //check
+        private String status;
+        private Double scoreAverage; // 평균별점
+        private Integer total; // 정원
+
+    }
 
 }
