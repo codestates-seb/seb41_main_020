@@ -28,7 +28,7 @@ const OptionSelector = styled.div`
   z-index: 10;
   width: 100%;
   min-width: max-content;
-  height: 100%;
+  /* height: 75%; */
   border: 2px solid ${primary.primary700};
   border-radius: 10px 0 0 10px;
   background-color: ${primary.primary600};
@@ -42,22 +42,23 @@ const OptionSelector = styled.div`
 
   p {
     min-width: max-content;
+    min-height: max-content;
     width: 100%;
-    padding: 10%;
+    padding: 8.5px;
     text-align: center;
     color: white;
     font-size: ${dtFontSize.medium};
 
     @media screen and (max-width: 1200px) {
       font-size: ${dtFontSize.small};
-      padding: 15%;
+      padding: 9.5px;
     }
   }
 
   svg {
     transform: rotate(180deg);
     margin-right: 7px;
-    margin-top: 5px;
+    margin-top: 6px;
   }
 `;
 
@@ -93,8 +94,8 @@ const OptionsList = styled.div`
 
 const InputContainer = styled.div`
   display: flex;
-  width: 40%;
-  height: 90%;
+  width: 34%;
+  height: 80%;
   border-radius: 0 10px 10px 0;
   border: 2px solid ${primary.primary700};
   border-width: 2px 2px 2px 0;
@@ -162,8 +163,8 @@ export default function SearchBar() {
           <p>{searchOption}</p>
           {/* traingle icon */}
           <svg
-            width="30"
-            height="30"
+            width="20"
+            height="20"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 320 512"
           >

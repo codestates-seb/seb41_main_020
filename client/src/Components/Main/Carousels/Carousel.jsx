@@ -14,14 +14,13 @@ const CarouselContainer = styled.div`
   background-color: ${sub.sub200};
   border-radius: 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   position: relative;
 `;
 
 const PrevButton = styled.button`
-  width: 30px;
-  padding: 7px 0;
+  width: 25px;
+  padding: 3px 0;
   border-radius: 50px;
   background-color: ${sub.sub400};
   border: 0;
@@ -33,15 +32,15 @@ const PrevButton = styled.button`
   }
 
   img {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     transform: rotate(180deg);
   }
 `;
 
 const NextButton = styled.button`
-  width: 30px;
-  padding: 7px 0;
+  width: 25px;
+  padding: 3px 0;
   border-radius: 50px;
   background-color: ${sub.sub400};
   border: 0;
@@ -53,18 +52,19 @@ const NextButton = styled.button`
   }
 
   img {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
   }
 `;
 
 const Rank = styled.h2`
   position: absolute;
-  font-size: 140px;
-  top: 43%;
-  left: 6%;
+  font-size: 100px;
+  top: 42%;
+  left: 8%;
   color: ${primary.primary200};
   font-style: italic;
+  pointer-events: none;
 `;
 
 export default function Carousel({

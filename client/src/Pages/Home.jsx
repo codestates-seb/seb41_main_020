@@ -27,8 +27,8 @@ const ButtonsContainer = styled.div`
 
 const CarouselContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  margin-top: 50px;
+  justify-content: center;
+  margin: 50px;
 `;
 
 const CarouselDisplay = styled.div`
@@ -36,38 +36,41 @@ const CarouselDisplay = styled.div`
   flex-direction: column;
   width: 40%;
   height: max-content;
+  align-items: center;
 
   h1 {
     color: ${primary.primary500};
-    font-size: ${dtFontSize.xlarge};
+    font-size: ${dtFontSize.large};
     margin-bottom: 10px;
+    width: 83%;
+    text-align: start;
   }
 `;
 
-const LognCarouselContainer = styled.div`
+const LongCarouselContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0 180px;
   align-items: center;
-  margin-top: 60px;
 
   .longcarousel_header_container {
-    margin-left: 20px;
+    margin-left: 70px;
     display: flex;
-    width: 88%;
+    width: 100%;
     justify-content: flex-start;
   }
 
   button {
     margin-left: 30px;
-    font-weight: 700;
+    font-weight: 600;
   }
 
   h1 {
     color: ${primary.primary500};
-    font-size: ${dtFontSize.xlarge};
+    font-size: ${dtFontSize.large};
     text-align: center;
-    padding-top: 10px;
+    padding-top: 18px;
   }
 `;
 
@@ -78,21 +81,23 @@ const BoardsContainer = styled.div`
   align-items: center;
   margin-top: 50px;
 
-  h1 {
-    width: 88%;
+  h1.title {
+    width: 78%;
     color: ${primary.primary500};
-    font-size: ${dtFontSize.xlarge};
-    margin-bottom: 10px;
+    font-size: ${dtFontSize.large};
+    margin-bottom: 5px;
+    text-align: start;
+    margin-left: 120px;
   }
 `;
 
 const BoardsGrid = styled.div`
-  width: 100%;
+  width: 80%;
   display: grid;
-  grid-template-columns: repeat(2, 530px);
-  column-gap: 122px;
-  row-gap: 80px;
-  justify-content: space-evenly;
+  grid-template-columns: repeat(2, 45%);
+  column-gap: 10px;
+  row-gap: 20px;
+  justify-content: center;
   margin-top: 30px;
 `;
 
@@ -122,8 +127,8 @@ export default function Home() {
         <CarouselDisplay>
           <h1>월간 예매율 순위</h1>
           <Carousel
-            width={"100%"}
-            height={"280px"}
+            width={"85%"}
+            height={"260px"}
             data={dummyArr}
             renderer={Renderer}
             isRankMode={true}
@@ -132,28 +137,28 @@ export default function Home() {
         <CarouselDisplay>
           <h1>새로 추가된 공연</h1>
           <Carousel
-            width={"100%"}
-            height={"280px"}
+            width={"85%"}
+            height={"260px"}
             data={dummyArr}
             renderer={Renderer}
           ></Carousel>
         </CarouselDisplay>
       </CarouselContainer>
-      <LognCarouselContainer>
+      <LongCarouselContainer>
         <div className="longcarousel_header_container">
           <h1>내 지역 공연 현황</h1>
           <Button>나의 위치: 종로구</Button>
         </div>
         <Carousel
-          width={"88%"}
-          height={"280px"}
+          width={"95%"}
+          height={"250px"}
           data={dummyArr}
           renderer={Renderer}
           isMultiple={true}
         ></Carousel>
-      </LognCarouselContainer>
+      </LongCarouselContainer>
       <BoardsContainer>
-        <h1>커뮤니티 인기 게시글</h1>
+        <h1 className="title">커뮤니티 인기 게시글</h1>
         <BoardsGrid>
           <Boards>자유게시판</Boards>
           <Boards>구인게시판</Boards>

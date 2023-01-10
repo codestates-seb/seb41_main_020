@@ -7,27 +7,29 @@ import styled from "styled-components";
 import Board from "./Board.jsx";
 
 const BoardsContainer = styled.div`
-  width: 530px;
-  height: 350px;
-  border-radius: 20;
+  width: 100%;
+  height: 265px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   h1 {
     width: 88%;
     color: ${primary.primary500};
-    font-size: ${dtFontSize.xlarge};
+    font-size: ${dtFontSize.medium};
     margin-bottom: 10px;
   }
 `;
 
 const BoardList = styled.ul`
-  /* width: 100%; */
+  width: 90%;
   padding: 0;
-  height: 350px;
+  height: 300px;
   background-color: aquamarine;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  border-radius: 20px;
+  border-radius: 10px;
 `;
 
 export default function Boards({ children }) {

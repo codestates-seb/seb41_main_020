@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 const ItemContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   width: 80%;
   height: 100%;
   margin: 0 10%;
@@ -19,7 +19,7 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 30px;
+  margin-right: 5px;
 `;
 
 const ConcertDetailsContainer = styled.div`
@@ -43,18 +43,18 @@ const ConcertDetailsContainer = styled.div`
   }
 
   h2 {
-    font-size: ${dtFontSize.large};
+    font-size: ${dtFontSize.medium};
     text-align: center;
   }
 
   h3 {
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
     margin-top: 10px;
     text-align: center;
   }
 
   .date {
-    font-size: ${dtFontSize.small};
+    font-size: ${dtFontSize.xsmall};
     font-weight: 400;
     color: ${sub.sub400};
     margin-top: 10px;
@@ -62,7 +62,7 @@ const ConcertDetailsContainer = styled.div`
   }
 
   .location {
-    font-size: ${dtFontSize.small};
+    font-size: ${dtFontSize.xsmall};
     font-weight: 800;
     color: ${sub.sub400};
     margin-top: 10px;
@@ -73,7 +73,7 @@ export default function Item({ data }) {
   return (
     <ItemContainer>
       <ImageContainer>
-        <img width={140} height={190} src={data.img} alt="poster" />
+        <img width={120} height={150} src={data.img} alt="poster" />
       </ImageContainer>
       <ConcertDetailsContainer>
         <h2>{data.title}</h2>

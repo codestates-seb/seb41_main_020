@@ -17,15 +17,19 @@ const BoardContainer = styled.div`
 const VoteContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 20px 30px;
+
   path {
     fill: ${primary.primary300};
   }
 
   p {
     color: ${primary.primary500};
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.xsmall};
     font-weight: 500;
+    margin-top: 5px;
   }
 `;
 
@@ -41,16 +45,16 @@ const ImageContainer = styled.div`
 const PostDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 0;
+  padding: 12px 0;
   justify-content: space-between;
 
   .title {
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
     font-weight: 600;
   }
 
   .content {
-    font-size: ${dtFontSize.small};
+    font-size: ${dtFontSize.xsmall};
   }
 
   .info {
@@ -63,8 +67,8 @@ export default function Board({ isLast }) {
     <BoardContainer isLast={isLast}>
       <VoteContainer>
         <svg
-          width={25}
-          height={25}
+          width={20}
+          height={20}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
         >

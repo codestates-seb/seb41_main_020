@@ -9,9 +9,9 @@ const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   width: 80%;
-  height: 70%;
-  margin: 0 1%;
-  padding: 0 10px;
+  height: 60%;
+  margin: 0 1.5%;
+  padding: 0 2px;
   background-color: ${sub.sub300};
   border-radius: 20px;
 `;
@@ -47,18 +47,18 @@ const ConcertDetailsContainer = styled.div`
   }
 
   h2 {
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
     text-align: center;
   }
 
   h3 {
-    font-size: ${dtFontSize.small};
-    margin-top: 10px;
+    font-size: ${dtFontSize.xsmall};
+    margin-top: 5px;
     text-align: center;
   }
 
   .date {
-    font-size: ${dtFontSize.xsmall};
+    font-size: 10px;
     font-weight: 400;
     color: ${sub.sub400};
     margin-top: 10px;
@@ -77,7 +77,7 @@ export default function MultipleItem({ data }) {
   return (
     <ItemContainer>
       <ImageContainer>
-        <img width={100} height={130} src={data.img} alt="poster" />
+        <img width={80} height={100} src={data.img} alt="poster" />
       </ImageContainer>
       <ConcertDetailsContainer>
         <h2>{data.title}</h2>

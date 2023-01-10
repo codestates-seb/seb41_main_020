@@ -6,14 +6,14 @@ import { primary, secondary } from "../../styles/mixins";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-  width: 150px;
+  width: 120px;
   padding: 10px;
   border-radius: 20px;
   background-color: ${primary.primary300};
   border: 0;
   color: white;
   margin: 10px;
-  font-weight: 500;
+  font-weight: 600;
 
   &:hover {
     cursor: pointer;
