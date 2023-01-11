@@ -20,8 +20,9 @@ import React from "react";
 import styled from "styled-components/macro";
 
 const Container = styled.div`
-  background-color: aliceblue;
+  align-items: center;
   display: flex;
+  flex-direction: column;
   height: max-content;
   justify-content: center;
   margin: 0 auto;
@@ -31,7 +32,7 @@ const Container = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 70%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
@@ -40,16 +41,18 @@ const ContentContainer = styled.div`
 
 const ContentHeaderContainer = styled.div`
   align-items: flex-start;
+  border-bottom: 1px solid ${sub.sub200};
   display: flex;
   height: max-content;
   justify-content: space-between;
   min-height: 140px;
   padding: 20px 47px;
-  width: 100%;
+  width: 80%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     min-height: 100px;
     padding: 20px 5.13%;
+    width: 100%;
   }
 `;
 
@@ -97,7 +100,7 @@ const HeaderButtonContainer = styled.div`
   }
 `;
 
-const PillButton = styled.button`
+export const PillButton = styled.button`
   all: unset;
   color: white;
   cursor: pointer;
@@ -123,8 +126,7 @@ const ContentTopContainer = styled.div`
   width: 100%;
   height: max-content;
   justify-content: space-between;
-  padding: 0 9.41%;
-  border: 2px solid red;
+  padding: 5%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: column;
@@ -193,7 +195,7 @@ const EmptySeat = styled.span`
 
 const TopRightContainer = styled.div`
   display: flex;
-  width: 48.16%; //(부모 요소 - padding)에서 다시 % 계산해야 함
+  width: 60%;
   background-color: ${sub.sub100};
   border-radius: 10px;
   justify-content: space-between;
@@ -336,24 +338,24 @@ export default function TicketsDetail() {
     <>
       <Header />
       <Container>
+        <ContentHeaderContainer>
+          <HeaderTitleContainer>
+            <h1>공연 상세페이지</h1>
+            <h2>서울 / 종로구 / Rock Night Party</h2>
+          </HeaderTitleContainer>
+          <HeaderButtonContainer>
+            <PillButton
+              color={primary.primary300}
+              hoverColor={secondary.secondary500}
+            >
+              수정하기
+            </PillButton>
+            <PillButton color={misc.red} hoverColor={misc.lightred}>
+              삭제하기
+            </PillButton>
+          </HeaderButtonContainer>
+        </ContentHeaderContainer>
         <ContentContainer>
-          <ContentHeaderContainer>
-            <HeaderTitleContainer>
-              <h1>공연 상세페이지</h1>
-              <h2>서울 / 종로구 / Rock Night Party</h2>
-            </HeaderTitleContainer>
-            <HeaderButtonContainer>
-              <PillButton
-                color={primary.primary300}
-                hoverColor={secondary.secondary500}
-              >
-                수정하기
-              </PillButton>
-              <PillButton color={misc.red} hoverColor={misc.lightred}>
-                삭제하기
-              </PillButton>
-            </HeaderButtonContainer>
-          </ContentHeaderContainer>
           <ContentTopContainer>
             <TopLeftContainer>
               <PosterImageArea />
