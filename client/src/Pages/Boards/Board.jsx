@@ -1,7 +1,3 @@
-import React from "react";
-import styled from "styled-components";
-import Aside from "./Aside/Aside.jsx";
-import Header from "../../Components/Header.jsx";
 import { primary, dtFontSize, sub, secondary } from "../../styles/mixins.js";
 import BoardDummy from "../../DummyData/BoardDummy.js";
 import heart from "../../assets/heart.svg";
@@ -9,6 +5,11 @@ import pen from "../../assets/pen.svg";
 import right from "../../assets/right.svg";
 import left from "../../assets/left.svg";
 import OKButton from "../../Components/OKButton.jsx";
+import Aside from "./Aside/Aside.jsx";
+import Header from "../../Components/Header.jsx";
+
+import React from "react";
+import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 80vw;
@@ -23,7 +24,7 @@ export const PageWrapper = styled.div`
   text-align: center;
 `;
 
-export const BoardWrapper = styled.div`
+export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -50,7 +51,7 @@ export const BoardWrapper = styled.div`
   }
 `;
 
-const BoardItem = styled.div`
+export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;
   height: 100px;
@@ -73,6 +74,12 @@ const BoardItem = styled.div`
     .heartCount {
       color: ${primary.primary500};
       font-weight: 700;
+    }
+
+    .heartImageDiv {
+      margin-bottom: 5px;
+      background-color: white;
+      border: white;
     }
   }
   .imageDiv {
@@ -205,7 +212,7 @@ export default function Board() {
       <Header></Header>
       <PageWrapper>
         <Aside></Aside>
-        <BoardWrapper>
+        <ContentWrapper>
           <div className="title">자유게시판</div>
           <div className="titleInfo">
             자유로운 주제로 글과 의견을 공유하는 게시판입니다.
@@ -215,9 +222,9 @@ export default function Board() {
             <BoardItem key={it.id}>
               <div className="likeDiv">
                 <div>
-                  <button className="heartButton">
+                  <div className="heartImageDiv">
                     <img width={30} src={heart} alt="heart"></img>
-                  </button>
+                  </div>
                 </div>
                 <div className="heartCount">157</div>
               </div>
@@ -255,7 +262,7 @@ export default function Board() {
           <SearchBarDiv>
             <input placeholder="검색어를 입력하세요." />
           </SearchBarDiv>
-        </BoardWrapper>
+        </ContentWrapper>
       </PageWrapper>
     </Wrapper>
   );

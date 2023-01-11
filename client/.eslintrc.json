@@ -31,6 +31,7 @@
     "eqeqeq": "error",
     "func-name-matching": "error",
     "init-declarations": "error",
-    "no-extra-boolean-cast": "off"
+    "no-extra-boolean-cast": "off",
+    "react/prop-types": "off"
   }
 }
