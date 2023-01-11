@@ -2,15 +2,21 @@ package codestates.frogroup.indiego.global.security.auth.filter;
 
 
 import codestates.frogroup.indiego.global.redis.RedisDao;
+import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
+import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.exception.ErrorResponse;
 import codestates.frogroup.indiego.global.security.auth.dto.LoginDto;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
 import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import codestates.frogroup.indiego.global.security.auth.utils.Responder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
