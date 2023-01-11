@@ -174,10 +174,7 @@ export default function SearchBar() {
             />
           </svg>
         </OptionSelector>
-        <OptionsList
-          onClick={(e) => e.stopPropagation()}
-          isClicked={isSearchOptionsClicked}
-        >
+        <OptionsList isClicked={isSearchOptionsClicked}>
           <li tabIndex={-1}>공연명</li>
           <li tabIndex={-1}>아티스트명 </li>
         </OptionsList>
