@@ -2,6 +2,7 @@ package codestates.frogroup.indiego.global.stub;
 
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleComment;
+import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleCommentDto;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.common.embedding.Board;
@@ -43,6 +44,7 @@ public class StubData {
     );
 
     public List<ArticleComment> articleComments = new ArrayList<>();
+    public List<ArticleLike> articleLikes = new ArrayList<>();
 
     public Article article = new Article(
             1L,
@@ -55,7 +57,9 @@ public class StubData {
             ),
             1234L,
             12L,
-            articleComments
+            articleComments.size(),
+            articleComments,
+            articleLikes
     );
 
     public ArticleComment articleComment = new ArticleComment(
@@ -167,8 +171,8 @@ public class StubData {
                 123L,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                getArticleCommentResponses(),
-                getArticleCommentResponses().size()
+                getArticleCommentResponses().size(),
+                getArticleCommentResponses()
         );
     }
 
