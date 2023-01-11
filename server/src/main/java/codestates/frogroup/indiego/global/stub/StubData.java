@@ -9,7 +9,6 @@ import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.Profile;
 import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberProfileDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowCommentDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
@@ -20,6 +19,7 @@ import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class StubData {
@@ -27,21 +27,23 @@ public class StubData {
     /**
      * Entity
      */
-
     public List<String> roles = new ArrayList<>(List.of("PERFORMER"));
 
 
     public Member member = new Member(
         1L,
-        "hgd123@naver.com",
+        "hgd1234@naver.com",
         "ghdrlfehd1234!",
         new Profile(
                 "홍길동",
                 "종로구",
                 "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
                 "홍길동 입니다!"
-        )
+            ),
+            roles
     );
+
+    public List<ArticleComment> articleComments = new ArrayList<>();
 
     public Article article = new Article(
             1L,
@@ -49,11 +51,12 @@ public class StubData {
             new Board(
                     "거 재밌는 공연 추천좀 해보셔",
                     "강서구에 재밌는 공연 뭐있슈?",
-                    null,
+                    "",
                     "자유 게시판"
             ),
             1234L,
-            12L
+            12L,
+            articleComments
     );
 
     public ArticleComment articleComment = new ArticleComment(
@@ -63,6 +66,15 @@ public class StubData {
             "오늘 오후 6시에 인디고 고등학교 체육관에서 밴드공연 있어요",
             20L
     );
+
+    public ArticleComment articleComment2 = new ArticleComment(
+            2L,
+            member,
+            article,
+            "오늘 오후 8시에 인디고 중학교 체육관에서 연극 있어요",
+            20L
+    );
+
 
     public Board board = new Board("개구리의 합창", "한겨울에 하는 개굴단의 합창! 해오름 소극장으로 여러분을 초대합니다. ",
             "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
@@ -78,9 +90,12 @@ public class StubData {
 
     public Coordinate coordinate = new Coordinate(37.58481899015186, 127.00088309891716 );
 
-    public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 4.67, 30);
+    public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 0.00, 30);
 
-    public ShowComment showComment = new ShowComment(1L, show, member, show.getScoreAverage(), "감동적입니다.");
+    public ShowComment showComment = new ShowComment(1L, show, member, 5.0, "감동적입니다.");
+
+
+
 
     /**
      * Member Response
@@ -93,7 +108,7 @@ public class StubData {
                 member.getEmail(),
                 roles,
                 new ArrayList<>(List.of(
-                        new MemberProfileDto(member.getProfile().getNickname(),
+                        new Profile(member.getProfile().getNickname(),
                         member.getProfile().getAddress(),
                         member.getProfile().getImage(),
                         member.getProfile().getIntroduction())))
@@ -125,6 +140,24 @@ public class StubData {
     /**
      * Article Response
      */
+    public ArticleDto.Response getArticlePostResponse() {
+
+        return new ArticleDto.Response(
+                1L,
+                member.getProfile().getNickname(),
+                article.getBoard().getTitle(),
+                article.getBoard().getContent(),
+                article.getBoard().getImage(),
+                article.getBoard().getCategory(),
+                1234L,
+                123L,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                null,
+                null
+        );
+    }
+
     public ArticleDto.Response getArticleResponse() {
 
         return new ArticleDto.Response(
@@ -143,7 +176,7 @@ public class StubData {
         );
     }
 
-    private List<ArticleCommentDto.Response> getArticleCommentResponses() {
+    public List<ArticleCommentDto.Response> getArticleCommentResponses() {
         return List.of(
                 new ArticleCommentDto.Response(
                         1L,
@@ -153,15 +186,37 @@ public class StubData {
                         articleComment.getComment(),
                         articleComment.getLikeCount(),
                         LocalDateTime.now()
+                ),
+                new ArticleCommentDto.Response(
+                        2L,
+                        article.getId(),
+                        member.getProfile().getNickname(),
+                        member.getProfile().getImage(),
+                        articleComment2.getComment(),
+                        articleComment2.getLikeCount(),
+                        LocalDateTime.now()
                 )
         );
+    }
+
+    public ArticleCommentDto.Response getArticleCommentResponse() {
+        return new ArticleCommentDto.Response(
+                    1L,
+                    article.getId(),
+                    member.getProfile().getNickname(),
+                    member.getProfile().getImage(),
+                    articleComment.getComment(),
+                    0L,
+                    LocalDateTime.now()
+            );
     }
 
     /**
      * Show Response
      */
-    public ShowDto.Response getShowResponse(){
-        return new ShowDto.Response(
+
+    public ShowDto.postResponse postShowResponse(){
+        return new ShowDto.postResponse(
                 show.getId(),
                 board.getTitle(),
                 board.getContent(),
@@ -179,12 +234,76 @@ public class StubData {
                 show.getTotal()
         );
     }
+    public ShowDto.Response getShowResponse(){
+        List<ShowCommentDto.Response> showComments = new ArrayList<>();
+        showComments.add(new ShowCommentDto.Response(
+                showComment.getId(),
+                showComment.getScore(),
+                showComment.getComment()
+        ));
+        return new ShowDto.Response(
+                show.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getImage(),
+                board.getCategory(),
+                showBoard.getPrice(),
+                showBoard.getAddress(),
+                showBoard.getExpiredAt(),
+                showBoard.getShowAt(),
+                showBoard.getDetailImage(),
+                show.getCoordinate().getLatitude(),
+                show.getCoordinate().getLongitude(),
+                Show.ShowStatus.SALE.getStatus(),
+                show.getScoreAverage(),
+                show.getTotal(),
+                showComments,
+                true
+
+        );
+    }
+
+    public ShowDto.Response getPatchResponse(){
+        List<ShowCommentDto.Response> showComments = new ArrayList<>();
+        showComments.add(new ShowCommentDto.Response(
+                showComment.getId(),
+                showComment.getScore(),
+                showComment.getComment()
+        ));
+
+        return new ShowDto.Response(
+                show.getId(),
+                board.getTitle(),
+                "개구리들의 락페스티벌에 초대합니다.",
+                board.getImage(),
+                "락",
+                showBoard.getPrice(),
+                showBoard.getAddress(),
+                showBoard.getExpiredAt(),
+                showBoard.getShowAt(),
+                showBoard.getDetailImage(),
+                show.getCoordinate().getLatitude(),
+                show.getCoordinate().getLongitude(),
+                Show.ShowStatus.SALE.getStatus(),
+                show.getScoreAverage(),
+                show.getTotal(),
+                showComments,
+                true
+        );
+    }
 
     public ShowCommentDto.Response getShowCommentResponse(){
         return new ShowCommentDto.Response(
                 show.getId(),
-                getShowResponse(),
-                show.getScoreAverage(),
+                5.0,
+                showComment.getComment()
+        );
+    }
+
+    public ShowCommentDto.Response getPatchShowCommentResponse(){
+        return new ShowCommentDto.Response(
+                show.getId(),
+                4.0,
                 showComment.getComment()
         );
     }
@@ -192,8 +311,16 @@ public class StubData {
     public ShowReservationDto.Response getShowReservationResponse(){
         return new ShowReservationDto.Response(
                 show.getId(),
-                getShowResponse(),
-                show.getTotal()
+                1,
+                1
+        );
+    }
+
+    public ShowReservationDto.Response getPatchShowReservationResponse(){
+        return new ShowReservationDto.Response(
+                show.getId(),
+                1,
+                2
         );
     }
 }
