@@ -7,6 +7,8 @@ import Button from "../Components/Main/Button.jsx";
 import Carousel from "../Components/Main/Carousels/Carousel.jsx";
 import Renderer from "../Components/Main/Carousels/Renderer.jsx";
 import Boards from "../Components/Main/Boards/Boards.jsx";
+import Overlay from "../Components/Main/Popups/Overlay.jsx";
+import LocationPopup from "../Components/Main/Popups/LocationPopup.jsx";
 
 import styled from "styled-components";
 import { dtFontSize, primary } from "../styles/mixins.js";
@@ -114,12 +116,25 @@ const dummyArr = new Array(9).fill(dummyObj);
 console.log(dummyArr);
 
 export default function Home() {
+  const [isLocationPopupOpen, setIsLocationPopupOpen] = useState(false);
+
+  const locationPopupOnClickHandler = () => {
+    setIsLocationPopupOpen(true);
+  };
+
   return (
     <MainContainer>
+      {isLocationPopupOpen && (
+        <Overlay>
+          <LocationPopup popupHandler={setIsLocationPopupOpen} />
+        </Overlay>
+      )}
       <Header />
       <Banner />
       <ButtonsContainer>
-        <Button>지역별 공연 현황</Button>
+        <Button clickEvent={locationPopupOnClickHandler}>
+          지역별 공연 현황
+        </Button>
         <Button>날짜별 공연 현황</Button>
       </ButtonsContainer>
       <SearchBar />
