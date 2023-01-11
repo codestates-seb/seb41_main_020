@@ -1,7 +1,8 @@
+import { primary, dtFontSize } from "../../../styles/mixins";
+
 import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
-import { primary, dtFontSize } from "../../../styles/mixins";
 
 const Side = styled.aside`
   display: flex;
