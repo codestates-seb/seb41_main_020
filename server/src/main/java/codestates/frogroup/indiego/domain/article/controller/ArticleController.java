@@ -4,7 +4,6 @@ import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
-import codestates.frogroup.indiego.domain.article.service.ArticleServiceImpl;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleController {
 
-    private final ArticleServiceImpl articleService;
+    private final ArticleService articleService;
     private final ArticleMapper mapper;
     // TODO: 임시용 추후 삭제
     private final MemberRepository memberRepository;
@@ -43,27 +42,24 @@ public class ArticleController {
         Member member = new StubData().member;
         memberRepository.save(member);
 
-        Article createdArticle = articleService.createArticle(mapper.articlePostToArticle(articlePostDto), member.getId());
+        Article article = mapper.articlePostToArticle(articlePostDto);
+        ArticleDto.Response response = articleService.createArticle(article, member.getId());
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.articleToArticleResponse(createdArticle)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
     /**
      * 게시글 수정
      */
-//    @PatchMapping("/{id}")
-//    public ResponseEntity patchArticle(@PathVariable("id") Long id,
-//                                       @Valid @RequestBody ArticleDto.Patch articlePatchDto) {
-//
-//        // TODO: 임시용 추후 삭제
-//        Member member = new StubData().member;
-//        memberRepository.save(member);
-//
-//        articleService.updateArticle(mapper.articlePatchToArticle(articlePatchDto), id);
-//
-//
-//        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
-//    }
+    @PatchMapping("/{article-id}")
+    public ResponseEntity patchArticle(@PathVariable("article-id") Long articleId,
+                                       @Valid @RequestBody ArticleDto.Patch articlePatchDto) {
+
+        Article article = mapper.articlePatchToArticle(articlePatchDto);
+        ArticleDto.Response response = articleService.updateArticle(article, articleId);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+    }
 
     /**
      * 게시글 전체 조회
@@ -85,14 +81,13 @@ public class ArticleController {
     }
 
     /**
-     * 게시글 상세 조회
+     * 게시글 단일 조회
      */
-    @GetMapping("/{id}")
-    public ResponseEntity getArticle() {
+    @GetMapping("/{article-id}")
+    public ResponseEntity getArticle(@PathVariable("article-id") Long articleId) {
 
-        StubData stubData = new StubData();
-
-        ArticleDto.Response response = stubData.getArticleResponse();
+        articleService.updateView(articleId);
+        ArticleDto.Response response = articleService.findArticle(articleId);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -100,8 +95,10 @@ public class ArticleController {
     /**
      * 게시글 삭제
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteArticle() {
+    @DeleteMapping("/{article-id}")
+    public ResponseEntity deleteArticle(@PathVariable("article-id") Long articleId) {
+
+        articleService.deleteArticle(articleId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -109,8 +106,13 @@ public class ArticleController {
     /**
      * 게시글 좋아요
      */
-    @PutMapping("/{id}")
-    public ResponseEntity articleLike() {
+    @PutMapping("/{article-id}")
+    public ResponseEntity articleLike(@PathVariable("article-id") Long articleId) {
+
+        Member member = new StubData().member;
+        memberRepository.save(member);
+
+        articleService.articleLike(articleId, member.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
