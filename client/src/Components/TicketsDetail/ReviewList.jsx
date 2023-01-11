@@ -21,7 +21,7 @@ import styled from "styled-components/macro";
 const ReviewListContainer = styled.ul`
   all: unset;
   display: flex;
-  width: 70%;
+  width: 90%;
   flex-direction: column;
 `;
 
