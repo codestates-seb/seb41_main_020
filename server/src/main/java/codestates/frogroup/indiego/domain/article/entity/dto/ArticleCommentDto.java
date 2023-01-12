@@ -2,6 +2,8 @@ package codestates.frogroup.indiego.domain.article.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 public class ArticleCommentDto {
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Post {
 
@@ -18,16 +21,16 @@ public class ArticleCommentDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch {
-
-        private Long id;
 
         private String comment;
 
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     public static class Response {
 
@@ -41,9 +44,9 @@ public class ArticleCommentDto {
 
         private String comment;
 
-        private Long likeCunt;
+        private long likeCount;
 
-        private LocalDateTime createAt;
+        private LocalDateTime createdAt;
 
     }
 }
