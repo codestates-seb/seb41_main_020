@@ -1,10 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
+import { Wrapper, PageWrapper, ContentWrapper } from "../Board.jsx";
 import Aside from "../Aside/Aside.jsx";
 import Header from "../../../Components/Header.jsx";
 import OKButton from "../../../Components/OKButton.jsx";
-import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
-import { Wrapper, PageWrapper, BoardWrapper } from "../Board.jsx";
+import Editor from "../../../Components/Editor.jsx";
+
+import React, { useState } from "react";
+import styled from "styled-components";
 
 const PostBoard = styled.div`
   width: 80vw;
@@ -67,12 +69,13 @@ const PostButton = styled(OKButton)`
 `;
 
 const PostCreate = () => {
+  const [contentValue, setContentValue] = useState("");
   return (
     <Wrapper>
       <Header></Header>
       <PageWrapper>
         <Aside></Aside>
-        <BoardWrapper>
+        <ContentWrapper>
           <div className="title">글 올리기</div>
           <div className="titleInfo">
             게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
@@ -85,20 +88,22 @@ const PostCreate = () => {
               <TitleInputDiv>
                 <input
                   className="titleInput"
-                  placeholder="게시글의 제목을 작성해주세요"
+                  placeholder="게시글의 제목을 작성해주세요."
                 />
               </TitleInputDiv>
               <div className="postDiv">본문</div>
               <ContentInputDiv>
-                <textarea
-                  className="contentInput"
-                  placeholder="내용을 입력해주세요"
-                ></textarea>
+                <Editor
+                  value={contentValue}
+                  setValue={setContentValue}
+                  placeholder={"내용을 입력해주세요."}
+                ></Editor>
+                {/* {console.log(contentValue)} */}
               </ContentInputDiv>
               <PostButton type="submit">글 올리기</PostButton>
             </PostBoard>
           </form>
-        </BoardWrapper>
+        </ContentWrapper>
       </PageWrapper>
     </Wrapper>
   );
