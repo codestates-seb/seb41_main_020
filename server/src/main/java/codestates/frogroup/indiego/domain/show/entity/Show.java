@@ -32,8 +32,6 @@ public class Show extends BaseTime {
     @Embedded
     private Coordinate coordinate;
 
-    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
-    private List<ShowComment> comment;
 
     @Enumerated(value = EnumType.STRING)
     private ShowStatus status = ShowStatus.SALE;
@@ -60,12 +58,11 @@ public class Show extends BaseTime {
     }
 
     @Builder
-    public Show(Member member, ShowBoard board, Coordinate coordinate, List<ShowComment> comment,
+    public Show(Member member, ShowBoard board, Coordinate coordinate,
                 int total, double scoreAverage) {
         this.member = member;
         this.board = board;
         this.coordinate = coordinate;
-        this.comment = comment;
         this.total = total;
         this.scoreAverage = scoreAverage;
     }
