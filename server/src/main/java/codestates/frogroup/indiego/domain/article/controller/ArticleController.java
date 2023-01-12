@@ -4,17 +4,18 @@ import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PageInfo;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
+import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import codestates.frogroup.indiego.global.stub.StubData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,7 +36,8 @@ public class ArticleController {
      */
     @PostMapping
     public ResponseEntity postArticle(@Valid @RequestBody ArticleDto.Post articlePostDto,
-                                      @LoginMemberId Long memberId) {
+                                      @LoginMemberId Long memberId,
+                                      @AuthenticationPrincipal AuthMember authMember) {
 
         Article article = mapper.articlePostToArticle(articlePostDto);
         ArticleDto.Response response = articleService.createArticle(article, memberId);

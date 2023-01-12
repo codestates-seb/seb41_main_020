@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +33,9 @@ public class ArticleComment extends BaseTime {
     @Column(nullable = false)
     @ColumnDefault("0")
     private long likeCount;
+
+    @OneToMany(mappedBy = "articleComment", cascade = CascadeType.ALL)
+    private List<ArticleCommentLike> articleCommentLikes = new ArrayList<>();
 
     public void setMember(Member member) {
         this.member = member;
