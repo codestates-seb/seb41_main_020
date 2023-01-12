@@ -24,6 +24,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  margin-top: 50px;
 
   > .sub-title {
     color: ${primary.primary500};
@@ -31,6 +32,10 @@ const ContentContainer = styled.div`
     font-weight: 600;
     text-align: left;
     width: 100%;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+    }
   }
 
   > .sub-description {
@@ -42,6 +47,10 @@ const ContentContainer = styled.div`
     margin-top: 5px;
     margin-bottom: 5%;
     width: 100%;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
 `;
 
@@ -54,13 +63,25 @@ const ReviewWritingContainer = styled.div`
   width: 100%;
   height: 200px;
   justify-content: space-between;
-  margin-bottom: 5%;
+  margin-bottom: calc(5% + 50px);
   padding: 4%;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    height: 150px;
+    font-size: ${mbFontSize.small};
+    margin-bottom: 20%;
+  }
 
   > div {
     align-items: center;
     display: flex;
     width: 90%;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      flex-direction: column;
+      font-size: ${mbFontSize.large};
+      width: 100%;
+    }
 
     > input {
       border: 2px solid ${sub.sub300};
@@ -69,6 +90,12 @@ const ReviewWritingContainer = styled.div`
       height: 50px;
       margin-left: 5%;
       padding: 10px;
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        font-size: ${mbFontSize.small};
+        height: 40px;
+        margin-left: 0;
+      }
     }
   }
 `;
