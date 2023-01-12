@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/shows/reservations")
+@RequestMapping("/shows/reservations/{show-id}")
 @Valid
 @RequiredArgsConstructor
 public class ShowReservationController {
@@ -23,21 +23,21 @@ public class ShowReservationController {
 
     StubData stubData = new StubData();
 
-    @PostMapping("/{show-id}")
+    @PostMapping
     public ResponseEntity postReservation(){
         return new ResponseEntity<>(
                 stubData.getShowReservationResponse(), HttpStatus.CREATED
         );
     }
 
-    @PatchMapping("/{show-id}")
+    @PatchMapping
     public ResponseEntity patchReservation(){
         return new ResponseEntity<>(
                 stubData.getPatchShowReservationResponse(), HttpStatus.OK
         );
     }
 
-    @DeleteMapping("/{show-id}")
+    @DeleteMapping
     public ResponseEntity deleteREservation(){
         return new ResponseEntity<>(
                 HttpStatus.NO_CONTENT

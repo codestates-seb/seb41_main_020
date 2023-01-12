@@ -83,8 +83,6 @@ public class ShowDto {
         private Show.ShowStatus status;
         private Double scoreAverage; // 평균별점
         private int total; // 정원
-
-        private List<ShowComment> comment;
     }
 
     @Getter
@@ -112,9 +110,9 @@ public class ShowDto {
         private Show.ShowStatus status;
         private Double scoreAverage; // 평균별점
         private int total; // 정원
-        private List<ShowCommentDto.Response> comments;
 
         private boolean isBookmarked;
+
     }
 
     @Getter

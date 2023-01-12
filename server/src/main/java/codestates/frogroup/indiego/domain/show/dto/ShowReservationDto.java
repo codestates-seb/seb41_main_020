@@ -9,8 +9,6 @@ public class ShowReservationDto {
     @Getter
     @AllArgsConstructor
     public static class Post{
-        private Long id;
-
         private Integer showId;
 
         private Integer ticketCount;
@@ -20,7 +18,7 @@ public class ShowReservationDto {
     @AllArgsConstructor
     @Builder
     public static class Patch{
-        private Long id;
+        private Long Id;
 
         private Integer showId;
 
@@ -36,5 +34,7 @@ public class ShowReservationDto {
         private Integer showId;
 
         private Integer ticketCount;
+
+        private boolean isExpired;
     }
 }
