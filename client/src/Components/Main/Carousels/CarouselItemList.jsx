@@ -2,7 +2,6 @@
 import React from "react";
 
 import Item from "./Item.jsx";
-import MultipleItem from "./MultipleItem.jsx";
 
 import styled from "styled-components";
 
@@ -11,7 +10,6 @@ const RendererContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  margin-left: 20px;
 `;
 
 const ItemsContainer = styled.div`
@@ -28,16 +26,11 @@ const ItemsContainer = styled.div`
   transition: all 0.5s ease-in-out;
 `;
 
-export default function Renderer({ data, currentIdx, isMultiple }) {
-  console.log(data);
-
+export default function CarouselItemList({ data, currentIdx }) {
   return (
     <RendererContainer>
-      <ItemsContainer currentIdx={currentIdx} isMultiple={isMultiple}>
+      <ItemsContainer currentIdx={currentIdx}>
         {data.map((item, index) => {
-          if (isMultiple) {
-            return <MultipleItem data={item} key={index} />;
-          }
           return <Item data={item} key={index} />;
         })}
       </ItemsContainer>
