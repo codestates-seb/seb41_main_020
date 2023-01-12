@@ -19,11 +19,16 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 5px;
+  margin-right: 10px;
+
+  img {
+    height: calc(100px + 2vw);
+    max-height: 150px;
+  }
 `;
 
 const ConcertDetailsContainer = styled.div`
-  width: max-content;
+  width: 200px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -43,37 +48,51 @@ const ConcertDetailsContainer = styled.div`
   }
 
   h2 {
-    font-size: ${dtFontSize.medium};
+    font-size: calc(8px + 0.5vw);
     text-align: center;
+
+    @media screen and (min-width: 1400px) {
+      font-size: ${dtFontSize.medium};
+    }
   }
 
   h3 {
-    font-size: ${dtFontSize.small};
+    font-size: calc(2px + 0.5vw);
     margin-top: 10px;
     text-align: center;
+    @media screen and (min-width: 1400px) {
+      font-size: ${dtFontSize.medium};
+    }
   }
 
   .date {
-    font-size: ${dtFontSize.xsmall};
+    font-size: calc(2px + 0.3vw);
     font-weight: 400;
     color: ${sub.sub400};
     margin-top: 10px;
     text-align: center;
+
+    @media screen and (min-width: 1400px) {
+      font-size: ${dtFontSize.xsmall};
+    }
   }
 
   .location {
-    font-size: ${dtFontSize.xsmall};
+    font-size: calc(2px + 0.3vw);
     font-weight: 800;
     color: ${sub.sub400};
     margin-top: 10px;
     text-align: center;
+    @media screen and (min-width: 1400px) {
+      font-size: ${dtFontSize.xsmall};
+    }
   }
 `;
 export default function Item({ data }) {
   return (
     <ItemContainer>
       <ImageContainer>
-        <img width={120} height={150} src={data.img} alt="poster" />
+        <img src={data.img} alt="poster" />
       </ImageContainer>
       <ConcertDetailsContainer>
         <h2>{data.title}</h2>
