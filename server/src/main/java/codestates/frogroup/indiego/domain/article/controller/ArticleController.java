@@ -6,6 +6,7 @@ import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.domain.article.service.ArticleServiceImpl;
 import codestates.frogroup.indiego.domain.member.entity.Member;
+import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PageInfo;
@@ -37,33 +38,29 @@ public class ArticleController {
      * 게시글 작성
      */
     @PostMapping
-    public ResponseEntity postArticle(@Valid @RequestBody ArticleDto.Post articlePostDto) {
+    public ResponseEntity postArticle() {
 
         // TODO: 임시용 추후 삭제
-        Member member = new StubData().member;
-        memberRepository.save(member);
+        StubData stubData = new StubData();
+        ArticleDto.Response response = stubData.getArticlePostResponse();
 
-        Article createdArticle = articleService.createArticle(mapper.articlePostToArticle(articlePostDto), member.getId());
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.articleToArticleResponse(createdArticle)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
     /**
      * 게시글 수정
      */
-//    @PatchMapping("/{id}")
-//    public ResponseEntity patchArticle(@PathVariable("id") Long id,
-//                                       @Valid @RequestBody ArticleDto.Patch articlePatchDto) {
-//
-//        // TODO: 임시용 추후 삭제
-//        Member member = new StubData().member;
-//        memberRepository.save(member);
-//
-//        articleService.updateArticle(mapper.articlePatchToArticle(articlePatchDto), id);
-//
-//
-//        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
-//    }
+    @PatchMapping("/{id}")
+    public ResponseEntity patchArticle() {
+
+        // TODO: 임시용 추후 삭제
+        StubData stubData = new StubData();
+
+        ArticleDto.Response response = stubData.getArticleResponse();
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+    }
 
     /**
      * 게시글 전체 조회
