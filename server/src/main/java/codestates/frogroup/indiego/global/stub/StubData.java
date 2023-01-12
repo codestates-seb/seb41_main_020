@@ -92,7 +92,7 @@ public class StubData {
 
     public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 0.00, 30);
 
-    public ShowComment showComment = new ShowComment(1L, show, member, 5.0, "감동적입니다.");
+    public ShowComment showComment = new ShowComment(1L, show.getId(), member, 5.0, "감동적입니다.");
 
 
 
@@ -238,6 +238,9 @@ public class StubData {
         List<ShowCommentDto.Response> showComments = new ArrayList<>();
         showComments.add(new ShowCommentDto.Response(
                 showComment.getId(),
+                show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
                 showComment.getScore(),
                 showComment.getComment()
         ));
@@ -266,6 +269,9 @@ public class StubData {
         List<ShowCommentDto.Response> showComments = new ArrayList<>();
         showComments.add(new ShowCommentDto.Response(
                 showComment.getId(),
+                show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
                 showComment.getScore(),
                 showComment.getComment()
         ));
@@ -292,15 +298,56 @@ public class StubData {
 
     public ShowCommentDto.Response getShowCommentResponse(){
         return new ShowCommentDto.Response(
+                showComment.getId(),
                 show.getId(),
-                5.0,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
                 showComment.getComment()
         );
     }
 
+    public List<ShowCommentDto.Response> getShowCommentsResponse(){
+        List<ShowCommentDto.Response> list = new ArrayList<>();
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                2L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                3L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                4L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                5L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        return list;
+
+    }
     public ShowCommentDto.Response getPatchShowCommentResponse(){
         return new ShowCommentDto.Response(
+                showComment.getId(),
                 show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
                 4.0,
                 showComment.getComment()
         );
