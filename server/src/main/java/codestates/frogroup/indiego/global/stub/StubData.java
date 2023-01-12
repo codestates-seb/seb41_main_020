@@ -90,7 +90,7 @@ public class StubData {
 
     public Coordinate coordinate = new Coordinate(37.58481899015186, 127.00088309891716 );
 
-    public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 0.00, 30);
+    public Show show = new Show(1L, member, showBoard, coordinate, null, Show.ShowStatus.SALE, 0.00, 30);
 
     public ShowComment showComment = new ShowComment(1L, show, member, 5.0, "감동적입니다.");
 
@@ -229,7 +229,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                Show.ShowStatus.SALE.getStatus(),
+                show.getStatus(),
                 show.getScoreAverage(),
                 show.getTotal()
         );
@@ -254,7 +254,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                Show.ShowStatus.SALE.getStatus(),
+                show.getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
                 showComments,
@@ -284,7 +284,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                Show.ShowStatus.SALE.getStatus(),
+                show.getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
                 showComments,

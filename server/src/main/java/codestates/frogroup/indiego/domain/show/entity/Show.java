@@ -3,13 +3,11 @@ package codestates.frogroup.indiego.domain.show.entity;
 import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.common.auditing.BaseTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,23 +21,29 @@ public class Show extends BaseTime {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @Setter
     private Member member;
 
     @Embedded
+    @Setter
     private ShowBoard board;
 
+    @Setter
     @Embedded
     private Coordinate coordinate;
 
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
+    private List<ShowComment> comment;
+
     @Enumerated(value = EnumType.STRING)
-    private ShowStatus status;
+    private ShowStatus status = ShowStatus.SALE;
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private Double scoreAverage; // 평균별점
+    private double scoreAverage; // 평균별점
 
     @Column(nullable = false)
-    private Integer total; // 정원
+    private int total; // 정원
 
 
     public enum ShowStatus {
@@ -55,4 +59,14 @@ public class Show extends BaseTime {
         }
     }
 
+    @Builder
+    public Show(Member member, ShowBoard board, Coordinate coordinate, List<ShowComment> comment,
+                int total, double scoreAverage) {
+        this.member = member;
+        this.board = board;
+        this.coordinate = coordinate;
+        this.comment = comment;
+        this.total = total;
+        this.scoreAverage = scoreAverage;
+    }
 }

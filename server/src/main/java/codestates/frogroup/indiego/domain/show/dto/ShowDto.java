@@ -14,34 +14,46 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
 public class ShowDto {
 
     @Getter
+    @Builder
     @AllArgsConstructor
     public static class Post{
-        private Long id;
         //ShowBoard
         //Board
+        @NotNull
         private String title;
+        @NotNull
         private String content;
         private String image;
+        @NotNull
         private String category;
         //board end
+        @NotNull
         private Integer price;
+        @NotNull
         private String address;
+        @NotNull
         private LocalDate expiredAt; // 만료날짜
+        @NotNull
         private LocalDate showAt; // 공연날짜
         private String detailImage;
         //showboard end
+        @NotNull
         private Double latitude;
+        @NotNull
         private Double longitude;
 
         //check
-        private String status;
-        private Double scoreAverage; // 평균별점
+        @NotNull
+        private Show.ShowStatus status;
+        //private double scoreAverage; // 평균별점
+        @NotNull
         private Integer total; // 정원
     }
 
@@ -68,15 +80,15 @@ public class ShowDto {
         private Double longitude;
 
         //check
-        private String status;
+        private Show.ShowStatus status;
         private Double scoreAverage; // 평균별점
-        private Integer total; // 정원
+        private int total; // 정원
 
-        private ShowCommentDto.Response comment;
+        private List<ShowComment> comment;
     }
 
     @Getter
-    @Builder
+    @Setter
     @AllArgsConstructor
     public static class Response{
         private Long id;
@@ -97,16 +109,16 @@ public class ShowDto {
         private Double longitude;
 
         //check
-        private String status;
+        private Show.ShowStatus status;
         private Double scoreAverage; // 평균별점
-        private Integer total; // 정원
+        private int total; // 정원
         private List<ShowCommentDto.Response> comments;
 
         private boolean isBookmarked;
     }
 
     @Getter
-    @Builder
+    @Setter
     @AllArgsConstructor
     public static class postResponse{
         private Long id;
@@ -127,10 +139,11 @@ public class ShowDto {
         private Double longitude;
 
         //check
-        private String status;
+        private Show.ShowStatus status;
         private Double scoreAverage; // 평균별점
-        private Integer total; // 정원
+        private int total; // 정원
 
+//
     }
 
 }
