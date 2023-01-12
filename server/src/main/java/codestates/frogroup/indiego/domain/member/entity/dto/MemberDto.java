@@ -74,6 +74,7 @@ public class MemberDto {
         private String introduction;
     }
 
+    @Getter
     @Builder
     @AllArgsConstructor
     public static class LoginResponse {
