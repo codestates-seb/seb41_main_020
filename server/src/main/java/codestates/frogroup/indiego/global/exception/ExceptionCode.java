@@ -19,7 +19,7 @@ public enum ExceptionCode {
     TOKEN_MALFORMED(400, "Token Malformed"),
     TOKEN_UNSUPPORTED(400, "Token Unsupported"),
     TOKEN_ILLEGAL_ARGUMENT(400, "Token Illegal Argument"),
-    ANONYMOUS_USER(404, "Anonymous User");
+    ANONYMOUS_USER(404, "Anonymous User"),
 
     // ARITCLE
     ARTICLE_NOT_FOUND(404, "게시글을 찾을 수 없습니다."),
