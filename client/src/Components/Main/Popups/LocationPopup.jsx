@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 
 import List from "./List.jsx";
 import { primary, sub, secondary, dtFontSize } from "../../../styles/mixins";
+import breakpoint from "../../../styles/breakpoint.js";
 
 import styled from "styled-components";
 
@@ -36,6 +37,12 @@ const MapContainer = styled.div`
   align-items: center;
   position: relative;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 100%;
+    min-height: 100px;
+    padding-top: 30px;
+  }
+
   svg {
     text {
       width: max-content;
@@ -46,6 +53,11 @@ const MapContainer = styled.div`
       fill: ${sub.sub600};
       transition: all 0.1s ease-in-out;
       pointer-events: none;
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        width: 100%;
+        height: 30%;
+      }
     }
 
     #Dobong-gu:hover ~ .dobong {
@@ -273,7 +285,8 @@ const MapContainer = styled.div`
 `;
 
 const CloseButton = styled.button`
-  width: 180px;
+  width: 30%;
+  max-width: 180px;
   padding: 10px;
   border-radius: 20px;
   border: 2px solid ${sub.sub800};
@@ -302,6 +315,11 @@ const ContentsContainer = styled.div`
   width: 100%;
   height: 80%;
   justify-content: space-evenly;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 `;
 
 const ConcertListContainer = styled.div`
@@ -318,6 +336,14 @@ const ConcertListContainer = styled.div`
     border-radius: 20px;
     background-color: ${primary.primary300};
     color: white;
+  }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 40%;
+    width: 100%;
+    margin-top: 0;
   }
 `;
 

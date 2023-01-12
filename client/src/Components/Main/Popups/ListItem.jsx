@@ -1,6 +1,7 @@
 import React from "react";
 
 import { primary, dtFontSize, sub } from "../../../styles/mixins";
+import breakpoint from "../../../styles/breakpoint";
 
 import styled from "styled-components";
 
@@ -25,6 +26,10 @@ const ListItemContainer = styled.div`
     margin-left: 10px;
     margin-top: 10px;
     font-weight: 700;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: 2vw;
+    }
   }
 
   .date {
@@ -32,6 +37,10 @@ const ListItemContainer = styled.div`
     font-size: ${dtFontSize.small};
     margin-left: 10px;
     margin-bottom: 5px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: 2vw;
+    }
   }
 `;
 

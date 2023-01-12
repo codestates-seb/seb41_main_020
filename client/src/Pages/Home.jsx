@@ -5,13 +5,15 @@ import Banner from "../Components/Main/Banner.jsx";
 import SearchBar from "../Components/Main/SearchBar.jsx";
 import Button from "../Components/Main/Button.jsx";
 import Carousel from "../Components/Main/Carousels/Carousel.jsx";
-import Renderer from "../Components/Main/Carousels/Renderer.jsx";
+import CarouselItemList from "../Components/Main/Carousels/CarouselItemList.jsx";
 import Boards from "../Components/Main/Boards/Boards.jsx";
 import Overlay from "../Components/Main/Popups/Overlay.jsx";
 import LocationPopup from "../Components/Main/Popups/LocationPopup.jsx";
+import LongCarousel from "../Components/Main/Carousels/LongCarousel.jsx";
 
 import styled from "styled-components";
 import { dtFontSize, primary } from "../styles/mixins.js";
+import breakpoint from "../styles/breakpoint.js";
 
 const MainContainer = styled.div`
   display: flex;
@@ -28,42 +30,92 @@ const ButtonsContainer = styled.div`
 `;
 
 const CarouselContainer = styled.div`
+  width: 100%;
+  height: 30vh;
+  min-height: 200px;
+  max-height: 300px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px 0;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin: 30px 0;
+    max-height: max-content;
+    height: max-content;
+  }
+`;
+
+const CarouselDisplayBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
   justify-content: center;
-  margin: 50px;
+  padding: 0 10%;
 `;
 
 const CarouselDisplay = styled.div`
   display: flex;
-  flex-direction: column;
-  width: 40%;
-  height: max-content;
-  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+  justify-content: space-evenly;
 
-  h1 {
-    color: ${primary.primary500};
-    font-size: ${dtFontSize.large};
-    margin-bottom: 10px;
-    width: 83%;
-    text-align: start;
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    flex-direction: column;
+  }
+
+  .carousel_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    h1 {
+      color: ${primary.primary500};
+      font-size: ${dtFontSize.large};
+      margin-bottom: 10px;
+      width: 73%;
+      height: max-content;
+      text-align: start;
+    }
   }
 `;
 
 const LongCarouselContainer = styled.div`
   width: 100%;
+  height: 35vh;
+  min-height: 300px;
+  max-height: 350px;
   display: flex;
   flex-direction: column;
-  padding: 0 180px;
   align-items: center;
+  /* padding: 0 13vw; */
+
+  .longcarousel_display {
+    width: max-content;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   .longcarousel_header_container {
-    margin-left: 70px;
     display: flex;
     width: 100%;
+    margin-left: 10px;
     justify-content: flex-start;
   }
 
-  button {
+  .longcarousel_display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 68vw;
+    height: 35vh;
+  }
+
+  .my_location {
     margin-left: 30px;
     font-weight: 600;
   }
@@ -78,22 +130,33 @@ const LongCarouselContainer = styled.div`
 
 const BoardsContainer = styled.div`
   width: 100%;
+  min-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 50px;
 
   h1.title {
-    width: 78%;
+    width: 80%;
     color: ${primary.primary500};
     font-size: ${dtFontSize.large};
     margin-bottom: 5px;
     text-align: start;
-    margin-left: 120px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      text-align: center;
+      background-color: ${primary.primary300};
+      color: white;
+      margin-left: 0;
+      width: 80%;
+      padding: 10px 0;
+      border-radius: 20px;
+    }
   }
 `;
 
 const BoardsGrid = styled.div`
+  min-width: 850px;
   width: 80%;
   display: grid;
   grid-template-columns: repeat(2, 45%);
@@ -101,13 +164,17 @@ const BoardsGrid = styled.div`
   row-gap: 20px;
   justify-content: center;
   margin-top: 30px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    grid-template-columns: repeat(1, 45%);
+  }
 `;
 
 const dummyObj = {
   title: "Rock Night Party",
   artist: "우리동네 락밴드",
   detail: "공연 상세 내용",
-  date: "2022.03.08 ~ 2022.03.09 (목) 18:00",
+  date: "2022.03.08 ~ 2022.03.09",
   location: "종로구 종로운동장",
   img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
 };
@@ -123,65 +190,65 @@ export default function Home() {
   };
 
   return (
-    <MainContainer>
-      {isLocationPopupOpen && (
-        <Overlay>
-          <LocationPopup popupHandler={setIsLocationPopupOpen} />
-        </Overlay>
-      )}
-      <Header />
-      <Banner />
-      <ButtonsContainer>
-        <Button clickEvent={locationPopupOnClickHandler}>
-          지역별 공연 현황
-        </Button>
-        <Button>날짜별 공연 현황</Button>
-      </ButtonsContainer>
-      <SearchBar />
-      <CarouselContainer>
-        <CarouselDisplay>
-          <h1>월간 예매율 순위</h1>
-          <Carousel
-            width={"85%"}
-            height={"260px"}
-            data={dummyArr}
-            renderer={Renderer}
-            isRankMode={true}
-          ></Carousel>
-        </CarouselDisplay>
-        <CarouselDisplay>
-          <h1>새로 추가된 공연</h1>
-          <Carousel
-            width={"85%"}
-            height={"260px"}
-            data={dummyArr}
-            renderer={Renderer}
-          ></Carousel>
-        </CarouselDisplay>
-      </CarouselContainer>
-      <LongCarouselContainer>
-        <div className="longcarousel_header_container">
-          <h1>내 지역 공연 현황</h1>
-          <Button>나의 위치: 종로구</Button>
-        </div>
-        <Carousel
-          width={"95%"}
-          height={"250px"}
-          data={dummyArr}
-          renderer={Renderer}
-          isMultiple={true}
-        ></Carousel>
-      </LongCarouselContainer>
-      <BoardsContainer>
-        <h1 className="title">커뮤니티 인기 게시글</h1>
-        <BoardsGrid>
-          <Boards>자유게시판</Boards>
-          <Boards>구인게시판</Boards>
-          <Boards>요청게시판</Boards>
-          <Boards>홍보게시판</Boards>
-          <Boards>공연후기</Boards>
-        </BoardsGrid>
-      </BoardsContainer>
-    </MainContainer>
+    <>
+      {/* <Header /> */}
+      <MainContainer>
+        {isLocationPopupOpen && (
+          <Overlay>
+            <LocationPopup popupHandler={setIsLocationPopupOpen} />
+          </Overlay>
+        )}
+        <Banner />
+        <ButtonsContainer>
+          <Button clickEvent={locationPopupOnClickHandler}>
+            지역별 공연 현황
+          </Button>
+          <Button>날짜별 공연 현황</Button>
+        </ButtonsContainer>
+        <SearchBar />
+        <CarouselContainer>
+          <CarouselDisplayBox>
+            <CarouselDisplay>
+              <div className="carousel_box">
+                <h1>월간 예매율 순위</h1>
+                <Carousel
+                  width={"80%"}
+                  minWidth={"300px"}
+                  maxWidth={"480px"}
+                  height={"100%"}
+                  data={dummyArr}
+                  carouselItemList={CarouselItemList}
+                  isRankMode={true}
+                ></Carousel>
+              </div>
+              <div className="carousel_box">
+                <h1>새로 추가된 공연</h1>
+                <Carousel
+                  width={"80%"}
+                  minWidth={"300px"}
+                  maxWidth={"480px"}
+                  height={"100%"}
+                  data={dummyArr}
+                  carouselItemList={CarouselItemList}
+                ></Carousel>
+              </div>
+            </CarouselDisplay>
+          </CarouselDisplayBox>
+        </CarouselContainer>
+        <LongCarouselContainer>
+          <LongCarousel data={dummyArr} />
+        </LongCarouselContainer>
+        <BoardsContainer>
+          <h1 className="title">커뮤니티 인기 게시글</h1>
+          <BoardsGrid>
+            <Boards>자유게시판</Boards>
+            <Boards>구인게시판</Boards>
+            <Boards>요청게시판</Boards>
+            <Boards>홍보게시판</Boards>
+            <Boards>공연후기</Boards>
+          </BoardsGrid>
+        </BoardsContainer>
+      </MainContainer>
+    </>
   );
 }

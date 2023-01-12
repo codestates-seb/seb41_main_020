@@ -2,6 +2,8 @@ import React from "react";
 
 import ListItem from "./ListItem.jsx";
 
+import breakpoint from "../../../styles/breakpoint.js";
+
 import styled from "styled-components";
 
 const ListContainer = styled.div`
@@ -11,6 +13,11 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: scroll;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 50%;
+    height: 50%;
+  }
 `;
 
 export default function List() {
