@@ -34,9 +34,8 @@ jobs:
         arguments: build
         build-root-directory: ./server
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      working-directory: ./server/
+    - name: Add permission
+      run: chmod +x ./gradlew
       
 #     - name: Build with Gradle
 #       run: ./gradlew build
