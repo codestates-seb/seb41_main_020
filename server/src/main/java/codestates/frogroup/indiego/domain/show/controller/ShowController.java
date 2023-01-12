@@ -33,7 +33,7 @@ public class ShowController {
     StubData stubData = new StubData();
 
     @PostMapping
-    public ResponseEntity postShow(@Valid @RequestBody ShowDto.Post showPostDto){
+    public ResponseEntity postShow(){
 //        ShowDto.Response response = new ShowDto.Response(showPostDto.getId(), showPostDto.getTitle(), showPostDto.getContent(),
 //                showPostDto.getImage(), showPostDto.getCategory(),showPostDto.getPrice(),
 //                showPostDto.getAddress(), showPostDto.getExpiredAt(), showPostDto.getShowAt(),
@@ -46,25 +46,21 @@ public class ShowController {
     }
 
     @PatchMapping ("/{show-id}")
-    public ResponseEntity patchShow(@Valid @RequestBody ShowDto.Patch showPatchDto){
+    public ResponseEntity patchShow(){
         return new ResponseEntity<>(
                 stubData.getPatchResponse(), HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{show-id}")
-    public ResponseEntity deleteShow(@PathVariable("show-id") long showId){
+    public ResponseEntity deleteShow(){
         return new ResponseEntity<>(
                 HttpStatus.NO_CONTENT
         );
     }
 
     @GetMapping("/{show-id}")
-    public ResponseEntity getShow(@PathVariable("location") String address,
-                                  @PathVariable("date") String date,
-                                  @PathVariable("title") String title,
-                                  @PathVariable("page") int page,
-                                  @PathVariable("size") int size){
+    public ResponseEntity getShow(){
         return new ResponseEntity<>(
                 stubData.getShowResponse(), HttpStatus.OK
         );

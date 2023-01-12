@@ -26,7 +26,7 @@ public class MemberController {
     private final MemberMapper memberMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto){
+    public ResponseEntity postMember(){
 
 //        Member member = memberMapper.memberPostDtoToMember(memberPostDto);
 //        Member saveMember = memberService.createMember(member);
@@ -37,7 +37,7 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@Positive @PathVariable("member-id") Long memberId){
+    public ResponseEntity getMember(){
 
 //        Member verifiedMember = memberService.findVerifiedMember(memberId);
 //        MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
@@ -47,8 +47,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@RequestBody MemberDto.Patch memberPatchDto,
-                                      @Positive @PathVariable("member-id") Long memberId ){
+    public ResponseEntity patchMember(){
 //        memberPatchDto.setMemberId(memberId); // TODO: 리펙토링하기 좋은 위치를 선별하고싶다!
 //        Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
 //
@@ -60,7 +59,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@Positive @PathVariable("member-id") Long memberId){
+    public ResponseEntity deleteMember(){
 //        memberService.deleteMember(memberId);
         return new ResponseEntity<>(new SingleResponseDto<>("회원탈퇴가 완료되었습니다"), HttpStatus.CREATED);
     }

@@ -22,21 +22,21 @@ public class ShowCommentController {
     StubData stubData = new StubData();
 
     @PostMapping("/{show-id}/comments")
-    public ResponseEntity postComment(@Valid @RequestBody ShowCommentDto.Post showPostDto){
+    public ResponseEntity postComment(){
         return new ResponseEntity<>(
                 stubData.getShowCommentResponse(), HttpStatus.CREATED
         );
     }
 
     @PatchMapping("/{show-id}/comments/{comment-id}")
-    public ResponseEntity patchComments(@Valid @RequestBody ShowCommentDto.Response response){
+    public ResponseEntity patchComments(){
         return new ResponseEntity<>(
                 stubData.getPatchShowCommentResponse(), HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{show-id}/comments/{comment-id}")
-    public ResponseEntity deleteREservation(@PathVariable("show-id") long showId){
+    public ResponseEntity deleteREservation(){
         return new ResponseEntity<>(
                 HttpStatus.NO_CONTENT
         );
