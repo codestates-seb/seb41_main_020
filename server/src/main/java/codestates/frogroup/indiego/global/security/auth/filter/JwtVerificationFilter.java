@@ -21,8 +21,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
 
     private final TokenProvider tokenProvider;
 
@@ -48,10 +46,10 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         try {
             // 헤더에서 AccessToken 토큰 꺼내오기
-            String jwt = resolveToken(request);
+            String jwt = tokenProvider.resolveToken(request);
 
             // 토큰 검증을 통과하면 다음 필터 진행
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt,response)) {
                 // 토큰으로부터 Authentication 객체를 만듬
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
 
@@ -70,16 +68,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                 response.setStatus(((BusinessLogicException)e).getExceptionCode().getStatus());
             }
         }
-    }
-
-    // Request Header 에서 토큰 정보를 꺼내오는 메소드
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-
-        return null;
     }
 
     // OncePerRequestFilter의 shouldNotFilter(); 오버라이딩함

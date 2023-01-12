@@ -1,19 +1,14 @@
 package codestates.frogroup.indiego.global.security.auth.filter;
 
 
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
-import codestates.frogroup.indiego.global.dto.SingleResponseDto;
-import codestates.frogroup.indiego.global.exception.ErrorResponse;
 import codestates.frogroup.indiego.global.security.auth.dto.LoginDto;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
 import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
+import codestates.frogroup.indiego.global.security.auth.utils.Responder;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -64,6 +59,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Authorization",headerValue);
         response.setHeader("Refresh",refreshToken);
 
+        Responder.loginSuccessResponse(response,authMember); // login 완료시 Response 응답 만들기
+
         // RefreshToken Cookie로 담는 방법
 //        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 //                .maxAge(7 * 24 * 60 * 60)
@@ -76,17 +73,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         log.info("# accessToken = {}",headerValue);
         log.info("# refreshToken = {}",refreshToken);
-
-        Gson gson = new Gson();
-        MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
-                .id(authMember.getId())
-                .email(authMember.getEmail())
-                .roles(authMember.getRoles())
-                .build();
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.OK.value());
-        response.getWriter().write(gson.toJson(new SingleResponseDto<>(loginResponse), SingleResponseDto.class));
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
     }
