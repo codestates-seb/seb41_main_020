@@ -9,6 +9,7 @@ name: Java CI with Gradle
 
 on:
   push:
+    paths: [ 'server/**' ]
     branches: [ "release" ]
   pull_request:
     branches: [ "release" ]
