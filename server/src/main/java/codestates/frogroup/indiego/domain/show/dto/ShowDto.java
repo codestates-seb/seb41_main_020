@@ -84,11 +84,11 @@ public class ShowDto {
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
 
+        private ShowCommentDto.Response comment;
     }
 
-
     @Getter
-    @Setter
+    @Builder
     @AllArgsConstructor
     public static class Response{
         private Long id;
@@ -109,16 +109,14 @@ public class ShowDto {
         private Double longitude;
 
         //check
-        private Show.ShowStatus status;
+        private String status;
         private Double scoreAverage; // 평균별점
-        private int total; // 정원
-
+        private Integer total; // 정원
         private boolean isBookmarked;
-
     }
 
     @Getter
-    @Setter
+    @Builder
     @AllArgsConstructor
     public static class postResponse{
         private Long id;

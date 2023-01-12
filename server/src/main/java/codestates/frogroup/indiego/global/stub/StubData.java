@@ -229,7 +229,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                show.getStatus(),
+                show.getStatus().getStatus(),
                 show.getScoreAverage(),
                 show.getTotal()
         );
@@ -257,7 +257,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                show.getStatus(),
+                show.getStatus().getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
                 true
@@ -289,7 +289,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                show.getStatus(),
+                show.getStatus().getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
                 true

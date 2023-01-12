@@ -7,7 +7,9 @@ import codestates.frogroup.indiego.domain.member.entity.Profile;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapperImpl;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
+import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.stub.StubData;
@@ -27,29 +29,34 @@ import java.time.LocalDate;
 public class ShowController {
 
     private final ShowRepository showRepository;
-
-    //private final ShowService showService;
+    private final ShowService showService;
+    private final ShowMapperImpl mapper;
 
     StubData stubData = new StubData();
 
     @PostMapping
     public ResponseEntity postShow(@Valid @RequestBody ShowDto.Post showPostDto){
 
-//        ShowDto.Response response = new ShowDto.Response(showPostDto.getId(), showPostDto.getTitle(), showPostDto.getContent(),
-//                showPostDto.getImage(), showPostDto.getCategory(),showPostDto.getPrice(),
-//                showPostDto.getAddress(), showPostDto.getExpiredAt(), showPostDto.getShowAt(),
-//                showPostDto.getDetailImage(), showPostDto.getLatitude(), showPostDto.getLongitude(),
-//                showPostDto.getStatus(), showPostDto.getScoreAverage(), showPostDto.getTotal());
+        Show show = mapper.showPostDtoToShow(showPostDto);
+        Show createdShow = showService.createShow(show, stubData.member.getId());
+        ShowDto.postResponse response = mapper.showToShowPostResponse(createdShow);
 
         return new ResponseEntity<>(
-                stubData.postShowResponse(), HttpStatus.CREATED
+                new SingleResponseDto(response)
+                , HttpStatus.CREATED
         );
     }
 
     @PatchMapping ("/{show-id}")
-    public ResponseEntity patchShow(@Valid @RequestBody ShowDto.Patch showPatchDto){
+    public ResponseEntity patchShow(@PathVariable("show-id") long showId,
+    @Valid @RequestBody ShowDto.Patch showPatchDto){
+        Show show = mapper.showPatchDtoToShow(showPatchDto);
+        show.setId(showId);
+        Show updatedShow = showService.updateShow(show, stubData.member.getId());
+        ShowDto.Response response = mapper.showToShowResponse(updatedShow);
+
         return new ResponseEntity<>(
-                stubData.getPatchResponse(), HttpStatus.OK
+                response, HttpStatus.OK
         );
     }
 
