@@ -34,6 +34,7 @@ public class ShowController {
 
     @PostMapping
     public ResponseEntity postShow(@Valid @RequestBody ShowDto.Post showPostDto){
+
 //        ShowDto.Response response = new ShowDto.Response(showPostDto.getId(), showPostDto.getTitle(), showPostDto.getContent(),
 //                showPostDto.getImage(), showPostDto.getCategory(),showPostDto.getPrice(),
 //                showPostDto.getAddress(), showPostDto.getExpiredAt(), showPostDto.getShowAt(),

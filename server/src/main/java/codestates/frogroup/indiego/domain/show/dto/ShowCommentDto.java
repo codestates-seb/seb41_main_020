@@ -11,11 +11,7 @@ public class ShowCommentDto {
     @Getter
     @AllArgsConstructor
     public static class Post{
-        @NotNull
-        private Long id;
-        @NotNull
-        private double score;
-        @NotNull
+        private Double score;
         private String comment;
     }
 
@@ -23,7 +19,6 @@ public class ShowCommentDto {
     @AllArgsConstructor
     @Builder
     public static class Patch{
-        private Long id;
         private Double score;
         private String comment;
     }
@@ -32,7 +27,10 @@ public class ShowCommentDto {
     @AllArgsConstructor
     @Builder
     public static class Response{
-        private Long id;
+        private Long commentId;
+        private Long showId;
+        private Long memberId;
+        private String nickname;
         private Double score;
         private String comment;
     }
