@@ -10,7 +10,6 @@ public class ShowCommentDto {
     @AllArgsConstructor
     public static class Post{
         private Long id;
-        private ShowDto.Post show;
         private Double score;
         private String comment;
     }
@@ -20,7 +19,6 @@ public class ShowCommentDto {
     @Builder
     public static class Patch{
         private Long id;
-        private ShowDto.Patch show;
         private Double score;
         private String comment;
     }
@@ -30,7 +28,6 @@ public class ShowCommentDto {
     @Builder
     public static class Response{
         private Long id;
-        private ShowDto.Response show;
         private Double score;
         private String comment;
     }
