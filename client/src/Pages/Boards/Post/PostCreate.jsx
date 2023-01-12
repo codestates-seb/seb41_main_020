@@ -46,9 +46,11 @@ const TitleInputDiv = styled.div`
 `;
 
 const ContentInputDiv = styled.div`
-  padding-top: 10px;
+  margin-top: 10px;
   text-align: left;
-  margin-bottom: 50px;
+  padding-bottom: 50px;
+  height: 400px;
+  background-color: white;
 
   .contentInput {
     width: 100%;

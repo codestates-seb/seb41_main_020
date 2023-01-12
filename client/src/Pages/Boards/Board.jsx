@@ -7,6 +7,7 @@ import left from "../../assets/left.svg";
 import OKButton from "../../Components/OKButton.jsx";
 import Aside from "./Aside/Aside.jsx";
 import Header from "../../Components/Header.jsx";
+import search from "../../assets/search.svg";
 
 import React from "react";
 import styled from "styled-components";
@@ -98,13 +99,13 @@ const BoardItemContent = styled.div`
 
   .titleDiv {
     margin-top: 10px;
-    font-size: ${dtFontSize.large};
+    font-size: ${dtFontSize.medium};
     font-weight: 700;
     text-align: left;
     color: ${sub.sub900};
   }
   .contentDiv {
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
     color: ${sub.sub700};
@@ -197,11 +198,27 @@ const PageNationDiv = styled.div`
 `;
 
 const SearchBarDiv = styled.div`
-  .SearchBarInput {
-    width: 100px;
-    height: 100px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  .aSearchBarDiv {
+    background-color: blue;
+    width: 40%;
   }
-  .ListButton {
+  .searchBarInput {
+    padding: 10px;
+    width: 80%;
+    height: 40px;
+    border: 2px solid ${sub.sub400};
+    border-radius: 10px;
+  }
+
+  .searchImage {
+    width: 17px;
+    height: 17px;
+  }
+
+  .listButton {
     background-color: blue;
   }
 `;
@@ -260,7 +277,13 @@ export default function Board() {
             </button>
           </PageNationDiv>
           <SearchBarDiv>
-            <input placeholder="검색어를 입력하세요." />
+            <div className="aSearchBarDiv">
+              <input
+                className="searchBarInput"
+                placeholder="검색어를 입력하세요."
+              />
+              <img className="searchImage" src={search} alt="돋보기"></img>
+            </div>
           </SearchBarDiv>
         </ContentWrapper>
       </PageWrapper>

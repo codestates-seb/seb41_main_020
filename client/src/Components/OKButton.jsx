@@ -7,6 +7,7 @@ const OKButton = styled.button`
   border: none;
   font-size: ${dtFontSize.medium};
   color: ${sub.sub100};
+  cursor: pointer;
 `;
 
 export default OKButton;

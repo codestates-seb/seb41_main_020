@@ -5,6 +5,7 @@ import Header from "../../../Components/Header.jsx";
 import OKButton from "../../../Components/OKButton.jsx";
 import EditorView from "../../../Components/EditorView.jsx";
 import heart from "../../../assets/heart.svg";
+import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 
 import React from "react";
 import styled from "styled-components";
@@ -13,7 +14,6 @@ const HeartItem = styled(BoardItem)`
   justify-content: center;
   .heartButton {
     margin-bottom: 5px;
-    background-color: yellow;
     border: white;
     cursor: pointer;
   }
@@ -28,7 +28,6 @@ const HeartItem = styled(BoardItem)`
 const AnswerWrapper = styled.div`
   margin-top: 60px;
   width: 100%;
-  /* background-color: yellow; */
   text-align: left;
 
   .answerCount {
@@ -39,7 +38,6 @@ const AnswerWrapper = styled.div`
   }
   .answerInputDiv {
     height: 65px;
-    background-color: green;
 
     .answerInput {
       border: 2px solid ${primary.primary500};
@@ -53,11 +51,117 @@ const AnswerWrapper = styled.div`
 const AnswerCreateButtonDiv = styled.div`
   text-align: right;
   width: 100%;
+  margin-bottom: 50px;
 `;
 
 const AnswerCreateButton = styled(OKButton)`
   width: 100px;
   height: 40px;
+`;
+
+const AnswerListWrapper = styled.div`
+  width: 100%;
+  > ul {
+    padding-left: 0px;
+    list-style: none;
+
+    > li {
+    }
+  }
+`;
+
+const AnswerListUserDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-bottom: 15px;
+`;
+
+const AnswerListImageDiv = styled.div`
+  .userImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+  }
+`;
+
+const AnswerListInfoDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .answerListUserName {
+    background-color: white;
+    height: 20px;
+    text-align: left;
+    color: ${primary.primary400};
+    font-size: ${dtFontSize.medium};
+    font-weight: 500;
+    padding-left: 15px;
+  }
+  .answerListCreateDate {
+    background-color: white;
+    height: 20px;
+    text-align: left;
+    color: ${sub.sub300};
+    font-size: ${dtFontSize.small};
+    font-weight: 300;
+    padding-left: 15px;
+  }
+`;
+
+const AnswerListContentDiv = styled.div`
+  text-align: left;
+  background-color: white;
+  border-bottom: 2px solid ${sub.sub300};
+  padding-bottom: 5px;
+  font-size: ${dtFontSize.medium};
+  color: ${sub.sub800};
+`;
+
+const AnswerListFunctionDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  margin-bottom: 20px;
+
+  .heartDiv {
+    display: flex;
+    justify-content: center;
+
+    .heartButton {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      .heartImage {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .hearCount {
+      margin-left: 5px;
+      margin-top: 1px;
+      color: ${primary.primary400};
+      font-size: ${dtFontSize.small};
+    }
+  }
+
+  .udDiv {
+    .udButton {
+      cursor: pointer;
+      width: 40px;
+      height: 20px;
+      border: none;
+      background-color: white;
+      color: ${sub.sub400};
+      margin-right: 5px;
+    }
+  }
 `;
 
 const Post = () => {
@@ -94,6 +198,43 @@ const Post = () => {
               </AnswerCreateButtonDiv>
             </AnswerWrapper>
           </form>
+          <AnswerListWrapper>
+            {AnswerDummy.map((it) => (
+              <ul key={it.id}>
+                <li>
+                  <AnswerListUserDiv>
+                    <AnswerListImageDiv>
+                      <img
+                        className="userImage"
+                        src={it.image}
+                        alt="userImage"
+                      />
+                    </AnswerListImageDiv>
+                    <AnswerListInfoDiv>
+                      <div className="answerListUserName">{it.nickname}</div>
+                      <div className="answerListCreateDate">
+                        {new Date(it.createAt).toLocaleString()}
+                      </div>
+                    </AnswerListInfoDiv>
+                  </AnswerListUserDiv>
+                  <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
+                  <AnswerListFunctionDiv>
+                    <div className="heartDiv">
+                      <button className="heartButton">
+                        <img className="heartImage" src={heart} alt="하트" />
+                      </button>
+
+                      <span className="hearCount">{it.likeCunt}</span>
+                    </div>
+                    <div className="udDiv">
+                      <button className="udButton">수정</button>
+                      <button className="udButton">삭제</button>
+                    </div>
+                  </AnswerListFunctionDiv>
+                </li>
+              </ul>
+            ))}
+          </AnswerListWrapper>
         </ContentWrapper>
       </PageWrapper>
     </Wrapper>
