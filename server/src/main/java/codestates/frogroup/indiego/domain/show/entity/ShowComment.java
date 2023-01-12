@@ -19,8 +19,9 @@ public class ShowComment extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long showId;
+    @ManyToOne
+    @JoinColumn(name = "show_id")
+    private Show show;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

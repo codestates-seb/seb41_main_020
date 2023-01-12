@@ -112,6 +112,7 @@ public class ShowDto {
         private int total; // 정원
 
         private boolean isBookmarked;
+
     }
 
     @Getter

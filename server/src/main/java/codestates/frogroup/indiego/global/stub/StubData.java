@@ -92,7 +92,7 @@ public class StubData {
 
     public Show show = new Show(1L, member, showBoard, coordinate, Show.ShowStatus.SALE, 0.00, 30);
 
-    public ShowComment showComment = new ShowComment(1L, show.getId(), member, 5.0, "감동적입니다.");
+    public ShowComment showComment = new ShowComment(1L, show, member, 5.0, "감동적입니다.");
 
 
 
@@ -357,7 +357,8 @@ public class StubData {
         return new ShowReservationDto.Response(
                 show.getId(),
                 1,
-                1
+                1,
+                false
         );
     }
 
@@ -365,7 +366,8 @@ public class StubData {
         return new ShowReservationDto.Response(
                 show.getId(),
                 1,
-                2
+                2,
+                false
         );
     }
 }
