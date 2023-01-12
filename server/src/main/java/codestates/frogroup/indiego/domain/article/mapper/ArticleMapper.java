@@ -8,7 +8,9 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = ArticleCommentMapper.class)
 public interface ArticleMapper {
 
     @Mapping(source = "title", target = "board.title")
@@ -28,6 +30,8 @@ public interface ArticleMapper {
     @Mapping(source = "board.image", target = "image")
     @Mapping(source = "board.category", target = "category")
     @Mapping(source = "member.profile.nickname", target = "nickname")
+    @Mapping(target = "articleCommentCount",
+            expression = "java(article.getArticleComments() != null ? article.getArticleComments().size() : 0)")
     ArticleDto.Response articleToArticleResponse(Article article);
 
     @Mapping(source = "board.title", target = "title")

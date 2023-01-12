@@ -1,10 +1,7 @@
 package codestates.frogroup.indiego.domain.article.entity;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,4 +22,10 @@ public class ArticleLike {
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article article;
+
+    @Builder
+    public ArticleLike(Member member, Article article) {
+        this.member = member;
+        this.article = article;
+    }
 }
