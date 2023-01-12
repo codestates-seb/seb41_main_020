@@ -19,6 +19,9 @@ public enum ExceptionCode {
     TOKEN_UNSUPPORTED(400, "Token Unsupported"),
     TOKEN_ILLEGAL_ARGUMENT(400, "Token Illegal Argument"),
     ANONYMOUS_USER(404, "Anonymous User");
+    
+    // ARITCLE
+    ARTICLE_NOT_FOUND(404, "게시글을 찾을 수 없습니다.");
 
     @Getter
     private int status;

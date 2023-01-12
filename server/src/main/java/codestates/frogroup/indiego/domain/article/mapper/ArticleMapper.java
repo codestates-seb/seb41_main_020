@@ -4,10 +4,11 @@ import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ArticleMapper {
 
     @Mapping(source = "title", target = "board.title")
@@ -26,6 +27,7 @@ public interface ArticleMapper {
     @Mapping(source = "board.content", target = "content")
     @Mapping(source = "board.image", target = "image")
     @Mapping(source = "board.category", target = "category")
+    @Mapping(source = "member.profile.nickname", target = "nickname")
     ArticleDto.Response articleToArticleResponse(Article article);
 
     @Mapping(source = "board.title", target = "title")

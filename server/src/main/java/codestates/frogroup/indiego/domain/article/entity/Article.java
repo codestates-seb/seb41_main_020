@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Article extends BaseTime {
@@ -30,15 +32,20 @@ public class Article extends BaseTime {
     @Embedded
     private Board board;
 
-    @Column(nullable = false)
     @ColumnDefault("0")
-    private Long view;
+    private long view;
 
-    @Column(nullable = false)
     @ColumnDefault("0")
-    private Long likeCount;
+    private long likeCount;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ArticleComment> articleComments = new ArrayList<>();
 
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 }
