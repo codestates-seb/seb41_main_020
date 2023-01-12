@@ -46,6 +46,13 @@ public class MemberController {
         return new ResponseEntity<>(new SingleResponseDto<>(stubData.getMemberPostResponse()), HttpStatus.CREATED);
     }
 
+    @GetMapping("/{member-id}/mypage")
+    public ResponseEntity getMyMember(@Positive @PathVariable("member-id") Long memberId){
+
+         StubData stubData = new StubData();
+        return new ResponseEntity<>(new SingleResponseDto<>(stubData.getMemberPostResponse()), HttpStatus.CREATED);
+    }
+
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(){
 //        memberPatchDto.setMemberId(memberId); // TODO: 리펙토링하기 좋은 위치를 선별하고싶다!
