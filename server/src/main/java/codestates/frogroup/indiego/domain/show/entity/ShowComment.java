@@ -2,10 +2,7 @@ package codestates.frogroup.indiego.domain.show.entity;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.common.auditing.BaseTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class ShowComment extends BaseTime {
 
     @Id
@@ -20,7 +18,7 @@ public class ShowComment extends BaseTime {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "show_id")
+    @JoinColumn(name = "show-id")
     private Show show;
 
     @ManyToOne
@@ -32,5 +30,4 @@ public class ShowComment extends BaseTime {
 
     @Column(nullable = false)
     private String comment;
-
 }
