@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Header from "../Components/Header.jsx";
 import Banner from "../Components/Main/Banner.jsx";
 import SearchBar from "../Components/Main/SearchBar.jsx";
 import Button from "../Components/Main/Button.jsx";
@@ -10,6 +9,7 @@ import Boards from "../Components/Main/Boards/Boards.jsx";
 import Overlay from "../Components/Main/Popups/Overlay.jsx";
 import LocationPopup from "../Components/Main/Popups/LocationPopup.jsx";
 import LongCarousel from "../Components/Main/Carousels/LongCarousel.jsx";
+import DatePopup from "../Components/Main/Popups/DatePopup.jsx";
 
 import styled from "styled-components";
 import { dtFontSize, primary } from "../styles/mixins.js";
@@ -183,19 +183,29 @@ const dummyArr = new Array(9).fill(dummyObj);
 console.log(dummyArr);
 
 export default function Home() {
-  const [isLocationPopupOpen, setIsLocationPopupOpen] = useState(false);
+  const [LocationPopupOpen, setLocationPopupOpen] = useState(false);
+  const [DatePopupOpen, setDatePopupOpen] = useState(false);
 
   const locationPopupOnClickHandler = () => {
-    setIsLocationPopupOpen(true);
+    setLocationPopupOpen(true);
+  };
+
+  const datePopupOnClickHanlder = () => {
+    setDatePopupOpen(true);
   };
 
   return (
     <>
       {/* <Header /> */}
       <MainContainer>
-        {isLocationPopupOpen && (
+        {LocationPopupOpen && (
           <Overlay>
-            <LocationPopup popupHandler={setIsLocationPopupOpen} />
+            <LocationPopup popupHandler={setLocationPopupOpen} />
+          </Overlay>
+        )}
+        {DatePopupOpen && (
+          <Overlay>
+            <DatePopup popupHandler={setDatePopupOpen}></DatePopup>
           </Overlay>
         )}
         <Banner />
@@ -203,7 +213,7 @@ export default function Home() {
           <Button clickEvent={locationPopupOnClickHandler}>
             지역별 공연 현황
           </Button>
-          <Button>날짜별 공연 현황</Button>
+          <Button clickEvent={datePopupOnClickHanlder}>날짜별 공연 현황</Button>
         </ButtonsContainer>
         <SearchBar />
         <CarouselContainer>

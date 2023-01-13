@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
+import codestates.frogroup.indiego.global.security.auth.utils.Responder;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -11,11 +12,15 @@ import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
@@ -29,7 +34,9 @@ public class TokenProvider {
 	 * 유저 정보로 JWT 토큰을 만들거나 토큰을 바탕으로 유저 정보를 가져옴
 	 * JWT 토큰 관련 암호화, 복호화, 검증 로직
 	 */
-	private static final String BEARER_TYPE = "Bearer";
+	public static final String BEARER_TYPE = "Bearer";
+	public static final String AUTHORIZATION_HEADER = "Authorization";
+	public static final String BEARER_PREFIX = "Bearer ";
 
 	@Getter
 	@Value("${jwt.secret-key}")
@@ -86,11 +93,12 @@ public class TokenProvider {
 			.compact();
 
 		return TokenDto.builder()
-			.grantType(BEARER_TYPE)
-			.accessToken(accessToken)
-			.accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-			.refreshToken(refreshToken)
-			.build();
+				.grantType(BEARER_TYPE)
+				.authorizationType(AUTHORIZATION_HEADER)
+				.accessToken(accessToken)
+				.accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+				.refreshToken(refreshToken)
+				.build();
 	}
 
 	public Authentication getAuthentication(String accessToken) {
@@ -123,39 +131,75 @@ public class TokenProvider {
 	}
 
 	// 토큰 검증
-	public boolean validateToken(String token) {
+	public boolean validateToken(String token, HttpServletResponse response) {
 
 		try {
 			parseClaims(token);
-			return true;
 		} catch (SignatureException e) {
 			log.info("Invalid JWT signature");
 			log.trace("Invalid JWT signature trace = {}", e);
-			throw new BusinessLogicException(ExceptionCode.TOKEN_SIGNATURE_INVALID);
+			Responder.sendErrorResponse(response, ExceptionCode.TOKEN_SIGNATURE_INVALID);
 		} catch (MalformedJwtException e) {
 			log.info("Invalid JWT token");
 			log.trace("Invalid JWT token trace = {}", e);
-			throw new BusinessLogicException(ExceptionCode.TOKEN_MALFORMED);
+			Responder.sendErrorResponse(response, ExceptionCode.TOKEN_MALFORMED);
 		} catch (ExpiredJwtException e) {
 			log.info("Expired JWT token");
 			log.trace("Expired JWT token trace = {}", e);
-			throw new BusinessLogicException(ExceptionCode.TOKEN_EXPIRED);
+			Responder.sendErrorResponse(response, ExceptionCode.TOKEN_EXPIRED);
 		} catch (UnsupportedJwtException e) {
 			log.info("Unsupported JWT token");
 			log.trace("Unsupported JWT token trace = {}", e);
-			throw new BusinessLogicException(ExceptionCode.TOKEN_UNSUPPORTED);
+			Responder.sendErrorResponse(response, ExceptionCode.TOKEN_UNSUPPORTED);
 		} catch (IllegalArgumentException e) {
 			log.info("JWT claims string is empty.");
 			log.trace("JWT claims string is empty trace = {}", e);
-			throw new BusinessLogicException(ExceptionCode.TOKEN_ILLEGAL_ARGUMENT);
+			Responder.sendErrorResponse(response, ExceptionCode.TOKEN_ILLEGAL_ARGUMENT);
 		}
+		return true;
 	}
 
-	public Claims parseClaims(String accessToken)  {
+	public void accessTokenSetHeader(String accessToken, HttpServletResponse response){
+		String headerValue = BEARER_PREFIX + accessToken;
+		response.setHeader(AUTHORIZATION_HEADER,headerValue);
+		log.info("# accessToken = {}",headerValue);
+	}
+
+	public void refreshTokenSetHeader(String refreshToken, HttpServletResponse response){
+		response.setHeader("Refresh",refreshToken);
+		log.info("# refreshToken = {}",refreshToken);
+	}
+
+	public ResponseCookie refreshTokenSetCookie(String refreshToken, HttpServletResponse response){
+		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+				.maxAge(1 * 24 * 60 * 60) // days * hours * min * sec
+				.path("/")
+				.secure(true)
+				.sameSite("None")
+				.httpOnly(true)
+				.build();
+
+		response.setHeader("Set-Cookie", cookie.toString()); // Refresh Token Cookie 에 전송
+		return cookie;
+	}
+
+
+	// Request Header Access Token 정보를 꺼내오는 메소드
+	public String resolveToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+			return bearerToken.substring(7);
+		}
+
+		return null;
+	}
+
+	// 토큰 복호화, 예외발생(토큰만료, 시그니처오류)시 Claims 객체 안만들어짐.
+	public Claims parseClaims(String token)  {
 		return Jwts.parserBuilder()
 				.setSigningKey(key)
 				.build()
-				.parseClaimsJws(accessToken)
+				.parseClaimsJws(token)
 				.getBody();
 	}
 }
