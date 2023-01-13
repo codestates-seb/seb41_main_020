@@ -1,7 +1,6 @@
 import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
-import { Wrapper, PageWrapper, ContentWrapper, BoardItem } from "../Board.jsx";
+import { PageWrapper, ContentWrapper, BoardItem } from "../Board.jsx";
 import Aside from "../Aside/Aside.jsx";
-import Header from "../../../Components/Header.jsx";
 import OKButton from "../../../Components/OKButton.jsx";
 import EditorView from "../../../Components/EditorView.jsx";
 import heart from "../../../assets/heart.svg";
@@ -166,78 +165,71 @@ const AnswerListFunctionDiv = styled.div`
 
 const Post = () => {
   return (
-    <Wrapper>
-      <Header></Header>
-      <PageWrapper>
-        <Aside></Aside>
-        <ContentWrapper>
-          <div className="title">글 제목(ex 난 누구인가 여긴 어디인가)</div>
-          <div className="titleInfo">작성날짜,작성자</div>
-          <div className="lineDiv"></div>
-          <EditorView value={"서버에서 받은 데이터"}></EditorView>
-          <HeartItem>
-            <div className="likeDiv">
-              <button className="heartButton">
-                <img width={50} src={heart} alt="heart"></img>
-              </button>
-              <div className="heartCount">157</div>
+    <PageWrapper>
+      <Aside></Aside>
+      <ContentWrapper>
+        <div className="title">글 제목(ex 난 누구인가 여긴 어디인가)</div>
+        <div className="titleInfo">작성날짜,작성자</div>
+        <div className="lineDiv"></div>
+        <EditorView value={"서버에서 받은 데이터"}></EditorView>
+        <HeartItem>
+          <div className="likeDiv">
+            <button className="heartButton">
+              <img width={50} src={heart} alt="heart"></img>
+            </button>
+            <div className="heartCount">157</div>
+          </div>
+        </HeartItem>
+        <form>
+          <AnswerWrapper>
+            <div className="answerCount">156개의 댓글</div>
+            <div className="answerInputDiv">
+              <input
+                className="answerInput"
+                type="text"
+                placeholder="댓글을 입력하세요."
+              />
             </div>
-          </HeartItem>
-          <form>
-            <AnswerWrapper>
-              <div className="answerCount">156개의 댓글</div>
-              <div className="answerInputDiv">
-                <input
-                  className="answerInput"
-                  type="text"
-                  placeholder="댓글을 입력하세요."
-                />
-              </div>
-              <AnswerCreateButtonDiv>
-                <AnswerCreateButton type="submit">작성하기</AnswerCreateButton>
-              </AnswerCreateButtonDiv>
-            </AnswerWrapper>
-          </form>
-          <AnswerListWrapper>
-            {AnswerDummy.map((it) => (
-              <ul key={it.id}>
-                <li>
-                  <AnswerListUserDiv>
-                    <AnswerListImageDiv>
-                      <img
-                        className="userImage"
-                        src={it.image}
-                        alt="userImage"
-                      />
-                    </AnswerListImageDiv>
-                    <AnswerListInfoDiv>
-                      <div className="answerListUserName">{it.nickname}</div>
-                      <div className="answerListCreateDate">
-                        {new Date(it.createAt).toLocaleString()}
-                      </div>
-                    </AnswerListInfoDiv>
-                  </AnswerListUserDiv>
-                  <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
-                  <AnswerListFunctionDiv>
-                    <div className="heartDiv">
-                      <button className="heartButton">
-                        <img className="heartImage" src={heart} alt="하트" />
-                      </button>
+            <AnswerCreateButtonDiv>
+              <AnswerCreateButton type="submit">작성하기</AnswerCreateButton>
+            </AnswerCreateButtonDiv>
+          </AnswerWrapper>
+        </form>
+        <AnswerListWrapper>
+          {AnswerDummy.map((it) => (
+            <ul key={it.id}>
+              <li>
+                <AnswerListUserDiv>
+                  <AnswerListImageDiv>
+                    <img className="userImage" src={it.image} alt="userImage" />
+                  </AnswerListImageDiv>
+                  <AnswerListInfoDiv>
+                    <div className="answerListUserName">{it.nickname}</div>
+                    <div className="answerListCreateDate">
+                      {new Date(it.createAt).toLocaleString()}
+                    </div>
+                  </AnswerListInfoDiv>
+                </AnswerListUserDiv>
+                <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
+                <AnswerListFunctionDiv>
+                  <div className="heartDiv">
+                    <button className="heartButton">
+                      <img className="heartImage" src={heart} alt="하트" />
+                    </button>
 
-                      <span className="hearCount">{it.likeCunt}</span>
-                    </div>
-                    <div className="udDiv">
-                      <button className="udButton">수정</button>
-                      <button className="udButton">삭제</button>
-                    </div>
-                  </AnswerListFunctionDiv>
-                </li>
-              </ul>
-            ))}
-          </AnswerListWrapper>
-        </ContentWrapper>
-      </PageWrapper>
-    </Wrapper>
+                    <span className="hearCount">{it.likeCunt}</span>
+                  </div>
+                  <div className="udDiv">
+                    <button className="udButton">수정</button>
+                    <button className="udButton">삭제</button>
+                  </div>
+                </AnswerListFunctionDiv>
+              </li>
+            </ul>
+          ))}
+        </AnswerListWrapper>
+      </ContentWrapper>
+    </PageWrapper>
   );
 };
 
