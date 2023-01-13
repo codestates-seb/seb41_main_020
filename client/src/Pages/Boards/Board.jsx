@@ -13,8 +13,7 @@ import React from "react";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  width: 80vw;
-  height: 100vh;
+  height: max-content;
   display: flex;
   flex-direction: column;
 `;
@@ -28,17 +27,15 @@ export const PageWrapper = styled.div`
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100vh;
 
   .title {
-    padding-left: 10px;
     font-size: ${dtFontSize.xlarge};
     color: ${primary.primary500};
     font-weight: 700;
     text-align: left;
   }
   .titleInfo {
-    padding-left: 10px;
     font-size: ${dtFontSize.medium};
     margin-top: 10px;
     color: ${sub.sub300};

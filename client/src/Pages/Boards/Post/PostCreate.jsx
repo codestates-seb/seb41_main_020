@@ -8,11 +8,10 @@ import Editor from "../../../Components/Editor.jsx";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const PostBoard = styled.div`
+export const PostBoard = styled.div`
   width: 80vw;
   height: 900px;
   background-color: ${sub.sub200};
-  margin-left: 10px;
   padding-left: 80px;
   padding-right: 80px;
   padding-top: 60px;
@@ -31,7 +30,7 @@ const ClassificationDiv = styled.div`
   margin-bottom: 80px;
 `;
 
-const TitleInputDiv = styled.div`
+export const TitleInputDiv = styled.div`
   padding-top: 10px;
   text-align: left;
   margin-bottom: 50px;
@@ -45,12 +44,13 @@ const TitleInputDiv = styled.div`
   }
 `;
 
-const ContentInputDiv = styled.div`
+export const ContentInputDiv = styled.div`
   margin-top: 10px;
   text-align: left;
   padding-bottom: 50px;
   height: 400px;
   background-color: white;
+  margin-bottom: 60px;
 
   .contentInput {
     width: 100%;
