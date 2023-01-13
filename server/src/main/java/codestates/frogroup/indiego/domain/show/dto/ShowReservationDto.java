@@ -1,40 +1,37 @@
 package codestates.frogroup.indiego.domain.show.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 public class ShowReservationDto {
 
     @Getter
     @AllArgsConstructor
-    public static class Post{
-        private Long id;
-
-        private Integer showId;
-
-        private Integer ticketCount;
-    }
-
-    @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     @Builder
-    public static class Patch{
-        private Long id;
-
-        private Integer showId;
-
+    public static class Post{
         private Integer ticketCount;
     }
 
+//    @Getter
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    @Builder
+//    public static class Patch{
+//        private Long id;
+//        private Integer ticketCount;
+//    }
+
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     @Builder
     public static class Response{
         private Long id;
 
-        private Integer showId;
+        private Long showId;
 
         private Integer ticketCount;
+
+        private boolean isExpired;
     }
 }

@@ -233,7 +233,7 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                Show.ShowStatus.SALE.getStatus(),
+                show.getStatus().getStatus(),
                 show.getScoreAverage(),
                 show.getTotal()
         );
@@ -242,6 +242,9 @@ public class StubData {
         List<ShowCommentDto.Response> showComments = new ArrayList<>();
         showComments.add(new ShowCommentDto.Response(
                 showComment.getId(),
+                show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
                 showComment.getScore(),
                 showComment.getComment()
         ));
@@ -258,10 +261,9 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                Show.ShowStatus.SALE.getStatus(),
+                show.getStatus().getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
-                showComments,
                 true
 
         );
@@ -271,6 +273,9 @@ public class StubData {
         List<ShowCommentDto.Response> showComments = new ArrayList<>();
         showComments.add(new ShowCommentDto.Response(
                 showComment.getId(),
+                show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
                 showComment.getScore(),
                 showComment.getComment()
         ));
@@ -288,25 +293,65 @@ public class StubData {
                 showBoard.getDetailImage(),
                 show.getCoordinate().getLatitude(),
                 show.getCoordinate().getLongitude(),
-                Show.ShowStatus.SALE.getStatus(),
+                show.getStatus().getStatus(),
                 show.getScoreAverage(),
                 show.getTotal(),
-                showComments,
                 true
         );
     }
 
     public ShowCommentDto.Response getShowCommentResponse(){
         return new ShowCommentDto.Response(
+                showComment.getId(),
                 show.getId(),
-                5.0,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
                 showComment.getComment()
         );
     }
 
+    public List<ShowCommentDto.Response> getShowCommentsResponse(){
+        List<ShowCommentDto.Response> list = new ArrayList<>();
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                2L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                3L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                4L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        list.add(new ShowCommentDto.Response( showComment.getId(),
+                5L,
+                member.getId(),
+                member.getProfile().getNickname(),
+                showComment.getScore(),
+                showComment.getComment()));
+        return list;
+
+    }
     public ShowCommentDto.Response getPatchShowCommentResponse(){
         return new ShowCommentDto.Response(
+                showComment.getId(),
                 show.getId(),
+                member.getId(),
+                member.getProfile().getNickname(),
                 4.0,
                 showComment.getComment()
         );
@@ -315,16 +360,18 @@ public class StubData {
     public ShowReservationDto.Response getShowReservationResponse(){
         return new ShowReservationDto.Response(
                 show.getId(),
+                1L,
                 1,
-                1
+                false
         );
     }
 
     public ShowReservationDto.Response getPatchShowReservationResponse(){
         return new ShowReservationDto.Response(
                 show.getId(),
-                1,
-                2
+                1L,
+                2,
+                false
         );
     }
 }

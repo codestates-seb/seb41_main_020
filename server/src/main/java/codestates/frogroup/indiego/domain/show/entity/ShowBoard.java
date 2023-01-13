@@ -1,10 +1,7 @@
 package codestates.frogroup.indiego.domain.show.entity;
 
 import codestates.frogroup.indiego.domain.common.embedding.Board;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -33,6 +30,7 @@ public class ShowBoard {
     @Column(nullable = false)
     private LocalDate showAt; // 공연날짜
 
+    @Column
     private String detailImage;
 
 }
