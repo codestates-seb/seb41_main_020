@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -78,5 +80,14 @@ public class MemberController {
         memberService.verifiedMemberId(memberId, loginMemberId);
         memberService.deleteMember(memberId);
         return new ResponseEntity<>(new SingleResponseDto<>("회원탈퇴가 완료되었습니다"), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/reissue")
+    public ResponseEntity reissue(@CookieValue(value = "refreshToken", required = false) String refreshToken,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response){
+
+        memberService.reissueAccessToken(refreshToken,request,response);
+        return new ResponseEntity("Refresh Token 재발급 완료!",HttpStatus.CREATED);
     }
 }
