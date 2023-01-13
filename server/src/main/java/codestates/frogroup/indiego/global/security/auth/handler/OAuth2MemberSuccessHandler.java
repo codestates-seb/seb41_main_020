@@ -3,6 +3,7 @@ package codestates.frogroup.indiego.global.security.auth.handler;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
 import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.oauth.OAuthAttributes;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final TokenProvider tokenProvider;
     private final MemberService memberService;
+    private final RedisDao redisDao;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -80,6 +83,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         tokenProvider.accessTokenSetHeader(accessToken, response); // Access Token 헤더에 전송
         tokenProvider.refreshTokenSetCookie(refreshToken,response); // Refresh Token 쿠키에 전송
+        int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
+        redisDao.setValues(refreshToken,accessToken, Duration.ofMinutes(refreshTokenExpirationMinutes)); // redis 저장
 
         // 만든 URI로 리다이렉트 보냄
         getRedirectStrategy().sendRedirect(request,response,uri);
