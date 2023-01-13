@@ -2,6 +2,7 @@ package codestates.frogroup.indiego.global.stub;
 
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleComment;
+import codestates.frogroup.indiego.domain.article.entity.ArticleCommentLike;
 import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleCommentDto;
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
@@ -46,6 +47,7 @@ public class StubData {
 
     public List<ArticleComment> articleComments = new ArrayList<>();
     public List<ArticleLike> articleLikes = new ArrayList<>();
+    public List<ArticleCommentLike> articleCommentLikes = new ArrayList<>();
 
     public Article article = new Article(
             1L,
@@ -68,7 +70,8 @@ public class StubData {
             member,
             article,
             "오늘 오후 6시에 인디고 고등학교 체육관에서 밴드공연 있어요",
-            20L
+            20L,
+            articleCommentLikes
     );
 
     public ArticleComment articleComment2 = new ArticleComment(
@@ -76,7 +79,8 @@ public class StubData {
             member,
             article,
             "오늘 오후 8시에 인디고 중학교 체육관에서 연극 있어요",
-            20L
+            20L,
+            articleCommentLikes
     );
 
 

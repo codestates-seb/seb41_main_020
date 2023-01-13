@@ -18,6 +18,9 @@ public interface ArticleCommentMapper {
     @Mapping(source = "article.id", target = "articleId")
     @Mapping(source = "member.profile.image", target = "image")
     @Mapping(source = "member.profile.nickname", target = "nickname")
+    @Mapping(target = "likeCount",
+            expression = "java(articleComment.getArticleCommentLikes() !=" +
+                    " null ? articleComment.getArticleCommentLikes().size() : 0)")
     ArticleCommentDto.Response articleCommentToArticleCommentResponse(ArticleComment articleComment);
 
     List<ArticleCommentDto.Response> articleCommentsToArticleCommentResponses(List<ArticleComment> articleComments);
