@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { dtFontSize, primary, sub } from "../../../styles/mixins";
 
@@ -20,6 +20,8 @@ const DateController = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid ${sub.sub300};
+  border-width: 0 0 1px 0;
 
   p {
     color: ${sub.sub800};
@@ -55,8 +57,10 @@ const CalendarGrid = styled.div`
   width: 90%;
   margin: 0 5%;
   height: 100%;
-  grid-template-columns: repeat(7, 14.25%);
-  grid-template-rows: 0.7fr 0.2fr repeat(5, 14.25%);
+  grid-template-columns: repeat(7, 14.265%);
+  grid-template-rows: 1fr 0.2fr repeat(6, 13%);
+  border: 1px solid ${sub.sub300};
+  border-radius: 20px;
 
   .item:nth-child(1) {
     grid-column-start: 1;
@@ -68,6 +72,16 @@ const CalendarGrid = styled.div`
   .days {
     text-align: center;
     font-weight: 600;
+    padding: 10px 0;
+    color: white;
+    background-color: ${primary.primary300};
+    border: 1px solid white;
+    border-width: 0 1px 0 0;
+  }
+
+  .days.last {
+    border: 1px solid ${primary.primary300};
+    border-width: 0 1px 0 0;
   }
 
   .date_container {
@@ -111,32 +125,60 @@ export default function Calendar({ setSelectedDate }) {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
+  const isMounted = useRef(0);
+
+  const addPreviousMonthDays = (dateObj, daysArr) => {
+    const yearAndDate = `${dateObj.year()}-${dateObj.month() + 1}-`;
+    const DOWofFirstDay = dayjs(yearAndDate + "01").$W;
+    if (DOWofFirstDay === 0) {
+      return daysArr;
+    } else {
+      const lastMonthDays = dayjs(
+        `${dateObj.year()}${dateObj.month() - 1}${dateObj.date()}`
+      ).daysInMonth();
+
+      const lastMonthDaysArr = new Array(DOWofFirstDay).fill(0);
+      lastMonthDaysArr.reduce((acc, cur, index, arr) => {
+        arr[index] = acc;
+        return acc - 1;
+      }, lastMonthDays);
+      daysArr = lastMonthDaysArr.concat(daysArr);
+      return daysArr;
+    }
+  };
 
   useEffect(() => {
     const now = dayjs();
     setSelectedYear(now.year());
     setSelectedMonth(now.month() + 1);
+    setSelectedDay(now.date());
     setSelectedDate(now.format("YYYY년 MM월 DD일"));
-    const newDaysArr = new Array(now.daysInMonth()).fill(1);
+    let newDaysArr = new Array(now.daysInMonth()).fill(1);
     newDaysArr.reduce((acc, current, index, arr) => {
       arr[index] = acc + 1;
       return acc + current;
     });
+    newDaysArr = addPreviousMonthDays(now, newDaysArr);
     setDaysArr(newDaysArr);
   }, []);
 
   useEffect(() => {
-    const selected = dayjs()
-      .set("year", selectedYear)
-      .set("month", selectedMonth - 1)
-      .set("date", selectedDay);
-    const newDaysArr = new Array(selected.daysInMonth()).fill(1);
-    newDaysArr.reduce((acc, current, index, arr) => {
-      arr[index] = acc + 1;
-      return acc + current;
-    });
-    setDaysArr(newDaysArr);
-    setSelectedDate(selected.format("YYYY년 MM월 DD일"));
+    if (isMounted.current > 2) {
+      const selected = dayjs()
+        .set("year", selectedYear)
+        .set("month", selectedMonth - 1)
+        .set("date", selectedDay);
+      let newDaysArr = new Array(selected.daysInMonth()).fill(1);
+      newDaysArr.reduce((acc, current, index, arr) => {
+        arr[index] = acc + 1;
+        return acc + current;
+      });
+      newDaysArr = addPreviousMonthDays(selected, newDaysArr);
+      setDaysArr(newDaysArr);
+      setSelectedDate(selected.format("YYYY년 MM월 DD일"));
+    } else {
+      isMounted.current++;
+    }
   }, [selectedMonth, selectedYear]);
 
   const dateOnClickHandler = (e) => {
@@ -146,7 +188,17 @@ export default function Calendar({ setSelectedDate }) {
   };
 
   const monthSelectorOnClickHandler = (num) => {
-    setSelectedMonth(selectedMonth + num);
+    if (selectedMonth <= 1 && num === -1) {
+      console.log("<= 1", selectedMonth);
+      setSelectedYear(selectedYear - 1);
+      setSelectedMonth(12);
+    } else if (selectedMonth >= 11 && num === 1) {
+      console.log("over 12", selectedMonth);
+      setSelectedYear(selectedYear + 1);
+      setSelectedMonth(1);
+    } else {
+      setSelectedMonth(selectedMonth + num);
+    }
   };
 
   return (
@@ -177,14 +229,15 @@ export default function Calendar({ setSelectedDate }) {
         <p className="item days">수</p>
         <p className="item days">목</p>
         <p className="item days">금</p>
-        <p className="item days">토</p>
+        <p className="item days last">토</p>
         {daysArr.map((day, index) => {
-          console.log(day, selectedDay);
           return (
             <div className="date_container" key={index}>
               <p
                 tabIndex={0}
-                className={`${selectedDay === day ? "selected" : ""} date`}
+                className={`${
+                  parseInt(selectedDay) === day ? "selected" : ""
+                } date`}
                 onClick={dateOnClickHandler}
               >
                 {day}
