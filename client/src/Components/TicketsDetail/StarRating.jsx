@@ -4,18 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
-import {
-  primary,
-  secondary,
-  sub,
-  misc,
-  dtFontSize,
-  mbFontSize,
-} from "../../styles/mixins";
+import { sub, misc } from "../../styles/mixins";
 
 //라이브러리 및 라이브러리 메소드
 import { React, useState } from "react";
 import styled from "styled-components/macro";
+
+const StarContainer = styled.div`
+  display: flex;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-bottom: 3%;
+  }
+`;
 
 const Star = styled.div`
   display: flex;
@@ -23,14 +24,14 @@ const Star = styled.div`
   .star {
     color: ${sub.sub300};
     cursor: pointer;
+  }
 
-    :hover {
-      color: ${misc.orange};
-    }
+  :hover .star {
+    color: ${misc.orange};
+  }
 
-    & :hover ~ .star {
-      color: ${sub.sub300};
-    }
+  & :hover ~ .star {
+    color: ${sub.sub300};
   }
 
   .filled {
@@ -41,7 +42,6 @@ const Star = styled.div`
 export default function StarRating() {
   const starsArray = [0, 1, 2, 3, 4];
   const [clicked, setClicked] = useState([false, false, false, false, false]);
-  const [hovered, setHovered] = useState([false, false, false, false, false]);
   let score = clicked.filter(Boolean).length;
 
   const handleStarClick = (index) => {
@@ -52,27 +52,18 @@ export default function StarRating() {
     setClicked(clickStates);
   };
 
-  const handleStarHover = (index) => {
-    let hoverStates = [...hovered];
-    for (let i = 0; i < 5; i++) {
-      hoverStates[i] = i <= index ? true : false;
-    }
-    setHovered(hoverStates);
-  };
-
   return (
-    <div>
+    <StarContainer>
       <Star>
         {starsArray.map((el, idx) => (
           <FontAwesomeIcon
             icon={faStar}
             key={idx}
             onClick={() => handleStarClick(el)}
-            onMouseEnter={() => handleStarHover(el)}
-            className={clicked[idx] || hovered[idx] ? "star filled" : "star"}
+            className={clicked[idx] ? "star filled" : "star"}
           />
         ))}
       </Star>
-    </div>
+    </StarContainer>
   );
 }

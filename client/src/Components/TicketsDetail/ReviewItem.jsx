@@ -19,46 +19,125 @@ import styled from "styled-components/macro";
 
 const ReviewItemContainer = styled.li`
   align-items: center;
+  background-color: ${sub.sub200};
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 60px;
+  height: 100px;
+  justify-content: space-between;
   margin-bottom: 3%;
-  padding: 0 5%;
+  padding: 20px 0;
 
-  background-color: ${sub.sub200};
-
-  > .star-rating-container {
-    display: flex;
-    margin-right: 1%;
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100px;
+    padding: 15px;
   }
 
-  > .reviewer-name {
-    color: ${sub.sub800};
-    font-weight: 600;
-    font-size: ${dtFontSize.small};
-    margin-right: 5%;
+  > .top-container {
+    align-items: center;
+    display: flex;
+    width: fit-content;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    > .top-left-container {
+      align-items: center;
+      display: flex;
+
+      > .star-rating-container {
+        align-items: center;
+        display: flex;
+        padding-right: 10px;
+        width: max-content;
+      }
+
+      > .reviewer-name {
+        display: flex;
+        color: ${sub.sub800};
+        font-weight: 600;
+        font-size: ${dtFontSize.small};
+        flex-direction: row;
+        padding-right: 50px;
+        width: max-content;
+        height: fit-content;
+
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          font-size: ${mbFontSize.small};
+          padding-right: 0;
+        }
+      }
+    }
+
+    > .button-container {
+      display: flex;
+      justify-content: space-between;
+      right: 0;
+      position: relative;
+      width: 53px;
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        width: 46px;
+      }
+
+      > button {
+        all: unset;
+        width: max-content;
+        font-size: ${dtFontSize.small};
+        color: ${sub.sub400};
+        cursor: pointer;
+
+        &:hover {
+          color: ${primary.primary500};
+        }
+
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          font-size: ${mbFontSize.small};
+        }
+      }
+    }
   }
 
   > .review-content {
     color: ${sub.sub800};
     font-weight: 400;
     font-size: ${dtFontSize.small};
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
+    }
   }
 `;
 
 export default function ReviewItem() {
   return (
     <ReviewItemContainer>
-      <div className="star-rating-container">
-        <FontAwesomeIcon icon={faStar} color={misc.orange} />
-        <FontAwesomeIcon icon={faStar} color={misc.orange} />
-        <FontAwesomeIcon icon={faStar} color={misc.orange} />
-        <FontAwesomeIcon icon={faStar} color={misc.orange} />
-        <FontAwesomeIcon icon={faStar} color={sub.sub300} />
+      <div className="top-container">
+        <div className="top-left-container">
+          <div className="star-rating-container">
+            <FontAwesomeIcon icon={faStar} color={misc.orange} />
+            <FontAwesomeIcon icon={faStar} color={misc.orange} />
+            <FontAwesomeIcon icon={faStar} color={misc.orange} />
+            <FontAwesomeIcon icon={faStar} color={misc.orange} />
+            <FontAwesomeIcon icon={faStar} color={sub.sub300} />
+          </div>
+          <div className="reviewer-name">일이삼사오육칠팔구십</div>
+        </div>
+        <div className="button-container">
+          <button>수정</button>
+          <button>삭제</button>
+        </div>
       </div>
-      <span className="reviewer-name">김아무개 님</span>
-      <span className="review-content">넘넘 재밌어요 추천합니다람쥐</span>
+      <span className="review-content">
+        오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한
+      </span>
     </ReviewItemContainer>
   );
 }

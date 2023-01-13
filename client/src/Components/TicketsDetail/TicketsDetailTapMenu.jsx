@@ -14,7 +14,7 @@ import {
 } from "../../styles/mixins";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState } from "react";
+import { React, useRef, useState } from "react";
 import styled from "styled-components/macro";
 
 const Tabs = styled.ul`
@@ -27,15 +27,22 @@ const Tabs = styled.ul`
   top: 0;
   left: 0;
   width: 100%;
+  height: 50px;
 
   > li {
     all: unset;
+    align-items: center;
     cursor: pointer;
     font-size: ${dtFontSize.large};
     font-weight: 600;
     color: ${sub.sub400};
+    justify-content: center;
     padding: 10px 20px;
     width: max-content;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+    }
 
     &.focused {
       color: ${primary.primary500};
@@ -54,6 +61,7 @@ const TapContent = styled.div`
 
 export default function TicketsDetailTap() {
   const [currentTab, setCurrentTab] = useState(0);
+  const tabContentRef = useRef();
 
   const menuArr = [
     { name: "공연 상세", content: <TicketsDetailTapDesc /> },
@@ -62,6 +70,10 @@ export default function TicketsDetailTap() {
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
+    tabContentRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   return (
@@ -80,7 +92,7 @@ export default function TicketsDetailTap() {
           );
         })}
       </Tabs>
-      <TapContent>{menuArr[currentTab].content}</TapContent>
+      <TapContent ref={tabContentRef}>{menuArr[currentTab].content}</TapContent>
     </>
   );
 }

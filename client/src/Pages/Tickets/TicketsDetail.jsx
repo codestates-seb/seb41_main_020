@@ -88,7 +88,6 @@ const PillButton = styled.button`
 export default function TicketsDetail() {
   return (
     <>
-      <Header />
       <Container>
         <ContentContainer>
           <ContentHeaderContainer>
