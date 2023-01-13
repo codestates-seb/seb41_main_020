@@ -12,8 +12,8 @@ const BackDrop = styled.div`
   top: 0;
   left: 0;
   z-index: 30;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: ${sub.sub800}D2;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@ export default function Overlay({ children, handler }) {
   return (
     <BackDrop
       onClick={() => {
-        handler(false);
+        handler && handler(false);
       }}
     >
       {children}

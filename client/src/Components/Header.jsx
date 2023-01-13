@@ -72,8 +72,7 @@ const HeaderLinkContainer = styled.div`
     height: max-content;
     text-align: center;
     vertical-align: middle;
-    height: 70%;
-    max-height: max-content;
+    height: max-content;
     font-size: ${dtFontSize.medium};
     padding: 10px 20px;
     padding-top: 12px;
@@ -90,9 +89,9 @@ const HeaderLinkContainer = styled.div`
     }
 
     @media screen and (max-width: 1000px) {
-      height: 80%;
+      height: 35px;
       font-size: ${dtFontSize.small};
-      padding: 4% 4%;
+      padding: 10px 10px 0 10px;
     }
   }
   @media screen and (max-width: ${breakpoint.mobile}) {
