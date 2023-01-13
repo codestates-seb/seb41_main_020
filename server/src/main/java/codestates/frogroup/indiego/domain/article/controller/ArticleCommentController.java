@@ -2,10 +2,9 @@ package codestates.frogroup.indiego.domain.article.controller;
 
 import codestates.frogroup.indiego.domain.article.entity.dto.ArticleCommentDto;
 import codestates.frogroup.indiego.domain.article.service.ArticleCommentService;
-import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
-import codestates.frogroup.indiego.global.stub.StubData;
+import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,14 +28,12 @@ public class ArticleCommentController {
      */
     @PostMapping
     public ResponseEntity postArticleComment(@PathVariable("article-id") Long articleId,
+                                             @LoginMemberId Long memberId,
                                              @Valid @RequestBody ArticleCommentDto.Post articleCommentPostDto) {
 
-        // TODO: 임시용 추후 삭제
-        Member member = new StubData().member;
-        memberRepository.save(member);
 
         ArticleCommentDto.Response response =
-                articleCommentService.createArticleComment(articleId, member.getId(), articleCommentPostDto);
+                articleCommentService.createArticleComment(articleId, memberId, articleCommentPostDto);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
@@ -47,14 +44,12 @@ public class ArticleCommentController {
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchArticleComment(@PathVariable("article-id") Long articleId,
                                               @PathVariable("comment-id") Long commentId,
+                                              @LoginMemberId Long memberId,
                                               @Valid @RequestBody ArticleCommentDto.Patch articleCommentPatchDto) {
 
-        // TODO: 임시용 추후 삭제
-        Member member = new StubData().member;
-        memberRepository.save(member);
 
         ArticleCommentDto.Response response =
-                articleCommentService.updateArticleComment(articleId, commentId, member.getId(), articleCommentPatchDto);
+                articleCommentService.updateArticleComment(articleId, commentId, memberId, articleCommentPatchDto);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -64,13 +59,10 @@ public class ArticleCommentController {
      */
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteArticleComment(@PathVariable("article-id") Long articleId,
-                                               @PathVariable("comment-id") Long commentId) {
+                                               @PathVariable("comment-id") Long commentId,
+                                               @LoginMemberId Long memberId) {
 
-        // TODO: 임시용 추후 삭제
-        Member member = new StubData().member;
-        memberRepository.save(member);
-
-        articleCommentService.deleteArticleComment(articleId, commentId, member.getId());
+        articleCommentService.deleteArticleComment(articleId, commentId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -80,13 +72,11 @@ public class ArticleCommentController {
      */
     @PutMapping("/{comment-id}")
     public ResponseEntity articleCommentLike(@PathVariable("article-id") Long articleId,
-                                             @PathVariable("comment-id") Long commentId) {
+                                             @PathVariable("comment-id") Long commentId,
+                                             @LoginMemberId Long memberId) {
 
-        // TODO: 임시용 추후 삭제
-        Member member = new StubData().member;
-        memberRepository.save(member);
 
-        articleCommentService.articleCommentLike(articleId, commentId, member.getId());
+        articleCommentService.articleCommentLike(articleId, commentId, memberId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

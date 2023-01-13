@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ArticleCommentLikeRepository extends JpaRepository<ArticleCommentLike, Long> {
 
-    List<ArticleCommentLike> findAllByArticleCommentId(Long articleId);
+    List<ArticleCommentLike> findAllByArticleCommentId(Long commentId);
 
     ArticleCommentLike findByMemberId(Long memberId);
 

@@ -53,17 +53,20 @@ public class ArticleService {
      * 게시글 수정
      */
     @Transactional
-    public ArticleDto.Response updateArticle(Article article, Long articleId) {
+    public ArticleDto.Response updateArticle(Article article, Long articleId, Long memberId) {
 
         Article findArticle = findVerifiedArticle(articleId);
 
-        changeArticle(article, findArticle);
+        if (findArticle.getMember().getId().equals(memberId)) {
 
-//        Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
+            changeArticle(article, findArticle);
+//            Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
 
-        Article savedArticle = articleRepository.save(findArticle);
+            Article savedArticle = articleRepository.save(findArticle);
+            return getResponse(savedArticle);
+        }
 
-        return getResponse(savedArticle);
+        throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
     }
 
     /**
@@ -89,8 +92,15 @@ public class ArticleService {
      * 게시글 삭제
      */
     @Transactional
-    public void deleteArticle(Long articleId) {
-        articleRepository.delete(findVerifiedArticle(articleId));
+    public void deleteArticle(Long articleId, Long memberId) {
+        Long findMemberId = findVerifiedArticle(articleId).getMember().getId();
+
+        if (findMemberId.equals(memberId)) {
+
+            articleRepository.delete(findVerifiedArticle(articleId));
+        }
+
+        throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
     }
 
     /**
