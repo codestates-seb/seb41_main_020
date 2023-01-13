@@ -11,6 +11,7 @@ import codestates.frogroup.indiego.global.security.auth.oauth.OAuthUserProfile;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -57,22 +58,19 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         AuthMember authMember = AuthMember.of(member);
 
         log.info("# OAuth2.0 AuthenticationSuccess !");
-        log.info("# Redirect to Frontend");
+
         TokenDto tokenDto = tokenProvider.generateTokenDto(authMember);
-        String grantType = tokenDto.getGrantType(); // Bearer
         String accessToken = tokenDto.getAccessToken(); // accessToken 만들기
         String refreshToken = tokenDto.getRefreshToken(); // refreshToken 만들기
 
-        log.info("# accessToken generated complete!");
-        log.info("# refreshToken generated complete !");
+        log.info("# OAuth2.0 Token generated complete!");
 
         // 리다이렉트를 하기위한 정보들을 보내줌
-        redirect(request,response,grantType,accessToken,refreshToken);
+        redirect(request,response,accessToken,refreshToken);
     }
 
     private void redirect(HttpServletRequest request,
                           HttpServletResponse response,
-                          String grantType,
                           String accessToken,
                           String refreshToken) throws IOException {
 
@@ -80,13 +78,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // Token을 토대로 URI를 만들어서 String으로 변환
         String uri = createURI(request, accessToken, refreshToken).toString();
 
-        // 헤더에 전송해보기
-        String headerValue = grantType + " " + accessToken;
-        response.setHeader("Authorization",headerValue); // Header에 등록
-        response.setHeader("Refresh",refreshToken); // Header에 등록
-        // response.setHeader("Access-Control-Allow-Credentials:", "true");
-        // response.setHeader("Access-Control-Allow-Origin", "*");
-        // response.setHeader("Access-Control-Expose-Headers", "Authorization");
+        tokenProvider.accessTokenSetHeader(accessToken, response); // Access Token 헤더에 전송
+        tokenProvider.refreshTokenSetCookie(refreshToken,response); // Refresh Token 쿠키에 전송
 
         // 만든 URI로 리다이렉트 보냄
         getRedirectStrategy().sendRedirect(request,response,uri);
@@ -96,7 +89,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // 리다이렉트시 JWT를 URI로 보내는 방법
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
-        queryParams.add("refresh_token", refreshToken);
+        //queryParams.add("refresh_token", refreshToken);
 
         String serverName = request.getServerName();
         // log.info("# serverName = {}",serverName);

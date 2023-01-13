@@ -170,14 +170,17 @@ public class TokenProvider {
 		log.info("# refreshToken = {}",refreshToken);
 	}
 
-	public ResponseCookie refreshTokenSetCookie(String refreshToken){
-		return ResponseCookie.from("refreshToken", refreshToken)
+	public ResponseCookie refreshTokenSetCookie(String refreshToken, HttpServletResponse response){
+		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 				.maxAge(1 * 24 * 60 * 60) // days * hours * min * sec
 				.path("/")
 				.secure(true)
 				.sameSite("None")
 				.httpOnly(true)
 				.build();
+
+		response.setHeader("Set-Cookie", cookie.toString()); // Refresh Token Cookie 에 전송
+		return cookie;
 	}
 
 
