@@ -9,6 +9,7 @@ import styled from "styled-components";
 const ListContainer = styled.div`
   width: 100%;
   height: 88%;
+  margin: 0 5%;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
