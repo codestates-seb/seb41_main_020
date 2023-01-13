@@ -128,7 +128,8 @@ export default function Calendar({ setSelectedDate }) {
   useEffect(() => {
     const selected = dayjs()
       .set("year", selectedYear)
-      .set("month", selectedMonth - 1);
+      .set("month", selectedMonth - 1)
+      .set("date", selectedDay);
     const newDaysArr = new Array(selected.daysInMonth()).fill(1);
     newDaysArr.reduce((acc, current, index, arr) => {
       arr[index] = acc + 1;
@@ -170,13 +171,13 @@ export default function Calendar({ setSelectedDate }) {
             <path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
           </svg>
         </DateController>
-        <p className="item days">일요일</p>
-        <p className="item days">월요일</p>
-        <p className="item days">화요일</p>
-        <p className="item days">수요일</p>
-        <p className="item days">목요일</p>
-        <p className="item days">금요일</p>
-        <p className="item days">토요일</p>
+        <p className="item days">일</p>
+        <p className="item days">월</p>
+        <p className="item days">화</p>
+        <p className="item days">수</p>
+        <p className="item days">목</p>
+        <p className="item days">금</p>
+        <p className="item days">토</p>
         {daysArr.map((day, index) => {
           console.log(day, selectedDay);
           return (
