@@ -68,7 +68,7 @@ public class SecurityConfiguration {
 						.anyRequest().permitAll()
 				)
 				.oauth2Login(oauth2 -> oauth2
-						.successHandler(new OAuth2MemberSuccessHandler(tokenProvider,memberService))
+						.successHandler(new OAuth2MemberSuccessHandler(tokenProvider, memberService))
 						.userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정 담당
 						.userService(oAuthService)
 				); // OAuth2 로그인 설정 시작점

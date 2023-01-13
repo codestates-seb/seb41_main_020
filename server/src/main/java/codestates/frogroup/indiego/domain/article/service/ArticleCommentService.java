@@ -47,7 +47,7 @@ public class ArticleCommentService {
         articleComment.setArticle(findArticle);
         articleComment.setMember(findMember);
 
-//         builder 활용 방법
+//      // builder 활용 방법
 //        ArticleComment articleComment = ArticleComment.builder()
 //                .member(findMember)
 //                .article(findArticle)
