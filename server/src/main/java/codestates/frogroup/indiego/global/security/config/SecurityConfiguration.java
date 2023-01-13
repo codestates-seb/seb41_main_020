@@ -1,6 +1,7 @@
 package codestates.frogroup.indiego.global.security.config;
 
 import codestates.frogroup.indiego.domain.member.service.MemberService;
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.filter.JwtAuthenticationFilter;
 import codestates.frogroup.indiego.global.security.auth.filter.JwtVerificationFilter;
 import codestates.frogroup.indiego.global.security.auth.handler.*;
