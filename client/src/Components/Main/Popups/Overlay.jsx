@@ -21,6 +21,14 @@ const BackDrop = styled.div`
   align-items: center;
 `;
 
-export default function Overlay({ children }) {
-  return <BackDrop>{children}</BackDrop>;
+export default function Overlay({ children, handler }) {
+  return (
+    <BackDrop
+      onClick={() => {
+        handler(false);
+      }}
+    >
+      {children}
+    </BackDrop>
+  );
 }
