@@ -1,6 +1,6 @@
 package codestates.frogroup.indiego.global.security.auth.handler;
 
-import codestates.frogroup.indiego.global.security.auth.utils.ErrorResponder;
+import codestates.frogroup.indiego.global.security.auth.utils.Responder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -16,6 +16,6 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         log.error("# Authentication failed: {}", exception.getMessage());
-        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+        Responder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
     }
 }

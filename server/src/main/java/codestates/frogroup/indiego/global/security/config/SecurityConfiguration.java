@@ -29,8 +29,7 @@ public class SecurityConfiguration {
 	private final TokenProvider tokenProvider;
 	private final OAuthService oAuthService;
 	private final MemberService memberService;
-
-	//private final RefreshTokenRepository refreshTokenRepository;
+	private final RedisDao redisDao;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -68,7 +67,7 @@ public class SecurityConfiguration {
 						.anyRequest().permitAll()
 				)
 				.oauth2Login(oauth2 -> oauth2
-						.successHandler(new OAuth2MemberSuccessHandler(tokenProvider, memberService))
+						.successHandler(new OAuth2MemberSuccessHandler(tokenProvider,memberService,redisDao))
 						.userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정 담당
 						.userService(oAuthService)
 				); // OAuth2 로그인 설정 시작점
@@ -95,7 +94,7 @@ public class SecurityConfiguration {
 		public void configure(HttpSecurity builder) throws Exception {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, tokenProvider);
+			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, tokenProvider, redisDao);
 			jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler()); // 추후 refreshTokenRepository 넣기
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());

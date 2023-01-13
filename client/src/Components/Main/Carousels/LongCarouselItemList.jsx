@@ -34,8 +34,6 @@ const ItemsContainer = styled.div`
 `;
 
 export default function LongCarouselItemList({ data, currentIdx }) {
-  console.log(currentIdx);
-
   return (
     <ListContainer>
       <ItemsContainer currentIdx={currentIdx}>
