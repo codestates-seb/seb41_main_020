@@ -6,17 +6,10 @@ import right from "../../assets/right.svg";
 import left from "../../assets/left.svg";
 import OKButton from "../../Components/OKButton.jsx";
 import Aside from "./Aside/Aside.jsx";
-import Header from "../../Components/Header.jsx";
+import search from "../../assets/search.svg";
 
 import React from "react";
 import styled from "styled-components";
-
-export const Wrapper = styled.div`
-  width: 80vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
 
 export const PageWrapper = styled.div`
   margin-top: 20px;
@@ -27,17 +20,15 @@ export const PageWrapper = styled.div`
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100vw;
 
   .title {
-    padding-left: 10px;
     font-size: ${dtFontSize.xlarge};
     color: ${primary.primary500};
     font-weight: 700;
     text-align: left;
   }
   .titleInfo {
-    padding-left: 10px;
     font-size: ${dtFontSize.medium};
     margin-top: 10px;
     color: ${sub.sub300};
@@ -98,13 +89,13 @@ const BoardItemContent = styled.div`
 
   .titleDiv {
     margin-top: 10px;
-    font-size: ${dtFontSize.large};
+    font-size: ${dtFontSize.medium};
     font-weight: 700;
     text-align: left;
     color: ${sub.sub900};
   }
   .contentDiv {
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
     color: ${sub.sub700};
@@ -197,73 +188,92 @@ const PageNationDiv = styled.div`
 `;
 
 const SearchBarDiv = styled.div`
-  .SearchBarInput {
-    width: 100px;
-    height: 100px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  .aSearchBarDiv {
+    background-color: blue;
+    width: 40%;
   }
-  .ListButton {
+  .searchBarInput {
+    padding: 10px;
+    width: 80%;
+    height: 40px;
+    border: 2px solid ${sub.sub400};
+    border-radius: 10px;
+  }
+
+  .searchImage {
+    width: 17px;
+    height: 17px;
+  }
+
+  .listButton {
     background-color: blue;
   }
 `;
 
 export default function Board() {
   return (
-    <Wrapper>
-      <Header></Header>
-      <PageWrapper>
-        <Aside></Aside>
-        <ContentWrapper>
-          <div className="title">자유게시판</div>
-          <div className="titleInfo">
-            자유로운 주제로 글과 의견을 공유하는 게시판입니다.
-          </div>
-          <div className="lineDiv"></div>
-          {BoardDummy.map((it) => (
-            <BoardItem key={it.id}>
-              <div className="likeDiv">
-                <div>
-                  <div className="heartImageDiv">
-                    <img width={30} src={heart} alt="heart"></img>
-                  </div>
+    <PageWrapper>
+      <Aside></Aside>
+      <ContentWrapper>
+        <div className="title">자유게시판</div>
+        <div className="titleInfo">
+          자유로운 주제로 글과 의견을 공유하는 게시판입니다.
+        </div>
+        <div className="lineDiv"></div>
+        {BoardDummy.map((it) => (
+          <BoardItem key={it.id}>
+            <div className="likeDiv">
+              <div>
+                <div className="heartImageDiv">
+                  <img width={30} src={heart} alt="heart"></img>
                 </div>
-                <div className="heartCount">157</div>
               </div>
-              <div className="imageDiv">
-                <img width={50} src={heart} alt="heart"></img>
-              </div>
-              <BoardItemContent>
-                <div className="titleDiv">{it.title}</div>
-                <div className="contentDiv">{it.content}</div>
-                <BoardItemCreateInfo>
-                  <div className="authorDiv">{it.author}</div>
-                  <div className="createDateDiv">{it.createdData}</div>
-                </BoardItemCreateInfo>
-              </BoardItemContent>
-            </BoardItem>
-          ))}
-          <WriteButtonDiv>
-            <WriteButton>
-              <img className="pencelImage" src={pen} alt="pen"></img>
-              <span className="WriteButtonSpan">글 올리기</span>
-            </WriteButton>
-          </WriteButtonDiv>
-          <PageNationDiv>
-            <button className="movePageButton">
-              <img className="arrowLeftImage" src={left} alt="이전 버튼" />
-            </button>
-            <button className="pageButton">1</button>
-            <button className="pageButton">2</button>
-            <button className="pageButton">3</button>
-            <button className="pageButton">4</button>
-            <button className="movePageButton">
-              <img className="arrowRightImage" src={right} alt="다음 버튼" />
-            </button>
-          </PageNationDiv>
-          <SearchBarDiv>
-            <input placeholder="검색어를 입력하세요." />
-          </SearchBarDiv>
-        </ContentWrapper>
-      </PageWrapper>
-    </Wrapper>
+              <div className="heartCount">157</div>
+            </div>
+            <div className="imageDiv">
+              <img width={50} src={heart} alt="heart"></img>
+            </div>
+            <BoardItemContent>
+              <div className="titleDiv">{it.title}</div>
+              <div className="contentDiv">{it.content}</div>
+              <BoardItemCreateInfo>
+                <div className="authorDiv">{it.author}</div>
+                <div className="createDateDiv">{it.createdData}</div>
+              </BoardItemCreateInfo>
+            </BoardItemContent>
+          </BoardItem>
+        ))}
+        <WriteButtonDiv>
+          <WriteButton>
+            <img className="pencelImage" src={pen} alt="pen"></img>
+            <span className="WriteButtonSpan">글 올리기</span>
+          </WriteButton>
+        </WriteButtonDiv>
+        <PageNationDiv>
+          <button className="movePageButton">
+            <img className="arrowLeftImage" src={left} alt="이전 버튼" />
+          </button>
+          <button className="pageButton">1</button>
+          <button className="pageButton">2</button>
+          <button className="pageButton">3</button>
+          <button className="pageButton">4</button>
+          <button className="movePageButton">
+            <img className="arrowRightImage" src={right} alt="다음 버튼" />
+          </button>
+        </PageNationDiv>
+        <SearchBarDiv>
+          <div className="aSearchBarDiv">
+            <input
+              className="searchBarInput"
+              placeholder="검색어를 입력하세요."
+            />
+            <img className="searchImage" src={search} alt="돋보기"></img>
+          </div>
+        </SearchBarDiv>
+      </ContentWrapper>
+    </PageWrapper>
   );
 }

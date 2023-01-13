@@ -1,18 +1,16 @@
 import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
-import { Wrapper, PageWrapper, ContentWrapper } from "../Board.jsx";
+import { PageWrapper, ContentWrapper } from "../Board.jsx";
 import Aside from "../Aside/Aside.jsx";
-import Header from "../../../Components/Header.jsx";
 import OKButton from "../../../Components/OKButton.jsx";
 import Editor from "../../../Components/Editor.jsx";
 
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const PostBoard = styled.div`
+export const PostBoard = styled.div`
   width: 80vw;
   height: 900px;
   background-color: ${sub.sub200};
-  margin-left: 10px;
   padding-left: 80px;
   padding-right: 80px;
   padding-top: 60px;
@@ -31,7 +29,7 @@ const ClassificationDiv = styled.div`
   margin-bottom: 80px;
 `;
 
-const TitleInputDiv = styled.div`
+export const TitleInputDiv = styled.div`
   padding-top: 10px;
   text-align: left;
   margin-bottom: 50px;
@@ -45,10 +43,13 @@ const TitleInputDiv = styled.div`
   }
 `;
 
-const ContentInputDiv = styled.div`
-  padding-top: 10px;
+export const ContentInputDiv = styled.div`
+  margin-top: 10px;
   text-align: left;
-  margin-bottom: 50px;
+  padding-bottom: 50px;
+  height: 400px;
+  background-color: white;
+  margin-bottom: 60px;
 
   .contentInput {
     width: 100%;
@@ -71,41 +72,38 @@ const PostButton = styled(OKButton)`
 const PostCreate = () => {
   const [contentValue, setContentValue] = useState("");
   return (
-    <Wrapper>
-      <Header></Header>
-      <PageWrapper>
-        <Aside></Aside>
-        <ContentWrapper>
-          <div className="title">글 올리기</div>
-          <div className="titleInfo">
-            게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
-          </div>
-          <form>
-            <PostBoard>
-              <div className="postDiv">분류</div>
-              <ClassificationDiv>1</ClassificationDiv>
-              <div className="postDiv">제목</div>
-              <TitleInputDiv>
-                <input
-                  className="titleInput"
-                  placeholder="게시글의 제목을 작성해주세요."
-                />
-              </TitleInputDiv>
-              <div className="postDiv">본문</div>
-              <ContentInputDiv>
-                <Editor
-                  value={contentValue}
-                  setValue={setContentValue}
-                  placeholder={"내용을 입력해주세요."}
-                ></Editor>
-                {/* {console.log(contentValue)} */}
-              </ContentInputDiv>
-              <PostButton type="submit">글 올리기</PostButton>
-            </PostBoard>
-          </form>
-        </ContentWrapper>
-      </PageWrapper>
-    </Wrapper>
+    <PageWrapper>
+      <Aside></Aside>
+      <ContentWrapper>
+        <div className="title">글 올리기</div>
+        <div className="titleInfo">
+          게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
+        </div>
+        <form>
+          <PostBoard>
+            <div className="postDiv">분류</div>
+            <ClassificationDiv>1</ClassificationDiv>
+            <div className="postDiv">제목</div>
+            <TitleInputDiv>
+              <input
+                className="titleInput"
+                placeholder="게시글의 제목을 작성해주세요."
+              />
+            </TitleInputDiv>
+            <div className="postDiv">본문</div>
+            <ContentInputDiv>
+              <Editor
+                value={contentValue}
+                setValue={setContentValue}
+                placeholder={"내용을 입력해주세요."}
+              ></Editor>
+              {/* {console.log(contentValue)} */}
+            </ContentInputDiv>
+            <PostButton type="submit">글 올리기</PostButton>
+          </PostBoard>
+        </form>
+      </ContentWrapper>
+    </PageWrapper>
   );
 };
 

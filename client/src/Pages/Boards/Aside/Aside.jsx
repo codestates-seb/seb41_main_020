@@ -8,7 +8,7 @@ const Side = styled.aside`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 20%;
+  width: 15%;
   height: 100vh;
 `;
 

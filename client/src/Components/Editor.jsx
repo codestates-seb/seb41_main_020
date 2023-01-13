@@ -29,7 +29,6 @@ export const formats = [
   "color",
   "link",
   "image",
-  "video",
   "width",
 ];
 
@@ -47,7 +46,7 @@ const Editor = ({ placeholder, value, setValue }) => {
       theme="snow"
       modules={modules}
       formats={formats}
-      style={{ width: "100%", height: "40vh", backgroundColor: "white" }}
+      style={{ width: "100%", height: "100%", backgroundColor: "white" }}
       onChange={(e) => setValue(e)}
     />
   );
