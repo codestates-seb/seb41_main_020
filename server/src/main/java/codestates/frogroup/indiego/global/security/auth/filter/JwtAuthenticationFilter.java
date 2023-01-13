@@ -1,6 +1,7 @@
 package codestates.frogroup.indiego.global.security.auth.filter;
 
 
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.dto.LoginDto;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
 import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
@@ -9,6 +10,7 @@ import codestates.frogroup.indiego.global.security.auth.utils.Responder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,15 +21,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Duration;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
+    private final RedisDao redisDao;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, TokenProvider tokenProvider, RedisDao redisDao) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
+        this.redisDao = redisDao;
     }
 
     /*
@@ -40,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper objectMapper = new ObjectMapper();
 
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // ServletInputSteam을 LoginDto 클래스 객체로 역직렬화 (즉, JSON 객체꺼냄)
-         log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",loginDto.getEmail(),loginDto.getPassword());
+        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",loginDto.getEmail(),loginDto.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
@@ -51,28 +56,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         AuthMember authMember = (AuthMember) authResult.getPrincipal();
         TokenDto tokenDto = tokenProvider.generateTokenDto(authMember);
-        String grantType = tokenDto.getGrantType(); // Bearer
         String accessToken = tokenDto.getAccessToken(); // accessToken 만들기
         String refreshToken = tokenDto.getRefreshToken(); // refreshToken 만들기
 
-        String headerValue = grantType + " " + accessToken;
-        response.setHeader("Authorization",headerValue);
-        response.setHeader("Refresh",refreshToken);
-
+        tokenProvider.accessTokenSetHeader(accessToken,response); // AccessToken Header response 생성
+        //tokenProvider.refreshTokenSetHeader(refreshToken,response); // RefreshToken Header response 생성
+        ResponseCookie cookie = tokenProvider.refreshTokenSetCookie(refreshToken); // RefreshToken Cookie로 설정
+        response.setHeader("Set-Cookie", cookie.toString());
         Responder.loginSuccessResponse(response,authMember); // login 완료시 Response 응답 만들기
 
-        // RefreshToken Cookie로 담는 방법
-//        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-//                .maxAge(7 * 24 * 60 * 60)
-//                .path("/")
-//                .secure(true)
-//                .sameSite("None")
-//                .httpOnly(true)
-//                .build();
-//        response.setHeader("Set-Cookie", cookie.toString());
-
-        log.info("# accessToken = {}",headerValue);
-        log.info("# refreshToken = {}",refreshToken);
+        // 로그인 성공시 Refresh Token Redis 저장 ( key = Refresh Token / value = Access Token )
+        int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
+        redisDao.setValues(refreshToken,accessToken, Duration.ofMinutes(refreshTokenExpirationMinutes));
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
     }

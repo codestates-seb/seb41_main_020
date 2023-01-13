@@ -6,14 +6,22 @@ import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
+import codestates.frogroup.indiego.global.redis.RedisDao;
+import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
+import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.oauth.OAuthUserProfile;
+import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import codestates.frogroup.indiego.global.security.auth.utils.CustomAuthorityUtils;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +36,8 @@ public class MemberService {
     private final CustomBeanUtils<Member> beanUtils;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final TokenProvider tokenProvider;
+    private final RedisDao redisDao;
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
@@ -109,5 +119,33 @@ public class MemberService {
         ProfileImage profileImage = profileImageList.get(0);
         member.getProfile().setImage(profileImage.getUrl());
         return profileImage;
+    }
+
+    public void reissueAccessToken(String refreshToken, HttpServletRequest request, HttpServletResponse response){
+
+        if(refreshToken == null){
+            throw new BusinessLogicException(ExceptionCode.COOKIE_REFRESH_TOKEN_NOT_FOUND);
+        }
+
+        String accessToken = tokenProvider.resolveToken(request);
+        String redisAccessToken = redisDao.getValues(refreshToken);
+
+        // Refresh Token이 Redis에 존재할 경우 Access Token 생성
+        if(redisDao.validateValue(redisAccessToken) && accessToken.equals(redisAccessToken)){
+            log.info("# RefreshToken을 통한 AccessToken 재발급 시작");
+            Claims claims = tokenProvider.parseClaims(refreshToken); // Refresh Token 복호화
+            String email = claims.get("sub", String.class); // Refresh Token에서 email정보 가져오기
+            Member member = findVerifiedMember(email); // DB에서 사용자 정보 찾기
+            AuthMember authMember = AuthMember.of(member.getId(), member.getEmail(), member.getRoles());
+            TokenDto tokenDto = tokenProvider.generateTokenDto(authMember); // Token 만들기
+            int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
+            redisDao.setValues(refreshToken, tokenDto.getAccessToken(), Duration.ofMinutes(refreshTokenExpirationMinutes));
+            tokenProvider.accessTokenSetHeader(tokenDto.getAccessToken(),response);
+
+        } else if(!redisDao.validateValue(redisAccessToken)){
+            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
+        } else {
+            throw new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_SAME);
+        }
     }
 }
