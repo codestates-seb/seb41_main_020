@@ -7,6 +7,7 @@ import left from "../../assets/left.svg";
 import OKButton from "../../Components/OKButton.jsx";
 import Aside from "./Aside/Aside.jsx";
 import search from "../../assets/search.svg";
+import SearchBar from "../../Components/Board/SearchBar.jsx";
 
 import React from "react";
 import styled from "styled-components";
@@ -21,6 +22,8 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100vw;
+  padding-left: 10px;
+  height: 1400px;
 
   .title {
     font-size: ${dtFontSize.xlarge};
@@ -191,21 +194,33 @@ const SearchBarDiv = styled.div`
   display: flex;
   text-align: center;
   justify-content: center;
-  .aSearchBarDiv {
-    background-color: blue;
-    width: 40%;
-  }
-  .searchBarInput {
-    padding: 10px;
-    width: 80%;
-    height: 40px;
-    border: 2px solid ${sub.sub400};
-    border-radius: 10px;
-  }
 
-  .searchImage {
-    width: 17px;
-    height: 17px;
+  .aSearchBarDiv {
+    border: 3px solid ${sub.sub500};
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    padding-right: 4px;
+
+    .searchBarInput {
+      border-radius: 20px;
+      padding: 10px;
+      height: 40px;
+      border: none;
+
+      &:focus-within {
+        outline: none;
+      }
+    }
+
+    .searchImage {
+      width: 17px;
+      height: 17px;
+    }
+    &:focus-within {
+      border: 3px solid ${primary.primary200};
+    }
   }
 
   .listButton {
@@ -264,15 +279,7 @@ export default function Board() {
             <img className="arrowRightImage" src={right} alt="다음 버튼" />
           </button>
         </PageNationDiv>
-        <SearchBarDiv>
-          <div className="aSearchBarDiv">
-            <input
-              className="searchBarInput"
-              placeholder="검색어를 입력하세요."
-            />
-            <img className="searchImage" src={search} alt="돋보기"></img>
-          </div>
-        </SearchBarDiv>
+        <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
       </ContentWrapper>
     </PageWrapper>
   );
