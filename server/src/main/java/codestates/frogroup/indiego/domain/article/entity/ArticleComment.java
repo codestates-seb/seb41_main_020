@@ -2,10 +2,7 @@ package codestates.frogroup.indiego.domain.article.entity;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.common.auditing.BaseTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -33,6 +30,29 @@ public class ArticleComment extends BaseTime {
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private Long likeCount;
+    private long likeCount;
 
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    @Builder
+    public ArticleComment(Member member, Article article, String comment) {
+        this.member = member;
+        this.article = article;
+        this.comment = comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
 }

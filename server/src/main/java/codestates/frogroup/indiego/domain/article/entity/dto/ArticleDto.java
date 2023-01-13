@@ -32,9 +32,6 @@ public class ArticleDto {
     @AllArgsConstructor
     public static class Patch {
 
-        @NotBlank
-        private Long id;
-
         private String title;
 
         private String content;
@@ -62,18 +59,17 @@ public class ArticleDto {
 
         private String category;
 
-        private Long view;
+        private long view;
 
-        private Long likeCount;
+        private long likeCount;
 
         private LocalDateTime createdAt;
 
         private LocalDateTime modifiedAt;
 
-        private List<ArticleCommentDto.Response> articleComments;
-
         private Integer articleCommentCount;
 
+        private List<ArticleCommentDto.Response> articleComments;
     }
 
 }
