@@ -58,27 +58,27 @@ public class ShowReservationService {
 //        return updatedShow;
 //    }
 //
-//    @Transactional
-//    public void deleteShow(Long id) {
-//
-//        Show findShow = findVerifiedShow(id);
-//        showRepository.delete(findShow);
-//
-//    }
+    @Transactional
+    public void deleteShow(Long id) {
+
+        ShowReservation reservation = findVerifiedReservation(id);
+        showReservationRepository.delete(reservation);
+
+    }
 //
 //    public Page<Article> findShow(Pageable pageable) {
 //        return null;
 //    }
 //
-//    private Show findVerifiedShow(Long id) {
-//        Optional<Show> optionalShow = showRepository.findById(id);
-//
-//        Show findShow =
-//                optionalShow.orElseThrow(()->
-//                        new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND));
-//        return findShow;
-//
-//    }
+    private ShowReservation findVerifiedReservation(Long id) {
+        Optional<ShowReservation> optionalShow = showReservationRepository.findById(id);
+
+        ShowReservation findShow =
+                optionalShow.orElseThrow(()->
+                        new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND));
+        return findShow;
+
+    }
 
     public Member getCurrentMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

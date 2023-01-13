@@ -18,7 +18,7 @@ public class ShowComment extends BaseTime {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "show-id")
+    @JoinColumn(name = "show_id")
     private Show show;
 
     @ManyToOne

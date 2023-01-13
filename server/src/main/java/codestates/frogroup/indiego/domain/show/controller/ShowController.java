@@ -35,7 +35,6 @@ import java.util.Optional;
 public class ShowController {
 
     private final MemberRepository memberRepository;
-    private final ShowRepository showRepository;
     private final ShowService showService;
     private final ShowMapperImpl mapper;
 
