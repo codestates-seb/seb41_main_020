@@ -21,6 +21,7 @@ const HeartItem = styled(BoardItem)`
     color: ${primary.primary500};
     font-size: ${dtFontSize.xlarge};
     font-weight: 700;
+    margin-bottom: 40px;
   }
 `;
 
@@ -56,6 +57,10 @@ const AnswerCreateButtonDiv = styled.div`
 const AnswerCreateButton = styled(OKButton)`
   width: 100px;
   height: 40px;
+
+  & :hover {
+    background-color: ${sub.sub500};
+  }
 `;
 
 const AnswerListWrapper = styled.div`
@@ -79,7 +84,6 @@ const AnswerListUserDiv = styled.div`
 const AnswerListImageDiv = styled.div`
   .userImage {
     width: 70px;
-    height: 70px;
     border-radius: 50%;
   }
 `;
@@ -142,7 +146,7 @@ const AnswerListFunctionDiv = styled.div`
       }
     }
 
-    .hearCount {
+    .heartCount {
       margin-left: 5px;
       margin-top: 1px;
       color: ${primary.primary400};
@@ -217,7 +221,7 @@ const Post = () => {
                       <img className="heartImage" src={heart} alt="하트" />
                     </button>
 
-                    <span className="hearCount">{it.likeCunt}</span>
+                    <span className="heartCount">{it.likeCunt}</span>
                   </div>
                   <div className="udDiv">
                     <button className="udButton">수정</button>

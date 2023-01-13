@@ -15,13 +15,12 @@ export const PageWrapper = styled.div`
   margin-top: 20px;
   display: flex;
   text-align: center;
-  /* height: max-content; */
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100vh;
+  width: 100vw;
 
   .title {
     font-size: ${dtFontSize.xlarge};
