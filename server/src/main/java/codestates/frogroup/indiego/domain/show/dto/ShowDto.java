@@ -23,6 +23,8 @@ public class ShowDto {
 
     @Getter
     @AllArgsConstructor
+    @Setter
+    @Builder
     public static class Post{
         //ShowBoard
         //Board
@@ -61,6 +63,7 @@ public class ShowDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @Builder
     public static class Patch{
         private Long id;
         //ShowBoard
@@ -88,7 +91,7 @@ public class ShowDto {
     }
 
     @Getter
-    @Builder
+    @Setter
     @AllArgsConstructor
     public static class Response{
         private Long id;
@@ -116,7 +119,7 @@ public class ShowDto {
     }
 
     @Getter
-    @Builder
+    @Setter
     @AllArgsConstructor
     public static class postResponse{
         private Long id;

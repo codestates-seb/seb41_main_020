@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Show extends BaseTime {
 
@@ -27,7 +27,7 @@ public class Show extends BaseTime {
 
     @Embedded
     @Setter
-    private ShowBoard board;
+    private ShowBoard showBoard;
 
     @Setter
     @Embedded
@@ -58,14 +58,10 @@ public class Show extends BaseTime {
         }
     }
 
+    // 박성호가 수정한 부분
+//    @Builder
+//    public Show(Long id) {
+//        this.id = id;
+//    }
 
-    @Builder
-    public Show(Member member, ShowBoard board, Coordinate coordinate,
-                int total, double scoreAverage) {
-        this.member = member;
-        this.board = board;
-        this.coordinate = coordinate;
-        this.total = total;
-        this.scoreAverage = scoreAverage;
-    }
 }

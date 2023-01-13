@@ -360,7 +360,7 @@ public class StubData {
     public ShowReservationDto.Response getShowReservationResponse(){
         return new ShowReservationDto.Response(
                 show.getId(),
-                1,
+                1L,
                 1,
                 false
         );
@@ -369,7 +369,7 @@ public class StubData {
     public ShowReservationDto.Response getPatchShowReservationResponse(){
         return new ShowReservationDto.Response(
                 show.getId(),
-                1,
+                1L,
                 2,
                 false
         );

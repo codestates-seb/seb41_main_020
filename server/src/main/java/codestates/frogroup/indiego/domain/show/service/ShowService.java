@@ -30,21 +30,19 @@ public class ShowService {
 
 
     @Transactional
-    public Show createShow(Show show, Long memberId) {
+    public Show createShow(Show show, long memberId) {
 
         // ToDo security 적용 시 수정 -> getCurrentMember
-        //Member member = memberRepository.findById(memberId).orElseThrow(
-        //        () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        StubData stubData = new StubData();
-        Member member = stubData.member;
-        memberRepository.save(member);
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
         show.setMember(member);
 
         return showRepository.save(show);
     }
 
     @Transactional
-    public Show updateShow(Show show, Long memberId) {
+    public Show updateShow(Show show, long memberId) {
         Show findShow = findVerifiedShow(show.getId());
 
         // ToDo security 적용 시 수정 -> getCurrentMember
@@ -64,7 +62,11 @@ public class ShowService {
 
     }
 
-    public Page<Article> findShow(Pageable pageable) {
+    public Show findShow(long showId){
+        return findVerifiedShow(showId);
+    }
+
+    public Page<Article> findShows(Pageable pageable) {
         return null;
     }
 
