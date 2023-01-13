@@ -74,4 +74,13 @@ public class MemberDto {
         private String introduction;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class LoginResponse {
+        private Long id;
+        private String email;
+        private String role;
+    }
+
 }

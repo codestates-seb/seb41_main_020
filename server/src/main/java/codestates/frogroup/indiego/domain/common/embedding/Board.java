@@ -21,6 +21,7 @@ public class Board {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column
     private String image;
 
     @Column(length = 50, nullable = false)

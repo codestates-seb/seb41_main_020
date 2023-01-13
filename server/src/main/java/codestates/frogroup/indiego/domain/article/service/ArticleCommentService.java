@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Slf4j
 @Service
@@ -48,7 +47,7 @@ public class ArticleCommentService {
         articleComment.setArticle(findArticle);
         articleComment.setMember(findMember);
 
-//         builder 활용 방법
+//      // builder 활용 방법
 //        ArticleComment articleComment = ArticleComment.builder()
 //                .member(findMember)
 //                .article(findArticle)
@@ -57,7 +56,7 @@ public class ArticleCommentService {
 
         ArticleComment savedArticleComment = articleCommentRepository.save(articleComment);
 
-        return getResponse(savedArticleComment);
+        return mapper.articleCommentToArticleCommentResponse(savedArticleComment);
     }
 
     /**
@@ -78,7 +77,7 @@ public class ArticleCommentService {
             ArticleComment updateArticleComment = beanUtils.copyNonNullProperties(articleComment, findArticleComment);
             ArticleComment savedArticleComment = articleCommentRepository.save(updateArticleComment);
 
-            return getResponse(savedArticleComment);
+            return mapper.articleCommentToArticleCommentResponse(savedArticleComment);
         }
 
         throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
@@ -125,21 +124,6 @@ public class ArticleCommentService {
 
     }
 
-    private ArticleCommentDto.Response getResponse(ArticleComment articleComment) {
-
-        ArticleCommentDto.Response response = mapper.articleCommentToArticleCommentResponse(articleComment);
-        List<ArticleCommentLike> articleCommentLikes =
-                articleCommentLikeRepository.findAllByArticleCommentId(articleComment.getId());
-
-        if (articleCommentLikes.isEmpty()) {
-            response.setLikeCount(0);
-        } else {
-            response.setLikeCount(articleCommentLikes.size());
-        }
-
-        return response;
-    }
-
     private ArticleComment findVerifiedArticleComment(Long articleCommentId) {
         return articleCommentRepository.findById(articleCommentId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
@@ -155,5 +139,22 @@ public class ArticleCommentService {
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
     }
+
+//    private ArticleCommentDto.Response getResponse(ArticleComment articleComment) {
+//
+//        ArticleCommentDto.Response response = mapper.articleCommentToArticleCommentResponse(articleComment);
+//        List<ArticleCommentLike> articleCommentLikes =
+//                articleCommentLikeRepository.findAllByArticleCommentId(articleComment.getId());
+//
+//        log.info("list<ArticleCommentLike> = {}", articleCommentLikes.toString());
+//
+//        if (articleCommentLikes.isEmpty()) {
+//            response.setLikeCount(0);
+//        } else {
+//            response.setLikeCount(articleCommentLikes.size());
+//        }
+//
+//        return response;
+//    }
 
 }

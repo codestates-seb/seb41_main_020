@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 //페이지, 리액트 컴포넌트, 정적 파일
 import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

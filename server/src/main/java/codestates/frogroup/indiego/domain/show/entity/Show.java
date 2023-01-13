@@ -3,17 +3,16 @@ package codestates.frogroup.indiego.domain.show.entity;
 import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.common.auditing.BaseTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
+@Setter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Show extends BaseTime {
 
@@ -23,23 +22,27 @@ public class Show extends BaseTime {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @Setter
     private Member member;
 
     @Embedded
-    private ShowBoard board;
+    @Setter
+    private ShowBoard showBoard;
 
+    @Setter
     @Embedded
     private Coordinate coordinate;
 
+
     @Enumerated(value = EnumType.STRING)
-    private ShowStatus status;
+    private ShowStatus status = ShowStatus.SALE;
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private Double scoreAverage; // 평균별점
+    private double scoreAverage; // 평균별점
 
     @Column(nullable = false)
-    private Integer total; // 정원
+    private int total; // 정원
 
 
     public enum ShowStatus {
@@ -54,5 +57,11 @@ public class Show extends BaseTime {
             this.status = status;
         }
     }
+
+    // 박성호가 수정한 부분
+//    @Builder
+//    public Show(Long id) {
+//        this.id = id;
+//    }
 
 }
