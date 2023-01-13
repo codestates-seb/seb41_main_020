@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 //페이지, 리액트 컴포넌트, 정적 파일
 import ReviewItem from "../TicketsDetail/ReviewItem.jsx";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
