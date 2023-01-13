@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 
 import { primary, dtFontSize, secondary, sub } from "../../styles/mixins";
+import breakpoint from "../../styles/breakpoint";
 import Search from "../../assets/search.svg";
 
 import styled from "styled-components";
@@ -14,6 +15,10 @@ const SearchBarContainer = styled.div`
   height: 50px;
   display: flex;
   justify-content: center;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    display: none;
+  }
 `;
 
 const OptionContainer = styled.div`
@@ -174,10 +179,7 @@ export default function SearchBar() {
             />
           </svg>
         </OptionSelector>
-        <OptionsList
-          onClick={(e) => e.stopPropagation()}
-          isClicked={isSearchOptionsClicked}
-        >
+        <OptionsList isClicked={isSearchOptionsClicked}>
           <li tabIndex={-1}>공연명</li>
           <li tabIndex={-1}>아티스트명 </li>
         </OptionsList>

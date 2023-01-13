@@ -19,24 +19,16 @@ const BackDrop = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  p {
-    width: 78%;
-    text-align: end;
-    font-size: 30px;
-    font-weight: 500;
-    color: white;
-
-    :hover {
-      cursor: pointer;
-    }
-  }
 `;
 
-export default function Overlay({ popupHandler, children }) {
-  const closePopupHandler = () => {
-    popupHandler(false);
-  };
-
-  return <BackDrop>{children}</BackDrop>;
+export default function Overlay({ children, handler }) {
+  return (
+    <BackDrop
+      onClick={() => {
+        handler(false);
+      }}
+    >
+      {children}
+    </BackDrop>
+  );
 }
