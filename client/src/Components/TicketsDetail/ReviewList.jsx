@@ -23,6 +23,10 @@ const ReviewListContainer = styled.ul`
   display: flex;
   width: 90%;
   flex-direction: column;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 100%;
+  }
 `;
 
 const AddMoreButton = styled.div`
@@ -32,10 +36,14 @@ const AddMoreButton = styled.div`
   font-weight: 600;
   justify-content: space-between;
   margin-top: 3%;
-  width: 7%;
+  width: max-content;
 
   &:hover {
     color: ${primary.primary500};
+  }
+
+  > span {
+    margin-right: 5px;
   }
 `;
 

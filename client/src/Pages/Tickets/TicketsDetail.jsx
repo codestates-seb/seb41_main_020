@@ -336,7 +336,6 @@ const TopRightContainer = styled.div`
 export default function TicketsDetail() {
   return (
     <>
-      <Header />
       <Container>
         <ContentHeaderContainer>
           <HeaderTitleContainer>
