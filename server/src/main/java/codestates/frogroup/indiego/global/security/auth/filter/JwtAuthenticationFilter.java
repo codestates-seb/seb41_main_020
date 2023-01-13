@@ -1,7 +1,6 @@
 package codestates.frogroup.indiego.global.security.auth.filter;
 
 
-
 import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.dto.LoginDto;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
