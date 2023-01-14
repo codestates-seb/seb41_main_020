@@ -201,12 +201,6 @@ export default function Login() {
     }
   };
 
-  const handleEnterPressFocusInput = (e) => {
-    if (e.key === "Enter") {
-      passwordInputRef.current.focus();
-    }
-  };
-
   return (
     <Container>
       <ContentContainer>
@@ -223,7 +217,7 @@ export default function Login() {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
-              onKeyPress={handleEnterPressFocusInput}
+              onKeyPress={handleEnterPressLogin}
               ref={emailInputRef}
             />
           </div>
