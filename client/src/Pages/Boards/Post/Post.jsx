@@ -10,8 +10,12 @@ import React from "react";
 import styled from "styled-components";
 
 const QuillViewDiv = styled.div`
-  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 60px;
+  width: 1130px;
+  height: max-content;
   background-color: green;
 `;
 
