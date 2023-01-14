@@ -13,15 +13,16 @@ import React from "react";
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
-  margin-top: 20px;
   display: flex;
   text-align: center;
 `;
 
 export const ContentWrapper = styled.div`
+  margin-top: 30px;
+  margin-left: 285.438px;
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 60%;
   padding-left: 10px;
   height: 1400px;
 

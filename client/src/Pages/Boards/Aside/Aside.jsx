@@ -1,15 +1,17 @@
-import { primary, dtFontSize } from "../../../styles/mixins";
+import { primary, dtFontSize, sub } from "../../../styles/mixins";
 
 import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 
 const Side = styled.aside`
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 15%;
-  height: 100vh;
+  width: 12%;
+  height: 100%;
+  border-right: 2px solid ${sub.sub200};
 `;
 
 const SideList = styled.div`

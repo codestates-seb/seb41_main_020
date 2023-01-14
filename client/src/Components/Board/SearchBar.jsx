@@ -15,7 +15,7 @@ const SearchBarDiv = styled.div`
     display: flex;
     align-items: center;
     border-radius: 20px;
-    padding-right: 4px;
+    padding-right: 9px;
 
     .searchBarInput {
       width: 100%;
