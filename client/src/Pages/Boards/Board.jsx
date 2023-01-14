@@ -1,35 +1,56 @@
-import { primary, dtFontSize, sub, secondary } from "../../styles/mixins.js";
-import BoardDummy from "../../DummyData/BoardDummy.js";
+//페이지, 리액트 컴포넌트, 정적 파일
 import heart from "../../assets/heart.svg";
 import pen from "../../assets/pen.svg";
 import right from "../../assets/right.svg";
 import left from "../../assets/left.svg";
 import OKButton from "../../Components/OKButton.jsx";
 import Aside from "./Aside/Aside.jsx";
-import search from "../../assets/search.svg";
 import SearchBar from "../../Components/Board/SearchBar.jsx";
+import MobileAside from "./Aside/MobileAside.jsx";
 
+//로컬 모듈
+import {
+  primary,
+  dtFontSize,
+  sub,
+  secondary,
+  mbFontSize,
+} from "../../styles/mixins.js";
+import breakpoint from "../../styles/breakpoint";
+import BoardDummy from "../../DummyData/BoardDummy.js";
+
+//라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
-  margin-top: 20px;
   display: flex;
   text-align: center;
 `;
 
 export const ContentWrapper = styled.div`
+  margin-top: 30px;
+  margin-left: 240px;
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 60%;
   padding-left: 10px;
   height: 1400px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-left: 50px;
+    width: 90%;
+  }
 
   .title {
     font-size: ${dtFontSize.xlarge};
     color: ${primary.primary500};
     font-weight: 700;
     text-align: left;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.xlarge};
+    }
   }
   .titleInfo {
     font-size: ${dtFontSize.medium};
@@ -37,14 +58,22 @@ export const ContentWrapper = styled.div`
     color: ${sub.sub300};
     text-align: left;
     margin-bottom: 30px;
-  }
 
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
+  }
   .lineDiv {
     height: 3px;
     background-color: ${sub.sub300};
   }
 `;
 
+const BoardWrapper = styled(ContentWrapper)`
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 130px;
+  }
+`;
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;
@@ -57,6 +86,10 @@ export const BoardItem = styled.div`
     flex-direction: column;
     text-align: center;
     justify-content: center;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 80px;
+    }
 
     .heartButton {
       margin-bottom: 5px;
@@ -81,6 +114,10 @@ export const BoardItem = styled.div`
     text-align: center;
     justify-content: center;
     width: 120px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      display: none;
+    }
   }
 `;
 
@@ -96,18 +133,32 @@ const BoardItemContent = styled.div`
     font-weight: 700;
     text-align: left;
     color: ${sub.sub900};
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      margin-top: 10px;
+      font-size: ${mbFontSize.xlarge};
+    }
   }
   .contentDiv {
     font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
     color: ${sub.sub700};
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+      margin-bottom: 20px;
+    }
   }
 `;
 
 const BoardItemCreateInfo = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    display: none;
+  }
   .authorDiv {
     font-size: ${dtFontSize.xsmall};
     font-weight: 300;
@@ -232,7 +283,8 @@ export default function Board() {
   return (
     <PageWrapper>
       <Aside></Aside>
-      <ContentWrapper>
+      <MobileAside></MobileAside>
+      <BoardWrapper>
         <div className="title">자유게시판</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
@@ -280,7 +332,7 @@ export default function Board() {
           </button>
         </PageNationDiv>
         <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
-      </ContentWrapper>
+      </BoardWrapper>
     </PageWrapper>
   );
 }
