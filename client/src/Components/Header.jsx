@@ -299,7 +299,7 @@ export default function Header() {
     if (innerWidth > 767) {
       setNavOpen(false);
     }
-  }, [innerWidth]);
+  }, []);
 
   return (
     <HeaderContainer>
