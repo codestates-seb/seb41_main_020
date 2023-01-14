@@ -1,5 +1,6 @@
-import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
+import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
 import { PageWrapper, ContentWrapper } from "../Board.jsx";
+import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/OKButton.jsx";
 import Editor from "../../../Components/Editor.jsx";
@@ -7,16 +8,29 @@ import Editor from "../../../Components/Editor.jsx";
 import React, { useState } from "react";
 import styled from "styled-components";
 
+export const PostWrapper = styled(ContentWrapper)`
+  width: 70vw;
+  padding-right: 10px;
+  height: max-content;
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 87%;
+  }
+`;
+
 export const PostBoard = styled.div`
-  width: 80vw;
-  height: 900px;
+  width: 100%;
+  height: 1000px;
   background-color: ${sub.sub200};
-  padding-left: 80px;
-  padding-right: 80px;
+  padding-left: 50px;
+  padding-right: 50px;
   padding-top: 60px;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 100%;
+  }
+
   .postDiv {
-    font-size: ${dtFontSize.large};
+    font-size: ${mbFontSize.large};
     font-weight: 700;
     color: ${primary.primary500};
     text-align: left;
@@ -47,7 +61,7 @@ export const ContentInputDiv = styled.div`
   margin-top: 10px;
   text-align: left;
   padding-bottom: 50px;
-  height: 400px;
+  height: 500px;
   background-color: white;
   margin-bottom: 60px;
 
@@ -67,6 +81,11 @@ const PostButton = styled(OKButton)`
   &:hover {
     background-color: ${secondary.secondary500};
   }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 200px;
+    font-size: ${mbFontSize.medium};
+  }
 `;
 
 const PostCreate = () => {
@@ -74,7 +93,7 @@ const PostCreate = () => {
   return (
     <PageWrapper>
       <Aside></Aside>
-      <ContentWrapper>
+      <PostWrapper>
         <div className="title">글 올리기</div>
         <div className="titleInfo">
           게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
@@ -102,7 +121,7 @@ const PostCreate = () => {
             <PostButton type="submit">글 올리기</PostButton>
           </PostBoard>
         </form>
-      </ContentWrapper>
+      </PostWrapper>
     </PageWrapper>
   );
 };

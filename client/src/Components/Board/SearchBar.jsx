@@ -9,13 +9,13 @@ const SearchBarDiv = styled.div`
   justify-content: center;
 
   .aSearchBarDiv {
-    width: 30vw;
+    width: 500px;
     border: 3px solid ${sub.sub500};
     position: relative;
     display: flex;
     align-items: center;
     border-radius: 20px;
-    padding-right: 4px;
+    padding-right: 9px;
 
     .searchBarInput {
       width: 100%;
