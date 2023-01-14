@@ -9,6 +9,16 @@ import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 import React from "react";
 import styled from "styled-components";
 
+const QuillViewDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+  width: 1130px;
+  height: max-content;
+  background-color: green;
+`;
+
 const HeartItem = styled(BoardItem)`
   justify-content: center;
   .heartButton {
@@ -175,7 +185,9 @@ const Post = () => {
         <div className="title">글 제목(ex 난 누구인가 여긴 어디인가)</div>
         <div className="titleInfo">작성날짜,작성자</div>
         <div className="lineDiv"></div>
-        <EditorView value={"서버에서 받은 데이터"}></EditorView>
+        <QuillViewDiv>
+          <EditorView></EditorView>
+        </QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton">
