@@ -9,7 +9,14 @@ import SearchBar from "../../Components/Board/SearchBar.jsx";
 import MobileAside from "./Aside/MobileAside.jsx";
 
 //로컬 모듈
-import { primary, dtFontSize, sub, secondary } from "../../styles/mixins.js";
+import {
+  primary,
+  dtFontSize,
+  sub,
+  secondary,
+  mbFontSize,
+} from "../../styles/mixins.js";
+import breakpoint from "../../styles/breakpoint";
 import BoardDummy from "../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
@@ -30,11 +37,21 @@ export const ContentWrapper = styled.div`
   padding-left: 10px;
   height: 1400px;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 130px;
+    margin-left: 50px;
+    width: 90%;
+  }
+
   .title {
     font-size: ${dtFontSize.xlarge};
     color: ${primary.primary500};
     font-weight: 700;
     text-align: left;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.xlarge};
+    }
   }
   .titleInfo {
     font-size: ${dtFontSize.medium};
@@ -42,6 +59,10 @@ export const ContentWrapper = styled.div`
     color: ${sub.sub300};
     text-align: left;
     margin-bottom: 30px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
 
   .lineDiv {
@@ -62,6 +83,10 @@ export const BoardItem = styled.div`
     flex-direction: column;
     text-align: center;
     justify-content: center;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 80px;
+    }
 
     .heartButton {
       margin-bottom: 5px;
@@ -86,6 +111,10 @@ export const BoardItem = styled.div`
     text-align: center;
     justify-content: center;
     width: 120px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      display: none;
+    }
   }
 `;
 
@@ -101,18 +130,32 @@ const BoardItemContent = styled.div`
     font-weight: 700;
     text-align: left;
     color: ${sub.sub900};
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      margin-top: 10px;
+      font-size: ${mbFontSize.xlarge};
+    }
   }
   .contentDiv {
     font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
     color: ${sub.sub700};
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+      margin-bottom: 20px;
+    }
   }
 `;
 
 const BoardItemCreateInfo = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    display: none;
+  }
   .authorDiv {
     font-size: ${dtFontSize.xsmall};
     font-weight: 300;

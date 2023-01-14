@@ -13,8 +13,9 @@ const MobileAsideDiv = styled.div`
   display: flex;
   align-items: center;
   padding: 0 50px;
-  overflow-x: scroll;
   border-bottom: 3px solid ${sub.sub200};
+  background-color: white;
+  overflow-x: scroll;
 
   ::-webkit-scrollbar {
     display: none;
