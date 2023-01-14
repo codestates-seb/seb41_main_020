@@ -1,23 +1,34 @@
 import { PageWrapper, ContentWrapper } from "../Boards/Board.jsx";
 import {
+  PostWrapper,
   PostBoard,
   TitleInputDiv,
   ContentInputDiv,
 } from "../Boards/Post/PostCreate.jsx";
-import { dtFontSize, sub, misc } from "../../styles/mixins.js";
+import breakpoint from "../../styles/breakpoint.js";
+
+import {
+  dtFontSize,
+  sub,
+  misc,
+  secondary,
+  mbFontSize,
+} from "../../styles/mixins.js";
 import OKButton from "../../Components/OKButton.jsx";
 import Editor from "../../Components/Editor.jsx";
 
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const TicketsCreateContentWrapper = styled(ContentWrapper)`
-  margin-left: 285.438px;
-  width: 80vw;
+const TicketsCreateContentWrapper = styled(PostWrapper)`
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    /* width: 90%; */
+  } ;
 `;
 
 const TicketsBoard = styled(PostBoard)`
   height: 1450px;
+  width: 100%;
 `;
 
 const TicketsCreateInputDiv = styled(TitleInputDiv)`
@@ -62,7 +73,6 @@ const ChoiceButton = styled(OKButton)`
 `;
 
 const ButtonDiv = styled.div`
-  margin-left: 10px;
   margin-top: 50px;
   margin-bottom: 50px;
   justify-content: center;
@@ -71,6 +81,15 @@ const ButtonDiv = styled.div`
 const PostButton = styled(OKButton)`
   width: 200px;
   height: 50px;
+
+  &:hover {
+    background-color: ${secondary.secondary500};
+  }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 150px;
+    font-size: ${mbFontSize.medium};
+  }
 `;
 
 const CancelButton = styled(PostButton)`

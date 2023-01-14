@@ -8,16 +8,17 @@ import Editor from "../../../Components/Editor.jsx";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const PostWrapper = styled(ContentWrapper)`
+export const PostWrapper = styled(ContentWrapper)`
+  width: 70vw;
+  padding-right: 10px;
+  height: max-content;
   @media screen and (max-width: ${breakpoint.mobile}) {
-    height: 1100px;
-    padding-right: 10px;
-    margin-left: 40px;
+    width: 87%;
   }
 `;
 
 export const PostBoard = styled.div`
-  width: 80vw;
+  width: 100%;
   height: 1000px;
   background-color: ${sub.sub200};
   padding-left: 50px;
