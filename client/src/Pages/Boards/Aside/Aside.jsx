@@ -1,4 +1,5 @@
 import { primary, dtFontSize, sub } from "../../../styles/mixins";
+import breakpoint from "../../../styles/breakpoint";
 
 import React from "react";
 import styled from "styled-components";
@@ -9,9 +10,13 @@ const Side = styled.aside`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 12%;
+  width: 200px;
   height: 100%;
   border-right: 2px solid ${sub.sub200};
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    display: none;
+  }
 `;
 
 const SideList = styled.div`
@@ -47,7 +52,6 @@ const SideList = styled.div`
 
 const Aside = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
   return (
     <Side>
       <SideList>

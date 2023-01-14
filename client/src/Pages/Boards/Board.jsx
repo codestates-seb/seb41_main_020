@@ -1,14 +1,18 @@
-import { primary, dtFontSize, sub, secondary } from "../../styles/mixins.js";
-import BoardDummy from "../../DummyData/BoardDummy.js";
+//페이지, 리액트 컴포넌트, 정적 파일
 import heart from "../../assets/heart.svg";
 import pen from "../../assets/pen.svg";
 import right from "../../assets/right.svg";
 import left from "../../assets/left.svg";
 import OKButton from "../../Components/OKButton.jsx";
 import Aside from "./Aside/Aside.jsx";
-import search from "../../assets/search.svg";
 import SearchBar from "../../Components/Board/SearchBar.jsx";
+import MobileAside from "./Aside/MobileAside.jsx";
 
+//로컬 모듈
+import { primary, dtFontSize, sub, secondary } from "../../styles/mixins.js";
+import BoardDummy from "../../DummyData/BoardDummy.js";
+
+//라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
 
@@ -19,7 +23,7 @@ export const PageWrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   margin-top: 30px;
-  margin-left: 285.438px;
+  margin-left: 240px;
   display: flex;
   flex-direction: column;
   width: 60%;
@@ -233,6 +237,7 @@ export default function Board() {
   return (
     <PageWrapper>
       <Aside></Aside>
+      <MobileAside></MobileAside>
       <ContentWrapper>
         <div className="title">자유게시판</div>
         <div className="titleInfo">
