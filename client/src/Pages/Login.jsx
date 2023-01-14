@@ -54,7 +54,8 @@ const LoginContainer = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 350px;
+  height: max-content;
+  min-height: 350px;
   justify-content: space-between;
   padding: 20px;
   width: 450px;
@@ -181,16 +182,28 @@ export default function Login() {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const loginHandler = () => {
+  const handleLogin = () => {
     if (!email) {
       emailInputRef.current.focus();
       setErrorMessageContent("⚠︎ 이메일을 입력해주세요");
       return;
     } else if (!password) {
       passwordInputRef.current.focus();
-      setErrorMessageContent("⚠︎ 비밀번호를 입력해주세요");
+      setErrorMessageContent("⚠︎비밀번호를 입력해주세요");
     } else {
       setErrorMessageContent("");
+    }
+  };
+
+  const handleEnterPressLogin = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
+  const handleEnterPressFocusInput = (e) => {
+    if (e.key === "Enter") {
+      passwordInputRef.current.focus();
     }
   };
 
@@ -210,6 +223,7 @@ export default function Login() {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
+              onKeyPress={handleEnterPressFocusInput}
               ref={emailInputRef}
             />
           </div>
@@ -224,6 +238,7 @@ export default function Login() {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              onKeyPress={handleEnterPressLogin}
               ref={passwordInputRef}
             />
             <div className="keep-login-container">
@@ -244,7 +259,7 @@ export default function Login() {
           >
             {errorMessageContent}
           </span>
-          <button onClick={loginHandler}>로그인</button>
+          <button onClick={handleLogin}>로그인</button>
         </LoginContainer>
       </ContentContainer>
     </Container>
