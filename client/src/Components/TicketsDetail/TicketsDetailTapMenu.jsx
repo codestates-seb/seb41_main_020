@@ -24,15 +24,16 @@ const Tabs = styled.ul`
   display: flex;
   margin-top: 5%;
   position: sticky;
-  top: 0;
+  top: 87px;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 70px;
 
   > li {
     all: unset;
     align-items: center;
     cursor: pointer;
+    display: flex;
     font-size: ${dtFontSize.large};
     font-weight: 600;
     color: ${sub.sub400};
@@ -57,6 +58,7 @@ const TapContent = styled.div`
   width: 100%;
   min-height: 1500px;
   padding: 5%;
+  scroll-margin: 120px;
 `;
 
 export default function TicketsDetailTap() {
