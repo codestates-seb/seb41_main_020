@@ -142,6 +142,7 @@ export default function Calendar({ setSelectedDate }) {
         arr[index] = acc;
         return acc - 1;
       }, lastMonthDays);
+      lastMonthDaysArr.reverse();
       daysArr = lastMonthDaysArr.concat(daysArr);
       return daysArr;
     }
