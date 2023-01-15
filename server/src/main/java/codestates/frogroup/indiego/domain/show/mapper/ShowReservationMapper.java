@@ -20,11 +20,12 @@ public interface ShowReservationMapper {
 
     // TODO default 를 쓰든 , service Layer 에서 처리를 하든
     // @Mapping(target = "show", expression = "java(new Show(post.getShowId()))")
-    @Mapping(source = "ticketCount", target = "ticketCount")
-    ShowReservation showReservationPostToShowReservation(ShowReservationDto.Post post);
+    //ShowReservation showReservationPostToShowReservation(ShowReservationDto.Post post);
 
-    @Mapping(source = "show.id", target = "showId")
-    ShowReservationDto.Response showToShowReservationResponse(ShowReservation showReservation);
+    @Mapping(source = "show.showBoard.board.title", target = "title")
+    @Mapping(source = "show.member.profile.nickname", target = "nickname")
+    @Mapping(source = "show.showBoard.address", target = "address")
+    ShowReservationDto.Response showReservationToShowReservationResponse(ShowReservation showReservation);
 
 
     List<ShowReservationDto.Response> showsReservationsToShowResvationResponses(List<ShowReservation> reservations);
