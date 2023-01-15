@@ -15,7 +15,7 @@ import {
 } from "../../styles/mixins";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 // import { Outlet } from "react-router-dom";
@@ -79,7 +79,7 @@ const ContentInnerRightContainer = styled.div`
   flex-direction: column;
   height: max-content;
   width: max-content;
-  margin-left: 30px;
+  margin: 30px 0 30px 30px;
 
   > .user-type-info {
     color: ${primary.primary500};
@@ -189,6 +189,7 @@ const SignupContainer = styled.div`
   > .input-container {
     display: flex;
     flex-direction: column;
+    margin-bottom: 30px;
 
     > label {
       color: white;
@@ -214,6 +215,23 @@ const SignupContainer = styled.div`
         font-size: ${mbFontSize.small};
         width: 250px;
         height: 25px;
+      }
+    }
+
+    > .validation-message-container {
+      display: flex;
+      flex-direction: column;
+      margin: 5px 0;
+      width: max-content;
+
+      > .validation-message {
+        all: unset;
+        color: ${misc.red};
+        font-size: ${dtFontSize.small};
+
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          font-size: ${mbFontSize.medium};
+        }
       }
     }
   }
@@ -244,9 +262,67 @@ const SignupContainer = styled.div`
 
 export default function Signup() {
   const [nickname, setNickname] = useState();
+  const [nicknameValid, setNicknameValid] = useState(false);
+  const [nicknameInputOnFocus, setNicknameInputOnFocus] = useState(false);
+
   const [email, setEmail] = useState();
+  const [emailValid, setEmailValid] = useState(false);
+  const [emailInputOnFocus, setEmailInputOnFocus] = useState(false);
+
   const [password, setPassword] = useState();
+  const [passwordLengthValid, setPasswordLengthValid] = useState(false);
+  const [passwordNumberLetterRegexValid, setPasswordNumberLetterRegexValid] =
+    useState(false);
+  const [passwordSpecialLetterRegexValid, setPasswordSpecialLetterRegexValid] =
+    useState(false);
+  const [passwordInputOnFocus, setPasswordInputOnFocus] = useState(false);
+
   const navigate = useNavigate();
+
+  //실시간 유효성 검사
+  useEffect(() => {
+    if (nickname && nickname.length <= 10) {
+      setNicknameValid(true);
+    } else {
+      setNicknameValid(false);
+    }
+  }, [nickname]);
+
+  useEffect(() => {
+    if (
+      email &&
+      email.length > 0 &&
+      /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)
+    ) {
+      setEmailValid(true);
+    } else {
+      setEmailValid(false);
+    }
+  }, [email]);
+
+  useEffect(() => {
+    if (password && password.length >= 8 && password.length <= 20) {
+      setPasswordLengthValid(true);
+    } else {
+      setPasswordLengthValid(false);
+    }
+  }, [password]);
+
+  useEffect(() => {
+    if (password && /(?=.*\d)(?=.*[a-zA-ZS])/.test(password)) {
+      setPasswordNumberLetterRegexValid(true);
+    } else {
+      setPasswordNumberLetterRegexValid(false);
+    }
+  }, [password]);
+
+  useEffect(() => {
+    if (password && /(?=.*[^a-zA-Z0-9!@#$%^&*])/.test(password) === false) {
+      setPasswordSpecialLetterRegexValid(true);
+    } else {
+      setPasswordSpecialLetterRegexValid(false);
+    }
+  }, [password]);
 
   return (
     <Container>
@@ -273,10 +349,21 @@ export default function Signup() {
                 onChange={(e) => {
                   setNickname(e.target.value);
                 }}
+                onFocus={() => setNicknameInputOnFocus(true)}
               />
-              <span className="error-message">
-                닉네임은 0자 이상 10자 이하여야 합니다
-              </span>
+              {nicknameInputOnFocus ? (
+                <ul className="validation-message-container">
+                  {nicknameValid ? (
+                    ""
+                  ) : (
+                    <li className="validation-message">
+                      ⚠︎ 닉네임은 1자 이상 10자 이하여야 합니다
+                    </li>
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
             </div>
             <div className="input-container">
               <label htmlFor="e-mail" id="e-mail">
@@ -289,7 +376,21 @@ export default function Signup() {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
+                onFocus={() => setEmailInputOnFocus(true)}
               />
+              {emailInputOnFocus ? (
+                <ul className="validation-message-container">
+                  {emailValid ? (
+                    ""
+                  ) : (
+                    <li className="validation-message">
+                      ⚠︎ 유효하지 않은 이메일 형식입니다
+                    </li>
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
             </div>
             <div className="input-container">
               <label htmlFor="password" id="password">
@@ -302,7 +403,38 @@ export default function Signup() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
+                onFocus={() => setPasswordInputOnFocus(true)}
               />
+              {passwordInputOnFocus ? (
+                <ul className="validation-message-container">
+                  {passwordLengthValid ? (
+                    ""
+                  ) : (
+                    <li className="validation-message">
+                      ⚠︎ 비밀번호는 8자 이상 20자 이하여야 합니다
+                    </li>
+                  )}
+                  {passwordNumberLetterRegexValid ? (
+                    ""
+                  ) : (
+                    <li className="validation-message">
+                      ⚠︎ 비밀번호는 반드시 각 1개 이상의 숫자와 영문자를
+                      <br />
+                      포함해야 합니다
+                    </li>
+                  )}
+                  {passwordSpecialLetterRegexValid ? (
+                    ""
+                  ) : (
+                    <li className="validation-message">
+                      ⚠︎ 비밀번호에 한글 및 !@#$%^&*를 제외한 특수문자는 <br />
+                      허용되지 않습니다
+                    </li>
+                  )}
+                </ul>
+              ) : (
+                ""
+              )}
             </div>
             <button>회원가입</button>
           </SignupContainer>

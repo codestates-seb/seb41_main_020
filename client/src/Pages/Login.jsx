@@ -234,6 +234,7 @@ export default function Login() {
               }}
               onKeyPress={handleEnterPressLogin}
               ref={passwordInputRef}
+              type="password"
             />
             <div className="keep-login-container">
               <input
@@ -246,13 +247,11 @@ export default function Login() {
               </label>
             </div>
           </div>
-          <span
-            className={
-              errorMessageContent ? "error-message" : "error-message-invisible"
-            }
-          >
-            {errorMessageContent}
-          </span>
+          {errorMessageContent ? (
+            <span className="error-message">{errorMessageContent}</span>
+          ) : (
+            ""
+          )}
           <button onClick={handleLogin}>로그인</button>
         </LoginContainer>
       </ContentContainer>
