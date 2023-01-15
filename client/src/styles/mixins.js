@@ -37,7 +37,7 @@ export const sub = {
 export const misc = {
   red: "#A02409",
   lightred: "#D0310E",
-  orange: "#F56700",
+  orange: "#FF9041",
 };
 
 export const dtFontSize = {

@@ -46,7 +46,7 @@ const EditorView = ({ value }) => {
       theme="bubble"
       modules={modules}
       formats={formats}
-      style={{ width: "100%", height: "40vh", backgroundColor: "white" }}
+      style={{ width: "1000px", height: "50px", backgroundColor: "yellow" }}
       readOnly
     />
   );

@@ -136,7 +136,7 @@ const InputContainer = styled.div`
   }
 `;
 
-export default function SearchBar() {
+export default function SearchBar({ className }) {
   const [isSearchOptionsClicked, setIsSearchOptionsClicked] = useState(false);
   const [searchOption, setSearchOption] = useState("공연명");
 
@@ -155,8 +155,8 @@ export default function SearchBar() {
   };
 
   return (
-    <SearchBarContainer>
-      <OptionContainer>
+    <SearchBarContainer className={className}>
+      <OptionContainer className="option_container">
         <OptionSelector
           tabIndex="0"
           className={isSearchOptionsClicked && "clicked"}
@@ -184,7 +184,7 @@ export default function SearchBar() {
           <li tabIndex={-1}>아티스트명 </li>
         </OptionsList>
       </OptionContainer>
-      <InputContainer>
+      <InputContainer className="input_container">
         <input placeholder="검색어를 입력하세요." />
         {/* search icon */}
         <svg

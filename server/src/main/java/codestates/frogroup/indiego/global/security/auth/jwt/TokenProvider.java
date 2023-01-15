@@ -178,7 +178,6 @@ public class TokenProvider {
 				.sameSite("None")
 				.httpOnly(true)
 				.build();
-
 		response.setHeader("Set-Cookie", cookie.toString()); // Refresh Token Cookie 에 전송
 		return cookie;
 	}

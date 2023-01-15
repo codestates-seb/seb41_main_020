@@ -26,8 +26,18 @@ public class ShowComment extends BaseTime {
     private Member member;
 
     @Column(nullable = false)
+    @Setter
     private Double score;
 
     @Column(nullable = false)
+    @Setter
     private String comment;
+
+    public void addShow(Show show){
+        this.show = show;
+    }
+
+    public void addMember(Member member){
+        this.member = member;
+    }
 }
