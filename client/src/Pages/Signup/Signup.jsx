@@ -2,6 +2,9 @@
 import logo from "../../assets/logo.svg";
 import naverIcon from "../../assets/naverIcon.jpg";
 import kakaoIcon from "../../assets/kakaoIcon.jpg";
+import { faEye } from "@fortawesome/free-solid-svg-icons/faEye";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons/faEyeSlash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -15,7 +18,7 @@ import {
 } from "../../styles/mixins";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 // import { Outlet } from "react-router-dom";
@@ -202,19 +205,39 @@ const SignupContainer = styled.div`
       }
     }
 
-    > input {
-      border: none;
-      border-radius: 5px;
-      color: ${sub.sub400};
-      font-size: ${dtFontSize.small};
-      width: 300px;
-      height: 40px;
-      padding: 0 10px;
+    > div {
+      display: flex;
+      height: max-content;
+      width: max-content;
+      position: relative;
 
-      @media screen and (max-width: ${breakpoint.mobile}) {
-        font-size: ${mbFontSize.small};
-        width: 250px;
-        height: 25px;
+      > input {
+        border: none;
+        border-radius: 5px;
+        color: ${sub.sub400};
+        font-size: ${dtFontSize.small};
+        width: 300px;
+        height: 40px;
+        padding: 0 10px;
+
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          font-size: ${mbFontSize.small};
+          width: 250px;
+          height: 25px;
+        }
+      }
+
+      > button {
+        all: unset;
+        cursor: pointer;
+        right: 1%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        > svg {
+          color: ${sub.sub300};
+        }
       }
     }
 
@@ -276,8 +299,20 @@ export default function Signup() {
   const [passwordSpecialLetterRegexValid, setPasswordSpecialLetterRegexValid] =
     useState(false);
   const [passwordInputOnFocus, setPasswordInputOnFocus] = useState(false);
+  const [passwordInputType, setPasswordInputType] = useState({
+    type: "password",
+    visible: false,
+  });
 
   const navigate = useNavigate();
+
+  const handlePasswordInputType = () => {
+    if (!passwordInputType.visible) {
+      setPasswordInputType({ type: "text", visible: true });
+    } else {
+      setPasswordInputType({ type: "password", visible: false });
+    }
+  };
 
   //실시간 유효성 검사
   useEffect(() => {
@@ -342,15 +377,17 @@ export default function Signup() {
               <label htmlFor="e-mail" id="e-mail">
                 닉네임
               </label>
-              <input
-                id="nickname"
-                placeholder="닉네임"
-                value={nickname || ""}
-                onChange={(e) => {
-                  setNickname(e.target.value);
-                }}
-                onFocus={() => setNicknameInputOnFocus(true)}
-              />
+              <div>
+                <input
+                  id="nickname"
+                  placeholder="닉네임"
+                  value={nickname || ""}
+                  onChange={(e) => {
+                    setNickname(e.target.value);
+                  }}
+                  onFocus={() => setNicknameInputOnFocus(true)}
+                />
+              </div>
               {nicknameInputOnFocus ? (
                 <ul className="validation-message-container">
                   {nicknameValid ? (
@@ -369,15 +406,17 @@ export default function Signup() {
               <label htmlFor="e-mail" id="e-mail">
                 이메일
               </label>
-              <input
-                id="e-mail"
-                placeholder="이메일"
-                value={email || ""}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                onFocus={() => setEmailInputOnFocus(true)}
-              />
+              <div>
+                <input
+                  id="e-mail"
+                  placeholder="이메일"
+                  value={email || ""}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                  onFocus={() => setEmailInputOnFocus(true)}
+                />
+              </div>
               {emailInputOnFocus ? (
                 <ul className="validation-message-container">
                   {emailValid ? (
@@ -396,15 +435,25 @@ export default function Signup() {
               <label htmlFor="password" id="password">
                 비밀번호
               </label>
-              <input
-                id="password"
-                placeholder="비밀번호"
-                value={password || ""}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                onFocus={() => setPasswordInputOnFocus(true)}
-              />
+              <div>
+                <button onClick={handlePasswordInputType}>
+                  {passwordInputType.visible ? (
+                    <FontAwesomeIcon icon={faEye} />
+                  ) : (
+                    <FontAwesomeIcon icon={faEyeSlash} />
+                  )}
+                </button>
+                <input
+                  id="password"
+                  placeholder="비밀번호"
+                  value={password || ""}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  onFocus={() => setPasswordInputOnFocus(true)}
+                  type={passwordInputType.type}
+                />
+              </div>
               {passwordInputOnFocus ? (
                 <ul className="validation-message-container">
                   {passwordLengthValid ? (
