@@ -7,6 +7,7 @@ import OKButton from "../../Components/OKButton.jsx";
 import Aside from "./Aside/Aside.jsx";
 import SearchBar from "../../Components/Board/SearchBar.jsx";
 import MobileAside from "./Aside/MobileAside.jsx";
+import Dropdown from "../../Components/Board/BoardDropdown.jsx";
 
 //로컬 모듈
 import {
@@ -57,12 +58,19 @@ export const ContentWrapper = styled.div`
     margin-top: 10px;
     color: ${sub.sub300};
     text-align: left;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.medium};
     }
   }
+
+  .dropboxDiv {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 5px;
+  }
+
   .lineDiv {
     height: 3px;
     background-color: ${sub.sub300};
@@ -279,6 +287,20 @@ const SearchBarDiv = styled.div`
   }
 `;
 
+const SearchAndDropdownDiv = styled.div`
+  width: 100%;
+  background-color: orange;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 100px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    padding: 0;
+    flex-direction: column;
+  }
+`;
+
 export default function Board() {
   return (
     <PageWrapper>
@@ -288,6 +310,9 @@ export default function Board() {
         <div className="title">자유게시판</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
+        </div>
+        <div className="dropboxDiv">
+          <Dropdown></Dropdown>
         </div>
         <div className="lineDiv"></div>
         {BoardDummy.map((it) => (
