@@ -1,13 +1,13 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import heart from "../../assets/heart.svg";
-import pen from "../../assets/pen.svg";
-import right from "../../assets/right.svg";
-import left from "../../assets/left.svg";
-import OKButton from "../../Components/OKButton.jsx";
-import Aside from "./Aside/Aside.jsx";
-import SearchBar from "../../Components/Board/SearchBar.jsx";
-import MobileAside from "./Aside/MobileAside.jsx";
-import Dropdown from "../../Components/Board/BoardDropdown.jsx";
+import heart from "../../../assets/heart.svg";
+import pen from "../../../assets/pen.svg";
+import right from "../../../assets/right.svg";
+import left from "../../../assets/left.svg";
+import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
+import Aside from "../Aside/Aside.jsx";
+import MobileAside from "../Aside/MobileAside.jsx";
+import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
+import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 
 //로컬 모듈
 import {
@@ -16,9 +16,9 @@ import {
   sub,
   secondary,
   mbFontSize,
-} from "../../styles/mixins.js";
-import breakpoint from "../../styles/breakpoint";
-import BoardDummy from "../../DummyData/BoardDummy.js";
+} from "../../../styles/mixins.js";
+import breakpoint from "../../../styles/breakpoint";
+import BoardDummy from "../../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
 import React from "react";

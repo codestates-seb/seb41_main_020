@@ -11,10 +11,10 @@ import SignupPerformer from "./Pages/Signup/SignupPerformer.jsx";
 import Login from "./Pages/Login.jsx";
 import Profile from "./Pages/Profile/Profile.jsx";
 import ProfileEdit from "./Pages/Profile/ProfileEdit.jsx";
-import Board from "./Pages/Boards/Board.jsx";
-import Post from "./Pages/Boards/Post/Post.jsx";
-import PostCreate from "./Pages/Boards/Post/PostCreate.jsx";
-import PostEdit from "./Pages/Boards/Post/PostEdit.jsx";
+import Board from "./Pages/Boards/Board/BoardList.jsx";
+import Post from "./Pages/Boards/Board/Board.jsx";
+import PostCreate from "./Pages/Boards/Board/BoardCreate.jsx";
+import PostEdit from "./Pages/Boards/Board/BoardEdit.jsx";
 import NotFound from "./Pages/NotFound.jsx";
 
 import Header from "./Components/Header.jsx";

@@ -1,9 +1,9 @@
 import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
-import { PageWrapper, ContentWrapper } from "../Board.jsx";
+import { PageWrapper, ContentWrapper } from "./BoardList.jsx";
 import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
-import OKButton from "../../../Components/OKButton.jsx";
-import Editor from "../../../Components/Editor.jsx";
+import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
+import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 
 import React, { useState } from "react";
 import styled from "styled-components";

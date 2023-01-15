@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { sub, dtFontSize, primary } from "../../styles/mixins";
+import { sub, dtFontSize, primary } from "../../../styles/mixins";
 
 const DropdownDiv = styled.div`
   display: inline-flex;

@@ -1,8 +1,8 @@
 import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "../Board.jsx";
+import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
-import OKButton from "../../../Components/OKButton.jsx";
-import EditorView from "../../../Components/EditorView.jsx";
+import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
+import EditorView from "../../../Components/Board/Board/EditorView.jsx";
 import heart from "../../../assets/heart.svg";
 import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 
