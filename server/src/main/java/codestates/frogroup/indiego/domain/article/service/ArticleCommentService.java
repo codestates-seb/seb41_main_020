@@ -3,7 +3,7 @@ package codestates.frogroup.indiego.domain.article.service;
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleComment;
 import codestates.frogroup.indiego.domain.article.entity.ArticleCommentLike;
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleCommentDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleCommentDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleCommentMapper;
 import codestates.frogroup.indiego.domain.article.repository.ArticleCommentLikeRepository;
 import codestates.frogroup.indiego.domain.article.repository.ArticleCommentRepository;

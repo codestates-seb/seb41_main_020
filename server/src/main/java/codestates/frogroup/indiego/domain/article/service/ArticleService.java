@@ -2,7 +2,7 @@ package codestates.frogroup.indiego.domain.article.service;
 
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.repository.ArticleLikeRepository;
 import codestates.frogroup.indiego.domain.article.repository.ArticleRepository;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j

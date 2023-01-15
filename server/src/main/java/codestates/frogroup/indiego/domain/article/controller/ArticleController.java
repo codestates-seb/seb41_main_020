@@ -1,7 +1,7 @@
 package codestates.frogroup.indiego.domain.article.controller;
 
 import codestates.frogroup.indiego.domain.article.entity.Article;
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
