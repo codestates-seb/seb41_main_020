@@ -20,8 +20,6 @@ import javax.validation.Valid;
 public class ArticleCommentController {
 
     private final ArticleCommentService articleCommentService;
-    // TODO: 임시용 추후 삭제
-    private final MemberRepository memberRepository;
 
     /**
      * 댓글 작성

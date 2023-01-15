@@ -134,13 +134,16 @@ public class ArticleService {
                 article.getMember().getProfile().getImage());
 
         ArticleDto.Response response = mapper.articleToArticleResponse(article);
-        List<ArticleLike> articleLikes = articleLikeRepository.findAllByArticleId(article.getId());
+        long likeCount = articleLikeRepository.countByArticleId(article.getId());
+        response.setLikeCount(likeCount);
 
-        if (articleLikes.isEmpty()) {
-            response.setLikeCount(0);
-        } else {
-            response.setLikeCount(articleLikes.size());
-        }
+//        List<ArticleLike> articleLikes = articleLikeRepository.findAllByArticleId(article.getId());
+//
+//        if (articleLikes.isEmpty()) {
+//            response.setLikeCount(0);
+//        } else {
+//            response.setLikeCount(articleLikes.size());
+//        }
 
         return response;
     }
