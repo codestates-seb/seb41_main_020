@@ -244,13 +244,13 @@ export default function Login() {
             <div>
               <input
                 id="e-mail"
-                placeholder="이메일"
-                value={email || ""}
+                onKeyPress={handleEnterPressLogin}
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
-                onKeyPress={handleEnterPressLogin}
+                placeholder="이메일"
                 ref={emailInputRef}
+                value={email || ""}
               />
             </div>
           </div>
@@ -268,11 +268,11 @@ export default function Login() {
               </button>
               <input
                 id="password"
-                placeholder="비밀번호"
-                value={password || ""}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
+                placeholder="비밀번호"
+                value={password || ""}
                 type={passwordInputType.type}
               />
             </div>
