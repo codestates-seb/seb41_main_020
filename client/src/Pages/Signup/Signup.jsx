@@ -35,7 +35,7 @@ const ContentContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  width: 55%;
+  width: 60%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: column;
@@ -182,7 +182,7 @@ const SignupContainer = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 320px;
-    height: 280px;
+    min-height: 280px;
     padding: 15px;
   }
 
@@ -230,7 +230,7 @@ const SignupContainer = styled.div`
         font-size: ${dtFontSize.small};
 
         @media screen and (max-width: ${breakpoint.mobile}) {
-          font-size: ${mbFontSize.medium};
+          font-size: ${mbFontSize.small};
         }
       }
     }
@@ -427,7 +427,7 @@ export default function Signup() {
                     ""
                   ) : (
                     <li className="validation-message">
-                      ⚠︎ 비밀번호에 한글 및 !@#$%^&*를 제외한 특수문자는 <br />
+                      ⚠︎ 한글 및 !@#$%^&*를 제외한 특수문자는 <br />
                       허용되지 않습니다
                     </li>
                   )}
