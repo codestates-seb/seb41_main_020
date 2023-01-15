@@ -287,21 +287,7 @@ const SearchBarDiv = styled.div`
   }
 `;
 
-const SearchAndDropdownDiv = styled.div`
-  width: 100%;
-  background-color: orange;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 100px;
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    padding: 0;
-    flex-direction: column;
-  }
-`;
-
-export default function Board() {
+export default function BoardList() {
   return (
     <PageWrapper>
       <Aside></Aside>

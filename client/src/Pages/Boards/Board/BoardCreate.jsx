@@ -88,7 +88,7 @@ const PostButton = styled(OKButton)`
   }
 `;
 
-const PostCreate = () => {
+const BoardCreate = () => {
   const [contentValue, setContentValue] = useState("");
   return (
     <PageWrapper>
@@ -126,4 +126,4 @@ const PostCreate = () => {
   );
 };
 
-export default PostCreate;
+export default BoardCreate;

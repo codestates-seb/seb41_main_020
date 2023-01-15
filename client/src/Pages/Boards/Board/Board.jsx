@@ -2,7 +2,6 @@ import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
 import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
-import EditorView from "../../../Components/Board/Board/EditorView.jsx";
 import heart from "../../../assets/heart.svg";
 import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 
@@ -11,12 +10,9 @@ import styled from "styled-components";
 
 const QuillViewDiv = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: 20px;
   margin-bottom: 60px;
-  width: 1130px;
   height: max-content;
-  background-color: green;
 `;
 
 const HeartItem = styled(BoardItem)`
@@ -31,7 +27,7 @@ const HeartItem = styled(BoardItem)`
     color: ${primary.primary500};
     font-size: ${dtFontSize.xlarge};
     font-weight: 700;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
   }
 `;
 
@@ -86,12 +82,16 @@ const AnswerListWrapper = styled.div`
 
 const AnswerListUserDiv = styled.div`
   display: flex;
-  align-items: center;
   justify-content: left;
-  margin-bottom: 15px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid ${sub.sub200};
 `;
 
 const AnswerListImageDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
   .userImage {
     width: 70px;
     border-radius: 50%;
@@ -102,6 +102,7 @@ const AnswerListInfoDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding-left: 15px;
 
   .answerListUserName {
     background-color: white;
@@ -110,7 +111,6 @@ const AnswerListInfoDiv = styled.div`
     color: ${primary.primary400};
     font-size: ${dtFontSize.medium};
     font-weight: 500;
-    padding-left: 15px;
   }
   .answerListCreateDate {
     background-color: white;
@@ -119,14 +119,13 @@ const AnswerListInfoDiv = styled.div`
     color: ${sub.sub300};
     font-size: ${dtFontSize.small};
     font-weight: 300;
-    padding-left: 15px;
   }
 `;
 
 const AnswerListContentDiv = styled.div`
   text-align: left;
   background-color: white;
-  border-bottom: 2px solid ${sub.sub300};
+  /* border-bottom: 2px solid ${sub.sub300}; */
   padding-bottom: 5px;
   font-size: ${dtFontSize.medium};
   color: ${sub.sub800};
@@ -136,7 +135,7 @@ const AnswerListFunctionDiv = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   .heartDiv {
     display: flex;
@@ -177,7 +176,7 @@ const AnswerListFunctionDiv = styled.div`
   }
 `;
 
-const Post = () => {
+const Board = () => {
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -185,9 +184,7 @@ const Post = () => {
         <div className="title">글 제목(ex 난 누구인가 여긴 어디인가)</div>
         <div className="titleInfo">작성날짜,작성자</div>
         <div className="lineDiv"></div>
-        <QuillViewDiv>
-          <EditorView></EditorView>
-        </QuillViewDiv>
+        <QuillViewDiv>본문 내용 입니다.</QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton">
@@ -224,22 +221,21 @@ const Post = () => {
                     <div className="answerListCreateDate">
                       {new Date(it.createAt).toLocaleString()}
                     </div>
+                    <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
+                    <AnswerListFunctionDiv>
+                      <div className="heartDiv">
+                        <button className="heartButton">
+                          <img className="heartImage" src={heart} alt="하트" />
+                        </button>
+                        <span className="heartCount">{it.likeCount}</span>
+                      </div>
+                      <div className="udDiv">
+                        <button className="udButton">수정</button>
+                        <button className="udButton">삭제</button>
+                      </div>
+                    </AnswerListFunctionDiv>
                   </AnswerListInfoDiv>
                 </AnswerListUserDiv>
-                <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
-                <AnswerListFunctionDiv>
-                  <div className="heartDiv">
-                    <button className="heartButton">
-                      <img className="heartImage" src={heart} alt="하트" />
-                    </button>
-
-                    <span className="heartCount">{it.likeCunt}</span>
-                  </div>
-                  <div className="udDiv">
-                    <button className="udButton">수정</button>
-                    <button className="udButton">삭제</button>
-                  </div>
-                </AnswerListFunctionDiv>
               </li>
             </ul>
           ))}
@@ -249,4 +245,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Board;
