@@ -27,7 +27,8 @@ public enum ExceptionCode {
     ARTICLE_NOT_FOUND(404, "게시글을 찾을 수 없습니다."),
     ARTICLE_COMMENT_NOT_FOUND(404, "해당 게시글의 댓글을 찾을 수 없습니다."),
 
-    SHOW_NOT_FOUND(404, "Show not found");
+    SHOW_NOT_FOUND(404, "Show not found"),
+    BOOKMARK_NOT_FOUND(404, "");
 
     @Getter
     private int status;
