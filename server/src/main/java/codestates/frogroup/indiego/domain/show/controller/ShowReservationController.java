@@ -6,7 +6,6 @@ import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import codestates.frogroup.indiego.domain.show.mapper.ShowReservationMapper;
-import codestates.frogroup.indiego.domain.show.mapper.ShowReservationMapperImpl;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowReservationRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowReservationService;
@@ -61,7 +60,8 @@ public class ShowReservationController {
     }
 
     public boolean isExpired(LocalDate date){
-        return LocalDate.now().isAfter(date);
+        LocalDate now = LocalDate.now();
+        return now.isAfter(date);
     }
 
 

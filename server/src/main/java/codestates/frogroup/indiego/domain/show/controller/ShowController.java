@@ -8,7 +8,7 @@ import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
-import codestates.frogroup.indiego.domain.show.mapper.ShowMapperImpl;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
@@ -36,7 +36,7 @@ public class ShowController {
 
     private final MemberRepository memberRepository;
     private final ShowService showService;
-    private final ShowMapperImpl mapper;
+    private final ShowMapper mapper;
 
 
     @PostMapping
