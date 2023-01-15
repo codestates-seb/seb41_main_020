@@ -1,5 +1,8 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import logo from "../assets/logo.svg";
+import { faEye } from "@fortawesome/free-solid-svg-icons/faEye";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons/faEyeSlash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //로컬 모듈
 import breakpoint from "../styles/breakpoint";
@@ -54,7 +57,8 @@ const LoginContainer = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 350px;
+  height: max-content;
+  min-height: 350px;
   justify-content: space-between;
   padding: 20px;
   width: 450px;
@@ -80,19 +84,39 @@ const LoginContainer = styled.div`
       }
     }
 
-    > input {
-      border: none;
-      border-radius: 5px;
-      color: ${sub.sub400};
-      font-size: ${dtFontSize.small};
-      width: 350px;
-      height: 40px;
-      padding: 0 10px;
+    > div {
+      display: flex;
+      height: max-content;
+      width: max-content;
+      position: relative;
 
-      @media screen and (max-width: ${breakpoint.mobile}) {
-        font-size: ${mbFontSize.small};
-        width: 250px;
-        height: 25px;
+      > input {
+        border: none;
+        border-radius: 5px;
+        color: ${sub.sub400};
+        font-size: ${dtFontSize.small};
+        width: 350px;
+        height: 40px;
+        padding: 0 10px;
+
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          font-size: ${mbFontSize.small};
+          width: 250px;
+          height: 25px;
+        }
+      }
+
+      > button {
+        all: unset;
+        cursor: pointer;
+        right: 1%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        > svg {
+          color: ${sub.sub300};
+        }
       }
     }
 
@@ -144,10 +168,6 @@ const LoginContainer = styled.div`
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.medium};
     }
-
-    & .-invisible {
-      display: none;
-    }
   }
 
   > button {
@@ -177,20 +197,38 @@ const LoginContainer = styled.div`
 export default function Login() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [passwordInputType, setPasswordInputType] = useState({
+    type: "password",
+    visible: false,
+  });
   const [errorMessageContent, setErrorMessageContent] = useState();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const loginHandler = () => {
+  const handlePasswordInputType = () => {
+    if (!passwordInputType.visible) {
+      setPasswordInputType({ type: "text", visible: true });
+    } else {
+      setPasswordInputType({ type: "password", visible: false });
+    }
+  };
+
+  const handleLogin = () => {
     if (!email) {
       emailInputRef.current.focus();
       setErrorMessageContent("⚠︎ 이메일을 입력해주세요");
       return;
     } else if (!password) {
       passwordInputRef.current.focus();
-      setErrorMessageContent("⚠︎ 비밀번호를 입력해주세요");
+      setErrorMessageContent("⚠︎비밀번호를 입력해주세요");
     } else {
       setErrorMessageContent("");
+    }
+  };
+
+  const handleEnterPressLogin = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
     }
   };
 
@@ -203,29 +241,41 @@ export default function Login() {
             <label htmlFor="e-mail" id="e-mail">
               이메일
             </label>
-            <input
-              id="e-mail"
-              placeholder="이메일"
-              value={email || ""}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              ref={emailInputRef}
-            />
+            <div>
+              <input
+                id="e-mail"
+                onKeyPress={handleEnterPressLogin}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                placeholder="이메일"
+                ref={emailInputRef}
+                value={email || ""}
+              />
+            </div>
           </div>
           <div className="input-container">
             <label htmlFor="password" id="password">
               비밀번호
             </label>
-            <input
-              id="password"
-              placeholder="비밀번호"
-              value={password || ""}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              ref={passwordInputRef}
-            />
+            <div>
+              <button onClick={handlePasswordInputType}>
+                {passwordInputType.visible ? (
+                  <FontAwesomeIcon icon={faEye} />
+                ) : (
+                  <FontAwesomeIcon icon={faEyeSlash} />
+                )}
+              </button>
+              <input
+                id="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                placeholder="비밀번호"
+                value={password || ""}
+                type={passwordInputType.type}
+              />
+            </div>
             <div className="keep-login-container">
               <input
                 id="keepLogin"
@@ -237,14 +287,12 @@ export default function Login() {
               </label>
             </div>
           </div>
-          <span
-            className={
-              errorMessageContent ? "error-message" : "error-message-invisible"
-            }
-          >
-            {errorMessageContent}
-          </span>
-          <button onClick={loginHandler}>로그인</button>
+          {errorMessageContent ? (
+            <span className="error-message">{errorMessageContent}</span>
+          ) : (
+            ""
+          )}
+          <button onClick={handleLogin}>로그인</button>
         </LoginContainer>
       </ContentContainer>
     </Container>
