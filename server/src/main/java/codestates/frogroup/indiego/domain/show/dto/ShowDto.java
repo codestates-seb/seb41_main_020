@@ -155,4 +155,22 @@ public class ShowDto {
 
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class LocationResponse {
+        private int total;
+        private List<ShowsResponse> shows;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class ShowsResponse {
+        private Long id;
+        private String title;
+        private String expiredAt;
+        private String showAt;
+    }
+
 }

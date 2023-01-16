@@ -71,7 +71,7 @@ public class ShowCommentController {
         Show show = showService.findShow(showId);
         showCommentService.deleteShowComment(commentId,memberId,show);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new SingleResponseDto<>("공연 후기가 삭제되었습니다"),HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("{show-id}/comments")

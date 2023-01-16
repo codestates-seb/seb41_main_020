@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 
 
-
+@Slf4j
 @RestController
 @RequestMapping("/shows")
 @Valid
@@ -91,6 +92,14 @@ public class ShowController {
         return new ResponseEntity(
                 new SingleResponseDto<>(response),
                 HttpStatus.OK);
+
+    }
+
+    @GetMapping("/location")
+    public ResponseEntity getLocationShows(@RequestParam("address") String address){
+        log.info("address = {},", address);
+
+        return new ResponseEntity(HttpStatus.OK);
 
     }
 
