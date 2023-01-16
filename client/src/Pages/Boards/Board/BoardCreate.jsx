@@ -40,7 +40,8 @@ export const PostBoard = styled.div`
 
 const ClassificationDiv = styled.div`
   text-align: left;
-  margin-bottom: 80px;
+  margin-top: 10px;
+  margin-bottom: 30px;
 `;
 
 export const TitleInputDiv = styled.div`

@@ -14,10 +14,9 @@ const SelectButton = styled.button`
   height: 30px;
   background-color: ${sub.sub300};
   color: white;
-  border-radius: 5px;
   border: none;
   text-align: center;
-  z-index: -10;
+  z-index: 10;
   cursor: pointer;
 `;
 
@@ -30,30 +29,18 @@ const DropdownContainer = styled.div`
   transition: all 0.6s ease-in-out;
 
   &.open {
-    top: 28px; // 위치
+    top: 30px; // 위치
     opacity: 1; //투명도
-    /* pointer-events: auto; // 안보일때 누르는거 막아놓음 */
+    pointer-events: auto; // 보일때 막아놓은거 다시 원래대로
   }
 
   &.close {
     top: 0px; // 위치
     opacity: 0; //투명도
-    /* pointer-events: none; // 안보일때 누르는거 막아놓음 */
+    pointer-events: none; // 안보일때 누르는거 막아놓음
   }
 
   > ul {
-    &.open {
-      top: 28px; // 위치
-      opacity: 1; //투명도
-      pointer-events: auto; // 안보일때 누르는거 막아놓음
-    }
-
-    &.close {
-      top: 0px; // 위치
-      opacity: 0; //투명도
-      /* pointer-events: none; // 안보일때 누르는거 막아놓음 */
-    }
-
     > li {
       list-style: none;
       padding: 2px 0;
@@ -81,7 +68,7 @@ const Dropdown = () => {
         {value}
       </SelectButton>
       <DropdownContainer className={toggle ? "open" : "close"}>
-        <ul className={toggle ? "open" : "close"}>
+        <ul>
           <li
             role="presentation"
             onClick={() => {
