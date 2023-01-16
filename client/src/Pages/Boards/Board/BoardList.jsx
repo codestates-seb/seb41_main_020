@@ -1,13 +1,12 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import heart from "../../../assets/heart.svg";
 import pen from "../../../assets/pen.svg";
-import right from "../../../assets/right.svg";
-import left from "../../../assets/left.svg";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Aside from "../Aside/Aside.jsx";
 import MobileAside from "../Aside/MobileAside.jsx";
 import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
+import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 
 //로컬 모듈
 import {
@@ -217,81 +216,6 @@ const WriteButton = styled(OKButton)`
   }
 `;
 
-const PageNationDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
-
-  .movePageButton {
-    border-radius: 100%;
-    width: 15px;
-    height: 15px;
-    background-color: ${sub.sub500};
-    border: none;
-    padding: 0;
-
-    .arrowLeftImage {
-      width: 6px;
-    }
-
-    .arrowRightImage {
-      width: 6px;
-      margin-left: 1px;
-    }
-  }
-
-  .pageButton {
-    background-color: white;
-    border: none;
-    color: ${sub.sub900};
-    font-size: ${dtFontSize.medium};
-    width: 20px;
-    height: 35px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0;
-  }
-`;
-
-const SearchBarDiv = styled.div`
-  display: flex;
-  text-align: center;
-  justify-content: center;
-
-  .aSearchBarDiv {
-    border: 3px solid ${sub.sub500};
-    position: relative;
-    display: flex;
-    align-items: center;
-    border-radius: 20px;
-    padding-right: 4px;
-
-    .searchBarInput {
-      border-radius: 20px;
-      padding: 10px;
-      height: 40px;
-      border: none;
-
-      &:focus-within {
-        outline: none;
-      }
-    }
-
-    .searchImage {
-      width: 17px;
-      height: 17px;
-    }
-    &:focus-within {
-      border: 3px solid ${primary.primary200};
-    }
-  }
-
-  .listButton {
-    background-color: blue;
-  }
-`;
-
 export default function BoardList() {
   const navigate = useNavigate();
   return (
@@ -347,18 +271,7 @@ export default function BoardList() {
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
         </WriteButtonDiv>
-        <PageNationDiv>
-          <button className="movePageButton">
-            <img className="arrowLeftImage" src={left} alt="이전 버튼" />
-          </button>
-          <button className="pageButton">1</button>
-          <button className="pageButton">2</button>
-          <button className="pageButton">3</button>
-          <button className="pageButton">4</button>
-          <button className="movePageButton">
-            <img className="arrowRightImage" src={right} alt="다음 버튼" />
-          </button>
-        </PageNationDiv>
+        <PageNation></PageNation>
         <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
       </BoardWrapper>
     </PageWrapper>
