@@ -1,5 +1,6 @@
 package codestates.frogroup.indiego.domain.article.service;
 
+import codestates.frogroup.indiego.domain.article.dto.ArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
 import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -71,8 +73,13 @@ public class ArticleService {
     /**
      * 게시글 전체 조회
      */
-    public Page<Article> findArticles(Pageable pageable) {
-        return null;
+    public Page<ArticleListResponseDto> findArticles(String category, String search, Pageable pageable) {
+
+        if (Objects.isNull(category) && Objects.isNull(search)) {
+            return articleRepository.findAllBasic(pageable);
+        }
+
+        return articleRepository.findAllSearch(category, search, pageable);
     }
 
     /**
@@ -108,11 +115,14 @@ public class ArticleService {
     @Transactional
     public void articleLike(Long articleId, Long memberId) {
         Article findArticle = findVerifiedArticle(articleId);
+
+        // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
 
+        // TODO: 리팩토링 1개의 메서드는 1개의 기능
         if (findArticleLike == null) {
             articleLikeRepository.save(
                     ArticleLike.builder()
