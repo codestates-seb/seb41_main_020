@@ -3,12 +3,11 @@ package codestates.frogroup.indiego.domain.article.repository.querydsl;
 import codestates.frogroup.indiego.domain.article.dto.ArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.dto.QArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.entity.Article;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -32,7 +31,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
     }
 
     @Override
-    public Page<ArticleListResponseDto> findAllBasic(Pageable pageable) {
+    public Page<ArticleListResponseDto> findAllBasic(String status, Pageable pageable) {
 
         // Querydsl 리포지토리 지원을 받는 경우에는
         // from(article)로 시작
@@ -59,7 +58,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         article.createdAt))
                 .from(article)
                 .where(article.board.category.eq("자유게시판"))
-                .orderBy(article.createdAt.desc())
+                .orderBy(sortStatusEq(status))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -68,13 +67,13 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .select(article)
                 .from(article)
                 .where(article.board.category.eq("자유게시판"))
-                .orderBy(article.createdAt.desc());
+                .orderBy(sortStatusEq(status));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount); // 최적화
     }
 
     @Override
-    public Page<ArticleListResponseDto> findAllSearch(String category, String search, Pageable pageable) {
+    public Page<ArticleListResponseDto> findAllSearch(String category, String search, String status, Pageable pageable) {
 
         List<ArticleListResponseDto> content = queryFactory
                 .select(new QArticleListResponseDto(
@@ -91,21 +90,32 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         article.board.category.eq(category),
                         searchEq(search)
                 )
-                .orderBy(article.createdAt.desc())
+                .orderBy(sortStatusEq(status))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = queryFactory
+        JPAQuery<Long> countQuery = queryFactory
                 .select(article.count())
                 .from(article)
                 .where(
                         article.board.category.eq(category),
                         searchEq(search)
                 )
-                .fetchOne();
+                .orderBy(sortStatusEq(status));
 
-        return new PageImpl<>(content, pageable, count);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount); // 최적화
+    }
+
+    private OrderSpecifier<?> sortStatusEq(String status) {
+
+        if (Objects.isNull(status) || status.equals("최신순")) {
+            return article.createdAt.desc();
+        } else if (status.equals("인기순")) {
+            return article.likeCount.desc();
+        }
+
+        return null;
     }
 
     private BooleanExpression searchEq(String search) {

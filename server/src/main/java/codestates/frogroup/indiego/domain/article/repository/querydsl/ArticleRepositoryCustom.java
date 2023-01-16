@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ArticleRepositoryCustom {
 
-    Page<ArticleListResponseDto> findAllBasic(Pageable pageable);
+    Page<ArticleListResponseDto> findAllBasic(String status, Pageable pageable);
 
-    Page<ArticleListResponseDto> findAllSearch(String category, String search, Pageable pageable);
+    Page<ArticleListResponseDto> findAllSearch(String category, String search, String status, Pageable pageable);
 }

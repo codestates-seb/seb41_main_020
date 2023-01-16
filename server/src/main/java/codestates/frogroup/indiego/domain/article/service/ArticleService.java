@@ -73,13 +73,13 @@ public class ArticleService {
     /**
      * 게시글 전체 조회
      */
-    public Page<ArticleListResponseDto> findArticles(String category, String search, Pageable pageable) {
+    public Page<ArticleListResponseDto> findArticles(String category, String search, String status, Pageable pageable) {
 
         if (Objects.isNull(category) && Objects.isNull(search)) {
-            return articleRepository.findAllBasic(pageable);
+            return articleRepository.findAllBasic(status, pageable);
         }
 
-        return articleRepository.findAllSearch(category, search, pageable);
+        return articleRepository.findAllSearch(category, search, status, pageable);
     }
 
     /**
