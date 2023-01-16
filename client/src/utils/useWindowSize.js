@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-export const useWindowSize = () => {
+export const useWindowSize = (callback) => {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const updateSize = () => {
-      setInnerWidth(window.innerWidth);
+      if (window.innerWidth > 767) {
+        callback(false);
+      }
     };
     window.addEventListener("resize", updateSize);
-    updateSize();
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 

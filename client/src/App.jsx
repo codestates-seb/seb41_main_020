@@ -22,6 +22,7 @@ import AdvertiseBoardList from "./Pages/Boards/BoardType/AdvertiseBoardList.jsx"
 import ReviewBoardList from "./Pages/Boards/BoardType/ReviewBoardList.jsx";
 
 import Header from "./Components/Header.jsx";
+import Footer from "./Components/Footer.jsx";
 // 그다음에는 로컬 모듈
 import "./App.css";
 
@@ -80,6 +81,7 @@ function App() {
         <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
+      <Footer />
     </>
   );
 }
