@@ -24,6 +24,9 @@ public class ShowBoard {
     @Column(length = 100, nullable = false)
     private String address;
 
+    @Column
+    private String detailAddress;
+
     @Column(nullable = false)
     private LocalDate expiredAt; // 만료날짜
 
