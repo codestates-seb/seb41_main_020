@@ -1,4 +1,4 @@
-package codestates.frogroup.indiego.domain.member.entity.dto;
+package codestates.frogroup.indiego.domain.member.dto;
 
 
 import codestates.frogroup.indiego.domain.member.entity.Profile;

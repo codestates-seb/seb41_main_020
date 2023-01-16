@@ -1,6 +1,6 @@
 package codestates.frogroup.indiego.domain.member.controller;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
+import codestates.frogroup.indiego.domain.member.dto.MemberDto;
 import codestates.frogroup.indiego.domain.member.mapper.MemberMapper;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;

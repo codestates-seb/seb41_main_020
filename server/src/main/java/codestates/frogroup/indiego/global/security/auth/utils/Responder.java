@@ -1,6 +1,6 @@
 package codestates.frogroup.indiego.global.security.auth.utils;
 
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
+import codestates.frogroup.indiego.domain.member.dto.MemberDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ErrorResponse;
