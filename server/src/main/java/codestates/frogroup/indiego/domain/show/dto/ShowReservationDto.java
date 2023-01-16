@@ -2,6 +2,10 @@ package codestates.frogroup.indiego.domain.show.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+
 public class ShowReservationDto {
 
     @Getter
@@ -9,29 +13,25 @@ public class ShowReservationDto {
     @NoArgsConstructor
     @Builder
     public static class Post{
+        @NotNull
+        private LocalDate date;
+
+        @NotNull
         private Integer ticketCount;
     }
 
-//    @Getter
-//    @AllArgsConstructor
-//    @NoArgsConstructor
-//    @Builder
-//    public static class Patch{
-//        private Long id;
-//        private Integer ticketCount;
-//    }
 
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     public static class Response{
         private Long id;
-
-        private Long showId;
-
+        private String title;
+        private String nickname;
+        private LocalDate date;
+        private String address;
         private Integer ticketCount;
-
         private boolean isExpired;
     }
 }
