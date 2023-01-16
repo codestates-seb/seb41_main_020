@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -97,10 +98,11 @@ public class ShowController {
 
     @GetMapping("/location")
     public ResponseEntity getLocationShows(@RequestParam("address") String address){
-        log.info("address = {},", address);
-
-        return new ResponseEntity(HttpStatus.OK);
-
+        List<Show> shows = showService.findShows(address);
+        List<ShowDto.ShowsResponse> showsResponses = mapper.showsToShowsResponse(shows);
+        int total = showsResponses.size();
+        return new ResponseEntity(new SingleResponseDto<>(new ShowDto.LocationResponse(total,showsResponses)),
+                HttpStatus.OK);
     }
 
 
