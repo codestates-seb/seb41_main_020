@@ -4,8 +4,8 @@ import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleComment;
 import codestates.frogroup.indiego.domain.article.entity.ArticleCommentLike;
 import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleCommentDto;
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleCommentDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.common.embedding.Board;
 import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
@@ -21,7 +21,6 @@ import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class StubData {
@@ -361,21 +360,21 @@ public class StubData {
         );
     }
 
-    public ShowReservationDto.Response getShowReservationResponse(){
-        return new ShowReservationDto.Response(
-                show.getId(),
-                1L,
-                1,
-                false
-        );
-    }
-
-    public ShowReservationDto.Response getPatchShowReservationResponse(){
-        return new ShowReservationDto.Response(
-                show.getId(),
-                1L,
-                2,
-                false
-        );
-    }
+//    public ShowReservationDto.Response getShowReservationResponse(){
+//        return new ShowReservationDto.Response(
+//                show.getId(),
+//                1L,
+//                1,
+//                false
+//        );
+//    }
+//
+//    public ShowReservationDto.Response getPatchShowReservationResponse(){
+//        return new ShowReservationDto.Response(
+//                show.getId(),
+//                1L,
+//                2,
+//                false
+//        );
+//    }
 }

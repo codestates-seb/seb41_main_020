@@ -1,6 +1,7 @@
 package codestates.frogroup.indiego.global.security.auth.utils;
 
 import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
+import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ErrorResponse;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
@@ -35,7 +36,7 @@ public class Responder {
                 .role(authMember.getRoles().get(0))
                 .build();
 
-        response.getWriter().write(gson.toJson(loginResponse, MemberDto.LoginResponse.class));
+        response.getWriter().write(gson.toJson(new SingleResponseDto<>(loginResponse),SingleResponseDto.class));
     }
 
 }

@@ -37,27 +37,9 @@ public class ShowReservationService {
 
     @Transactional
     public ShowReservation createReservation(ShowReservation reservation) {
-        //mapper => service
-        //나머지 셋 해줘야 함
-        Member member = memberService.findVerifiedMember(getCurrentMember().getId());
-        reservation.setMember(member);
-
         return showReservationRepository.save(reservation);
     }
 
-//    @Transactional
-//    public Show updateShow(Show show, Long memberId) {
-//        Show findShow = findVerifiedShow(show.getId());
-//
-//        // ToDo security 적용 시 수정 -> getCurrentMember
-//        Member member = memberRepository.findById(memberId).orElseThrow(
-//                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        Show updatedShow = utils.copyNonNullProperties(show, findShow);
-//
-//        return updatedShow;
-//    }
-//
     @Transactional
     public void deleteShow(Long id) {
 

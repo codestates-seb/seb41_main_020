@@ -87,7 +87,6 @@ public class ShowDto {
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
 
-        private ShowCommentDto.Response comment;
     }
 
     @Getter

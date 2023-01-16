@@ -28,8 +28,8 @@ public class ShowCommentDto {
     @Builder
     public static class Response{
         private Long commentId;
-        private Long showId;
-        private Long memberId;
+        private Long showId; // 정희님에게 물어보기!!
+        private Long memberId; // 정희님에게 물어보기!!
         private String nickname;
         private Double score;
         private String comment;

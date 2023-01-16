@@ -1,7 +1,7 @@
 package codestates.frogroup.indiego.domain.article.mapper;
 
 import codestates.frogroup.indiego.domain.article.entity.Article;
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
