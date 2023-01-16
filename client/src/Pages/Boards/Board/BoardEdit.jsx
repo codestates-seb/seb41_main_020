@@ -1,12 +1,13 @@
 import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
-import { PageWrapper, ContentWrapper } from "../Board.jsx";
+import { PageWrapper, ContentWrapper } from "./BoardList.jsx";
 import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
-import OKButton from "../../../Components/OKButton.jsx";
-import Editor from "../../../Components/Editor.jsx";
+import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
+import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 
 import React, { useState } from "react";
 import styled from "styled-components";
+import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -38,7 +39,6 @@ export const PostBoard = styled.div`
 `;
 
 const ClassificationDiv = styled.div`
-  background-color: red;
   text-align: left;
   margin-bottom: 80px;
 `;
@@ -88,20 +88,20 @@ const PostButton = styled(OKButton)`
   }
 `;
 
-const PostCreate = () => {
+const BoardEdit = () => {
   const [contentValue, setContentValue] = useState("");
   return (
     <PageWrapper>
       <Aside></Aside>
       <PostWrapper>
-        <div className="title">글 올리기</div>
-        <div className="titleInfo">
-          게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
-        </div>
+        <div className="title">글 수정하기</div>
+        <div className="titleInfo">게시판을 수정 할 수 있습니다.</div>
         <form>
           <PostBoard>
             <div className="postDiv">분류</div>
-            <ClassificationDiv>1</ClassificationDiv>
+            <ClassificationDiv>
+              <CreateDropdown></CreateDropdown>
+            </ClassificationDiv>
             <div className="postDiv">제목</div>
             <TitleInputDiv>
               <input
@@ -126,4 +126,4 @@ const PostCreate = () => {
   );
 };
 
-export default PostCreate;
+export default BoardEdit;

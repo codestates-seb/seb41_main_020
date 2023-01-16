@@ -293,13 +293,7 @@ const NavbarLinkerContainer = styled.div`
 
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
-  const innerWidth = useWindowSize();
-
-  useEffect(() => {
-    if (innerWidth > 767) {
-      setNavOpen(false);
-    }
-  }, []);
+  useWindowSize(setNavOpen);
 
   return (
     <HeaderContainer>

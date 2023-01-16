@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
-import { primary, sub } from "../../styles/mixins";
-import search from "../../assets/search.svg";
+import { primary, sub } from "../../../styles/mixins";
+import search from "../../../assets/search.svg";
 
 const SearchBarDiv = styled.div`
   display: flex;

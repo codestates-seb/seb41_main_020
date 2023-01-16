@@ -62,16 +62,4 @@ public class ShowReservationService {
 
     }
 
-    public Member getCurrentMember() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication == null || authentication.getName() == null || authentication.getName().equals("GUEST"))
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
-
-        Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
-        Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-
-        return member;
-    }
 }
