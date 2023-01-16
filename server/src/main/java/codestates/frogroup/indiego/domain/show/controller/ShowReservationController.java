@@ -1,6 +1,7 @@
 package codestates.frogroup.indiego.domain.show.controller;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
@@ -11,6 +12,7 @@ import codestates.frogroup.indiego.domain.show.repository.ShowReservationReposit
 import codestates.frogroup.indiego.domain.show.service.ShowReservationService;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import codestates.frogroup.indiego.global.stub.StubData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,17 +33,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ShowReservationController {
     private final ShowReservationRepository showReservationRepository;
-
     private final ShowReservationMapper mapper;
     private final ShowReservationService showReservationService;
     private final ShowService showService;
+    private final MemberService memberService;
 
 
     @PostMapping("/{show-id}")
     public ResponseEntity postReservation(@Valid @RequestBody ShowReservationDto.Post post,
-                                          @PathVariable("show-id") long showId){
+                                          @PathVariable("show-id") Long showId,
+                                          @LoginMemberId Long memberId){
         Show show = showService.findShow(showId);
-        Member member = showReservationService.getCurrentMember();
+        Member member = memberService.findVerifiedMember(memberId);
 
         //ToDo 리팩토링
         ShowReservation showReservation = new ShowReservation();
@@ -61,7 +64,7 @@ public class ShowReservationController {
 
     public boolean isExpired(LocalDate date){
         LocalDate now = LocalDate.now();
-        return now.isAfter(date);
+        return now.isBefore(date);
     }
 
 

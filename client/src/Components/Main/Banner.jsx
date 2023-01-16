@@ -2,7 +2,7 @@ import React from "react";
 
 import logo from "../../assets/logo.svg";
 import { dtFontSize } from "../../styles/mixins";
-import testBannerImage from "../../assets/testBannerImage.jpg";
+import mainBannerImage from "../../assets/mainBannerImage.jpg";
 
 import styled from "styled-components";
 
@@ -28,7 +28,7 @@ const BannerContianer = styled.div`
 export default function Banner() {
   return (
     <BannerContianer>
-      <img alt="test" src={testBannerImage} width="100%" />
+      <img alt="main banner" src={mainBannerImage} width="100%" />
     </BannerContianer>
   );
 }

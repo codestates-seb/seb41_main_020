@@ -1,8 +1,8 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import Header from "../../Components/Header.jsx";
 import TicketsDetailTap from "../../Components/TicketsDetail/TicketsDetailTapMenu.jsx";
-import NaverMapIcon from "../../assets/naverMapIcon.png";
-import KakaoMapIcon from "../../assets/kakaoMapIcon.png";
+import NaverMapIcon from "../../assets/naverMapIcon.jpg";
+import KakaoMapIcon from "../../assets/kakaoMapIcon.jpg";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -320,6 +320,7 @@ const TopRightContainer = styled.div`
         }
 
         > img {
+          border-radius: 15px;
           width: 40px;
           height: 40px;
 

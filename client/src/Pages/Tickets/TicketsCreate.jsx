@@ -1,10 +1,10 @@
-import { PageWrapper, ContentWrapper } from "../Boards/Board.jsx";
+import { PageWrapper, ContentWrapper } from "../Boards/Board/BoardList.jsx";
 import {
   PostWrapper,
   PostBoard,
   TitleInputDiv,
   ContentInputDiv,
-} from "../Boards/Post/PostCreate.jsx";
+} from "../Boards/Board/BoardCreate.jsx";
 import breakpoint from "../../styles/breakpoint.js";
 
 import {
@@ -14,8 +14,8 @@ import {
   secondary,
   mbFontSize,
 } from "../../styles/mixins.js";
-import OKButton from "../../Components/OKButton.jsx";
-import Editor from "../../Components/Editor.jsx";
+import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
+import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
 
 import React, { useState } from "react";
 import styled from "styled-components";

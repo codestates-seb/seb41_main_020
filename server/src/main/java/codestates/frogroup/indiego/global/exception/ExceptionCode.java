@@ -32,7 +32,11 @@ public enum ExceptionCode {
     SHOW_COMMENT_NOT_FOUND(404, "Show Comment not found"),
     SHOW_COMMENT_IS_NOT_SAME(404, "Show Comment is not same the Comment of Show"),
 
-    BOOKMARK_NOT_FOUND(404, "북마크가 존재하지 않습니다.");
+    BOOKMARK_NOT_FOUND(404, "북마크가 존재하지 않습니다."),
+
+    // File Upload
+    UPLOAD_FAILED(404, "File Upload Failed !"),
+    UPLOAD_VOLUME_OVER(404, "File Size가 10MB를 초과하였습니다 !");
 
     @Getter
     private int status;

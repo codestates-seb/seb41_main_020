@@ -59,7 +59,16 @@ public class MemberService {
     public Member updateMember(Member member, Long memberId) {
         Member findMember = findVerifiedMember(memberId);
 
-        return beanUtils.copyNonNullProperties(member, findMember); // TODO: 사용 방법 알 필요가있음
+        Optional.ofNullable(member.getProfile().getNickname())
+                .ifPresent(nickname -> findMember.getProfile().setNickname(nickname));
+        Optional.ofNullable(member.getProfile().getAddress())
+                .ifPresent(address -> findMember.getProfile().setAddress(address));
+        Optional.ofNullable(member.getProfile().getImage())
+                .ifPresent(image -> findMember.getProfile().setImage(image));
+        Optional.ofNullable(member.getProfile().getIntroduction())
+                .ifPresent(introduction -> findMember.getProfile().setIntroduction(introduction));
+
+        return findMember;
     }
 
     public void deleteMember(Long memberId) {

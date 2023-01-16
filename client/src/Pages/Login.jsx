@@ -268,6 +268,7 @@ export default function Login() {
               </button>
               <input
                 id="password"
+                ref={passwordInputRef}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
