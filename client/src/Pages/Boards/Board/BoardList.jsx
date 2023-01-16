@@ -23,6 +23,7 @@ import BoardDummy from "../../../DummyData/BoardDummy.js";
 //라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -135,12 +136,16 @@ const BoardItemContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  .titleDiv {
+  .titleButton {
+    width: max-content;
     margin-top: 10px;
     font-size: ${dtFontSize.medium};
     font-weight: 700;
     text-align: left;
     color: ${sub.sub900};
+    background-color: white;
+    border: none;
+    cursor: pointer;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       margin-top: 10px;
@@ -288,6 +293,7 @@ const SearchBarDiv = styled.div`
 `;
 
 export default function BoardList() {
+  const navigate = useNavigate();
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -315,7 +321,14 @@ export default function BoardList() {
               <img width={50} src={heart} alt="heart"></img>
             </div>
             <BoardItemContent>
-              <div className="titleDiv">{it.title}</div>
+              <button
+                className="titleButton"
+                onClick={() => {
+                  navigate("/board/1");
+                }}
+              >
+                {it.title}
+              </button>
               <div className="contentDiv">{it.content}</div>
               <BoardItemCreateInfo>
                 <div className="authorDiv">{it.author}</div>
@@ -325,7 +338,11 @@ export default function BoardList() {
           </BoardItem>
         ))}
         <WriteButtonDiv>
-          <WriteButton>
+          <WriteButton
+            onClick={() => {
+              navigate("/board/create");
+            }}
+          >
             <img className="pencelImage" src={pen} alt="pen"></img>
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>

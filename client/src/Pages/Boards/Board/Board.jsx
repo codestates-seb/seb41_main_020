@@ -14,6 +14,7 @@ import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const QuillViewDiv = styled.div`
   display: flex;
@@ -187,8 +188,8 @@ const AnswerListFunctionDiv = styled.div`
     }
   }
 
-  .udDiv {
-    .udButton {
+  .edDiv {
+    .edButton {
       cursor: pointer;
       width: 40px;
       height: 20px;
@@ -200,7 +201,23 @@ const AnswerListFunctionDiv = styled.div`
   }
 `;
 
+const EditDeleteDiv = styled.div`
+  display: flex;
+  justify-content: right;
+  margin-top: 3px;
+  .edButton {
+    cursor: pointer;
+    width: 40px;
+    height: 20px;
+    border: none;
+    background-color: white;
+    color: ${sub.sub400};
+    margin-right: 5px;
+  }
+`;
+
 const Board = () => {
+  const navigate = useNavigate();
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -217,6 +234,17 @@ const Board = () => {
             <div className="heartCount">157</div>
           </div>
         </HeartItem>
+        <EditDeleteDiv>
+          <button
+            className="edButton"
+            onClick={() => {
+              navigate("/board/1/edit");
+            }}
+          >
+            수정
+          </button>
+          <button className="edButton">삭제</button>
+        </EditDeleteDiv>
         <form>
           <AnswerWrapper>
             <div className="answerCount">156개의 댓글</div>
@@ -253,9 +281,9 @@ const Board = () => {
                         </button>
                         <span className="heartCount">{it.likeCount}</span>
                       </div>
-                      <div className="udDiv">
-                        <button className="udButton">수정</button>
-                        <button className="udButton">삭제</button>
+                      <div className="edDiv">
+                        <button className="edButton">수정</button>
+                        <button className="edButton">삭제</button>
                       </div>
                     </AnswerListFunctionDiv>
                   </AnswerListInfoDiv>
