@@ -1,21 +1,18 @@
 package codestates.frogroup.indiego.domain.article.controller;
 
-import codestates.frogroup.indiego.domain.article.dto.ArticleSearchCondition;
+import codestates.frogroup.indiego.domain.article.dto.ArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
-import codestates.frogroup.indiego.global.dto.PageInfo;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
-import codestates.frogroup.indiego.global.stub.StubData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.data.domain.Sort.Direction.*;
 
@@ -68,12 +66,16 @@ public class ArticleController {
     /**
      * 게시글 전체 조회
      */
-//    @GetMapping
-//    public ResponseEntity getArticles(ArticleSearchCondition condition,
-//                                      @PageableDefault(size = 10, sort = "createdAt", direction = DESC) Pageable pageable) {
-//
-//        return new ResponseEntity<>(new MultiResponseDto<>(responses, (Page) pageInfo), HttpStatus.OK);
-//    }
+    @GetMapping
+    public ResponseEntity getArticles(@RequestParam(required = false) String category,
+                                      @RequestParam(required = false) String search,
+                                      @PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable) {
+
+        log.info("conditionIsNull?={}", Objects.isNull(category));
+        Page<ArticleListResponseDto> responses = articleService.findArticles(category, search, pageable);
+
+        return new ResponseEntity<>(new MultiResponseDto<>(responses.getContent(), responses), HttpStatus.OK);
+    }
 
     /**
      * 게시글 단일 조회

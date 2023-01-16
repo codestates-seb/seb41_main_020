@@ -1,5 +1,6 @@
 package codestates.frogroup.indiego.domain.article.service;
 
+import codestates.frogroup.indiego.domain.article.dto.ArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
 import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -71,8 +73,13 @@ public class ArticleService {
     /**
      * 게시글 전체 조회
      */
-    public Page<Article> findArticles(Pageable pageable) {
-        return null;
+    public Page<ArticleListResponseDto> findArticles(String category, String search, Pageable pageable) {
+
+        if (Objects.isNull(category) && Objects.isNull(search)) {
+            return articleRepository.findAllBasic(pageable);
+        }
+
+        return articleRepository.findAllSearch(category, search, pageable);
     }
 
     /**
