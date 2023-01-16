@@ -18,6 +18,7 @@ import PostEdit from "./Pages/Boards/Post/PostEdit.jsx";
 import NotFound from "./Pages/NotFound.jsx";
 
 import Header from "./Components/Header.jsx";
+import Footer from "./Components/Footer.jsx";
 // 그다음에는 로컬 모듈
 import "./App.css";
 
@@ -76,6 +77,7 @@ function App() {
         <Route path="/baord/review/:id/edit" element={<PostEdit />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
+      <Footer />
     </>
   );
 }
