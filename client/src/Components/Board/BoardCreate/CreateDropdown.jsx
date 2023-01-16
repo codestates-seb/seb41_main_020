@@ -7,7 +7,6 @@ const DropdownDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
   position: relative;
-  background-color: black;
 `;
 
 const SelectButton = styled.button`
@@ -15,7 +14,6 @@ const SelectButton = styled.button`
   height: 30px;
   background-color: ${sub.sub300};
   color: white;
-  border-radius: 5px;
   border: none;
   text-align: center;
   z-index: 10;
@@ -33,13 +31,13 @@ const DropdownContainer = styled.div`
   &.open {
     top: 30px; // 위치
     opacity: 1; //투명도
-    pointer-events: "none"; // 안보일때 누르는거 막아놓음
+    pointer-events: auto; // 안보일때 누르는거 막아놓음
   }
 
   &.close {
     top: 0px; // 위치
     opacity: 0; //투명도
-    pointer-events: "none"; // 안보일때 누르는거 막아놓음
+    pointer-events: none; // 안보일때 누르는거 막아놓음
   }
 
   > ul {
@@ -69,43 +67,44 @@ const CreateDropdown = () => {
     <DropdownDiv>
       <SelectButton type="button" onClick={() => setToggle(!toggle)}>
         {value}
+
+        <DropdownContainer className={toggle ? "open" : "close"}>
+          <ul>
+            <li
+              role="presentation"
+              onClick={() => {
+                handleDropdown("자유게시판");
+              }}
+            >
+              자유게시판
+            </li>
+            <li
+              role="presentation"
+              onClick={() => {
+                handleDropdown("구인게시판");
+              }}
+            >
+              구인게시판
+            </li>
+            <li
+              role="presentation"
+              onClick={() => {
+                handleDropdown("요청게시판");
+              }}
+            >
+              요청게시판
+            </li>
+            <li
+              role="presentation"
+              onClick={() => {
+                handleDropdown("홍보게시판");
+              }}
+            >
+              홍보게시판
+            </li>
+          </ul>
+        </DropdownContainer>
       </SelectButton>
-      <DropdownContainer className={toggle ? "open" : "close"}>
-        <ul>
-          <li
-            role="presentation"
-            onClick={() => {
-              handleDropdown("자유게시판");
-            }}
-          >
-            자유게시판
-          </li>
-          <li
-            role="presentation"
-            onClick={() => {
-              handleDropdown("구인게시판");
-            }}
-          >
-            구인게시판
-          </li>
-          <li
-            role="presentation"
-            onClick={() => {
-              handleDropdown("요청게시판");
-            }}
-          >
-            요청게시판
-          </li>
-          <li
-            role="presentation"
-            onClick={() => {
-              handleDropdown("홍보게시판");
-            }}
-          >
-            홍보게시판
-          </li>
-        </ul>
-      </DropdownContainer>
     </DropdownDiv>
   );
 };
