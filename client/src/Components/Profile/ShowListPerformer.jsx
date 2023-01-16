@@ -1,5 +1,5 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import ShowItem from "./ShowItem.jsx";
+import ShowItemPerformer from "./ShowItemPerformer.jsx";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -39,10 +39,10 @@ const ShowListInnerContainer = styled.ul`
 export default function ShowList() {
   return (
     <ShowListInnerContainer>
-      <ShowItem />
-      <ShowItem />
-      <ShowItem />
-      <ShowItem />
+      <ShowItemPerformer />
+      <ShowItemPerformer />
+      <ShowItemPerformer />
+      <ShowItemPerformer />
     </ShowListInnerContainer>
   );
 }
