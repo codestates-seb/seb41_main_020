@@ -9,7 +9,6 @@ import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import codestates.frogroup.indiego.domain.show.mapper.ShowCommentMapper;
-import codestates.frogroup.indiego.domain.show.mapper.ShowCommentMapperImpl;
 import codestates.frogroup.indiego.domain.show.repository.ShowCommentRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowCommentService;
@@ -35,12 +34,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShowCommentController {
 
-    private final ShowCommentRepository showCommentRepository;
     private final ShowCommentMapper showCommentMapper;
     private final ShowCommentService showCommentService;
     private final ShowService showService;
     private final MemberService memberService;
-    private final ShowCommentMapperImpl mapper;
 
 
     @PostMapping("/{show-id}/comments")
