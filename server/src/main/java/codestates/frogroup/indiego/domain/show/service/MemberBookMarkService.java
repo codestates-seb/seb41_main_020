@@ -3,6 +3,7 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.MemberBookMark;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import codestates.frogroup.indiego.domain.show.repository.MemberBookMarkRepository;
@@ -23,21 +24,21 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class MemberBookMarkService {
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final ShowService showService;
     private final MemberBookMarkRepository memberBookMarkRepository;
-    public HttpStatus manageBookMark(Long showId){
-        Member member = getCurrentMember();
+    public HttpStatus manageBookMark(Long showId, long memberId){
 
-        if( memberBookMarkRepository.findByShowIdAndMemberId(showId, member.getId()) != null){
-            return deleteBookMark(showId, member.getId());
+        if( memberBookMarkRepository.findByShowIdAndMemberId(showId, memberId) != null){
+            return deleteBookMark(showId, memberId);
         }else{
-            return createMemberBookMark(showId, member);
+            return createMemberBookMark(showId, memberId);
         }
     }
 
-    public HttpStatus createMemberBookMark(Long showId, Member member){
+    public HttpStatus createMemberBookMark(Long showId, Long memberId){
         Show show = showService.findShow(showId);
+        Member member = memberService.findVerifiedMember(memberId);
         MemberBookMark memberBookMark = MemberBookMark.builder()
                 .member(member)
                 .show(show)
@@ -53,18 +54,7 @@ public class MemberBookMarkService {
     }
 
 
-    public Member getCurrentMember() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication == null || authentication.getName() == null || authentication.getName().equals("GUEST"))
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
-
-        Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
-        Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-
-        return member;
-    }
 
     private MemberBookMark findVerifiedBookMark(Long showId, Long memberId) {
         Optional<MemberBookMark> optionalBookMark = Optional.ofNullable(memberBookMarkRepository.findByShowIdAndMemberId(showId, memberId));
