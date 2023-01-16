@@ -1,12 +1,13 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import heart from "../../assets/heart.svg";
-import pen from "../../assets/pen.svg";
-import right from "../../assets/right.svg";
-import left from "../../assets/left.svg";
-import OKButton from "../../Components/OKButton.jsx";
-import Aside from "./Aside/Aside.jsx";
-import SearchBar from "../../Components/Board/SearchBar.jsx";
-import MobileAside from "./Aside/MobileAside.jsx";
+import heart from "../../../assets/heart.svg";
+import pen from "../../../assets/pen.svg";
+import right from "../../../assets/right.svg";
+import left from "../../../assets/left.svg";
+import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
+import Aside from "../Aside/Aside.jsx";
+import MobileAside from "../Aside/MobileAside.jsx";
+import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
+import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 
 //로컬 모듈
 import {
@@ -15,9 +16,9 @@ import {
   sub,
   secondary,
   mbFontSize,
-} from "../../styles/mixins.js";
-import breakpoint from "../../styles/breakpoint";
-import BoardDummy from "../../DummyData/BoardDummy.js";
+} from "../../../styles/mixins.js";
+import breakpoint from "../../../styles/breakpoint";
+import BoardDummy from "../../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
 import React from "react";
@@ -57,12 +58,19 @@ export const ContentWrapper = styled.div`
     margin-top: 10px;
     color: ${sub.sub300};
     text-align: left;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.medium};
     }
   }
+
+  .dropboxDiv {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 5px;
+  }
+
   .lineDiv {
     height: 3px;
     background-color: ${sub.sub300};
@@ -279,15 +287,18 @@ const SearchBarDiv = styled.div`
   }
 `;
 
-export default function Board() {
+export default function ReviewBoardList() {
   return (
     <PageWrapper>
       <Aside></Aside>
       <MobileAside></MobileAside>
       <BoardWrapper>
-        <div className="title">자유게시판</div>
+        <div className="title">후기게시판</div>
         <div className="titleInfo">
-          자유로운 주제로 글과 의견을 공유하는 게시판입니다.
+          공연의 후기를 작성할 수 있는 게시판 입니다.
+        </div>
+        <div className="dropboxDiv">
+          <Dropdown></Dropdown>
         </div>
         <div className="lineDiv"></div>
         {BoardDummy.map((it) => (
