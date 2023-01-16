@@ -34,13 +34,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShowCommentController {
 
-    private final ShowCommentRepository showCommentRepository;
     private final ShowCommentMapper showCommentMapper;
     private final ShowCommentService showCommentService;
     private final ShowService showService;
     private final MemberService memberService;
-    private final ShowCommentMapper mapper;
-
 
     @PostMapping("/{show-id}/comments")
     public ResponseEntity postComment(@PathVariable("show-id") Long showId,
