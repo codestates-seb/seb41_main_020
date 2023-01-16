@@ -13,6 +13,7 @@ const Side = styled.aside`
   width: 200px;
   height: 100%;
   border-right: 2px solid ${sub.sub200};
+  z-index: -1;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     display: none;
@@ -20,7 +21,6 @@ const Side = styled.aside`
 `;
 
 const SideList = styled.div`
-  background-color: white;
   margin-top: 30px;
   width: 100px;
   height: 100%;
