@@ -6,12 +6,14 @@ import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
+import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -70,12 +72,24 @@ public class ArticleController {
     public ResponseEntity getArticles(@RequestParam(required = false) String category,
                                       @RequestParam(required = false) String search,
                                       @RequestParam(required = false) String status,
-                                      @PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable) {
+                                      @PageableDefault(page = 1) Pageable pageable) {
 
         log.info("conditionIsNull?={}", Objects.isNull(category));
+
         Page<ArticleListResponseDto> responses = articleService.findArticles(category, search, status, pageable);
 
         return new ResponseEntity<>(new MultiResponseDto<>(responses.getContent(), responses), HttpStatus.OK);
+    }
+
+    /**
+     * 인기 게시글 조회
+     */
+    @GetMapping("/populars")
+    public ResponseEntity getPopularArticles(@RequestParam String category) {
+
+        List<ArticleListResponseDto> responses = articleService.findPopularArticles(category);
+
+        return new ResponseEntity<>(new PagelessMultiResponseDto<>(responses), HttpStatus.OK);
     }
 
     /**

@@ -26,6 +26,7 @@ public enum ExceptionCode {
     // ARITCLE
     ARTICLE_NOT_FOUND(404, "게시글을 찾을 수 없습니다."),
     ARTICLE_COMMENT_NOT_FOUND(404, "해당 게시글의 댓글을 찾을 수 없습니다."),
+    ARTICLE_GET_BAD_REQUEST(400, "게시글 조회에 대한 잘못된 요청입니다."),
 
     SHOW_NOT_FOUND(404, "Show not found"),
 
