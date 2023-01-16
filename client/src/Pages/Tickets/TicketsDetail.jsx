@@ -40,18 +40,18 @@ const ContentContainer = styled.div`
 `;
 
 const ContentHeaderContainer = styled.div`
-  align-items: flex-start;
+  align-items: center;
   border-bottom: 1px solid ${sub.sub200};
   display: flex;
   height: max-content;
   justify-content: space-between;
   min-height: 140px;
-  padding: 20px 47px;
+  padding: 20px 40px;
   width: 80%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     min-height: 100px;
-    padding: 20px 5.13%;
+    padding: 20px;
     width: 100%;
   }
 `;
@@ -297,37 +297,26 @@ const TopRightContainer = styled.div`
       }
     }
 
-    > .button-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      width: 90px;
+    > button {
+      all: unset;
+      cursor: pointer;
+      display: inline;
+      width: 40px;
+      height: 40px;
 
       @media screen and (max-width: ${breakpoint.mobile}) {
-        width: 70px;
+        width: 30px;
+        height: 30px;
       }
 
-      > button {
-        all: unset;
-        cursor: pointer;
-        display: inline;
+      > img {
+        border-radius: 100%;
         width: 40px;
         height: 40px;
 
         @media screen and (max-width: ${breakpoint.mobile}) {
           width: 30px;
           height: 30px;
-        }
-
-        > img {
-          border-radius: 15px;
-          width: 40px;
-          height: 40px;
-
-          @media screen and (max-width: ${breakpoint.mobile}) {
-            width: 30px;
-            height: 30px;
-          }
         }
       }
     }
@@ -401,14 +390,9 @@ export default function TicketsDetail() {
                     서울특별시 종로구 132-38 (종로운동장)
                   </span>
                 </div>
-                <div className="button-container">
-                  <button>
-                    <img alt="naver map icon" src={NaverMapIcon} />
-                  </button>
-                  <button>
-                    <img alt="kakao map icon" src={KakaoMapIcon} />
-                  </button>
-                </div>
+                <button>
+                  <img alt="kakao map icon" src={KakaoMapIcon} />
+                </button>
               </div>
             </TopRightContainer>
           </ContentTopContainer>
