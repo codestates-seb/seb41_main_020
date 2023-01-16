@@ -39,7 +39,6 @@ public class ShowCommentController {
     private final ShowService showService;
     private final MemberService memberService;
 
-
     @PostMapping("/{show-id}/comments")
     public ResponseEntity postComment(@PathVariable("show-id") Long showId,
                                       @LoginMemberId Long memberId,
