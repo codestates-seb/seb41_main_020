@@ -16,6 +16,10 @@ import Board from "./Pages/Boards/Board/Board.jsx";
 import BoardCreate from "./Pages/Boards/Board/BoardCreate.jsx";
 import BoardEdit from "./Pages/Boards/Board/BoardEdit.jsx";
 import NotFound from "./Pages/NotFound.jsx";
+import EmployBoardList from "./Pages/Boards/BoardType/EmployBoard.jsx";
+import RequestBoardList from "./Pages/Boards/BoardType/RequestBoardList.jsx";
+import AdvertiseBoardList from "./Pages/Boards/BoardType/AdvertiseBoardList.jsx";
+import ReviewBoardList from "./Pages/Boards/BoardType/ReviewBoardList.jsx";
 
 import Header from "./Components/Header.jsx";
 // 그다음에는 로컬 모듈
@@ -55,25 +59,25 @@ function App() {
         <Route path="/board/:id" element={<Board />}></Route>
         <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
         {/* 구인게시판 */}
-        <Route path="/board" element={<BoardList />}></Route>
-        <Route path="/board/create" element={<BoardCreate />}></Route>
-        <Route path="/board/:id" element={<Board />}></Route>
-        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
+        <Route path="/board/employ" element={<EmployBoardList />}></Route>
+        <Route path="/board/employ/create" element={<BoardCreate />}></Route>
+        <Route path="/board/employ/:id" element={<Board />}></Route>
+        <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
         {/* 요청게시판 */}
-        <Route path="/board" element={<BoardList />}></Route>
-        <Route path="/board/create" element={<BoardCreate />}></Route>
-        <Route path="/board/:id" element={<Board />}></Route>
-        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
+        <Route path="/board/request" element={<RequestBoardList />}></Route>
+        <Route path="/board/request/create" element={<BoardCreate />}></Route>
+        <Route path="/board/request/:id" element={<Board />}></Route>
+        <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
         {/* 홍보게시판 */}
-        <Route path="/board" element={<BoardList />}></Route>
-        <Route path="/board/create" element={<BoardCreate />}></Route>
-        <Route path="/board/:id" element={<Board />}></Route>
-        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
+        <Route path="/board/advertise" element={<AdvertiseBoardList />}></Route>
+        <Route path="/board/advertise/create" element={<BoardCreate />}></Route>
+        <Route path="/board/advertise/:id" element={<Board />}></Route>
+        <Route path="/board/advertise/:id/edit" element={<BoardEdit />}></Route>
         {/* 후기게시판 */}
-        <Route path="/board" element={<BoardList />}></Route>
-        <Route path="/board/create" element={<BoardCreate />}></Route>
-        <Route path="/board/:id" element={<Board />}></Route>
-        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
+        <Route path="/board/review" element={<ReviewBoardList />}></Route>
+        <Route path="/board/review/create" element={<BoardCreate />}></Route>
+        <Route path="/board/review/:id" element={<Board />}></Route>
+        <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </>
