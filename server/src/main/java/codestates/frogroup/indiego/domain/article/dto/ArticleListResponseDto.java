@@ -25,7 +25,7 @@ public class ArticleListResponseDto {
 
     private LocalDateTime createdAt;
 
-    @QueryProjection
+    @QueryProjection // QDTO 생성 설계 구조에 대해서 의존성이 생겨서 큰 단점으로 작용할 수 있다고합니다.
     public ArticleListResponseDto(Long id, String nickname, String title, String content, String category,
                                   String image, long likeCount, LocalDateTime createdAt) {
         this.id = id;

@@ -115,11 +115,14 @@ public class ArticleService {
     @Transactional
     public void articleLike(Long articleId, Long memberId) {
         Article findArticle = findVerifiedArticle(articleId);
+
+        // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
 
+        // TODO: 리팩토링 1개의 메서드는 1개의 기능
         if (findArticleLike == null) {
             articleLikeRepository.save(
                     ArticleLike.builder()

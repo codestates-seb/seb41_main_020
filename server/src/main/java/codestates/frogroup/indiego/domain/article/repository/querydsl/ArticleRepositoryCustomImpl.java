@@ -3,6 +3,7 @@ package codestates.frogroup.indiego.domain.article.repository.querydsl;
 import codestates.frogroup.indiego.domain.article.dto.ArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.dto.QArticleListResponseDto;
 import codestates.frogroup.indiego.domain.article.entity.Article;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static codestates.frogroup.indiego.domain.article.entity.QArticle.article;
-import static codestates.frogroup.indiego.domain.member.entity.QMember.member;
 import static org.springframework.util.StringUtils.hasText;
 
 public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport implements ArticleRepositoryCustom {
@@ -31,10 +31,22 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    // 정렬이 안된다.
     @Override
     public Page<ArticleListResponseDto> findAllBasic(Pageable pageable) {
 
+        // Querydsl 리포지토리 지원을 받는 경우에는
+        // from(article)로 시작
+
+        // queryFactory 사용은
+        // queryFactory.select(article)로 시작
+
+        // DTO 방법이 여러 가지
+        // (1) Projections - 조금 복잡하나 구조적인 측에서는 장점이 존재
+        // - Projections.Fields
+        // - Projections.Beans
+        // - Projections.Constructor
+
+        // (2) QDTO 타입을 이용하는 방법 - 편리한 데 단점이 존재, DTO 클래스 생성자에 @QueryProjection 사용
         List<ArticleListResponseDto> content = queryFactory
                 .select(new QArticleListResponseDto(
                         article.id,
@@ -61,7 +73,6 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount); // 최적화
     }
 
-    // 정렬안되고, 조건도 안통하는것 같다.
     @Override
     public Page<ArticleListResponseDto> findAllSearch(String category, String search, Pageable pageable) {
 

@@ -40,6 +40,7 @@ public class ArticleCommentService {
                                                Long memberId,
                                                ArticleCommentDto.Post articleCommentPostDto) {
         Article findArticle = findVerifiedArticle(articleId);
+        // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = findVerifiedMember(memberId);
 
         // mapper 활용 방법
@@ -108,6 +109,7 @@ public class ArticleCommentService {
 
         findVerifiedArticle(articleId);
         ArticleComment findArticleComment = findVerifiedArticleComment(commentId);
+        // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = findVerifiedMember(memberId);
 
         ArticleCommentLike articleCommentLike = articleCommentLikeRepository.findByMemberId(findArticleComment.getId());
@@ -129,6 +131,7 @@ public class ArticleCommentService {
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
+    // TODO: 리팩토링 memberService에서 사용하자
     private Member findVerifiedMember(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
