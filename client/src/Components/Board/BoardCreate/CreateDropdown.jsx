@@ -7,17 +7,18 @@ const DropdownDiv = styled.div`
   display: inline-flex;
   flex-direction: column;
   position: relative;
+  background-color: black;
 `;
 
 const SelectButton = styled.button`
-  width: 80px;
+  width: 200px;
   height: 30px;
   background-color: ${sub.sub300};
   color: white;
   border-radius: 5px;
   border: none;
   text-align: center;
-  z-index: -10;
+  z-index: 10;
   cursor: pointer;
 `;
 
@@ -30,33 +31,22 @@ const DropdownContainer = styled.div`
   transition: all 0.6s ease-in-out;
 
   &.open {
-    top: 28px; // 위치
+    top: 30px; // 위치
     opacity: 1; //투명도
-    /* pointer-events: auto; // 안보일때 누르는거 막아놓음 */
+    pointer-events: "none"; // 안보일때 누르는거 막아놓음
   }
 
   &.close {
     top: 0px; // 위치
     opacity: 0; //투명도
-    /* pointer-events: none; // 안보일때 누르는거 막아놓음 */
+    pointer-events: "none"; // 안보일때 누르는거 막아놓음
   }
 
   > ul {
-    &.open {
-      top: 28px; // 위치
-      opacity: 1; //투명도
-      pointer-events: auto; // 안보일때 누르는거 막아놓음
-    }
-
-    &.close {
-      top: 0px; // 위치
-      opacity: 0; //투명도
-      /* pointer-events: none; // 안보일때 누르는거 막아놓음 */
-    }
-
     > li {
+      text-align: center;
       list-style: none;
-      padding: 2px 0;
+      padding: 3px 0;
       font-size: ${dtFontSize.small};
       cursor: pointer;
 
@@ -67,7 +57,7 @@ const DropdownContainer = styled.div`
   }
 `;
 
-const Dropdown = () => {
+const CreateDropdown = () => {
   const [toggle, setToggle] = useState(false);
   const [value, setValue] = useState("최신순");
 
@@ -81,22 +71,38 @@ const Dropdown = () => {
         {value}
       </SelectButton>
       <DropdownContainer className={toggle ? "open" : "close"}>
-        <ul className={toggle ? "open" : "close"}>
+        <ul>
           <li
             role="presentation"
             onClick={() => {
-              handleDropdown("최신순");
+              handleDropdown("자유게시판");
             }}
           >
-            최신순
+            자유게시판
           </li>
           <li
             role="presentation"
             onClick={() => {
-              handleDropdown("인기순");
+              handleDropdown("구인게시판");
             }}
           >
-            인기순
+            구인게시판
+          </li>
+          <li
+            role="presentation"
+            onClick={() => {
+              handleDropdown("요청게시판");
+            }}
+          >
+            요청게시판
+          </li>
+          <li
+            role="presentation"
+            onClick={() => {
+              handleDropdown("홍보게시판");
+            }}
+          >
+            홍보게시판
           </li>
         </ul>
       </DropdownContainer>
@@ -104,4 +110,4 @@ const Dropdown = () => {
   );
 };
 
-export default Dropdown;
+export default CreateDropdown;

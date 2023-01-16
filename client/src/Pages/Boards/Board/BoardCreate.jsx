@@ -7,6 +7,7 @@ import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 
 import React, { useState } from "react";
 import styled from "styled-components";
+import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -38,7 +39,6 @@ export const PostBoard = styled.div`
 `;
 
 const ClassificationDiv = styled.div`
-  background-color: red;
   text-align: left;
   margin-bottom: 80px;
 `;
@@ -101,7 +101,9 @@ const BoardCreate = () => {
         <form>
           <PostBoard>
             <div className="postDiv">분류</div>
-            <ClassificationDiv>1</ClassificationDiv>
+            <ClassificationDiv>
+              <CreateDropdown></CreateDropdown>
+            </ClassificationDiv>
             <div className="postDiv">제목</div>
             <TitleInputDiv>
               <input

@@ -11,10 +11,10 @@ import SignupPerformer from "./Pages/Signup/SignupPerformer.jsx";
 import Login from "./Pages/Login.jsx";
 import Profile from "./Pages/Profile/Profile.jsx";
 import ProfileEdit from "./Pages/Profile/ProfileEdit.jsx";
-import Board from "./Pages/Boards/Board/BoardList.jsx";
-import Post from "./Pages/Boards/Board/Board.jsx";
-import PostCreate from "./Pages/Boards/Board/BoardCreate.jsx";
-import PostEdit from "./Pages/Boards/Board/BoardEdit.jsx";
+import BoardList from "./Pages/Boards/Board/BoardList.jsx";
+import Board from "./Pages/Boards/Board/Board.jsx";
+import BoardCreate from "./Pages/Boards/Board/BoardCreate.jsx";
+import BoardEdit from "./Pages/Boards/Board/BoardEdit.jsx";
 import NotFound from "./Pages/NotFound.jsx";
 
 import Header from "./Components/Header.jsx";
@@ -50,30 +50,30 @@ function App() {
 
         {/* 게시판 분류 */}
         {/* 자유게시판 (게시판 홈)*/}
-        <Route path="/board" element={<Board />}></Route>
-        <Route path="/board/create" element={<PostCreate />}></Route>
-        <Route path="/board/:id" element={<Post />}></Route>
-        <Route path="/board/:id/edit" element={<PostEdit />}></Route>
+        <Route path="/board" element={<BoardList />}></Route>
+        <Route path="/board/create" element={<BoardCreate />}></Route>
+        <Route path="/board/:id" element={<Board />}></Route>
+        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
         {/* 구인게시판 */}
-        <Route path="/board/employ" element={<Board />}></Route>
-        <Route path="/board/employ/create" element={<PostCreate />}></Route>
-        <Route path="/board/employ/:id" element={<Home />}></Route>
-        <Route path="/board/employ/:id/edit" element={<Home />}></Route>
+        <Route path="/board" element={<BoardList />}></Route>
+        <Route path="/board/create" element={<BoardCreate />}></Route>
+        <Route path="/board/:id" element={<Board />}></Route>
+        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
         {/* 요청게시판 */}
-        <Route path="/board/request" element={<Board />}></Route>
-        <Route path="/board/request/create" element={<PostCreate />}></Route>
-        <Route path="/board/request/:id" element={<Post />}></Route>
-        <Route path="/board/request/:id/edit" element={<PostEdit />}></Route>
+        <Route path="/board" element={<BoardList />}></Route>
+        <Route path="/board/create" element={<BoardCreate />}></Route>
+        <Route path="/board/:id" element={<Board />}></Route>
+        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
         {/* 홍보게시판 */}
-        <Route path="/board/advertise" element={<Board />}></Route>
-        <Route path="/board/advertise/create" element={<PostCreate />}></Route>
-        <Route path="/board/advertise/:id" element={<Post />}></Route>
-        <Route path="/board/advertise/:id/edit" element={<PostEdit />}></Route>
+        <Route path="/board" element={<BoardList />}></Route>
+        <Route path="/board/create" element={<BoardCreate />}></Route>
+        <Route path="/board/:id" element={<Board />}></Route>
+        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
         {/* 후기게시판 */}
-        <Route path="/board/review" element={<Board />}></Route>
-        <Route path="/baord/review/create" element={<PostCreate />}></Route>
-        <Route path="/baord/review/:id" element={<Post />}></Route>
-        <Route path="/baord/review/:id/edit" element={<PostEdit />}></Route>
+        <Route path="/board" element={<BoardList />}></Route>
+        <Route path="/board/create" element={<BoardCreate />}></Route>
+        <Route path="/board/:id" element={<Board />}></Route>
+        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </>

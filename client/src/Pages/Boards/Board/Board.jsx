@@ -1,4 +1,11 @@
-import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
+import {
+  primary,
+  dtFontSize,
+  sub,
+  secondary,
+  mbFontSize,
+} from "../../../styles/mixins.js";
+import breakpoint from "../../../styles/breakpoint.js";
 import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
@@ -28,6 +35,10 @@ const HeartItem = styled(BoardItem)`
     font-size: ${dtFontSize.xlarge};
     font-weight: 700;
     margin-bottom: 80px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.xlarge};
+    }
   }
 `;
 
@@ -41,6 +52,10 @@ const AnswerWrapper = styled.div`
     font-weight: 700;
     color: ${primary.primary500};
     margin-bottom: 30px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+    }
   }
   .answerInputDiv {
     height: 65px;
@@ -64,8 +79,8 @@ const AnswerCreateButton = styled(OKButton)`
   width: 100px;
   height: 40px;
 
-  & :hover {
-    background-color: ${sub.sub500};
+  &:hover {
+    background-color: ${secondary.secondary500};
   }
 `;
 
@@ -111,6 +126,9 @@ const AnswerListInfoDiv = styled.div`
     color: ${primary.primary400};
     font-size: ${dtFontSize.medium};
     font-weight: 500;
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
   .answerListCreateDate {
     background-color: white;
@@ -119,16 +137,22 @@ const AnswerListInfoDiv = styled.div`
     color: ${sub.sub300};
     font-size: ${dtFontSize.small};
     font-weight: 300;
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
+    }
   }
 `;
 
 const AnswerListContentDiv = styled.div`
   text-align: left;
   background-color: white;
-  /* border-bottom: 2px solid ${sub.sub300}; */
   padding-bottom: 5px;
   font-size: ${dtFontSize.medium};
   color: ${sub.sub800};
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${mbFontSize.medium};
+  }
 `;
 
 const AnswerListFunctionDiv = styled.div`
@@ -188,7 +212,7 @@ const Board = () => {
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton">
-              <img width={50} src={heart} alt="heart"></img>
+              <img width={45} src={heart} alt="heart"></img>
             </button>
             <div className="heartCount">157</div>
           </div>
