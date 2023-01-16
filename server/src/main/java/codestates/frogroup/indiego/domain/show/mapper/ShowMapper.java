@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ShowMapper {
 
@@ -67,4 +69,11 @@ public interface ShowMapper {
     @Mapping(source = "showBoard.detailImage", target = "detailImage")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
     ShowDto.Response showToShowResponse(Show show);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "showBoard.board.title", target = "title")
+    @Mapping(source = "showBoard.expiredAt", target = "expiredAt")
+    @Mapping(source = "showBoard.showAt", target = "showAt")
+    List<ShowDto.ShowsResponse> showsToShowsResponse(List<Show> shows);
+
 }

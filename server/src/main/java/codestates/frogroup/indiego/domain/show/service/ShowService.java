@@ -15,10 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 //테스트해보고 페이지네이션 마저 작성
 @Slf4j
@@ -63,6 +66,15 @@ public class ShowService {
         Show findShow = findVerifiedShow(id);
         showRepository.delete(findShow);
 
+    }
+
+    public List<Show> findShows(String address){
+        List<Show> findShows = showRepository.findByShowBoardAddressAndStatus(address, Show.ShowStatus.SALE,
+                Sort.by(Sort.Order.desc("createdAt")));
+        if(findShows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
+        return findShows;
     }
 
     public Show findShow(long showId){

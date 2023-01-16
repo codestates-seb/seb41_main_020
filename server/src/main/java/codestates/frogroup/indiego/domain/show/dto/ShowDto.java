@@ -17,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ShowDto {
@@ -171,6 +172,14 @@ public class ShowDto {
         private String title;
         private String expiredAt;
         private String showAt;
+
+        @Builder
+        ShowsResponse(Long id, ShowBoard showBoard){
+            this.id = id;
+            this.title = showBoard.getBoard().getTitle();
+            this.expiredAt = showBoard.getExpiredAt().toString();
+            this.showAt = showBoard.getShowAt().toString();
+        }
     }
 
 }
