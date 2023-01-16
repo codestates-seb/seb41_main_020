@@ -1,5 +1,7 @@
 package codestates.frogroup.indiego.global.fileupload;
 
+import codestates.frogroup.indiego.global.exception.BusinessLogicException;
+import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -24,48 +26,32 @@ public class AwsS3Service implements ImageUploadService {
 	private String bucketName;
 
 	public String StoreImage(MultipartFile file) {
-		validateFileExists(file);
+
+		if (file.isEmpty()) {
+			throw new BusinessLogicException(ExceptionCode.UPLOAD_FAILED);
+		}
+
 		String originalFilename = file.getOriginalFilename();
 		String storeFileName = createStoreFileName(originalFilename);
 
 		log.info("# originalFilename = {}", originalFilename);
-		log.info("# storeFileName = {}", originalFilename);
-
-		// ObjectMetadata objectMetadata = new ObjectMetadata();
-		// objectMetadata.setContentType(file.getContentType());
-		// log.info("getContentType = {}",file.getContentType());
+		log.info("# storeFileName = {}", storeFileName);
 
 		try (InputStream inputStream = file.getInputStream()) {
-			// byte[] bytes = IOUtils.toByteArray(inputStream);
-			// objectMetadata.setContentLength(bytes.length);
-			// ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 			amazonS3.putObject(new PutObjectRequest(bucketName, storeFileName, inputStream, null)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 		} catch (IOException e) {
-			throw new RuntimeException();
+			throw new BusinessLogicException(ExceptionCode.UPLOAD_FAILED);
 		}
 
 		return amazonS3.getUrl(bucketName, storeFileName).toString();
 	}
 
-	private void validateFileExists(MultipartFile multipartFile) {
-		if (multipartFile.isEmpty()) {
-			throw new RuntimeException();
-		}
-	}
-
 	private static String createStoreFileName(String originalFilename) {
-		String ext = extractExt(originalFilename);
-		String uuid = UUID.randomUUID().toString();
-
-		log.info("ext = {}'",ext);
-		log.info("uuid = {}",uuid);
-
-		return uuid + "." + ext;
+		return UUID.randomUUID().toString() + "." + extractExt(originalFilename);
 	}
 
 	private static String extractExt(String originalFilename) {
-		int pos = originalFilename.lastIndexOf(".");
-		return originalFilename.substring(pos + 1);
+		return originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 	}
 }

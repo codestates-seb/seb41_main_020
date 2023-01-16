@@ -22,6 +22,7 @@ public interface MemberMapper {
     Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
 
     @Mapping(source = "profile.nickname", target = "nickname")
+    @Mapping(source = "roles", target = "role")
     MemberDto.PostResponse memberToPostResponse(Member member);
 
     @Mapping(source = "profile.nickname", target = "nickname")
@@ -34,6 +35,7 @@ public interface MemberMapper {
     @Mapping(source = "profile.address", target = "profile.address")
     @Mapping(source = "profile.image", target = "profile.image")
     @Mapping(source = "profile.introduction", target = "profile.introduction")
+    @Mapping(source = "roles", target = "role")
     MemberDto.GetResponse memberToGetResponse(Member member);
 
 }

@@ -113,7 +113,7 @@ public class StubData {
         return new MemberDto.GetResponse(
                 member.getId(),
                 member.getEmail(),
-                roles,
+                roles.get(0),
                 new ArrayList<>(List.of(
                         new Profile(member.getProfile().getNickname(),
                         member.getProfile().getAddress(),

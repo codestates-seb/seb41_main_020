@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
 import codestates.frogroup.indiego.domain.member.mapper.MemberMapper;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.fileupload.ImageUploadService;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberMapper memberMapper;
+    private final ImageUploadService awsS3Service;
 
     @PostMapping("/signup")
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto){
@@ -34,8 +37,17 @@ public class MemberController {
         Member saveMember = memberService.createMember(member);
         MemberDto.PostResponse postResponse = memberMapper.memberToPostResponse(saveMember);
 
-        // StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(postResponse), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{member-id}/upload")
+    public ResponseEntity uploadProfileImage(@RequestParam MultipartFile file,
+                                             @Positive @PathVariable("member-id") Long memberId,
+                                             @LoginMemberId Long loginMemberId){
+
+        memberService.verifiedMemberId(memberId, loginMemberId);
+        String url = awsS3Service.StoreImage(file);
+        return new ResponseEntity<>(new SingleResponseDto<>(url), HttpStatus.CREATED);
     }
 
     @GetMapping("/{member-id}")
@@ -44,11 +56,10 @@ public class MemberController {
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
 
-        // StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(getResponse), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{member-id}/mypage") // TODO: 배포판 프로젝트 StubData 넣어서 추가할것
+    @GetMapping("/{member-id}/mypage")
     public ResponseEntity getMyMember(@Positive @PathVariable("member-id") Long memberId,
                                       @LoginMemberId Long loginMemberId){
 
@@ -56,7 +67,6 @@ public class MemberController {
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
 
-        // StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(getResponse), HttpStatus.CREATED);
     }
 
@@ -70,7 +80,6 @@ public class MemberController {
         Member updateMember = memberService.updateMember(member,memberId);
         MemberDto.PatchResponse patchResponse = memberMapper.memberToPatchResponse(updateMember);
 
-        // StubData stubData = new StubData();
         return new ResponseEntity<>(new SingleResponseDto<>(patchResponse), HttpStatus.CREATED);
     }
 
