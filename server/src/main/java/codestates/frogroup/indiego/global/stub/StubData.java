@@ -10,10 +10,9 @@ import codestates.frogroup.indiego.domain.common.embedding.Board;
 import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.Profile;
-import codestates.frogroup.indiego.domain.member.entity.dto.MemberDto;
+import codestates.frogroup.indiego.domain.member.dto.MemberDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowCommentDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
-import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
@@ -113,7 +112,7 @@ public class StubData {
         return new MemberDto.GetResponse(
                 member.getId(),
                 member.getEmail(),
-                roles,
+                roles.get(0),
                 new ArrayList<>(List.of(
                         new Profile(member.getProfile().getNickname(),
                         member.getProfile().getAddress(),

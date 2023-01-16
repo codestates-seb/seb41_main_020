@@ -1,4 +1,4 @@
-package codestates.frogroup.indiego.domain.member.entity.dto;
+package codestates.frogroup.indiego.domain.member.dto;
 
 
 import codestates.frogroup.indiego.domain.member.entity.Profile;
@@ -44,14 +44,14 @@ public class MemberDto {
     public static class GetResponse {
         private Long id;
         private String email;
-        private List<String> roles;
+        private String role;
         private List<Profile> profile;
 
         @Builder
-        public GetResponse(Long id, String email, List<String> roles, Profile profile){
+        public GetResponse(Long id, String email, List<String> role, Profile profile){
             this.id = id;
             this.email = email;
-            this.roles = roles;
+            this.role = role.get(0);
             this.profile = List.of(profile);
         }
     }
@@ -62,7 +62,15 @@ public class MemberDto {
         private Long id;
         private String email;
         private String nickname;
-        private List<String> roles;
+        private String role;
+
+        @Builder
+        public PostResponse(Long id, String email, String nickname, List<String> role){
+            this.id = id;
+            this.email = email;
+            this.nickname = nickname;
+            this.role = role.get(0);
+        }
     }
 
     @Getter

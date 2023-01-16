@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -58,6 +59,16 @@ public class ExceptionAdvice {
         final ErrorResponse response = ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED);
 
         return response;
+    }
+
+    /*
+    * 파일 업로드시 허용 용량을 초과하였을 경우 예외처리
+    * */
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ErrorResponse> handleException(MaxUploadSizeExceededException e) {
+
+        final ErrorResponse response = ErrorResponse.of(ExceptionCode.UPLOAD_VOLUME_OVER);
+        return ResponseEntity.internalServerError().body(response);
     }
 
 }
