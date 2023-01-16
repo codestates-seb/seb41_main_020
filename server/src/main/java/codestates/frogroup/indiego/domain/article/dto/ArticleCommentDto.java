@@ -1,4 +1,4 @@
-package codestates.frogroup.indiego.domain.article.entity.dto;
+package codestates.frogroup.indiego.domain.article.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

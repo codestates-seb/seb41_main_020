@@ -1,22 +1,26 @@
-import { primary, dtFontSize, sub, secondary } from "../../../styles/mixins.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "../Board.jsx";
+import {
+  primary,
+  dtFontSize,
+  sub,
+  secondary,
+  mbFontSize,
+} from "../../../styles/mixins.js";
+import breakpoint from "../../../styles/breakpoint.js";
+import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
-import OKButton from "../../../Components/OKButton.jsx";
-import EditorView from "../../../Components/EditorView.jsx";
+import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import heart from "../../../assets/heart.svg";
 import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const QuillViewDiv = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: 20px;
   margin-bottom: 60px;
-  width: 1130px;
   height: max-content;
-  background-color: green;
 `;
 
 const HeartItem = styled(BoardItem)`
@@ -31,7 +35,11 @@ const HeartItem = styled(BoardItem)`
     color: ${primary.primary500};
     font-size: ${dtFontSize.xlarge};
     font-weight: 700;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.xlarge};
+    }
   }
 `;
 
@@ -45,6 +53,10 @@ const AnswerWrapper = styled.div`
     font-weight: 700;
     color: ${primary.primary500};
     margin-bottom: 30px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+    }
   }
   .answerInputDiv {
     height: 65px;
@@ -68,8 +80,8 @@ const AnswerCreateButton = styled(OKButton)`
   width: 100px;
   height: 40px;
 
-  & :hover {
-    background-color: ${sub.sub500};
+  &:hover {
+    background-color: ${secondary.secondary500};
   }
 `;
 
@@ -86,12 +98,16 @@ const AnswerListWrapper = styled.div`
 
 const AnswerListUserDiv = styled.div`
   display: flex;
-  align-items: center;
   justify-content: left;
-  margin-bottom: 15px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid ${sub.sub200};
 `;
 
 const AnswerListImageDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
   .userImage {
     width: 70px;
     border-radius: 50%;
@@ -102,6 +118,7 @@ const AnswerListInfoDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding-left: 15px;
 
   .answerListUserName {
     background-color: white;
@@ -110,7 +127,9 @@ const AnswerListInfoDiv = styled.div`
     color: ${primary.primary400};
     font-size: ${dtFontSize.medium};
     font-weight: 500;
-    padding-left: 15px;
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
   .answerListCreateDate {
     background-color: white;
@@ -119,24 +138,29 @@ const AnswerListInfoDiv = styled.div`
     color: ${sub.sub300};
     font-size: ${dtFontSize.small};
     font-weight: 300;
-    padding-left: 15px;
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
+    }
   }
 `;
 
 const AnswerListContentDiv = styled.div`
   text-align: left;
   background-color: white;
-  border-bottom: 2px solid ${sub.sub300};
   padding-bottom: 5px;
   font-size: ${dtFontSize.medium};
   color: ${sub.sub800};
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${mbFontSize.medium};
+  }
 `;
 
 const AnswerListFunctionDiv = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   .heartDiv {
     display: flex;
@@ -164,8 +188,8 @@ const AnswerListFunctionDiv = styled.div`
     }
   }
 
-  .udDiv {
-    .udButton {
+  .edDiv {
+    .edButton {
       cursor: pointer;
       width: 40px;
       height: 20px;
@@ -177,7 +201,23 @@ const AnswerListFunctionDiv = styled.div`
   }
 `;
 
-const Post = () => {
+const EditDeleteDiv = styled.div`
+  display: flex;
+  justify-content: right;
+  margin-top: 3px;
+  .edButton {
+    cursor: pointer;
+    width: 40px;
+    height: 20px;
+    border: none;
+    background-color: white;
+    color: ${sub.sub400};
+    margin-right: 5px;
+  }
+`;
+
+const Board = () => {
+  const navigate = useNavigate();
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -185,17 +225,26 @@ const Post = () => {
         <div className="title">글 제목(ex 난 누구인가 여긴 어디인가)</div>
         <div className="titleInfo">작성날짜,작성자</div>
         <div className="lineDiv"></div>
-        <QuillViewDiv>
-          <EditorView></EditorView>
-        </QuillViewDiv>
+        <QuillViewDiv>본문 내용 입니다.</QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton">
-              <img width={50} src={heart} alt="heart"></img>
+              <img width={45} src={heart} alt="heart"></img>
             </button>
             <div className="heartCount">157</div>
           </div>
         </HeartItem>
+        <EditDeleteDiv>
+          <button
+            className="edButton"
+            onClick={() => {
+              navigate("/board/1/edit");
+            }}
+          >
+            수정
+          </button>
+          <button className="edButton">삭제</button>
+        </EditDeleteDiv>
         <form>
           <AnswerWrapper>
             <div className="answerCount">156개의 댓글</div>
@@ -224,22 +273,21 @@ const Post = () => {
                     <div className="answerListCreateDate">
                       {new Date(it.createAt).toLocaleString()}
                     </div>
+                    <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
+                    <AnswerListFunctionDiv>
+                      <div className="heartDiv">
+                        <button className="heartButton">
+                          <img className="heartImage" src={heart} alt="하트" />
+                        </button>
+                        <span className="heartCount">{it.likeCount}</span>
+                      </div>
+                      <div className="edDiv">
+                        <button className="edButton">수정</button>
+                        <button className="edButton">삭제</button>
+                      </div>
+                    </AnswerListFunctionDiv>
                   </AnswerListInfoDiv>
                 </AnswerListUserDiv>
-                <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
-                <AnswerListFunctionDiv>
-                  <div className="heartDiv">
-                    <button className="heartButton">
-                      <img className="heartImage" src={heart} alt="하트" />
-                    </button>
-
-                    <span className="heartCount">{it.likeCunt}</span>
-                  </div>
-                  <div className="udDiv">
-                    <button className="udButton">수정</button>
-                    <button className="udButton">삭제</button>
-                  </div>
-                </AnswerListFunctionDiv>
               </li>
             </ul>
           ))}
@@ -249,4 +297,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Board;

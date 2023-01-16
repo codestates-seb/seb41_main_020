@@ -1,10 +1,7 @@
 package codestates.frogroup.indiego.domain.member.entity;
 
 import codestates.frogroup.indiego.domain.show.entity.Show;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class MemberBookMark {
 
     @Id

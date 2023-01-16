@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { primary, sub, dtFontSize } from "../styles/mixins";
+import { primary, sub, dtFontSize } from "../../../styles/mixins";
 
 const OKButton = styled.button`
   background-color: ${primary.primary200};

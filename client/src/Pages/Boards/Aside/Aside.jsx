@@ -85,6 +85,13 @@ const Aside = () => {
           홍보게시판
         </Link>
         <br />
+        <Link
+          className={pathname === "/board/review" ? "thisLinkNav" : "linkNav"}
+          to="/board/review"
+        >
+          후기게시판
+        </Link>
+        <br />
       </SideList>
     </Side>
   );

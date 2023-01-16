@@ -1,10 +1,11 @@
 package codestates.frogroup.indiego.domain.show.controller;
 
+import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
-import codestates.frogroup.indiego.domain.show.mapper.ShowReservationMapperImpl;
+import codestates.frogroup.indiego.domain.show.mapper.ShowReservationMapper;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowReservationRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowReservationService;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -29,32 +32,38 @@ import java.util.List;
 public class ShowReservationController {
     private final ShowReservationRepository showReservationRepository;
 
-    private final ShowReservationMapperImpl mapper;
+    private final ShowReservationMapper mapper;
     private final ShowReservationService showReservationService;
     private final ShowService showService;
+
+
     @PostMapping("/{show-id}")
     public ResponseEntity postReservation(@Valid @RequestBody ShowReservationDto.Post post,
                                           @PathVariable("show-id") long showId){
         Show show = showService.findShow(showId);
-        ShowReservation showReservation = mapper.showReservationPostToShowReservation(post);
+        Member member = showReservationService.getCurrentMember();
+
+        //ToDo 리팩토링
+        ShowReservation showReservation = new ShowReservation();
+        showReservation.setDate(post.getDate());
+        showReservation.setMember(member);
         showReservation.setShow(show);
+        showReservation.setTicketCount(post.getTicketCount());
         ShowReservation created = showReservationService.createReservation(showReservation);
+
+        ShowReservationDto.Response response = mapper.showReservationToShowReservationResponse(created);
+        response.setExpired(isExpired(post.getDate()));
         return new ResponseEntity<>(
-                mapper.showToShowReservationResponse(created), HttpStatus.CREATED
+                response
+                , HttpStatus.CREATED
         );
     }
 
-//    @PatchMapping
-//    public ResponseEntity patchReservation(@Valid @RequestBody ShowReservationDto.Post post,
-//                                          @PathVariable("show-id") long showId){
-//        Show show = showService.findShow(showId);
-//        ShowReservation showReservation = mapper.show(post);
-//        showReservation.setShow(show);
-//        ShowReservation created = showReservationService.createReservation(showReservation);
-//        return new ResponseEntity<>(
-//                stubData.getPatchShowReservationResponse(), HttpStatus.OK
-//        );
-//    }
+    public boolean isExpired(LocalDate date){
+        LocalDate now = LocalDate.now();
+        return now.isAfter(date);
+    }
+
 
     @DeleteMapping("/{reservation-id}")
     public ResponseEntity deleteReservation(@PathVariable("reservation-id") long reservationId){
@@ -68,9 +77,19 @@ public class ShowReservationController {
     @GetMapping
     public ResponseEntity getShows(){
         java.util.List<ShowReservation> showReservationList =showReservationRepository.findAll();
+        List<ShowReservationDto.Response> responses = mapper.showsReservationsToShowResvationResponses(showReservationList);
         return new ResponseEntity(
-                new SingleResponseDto<>(mapper.showsReservationsToShowResvationResponses(showReservationList)),
+                new SingleResponseDto<>(setExpireds(showReservationList, responses)),
                 HttpStatus.OK);
 
+    }
+
+    private List<ShowReservationDto.Response> setExpireds(List<ShowReservation> showReservationList, List<ShowReservationDto.Response> responses) {
+        for(int i = 0; i< responses.size(); i++){
+            responses.get(i)
+                    .setExpired(isExpired(
+                            showReservationList.get(i).getDate()));
+        }
+        return responses;
     }
 }
