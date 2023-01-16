@@ -107,6 +107,28 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount); // 최적화
     }
 
+    @Override
+    public List<ArticleListResponseDto> findLikeCountDesc(String category) {
+
+        return queryFactory
+                .select(new QArticleListResponseDto(
+                        article.id,
+                        article.member.profile.nickname,
+                        article.board.title,
+                        article.board.content,
+                        article.board.category,
+                        article.board.image,
+                        article.likeCount,
+                        article.createdAt))
+                .from(article)
+                .where(article.board.category.eq(category))
+                .orderBy(article.likeCount.desc())
+                .offset(0)
+                .limit(5)
+                .fetch();
+
+    }
+
     private OrderSpecifier<?> sortStatusEq(String status) {
 
         if (Objects.isNull(status) || status.equals("최신순")) {

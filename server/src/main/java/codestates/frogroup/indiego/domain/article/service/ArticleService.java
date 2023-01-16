@@ -15,10 +15,12 @@ import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -75,11 +77,22 @@ public class ArticleService {
      */
     public Page<ArticleListResponseDto> findArticles(String category, String search, String status, Pageable pageable) {
 
+        pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+
         if (Objects.isNull(category) && Objects.isNull(search)) {
             return articleRepository.findAllBasic(status, pageable);
         }
 
         return articleRepository.findAllSearch(category, search, status, pageable);
+    }
+
+    public List<ArticleListResponseDto> findPopularArticles(String category) {
+
+        if (Objects.isNull(category)) {
+            throw new BusinessLogicException(ExceptionCode.ARTICLE_GET_BAD_REQUEST);
+        }
+
+        return articleRepository.findLikeCountDesc(category);
     }
 
     /**
