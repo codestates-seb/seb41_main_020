@@ -1,8 +1,7 @@
 package codestates.frogroup.indiego.domain.article.controller;
 
-import codestates.frogroup.indiego.domain.article.entity.dto.ArticleCommentDto;
+import codestates.frogroup.indiego.domain.article.dto.ArticleCommentDto;
 import codestates.frogroup.indiego.domain.article.service.ArticleCommentService;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,6 @@ import javax.validation.Valid;
 public class ArticleCommentController {
 
     private final ArticleCommentService articleCommentService;
-    // TODO: 임시용 추후 삭제
-    private final MemberRepository memberRepository;
 
     /**
      * 댓글 작성
