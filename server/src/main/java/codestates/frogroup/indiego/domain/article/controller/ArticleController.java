@@ -69,10 +69,11 @@ public class ArticleController {
     @GetMapping
     public ResponseEntity getArticles(@RequestParam(required = false) String category,
                                       @RequestParam(required = false) String search,
+                                      @RequestParam(required = false) String status,
                                       @PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable) {
 
         log.info("conditionIsNull?={}", Objects.isNull(category));
-        Page<ArticleListResponseDto> responses = articleService.findArticles(category, search, pageable);
+        Page<ArticleListResponseDto> responses = articleService.findArticles(category, search, status, pageable);
 
         return new ResponseEntity<>(new MultiResponseDto<>(responses.getContent(), responses), HttpStatus.OK);
     }
