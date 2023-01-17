@@ -5,6 +5,7 @@ import codestates.frogroup.indiego.domain.article.repository.ArticleRepository;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 //테스트해보고 페이지네이션 마저 작성
 @Slf4j
@@ -26,6 +28,7 @@ public class ShowService {
     private final ShowRepository showRepository;
     private final MemberRepository memberRepository;
     private final CustomBeanUtils<Show> utils;
+
 
 
     @Transactional
@@ -65,10 +68,13 @@ public class ShowService {
         return findVerifiedShow(showId);
     }
 
-    public Page<Article> findShows(Pageable pageable) {
-        return null;
-    }
+    public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
+                                               LocalDate start, LocalDate end, Pageable pageable){
 
+        pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+
+        return showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
+    }
     private Show findVerifiedShow(Long id) {
         Optional<Show> optionalShow = showRepository.findById(id);
 
