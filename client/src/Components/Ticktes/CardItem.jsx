@@ -12,7 +12,7 @@ const CardItemContainer = styled.div`
   background-color: ${sub.sub200};
   border-radius: 20px;
   position: relative;
-  padding: 10px;
+  padding: 15px 10px;
   transition: all 0.1s ease-in-out;
 
   a {

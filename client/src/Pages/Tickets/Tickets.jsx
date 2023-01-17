@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import SearchBar from "../../Components/Main/SearchBar.jsx";
 import Button from "../../Components/Main/Button.jsx";
 import ItemList from "../../Components/Ticktes/ItemList.jsx";
 
 import breakpoint from "../../styles/breakpoint";
-import { primary, sub, dtFontSize, mbFontSize } from "../../styles/mixins";
+import {
+  primary,
+  sub,
+  dtFontSize,
+  mbFontSize,
+  secondary,
+} from "../../styles/mixins";
 import { dummyArr } from "../../DummyData/mainDummy.js";
+import "../../styles/ReactDatePicker.css";
 
 import styled from "styled-components";
+import DatePicker from "react-datepicker";
+import { ko } from "date-fns/esm/locale";
 
 const Container = styled.div`
   align-items: center;
@@ -90,19 +99,16 @@ const SearchBarContainer = styled.div`
 const SearchBarMainContainer = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    flex-direction: column;
-  }
 `;
 
 const SearchBarExtended = styled(SearchBar)`
-  width: 60%;
+  width: 100%;
   justify-content: flex-start;
   padding: 0 10px;
   margin-top: 10px;
+  max-width: 700px;
 
   .input_container {
     width: 80%;
@@ -114,7 +120,7 @@ const SearchBarExtended = styled(SearchBar)`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     display: flex;
-    width: 85%;
+    width: 90%;
   }
 `;
 
@@ -122,6 +128,10 @@ const ButtonExtended = styled(Button)`
   width: max-content;
   min-width: 120px;
   height: max-content;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-left: 0;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -138,12 +148,17 @@ const ItemListContainer = styled.div`
 
 const SelectorContainer = styled.div`
   display: flex;
-  margin-left: 50px;
+  margin-left: 40px;
+  align-items: center;
+  justify-content: center;
 
   .selector_group {
-    width: max-content;
+    display: flex;
     height: max-content;
-    margin-right: 10px;
+    align-items: center;
+    width: max-content;
+    height: 100%;
+    margin-left: 10px;
   }
 
   label {
@@ -162,13 +177,89 @@ const SelectorContainer = styled.div`
     }
   }
 
+  .mobile_top_selector_group {
+    display: flex;
+    align-items: center;
+  }
+
+  .dash {
+    margin: 0 5px;
+  }
+
   @media screen and (max-width: ${breakpoint.mobile}) {
-    justify-content: center;
-    margin-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
+const StyledDatePicker = styled(DatePicker)`
+  width: 80px;
+  border-radius: 20px;
+  background-color: transparent;
+  border: none;
+  font-weight: 600;
+  color: white;
+  margin-left: 3px;
+
+  :focus-within {
+    outline: none;
+  }
+`;
+
+const DatePickerContainer = styled.div`
+  width: max-content;
+  height: 30px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: 0 5px;
+  background-color: ${primary.primary300};
+
+  svg {
+    margin: 0 5px;
+
+    path {
+      fill: white;
+    }
+  }
+
+  :focus-within {
+    outline: 1px solid ${primary.primary300};
+    background-color: ${secondary.secondary400};
+  }
+
+  :hover {
+    background-color: ${secondary.secondary400};
+  }
+`;
+
+const SelectDateContainer = styled.div`
+  display: flex;
+  width: max-content;
+  height: max-content;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  width: max-content;
+  height: max-content;
+`;
+
 export default function Tickets() {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  useEffect(() => {
+    if (endDate < startDate) {
+      window.alert("시작 날짜보다 이전 날짜를 선택할 수 없습니다.");
+      setStartDate(new Date());
+      setEndDate(new Date());
+    }
+  }, [endDate]);
+
   return (
     <Container>
       <ContentHeaderContainer>
@@ -180,23 +271,77 @@ export default function Tickets() {
       <ContentContainer>
         <SearchBarContainer>
           <SelectorContainer>
-            <div className="selector_group">
-              <label htmlFor="all">전체</label>
-              <input id="all" name="category" type="radio" value="전체" />
-            </div>
-            <div className="selector_group">
-              <label htmlFor="music">음악</label>
-              <input id="music" name="category" type="radio" value="음악" />
-            </div>
-            <div className="selector_group">
-              <label htmlFor="play">공연</label>
-              <input id="play" name="category" type="radio" value="연극" />
+            <SelectDateContainer>
+              <DatePickerContainer>
+                {/* calander 아이콘 */}
+                <svg
+                  width={15}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path d="M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z" />
+                </svg>
+                <StyledDatePicker
+                  selected={startDate}
+                  onChange={(startDate) => {
+                    setStartDate(startDate);
+                  }}
+                  dateFormat="yyyy-MM-dd"
+                  locale={ko}
+                />
+              </DatePickerContainer>
+              <svg className="dash" width={10} viewBox="0 0 448 512">
+                <path
+                  fill={primary.primary300}
+                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
+                />
+              </svg>
+              <DatePickerContainer>
+                {/* calander 아이콘 */}
+                <svg
+                  width={15}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path d="M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z" />
+                </svg>
+                <StyledDatePicker
+                  selected={endDate}
+                  onChange={(endDate) => {
+                    setEndDate(endDate);
+                  }}
+                  dateFormat="yyyy-MM-dd"
+                  locale={ko}
+                />
+              </DatePickerContainer>
+            </SelectDateContainer>
+            <div className="mobile_top_selector_group">
+              <ButtonExtended>종로구</ButtonExtended>
+              <RadioGroup>
+                <div className="selector_group">
+                  <label htmlFor="all">전체</label>
+                  <input
+                    checked
+                    id="all"
+                    name="category"
+                    type="radio"
+                    value="전체"
+                  />
+                </div>
+                <div className="selector_group">
+                  <label htmlFor="music">음악</label>
+                  <input id="music" name="category" type="radio" value="음악" />
+                </div>
+                <div className="selector_group">
+                  <label htmlFor="play">연극</label>
+                  <input id="play" name="category" type="radio" value="연극" />
+                </div>
+              </RadioGroup>
             </div>
           </SelectorContainer>
           <SearchBarMainContainer>
             <ButtonContainer>
-              <ButtonExtended>종로구</ButtonExtended>
-              <ButtonExtended>2022.12.24 ~ 2022.12.25</ButtonExtended>
+              {/* <ButtonExtended>2022.12.24 ~ 2022.12.25</ButtonExtended> */}
             </ButtonContainer>
             <SearchBarExtended></SearchBarExtended>
           </SearchBarMainContainer>
