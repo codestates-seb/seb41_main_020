@@ -347,7 +347,6 @@ const NavbarLinkerContainer = styled.div`
 
 export default function Header() {
   const location = useLocation();
-  console.log(location.pathname);
   const [navOpen, setNavOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   useWindowSize(setNavOpen);
@@ -368,25 +367,25 @@ export default function Header() {
       </LogoContainer>
       <HeaderLinkContainer>
         <Link
-          className={location.pathname.includes("tickets") && "currrent"}
+          className={location.pathname.includes("tickets") ? "current" : ""}
           to="tickets"
         >
           티켓팅
         </Link>
         <Link
-          className={location.pathname.includes("board") && "current"}
+          className={location.pathname.includes("board") ? "current" : ""}
           to="board"
         >
           커뮤니티
         </Link>
         <Link
-          className={location.pathname.includes("search") && "current"}
+          className={location.pathname.includes("search") ? "current" : ""}
           to="search"
         >
           공연찾기
         </Link>
         <Link
-          className={location.pathname.includes("user") && "current"}
+          className={location.pathname.includes("user") ? "current" : ""}
           to="user/:id"
         >
           마이페이지
@@ -491,19 +490,23 @@ export default function Header() {
                 </>
               )}
               <Link
-                className={location.pathname.includes("tickets") && "current"}
+                className={
+                  location.pathname.includes("tickets") ? "current" : ""
+                }
                 to="/tickets"
               >
                 티켓팅
               </Link>
               <Link
-                className={location.pathname.includes("board") && "current"}
+                className={location.pathname.includes("board") ? "current" : ""}
                 to="/board"
               >
                 커뮤니티
               </Link>
               <Link
-                className={location.pathname.includes("search") && "current"}
+                className={
+                  location.pathname.includes("search") ? "current" : ""
+                }
                 to="search"
               >
                 공연찾기

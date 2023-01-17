@@ -87,7 +87,7 @@ const OptionsList = styled.div`
     font-weight: 500;
     color: white;
     margin-top: 6.5px;
-    padding: 3px 20%;
+    padding: 3px 10%;
     text-align: center;
 
     &:hover {

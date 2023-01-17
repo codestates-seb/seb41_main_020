@@ -81,9 +81,17 @@ const SearchBarContainer = styled.div`
   width: 100%;
   height: max-content;
   display: flex;
+  flex-direction: column;
+  align-items: space-evenly;
+  justify-content: center;
+  margin-bottom: 50px;
+`;
+
+const SearchBarMainContainer = styled.div`
+  display: flex;
+  width: 100%;
   justify-content: space-evenly;
   align-items: center;
-  margin-bottom: 50px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: column;
@@ -94,6 +102,7 @@ const SearchBarExtended = styled(SearchBar)`
   width: 60%;
   justify-content: flex-start;
   padding: 0 10px;
+  margin-top: 10px;
 
   .input_container {
     width: 80%;
@@ -124,6 +133,39 @@ const ItemListContainer = styled.div`
   height: 100%;
   display: flex;
   margin-top: 50px;
+  justify-content: center;
+`;
+
+const SelectorContainer = styled.div`
+  display: flex;
+  margin-left: 50px;
+
+  .selector_group {
+    width: max-content;
+    height: max-content;
+    margin-right: 10px;
+  }
+
+  label {
+    margin-right: 5px;
+    font-weight: 600;
+    color: ${primary.primary500};
+
+    :hover {
+      cursor: pointer;
+    }
+  }
+
+  input {
+    :hover {
+      cursor: pointer;
+    }
+  }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    justify-content: center;
+    margin-left: 0;
+  }
 `;
 
 export default function Tickets() {
@@ -137,11 +179,27 @@ export default function Tickets() {
       </ContentHeaderContainer>
       <ContentContainer>
         <SearchBarContainer>
-          <ButtonContainer>
-            <ButtonExtended>종로구</ButtonExtended>
-            <ButtonExtended>2022.12.24 ~ 2022.12.25</ButtonExtended>
-          </ButtonContainer>
-          <SearchBarExtended></SearchBarExtended>
+          <SelectorContainer>
+            <div className="selector_group">
+              <label htmlFor="all">전체</label>
+              <input id="all" name="category" type="radio" value="전체" />
+            </div>
+            <div className="selector_group">
+              <label htmlFor="music">음악</label>
+              <input id="music" name="category" type="radio" value="음악" />
+            </div>
+            <div className="selector_group">
+              <label htmlFor="play">공연</label>
+              <input id="play" name="category" type="radio" value="연극" />
+            </div>
+          </SelectorContainer>
+          <SearchBarMainContainer>
+            <ButtonContainer>
+              <ButtonExtended>종로구</ButtonExtended>
+              <ButtonExtended>2022.12.24 ~ 2022.12.25</ButtonExtended>
+            </ButtonContainer>
+            <SearchBarExtended></SearchBarExtended>
+          </SearchBarMainContainer>
         </SearchBarContainer>
         <ItemListContainer>
           <ItemList data={dummyArr} />
