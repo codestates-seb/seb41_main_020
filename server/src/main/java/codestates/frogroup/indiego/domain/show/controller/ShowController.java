@@ -19,9 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -105,5 +105,23 @@ public class ShowController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/marker")
+    public ResponseEntity getMonthMarker(@Positive @RequestParam("year") Integer year,
+                                         @Positive @RequestParam("month") Integer month){
+
+        Map<String, String> markerShows = showService.findMarkerShows(year, month);
+
+        return new ResponseEntity(new SingleResponseDto<>(markerShows), HttpStatus.OK);
+    }
+
+    @GetMapping("/dates")
+    public ResponseEntity getCalendarList(@Positive @RequestParam("year") Integer year,
+                                          @Positive @RequestParam("month") Integer month,
+                                          @Positive @RequestParam("day") Integer day){
+        List<Show> shows = showService.findCalendarShows(year, month, day);
+        List<ShowDto.ShowsResponse> showsResponses = mapper.showsToShowsResponse(shows);
+
+        return new ResponseEntity(new SingleResponseDto<>(showsResponses), HttpStatus.OK);
+    }
 
 }
