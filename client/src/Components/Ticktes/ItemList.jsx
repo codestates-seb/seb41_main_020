@@ -6,7 +6,7 @@ import CardItem from "./CardItem.jsx";
 import breakpoint from "../../styles/breakpoint.js";
 
 const ItemGrid = styled.div`
-  width: 100%;
+  width: 90%;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -62,203 +62,203 @@ const MapContainer = styled.div`
 
     #Dobong-gu:hover ~ .dobong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Dobong-gu:focus ~ .dobong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Nowon-gu:hover ~ .nowon {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Nowon-gu:focus ~ .nowon {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangbuk-gu:focus ~ .gangbuk {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangbuk-gu:hover ~ .gangbuk {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Jungnang-gu:focus ~ .jungnang {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Jungnang-gu:hover ~ .jungnang {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seongbuk-gu:focus ~ .seongbuk {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seongbuk-gu:hover ~ .seongbuk {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Dongdaemun-gu:focus ~ .dongdaemun {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Dongdaemun-gu:hover ~ .dongdaemun {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gwangjin-gu:focus ~ .gwangjin {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gwangjin-gu:hover ~ .gwangjin {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Jung-gu:focus ~ .junggu {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Jung-gu:hover ~ .junggu {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seongdong-gu:focus ~ .seongdong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seongdong-gu:hover ~ .seongdong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Jongno-gu:focus ~ .jongno {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Jongno-gu:hover ~ .jongno {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Yongsan-gu:focus ~ .yongsan {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Yongsan-gu:hover ~ .yongsan {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Eunpyeong-gu:focus ~ .eunpyeong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Eunpyeong-gu:hover ~ .eunpyeong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seodaemun-gu:focus ~ .seodaemun {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seodaemun-gu:hover ~ .seodaemun {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Mapo-gu:focus ~ .mapo {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Mapo-gu:hover ~ .mapo {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangseo-gu:focus ~ .gangseo {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangseo-gu:hover ~ .gangseo {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Yangcheon-gu:focus ~ .yangcheon {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Yangcheon-gu:hover ~ .yangcheon {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Guro-gu:focus ~ .guro {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Guro-gu:hover ~ .guro {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Yeongdeungpo-gu:focus ~ .yeongdeungpo {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Yeongdeungpo-gu:hover ~ .yeongdeungpo {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Dongjak-gu:focus ~ .dongjak {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Dongjak-gu:hover ~ .dongjak {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Geumcheon-gu:focus ~ .geumcheon {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Geumcheon-gu:hover ~ .geumcheon {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gwanak-gu:focus ~ .gwanak {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gwanak-gu:hover ~ .gwanak {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seocho-gu:focus ~ .seocho {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Seocho-gu:hover ~ .seocho {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangnam-gu:focus ~ .gangnam {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangnam-gu:hover ~ .gangnam {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Songpa-gu:focus ~ .songpa {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Songpa-gu:hover ~ .songpa {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangdong-gu:focus ~ .gangdong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
     #Gangdong-gu:hover ~ .gangdong {
       fill: white;
-      transform: translate(0, -30px);
+      transform: translate(0, -10px);
     }
   }
 
@@ -363,7 +363,7 @@ export default function LocationPopup({ popupHandler }) {
     <PopupContainer>
       <h1>지역별 공연 현황</h1>
       <ContentsContainer>
-        <MapContainer>
+        <MapContainer clickHandler={locationClickHandler}>
           {/* 서울지도svg */}
           <svg
             version="1.1"
