@@ -1,6 +1,5 @@
 package codestates.frogroup.indiego.domain.show.controller;
 
-import codestates.frogroup.indiego.domain.member.entity.MemberBookMark;
 import codestates.frogroup.indiego.domain.show.service.MemberBookMarkService;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/shows")

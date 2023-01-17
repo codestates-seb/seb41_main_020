@@ -1,16 +1,10 @@
 package codestates.frogroup.indiego.domain.show.mapper;
 
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
-import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
-import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
-import codestates.frogroup.indiego.domain.show.service.ShowService;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

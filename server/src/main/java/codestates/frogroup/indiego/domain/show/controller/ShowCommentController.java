@@ -1,16 +1,11 @@
 package codestates.frogroup.indiego.domain.show.controller;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowCommentDto;
-import codestates.frogroup.indiego.domain.show.dto.ShowDto;
-import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import codestates.frogroup.indiego.domain.show.mapper.ShowCommentMapper;
-import codestates.frogroup.indiego.domain.show.repository.ShowCommentRepository;
-import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowCommentService;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
@@ -71,7 +66,7 @@ public class ShowCommentController {
         Show show = showService.findShow(showId);
         showCommentService.deleteShowComment(commentId,memberId,show);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new SingleResponseDto<>("공연 후기가 삭제되었습니다"),HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("{show-id}/comments")

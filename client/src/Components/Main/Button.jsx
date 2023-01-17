@@ -21,13 +21,13 @@ const StyledButton = styled.button`
   }
 `;
 
-export default function Button({ children, clickEvent, className }) {
+export default function Button({ children, clickEvent, className, ref }) {
   const buttonClickHandler = (e) => {
     clickEvent();
   };
 
   return (
-    <StyledButton onClick={buttonClickHandler} className={className}>
+    <StyledButton ref={ref} onClick={buttonClickHandler} className={className}>
       {children}
     </StyledButton>
   );

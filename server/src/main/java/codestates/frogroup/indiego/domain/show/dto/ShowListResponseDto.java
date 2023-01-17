@@ -3,7 +3,6 @@ package codestates.frogroup.indiego.domain.show.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
