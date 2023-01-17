@@ -46,6 +46,8 @@ public class ShowDto {
         private LocalDate expiredAt; // 만료날짜
         @NotNull
         private LocalDate showAt; // 공연날짜
+        @NotNull
+        private String showTime;
         private String detailImage;
         //showboard end
         @NotNull
@@ -80,6 +82,7 @@ public class ShowDto {
         private String detailAddress;
         private LocalDate expiredAt; // 만료날짜
         private LocalDate showAt; // 공연날짜
+        private String showTime;
         private String detailImage;
         //showboard end
         private Double latitude;
@@ -109,6 +112,7 @@ public class ShowDto {
         private String detailAddress;
         private LocalDate expiredAt; // 만료날짜
         private LocalDate showAt; // 공연날짜
+        private String showTime;
         private String detailImage;
         //showboard end
         private Double latitude;
@@ -138,6 +142,7 @@ public class ShowDto {
         private String detailAddress;
         private LocalDate expiredAt; // 만료날짜
         private LocalDate showAt; // 공연날짜
+        private String showTime;
         private String detailImage;
         //showboard end
         private Double latitude;
