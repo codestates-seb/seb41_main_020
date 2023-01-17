@@ -169,14 +169,20 @@ public class ShowDto {
     @AllArgsConstructor
     public static class ShowsResponse {
         private Long id;
+        private String nickname;
         private String title;
+        private String content;
+        private String image;
         private String expiredAt;
         private String showAt;
 
         @Builder
-        ShowsResponse(Long id, ShowBoard showBoard){
+        ShowsResponse(Long id, ShowBoard showBoard, Member member){
             this.id = id;
+            this.nickname = member.getProfile().getNickname();
             this.title = showBoard.getBoard().getTitle();
+            this.content = showBoard.getBoard().getContent();
+            this.image = showBoard.getBoard().getImage();
             this.expiredAt = showBoard.getExpiredAt().toString();
             this.showAt = showBoard.getShowAt().toString();
         }

@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 //테스트해보고 페이지네이션 마저 작성
 @Slf4j
 @Service
@@ -81,13 +82,20 @@ public class ShowService {
 
     public Map<String, String> findMarkerShows(Integer year, Integer month){
 
-        Map<String, String> map = new HashMap<>();
-
         Integer day = getCalendarTotalDay(year, month);
-
-        LocalDate startTime = LocalDate.of(year, month, day);
+        LocalDate startTime = LocalDate.of(year, month, 1);
         LocalDate endTime = LocalDate.of(year, month, day);
 
+        List<Show> shows = showRepository.findAllByShowBoardShowAtBetweenAndStatus(startTime, endTime, ShowStatus.SALE,
+                Sort.by(Sort.Order.desc("showBoard.showAt")));
+        findVerifiedShows(shows);
+
+        Map<String, String> map = new LinkedHashMap<>();
+        for (int i=shows.size()-1; i>=0; i--){
+            String showAt = shows.get(i).getShowBoard().getShowAt().toString();
+            String key = showAt.substring(showAt.length() - 2);
+            map.put(key,"true");
+        }
         return map;
     }
 
@@ -135,6 +143,20 @@ public class ShowService {
     }
 
     private Integer getCalendarTotalDay(Integer year, Integer month){
-        return 1;
+
+        Integer day = null;
+
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+            day = 31;
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+            day = 30;
+        } else {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                day = 29;
+            } else {
+                day = 28;
+            }
+        }
+        return day;
     }
 }
