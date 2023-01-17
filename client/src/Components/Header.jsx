@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import Overlay from "./Main/Popups/Overlay.jsx";
 
@@ -94,6 +94,19 @@ const HeaderLinkContainer = styled.div`
       padding: 10px 10px 0 10px;
     }
   }
+
+  .current {
+    background-color: ${primary.primary300};
+    color: white;
+    border-radius: 20px;
+
+    :hover {
+      background-color: ${primary.primary300};
+      color: white;
+      border-radius: 20px;
+    }
+  }
+
   @media screen and (max-width: ${breakpoint.mobile}) {
     display: none;
   }
@@ -307,6 +320,10 @@ const NavbarLinkerContainer = styled.div`
   flex-direction: column;
   margin-top: 50px;
 
+  a.current {
+    color: ${primary.primary200};
+  }
+
   a {
     width: 100%;
     font-size: ${mbFontSize.large};
@@ -329,6 +346,8 @@ const NavbarLinkerContainer = styled.div`
 `;
 
 export default function Header() {
+  const location = useLocation();
+  console.log(location.pathname);
   const [navOpen, setNavOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   useWindowSize(setNavOpen);
@@ -348,10 +367,30 @@ export default function Header() {
         </Link>
       </LogoContainer>
       <HeaderLinkContainer>
-        <Link to="tickets">티켓팅</Link>
-        <Link to="board">커뮤니티</Link>
-        <Link to="search">공연찾기</Link>
-        <Link to="user/:id">마이페이지</Link>
+        <Link
+          className={location.pathname.includes("tickets") && "currrent"}
+          to="tickets"
+        >
+          티켓팅
+        </Link>
+        <Link
+          className={location.pathname.includes("board") && "current"}
+          to="board"
+        >
+          커뮤니티
+        </Link>
+        <Link
+          className={location.pathname.includes("search") && "current"}
+          to="search"
+        >
+          공연찾기
+        </Link>
+        <Link
+          className={location.pathname.includes("user") && "current"}
+          to="user/:id"
+        >
+          마이페이지
+        </Link>
       </HeaderLinkContainer>
       {isLogin ? (
         <UserStatus>
@@ -451,9 +490,24 @@ export default function Header() {
                   <Link to="/signup">회원가입</Link>
                 </>
               )}
-              <Link to="/tickets">티켓팅</Link>
-              <Link to="/board">커뮤니티</Link>
-              <Link to="search">공연찾기</Link>
+              <Link
+                className={location.pathname.includes("tickets") && "current"}
+                to="/tickets"
+              >
+                티켓팅
+              </Link>
+              <Link
+                className={location.pathname.includes("board") && "current"}
+                to="/board"
+              >
+                커뮤니티
+              </Link>
+              <Link
+                className={location.pathname.includes("search") && "current"}
+                to="search"
+              >
+                공연찾기
+              </Link>
             </NavbarLinkerContainer>
           </NavbarContainer>
         </Overlay>
