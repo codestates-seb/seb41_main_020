@@ -42,9 +42,12 @@ function App() {
         <Route path="/signup/performer" element={<SignupPerformer />}></Route>
         <Route path="/login" element={<Login />}></Route>
         {/* 프로파일 */}
-        <Route path="/user/:id" element={<Profile />}></Route>
-        <Route path="/performer/:id" element={<ProfilePerformer />}></Route>
-        <Route path="/user/:id/edit" element={<ProfileEdit />}></Route>
+        <Route path="mypage/user/:id" element={<Profile />}></Route>
+        <Route
+          path="mypage/performer/:id"
+          element={<ProfilePerformer />}
+        ></Route>
+        <Route path="/mypage/:id/edit" element={<ProfileEdit />}></Route>
 
         {/* 티케팅게시판 */}
         <Route path="/tickets" element={<Tickets />}></Route>

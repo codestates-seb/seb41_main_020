@@ -7,7 +7,7 @@ import "./ReactDatePicker.css";
 const ReactDatePicker = ({ setDate }) => {
   const [startDate, setStartDate] = useState(new Date());
   useEffect(() => {
-    setDate(startDate.toLocaleString());
+    setDate(startDate.toISOString().substring(0, 10));
   }, [startDate]);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (

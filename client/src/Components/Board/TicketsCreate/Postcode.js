@@ -20,8 +20,8 @@ export const Postcode = (props) => {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    console.log(fullAddress);
     props.setPlace(fullAddress);
+    props.setGu(fullAddress.split(" ")[1]);
   };
 
   const handleClick = () => {

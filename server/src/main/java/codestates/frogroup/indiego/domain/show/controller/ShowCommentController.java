@@ -16,9 +16,7 @@ import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
-import codestates.frogroup.indiego.global.stub.StubData;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.common.util.impl.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +71,7 @@ public class ShowCommentController {
         Show show = showService.findShow(showId);
         showCommentService.deleteShowComment(commentId,memberId,show);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new SingleResponseDto<>("공연 후기가 삭제되었습니다"),HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("{show-id}/comments")

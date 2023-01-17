@@ -25,8 +25,8 @@ public class AwsS3Service implements ImageUploadService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
 
-	public String StoreImage(MultipartFile file) {
-
+	public String StoreImage(MultipartFile file, AwsS3Path awsS3Path) {
+		;
 		if (file.isEmpty()) {
 			throw new BusinessLogicException(ExceptionCode.UPLOAD_FAILED);
 		}
@@ -38,7 +38,7 @@ public class AwsS3Service implements ImageUploadService {
 		log.info("# storeFileName = {}", storeFileName);
 
 		try (InputStream inputStream = file.getInputStream()) {
-			amazonS3.putObject(new PutObjectRequest(bucketName, storeFileName, inputStream, null)
+			amazonS3.putObject(new PutObjectRequest(bucketName + awsS3Path.getPath(), storeFileName, inputStream, null)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 		} catch (IOException e) {
 			throw new BusinessLogicException(ExceptionCode.UPLOAD_FAILED);

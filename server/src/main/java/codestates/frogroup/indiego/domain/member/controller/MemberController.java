@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.domain.member.dto.MemberDto;
 import codestates.frogroup.indiego.domain.member.mapper.MemberMapper;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
 import codestates.frogroup.indiego.global.fileupload.ImageUploadService;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class MemberController {
                                              @LoginMemberId Long loginMemberId){
 
         memberService.verifiedMemberId(memberId, loginMemberId);
-        String url = awsS3Service.StoreImage(file);
+        String url = awsS3Service.StoreImage(file, AwsS3Path.PROFILEIMAGE);
         return new ResponseEntity<>(new SingleResponseDto<>(url), HttpStatus.CREATED);
     }
 

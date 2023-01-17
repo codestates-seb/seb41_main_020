@@ -5,18 +5,29 @@ import codestates.frogroup.indiego.domain.article.repository.ArticleRepository;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
+import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.*;
+
 //테스트해보고 페이지네이션 마저 작성
 @Slf4j
 @Service
@@ -26,6 +37,7 @@ public class ShowService {
     private final ShowRepository showRepository;
     private final MemberRepository memberRepository;
     private final CustomBeanUtils<Show> utils;
+
 
 
     @Transactional
@@ -61,12 +73,63 @@ public class ShowService {
 
     }
 
+    public List<Show> findShows(String address){
+        List<Show> shows = showRepository.findByShowBoardAddressAndStatus(address, ShowStatus.SALE,
+                Sort.by(Sort.Order.desc("createdAt")));
+        findVerifiedShows(shows);
+        return shows;
+    }
+
+    public Map<String, String> findMarkerShows(Integer year, Integer month){
+
+        Integer day = getCalendarTotalDay(year, month);
+        LocalDate startTime = LocalDate.of(year, month, 1);
+        LocalDate endTime = LocalDate.of(year, month, day);
+
+        List<Show> shows = showRepository.findAllByShowBoardShowAtBetweenAndStatus(startTime, endTime, ShowStatus.SALE,
+                Sort.by(Sort.Order.desc("showBoard.showAt")));
+        findVerifiedShows(shows);
+
+        Map<String, String> map = new LinkedHashMap<>();
+        for (int i=shows.size()-1; i>=0; i--){
+            String showAt = shows.get(i).getShowBoard().getShowAt().toString();
+            String key = showAt.substring(showAt.length() - 2);
+            map.put(key,"true");
+        }
+        return map;
+    }
+
+    public List<Show> findCalendarShows(Integer year, Integer month, Integer day){
+
+        LocalDate startTime = LocalDate.of(year, month, day);
+        LocalDate endTime = LocalDate.of(year, month, day);
+
+        List<Show> shows = showRepository.findAllByShowBoardShowAtBetweenAndStatus(startTime, endTime, ShowStatus.SALE,
+                Sort.by(Sort.Order.desc("createdAt")));
+        findVerifiedShows(shows);
+        return shows;
+    }
+
     public Show findShow(long showId){
         return findVerifiedShow(showId);
     }
 
-    public Page<Article> findShows(Pageable pageable) {
+    public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
+                                               LocalDate start, LocalDate end, Pageable pageable){
+
+        pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+
+        return showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
+    }
+
+    public Page<Article> findShows(Pageable pageables) {
         return null;
+    }
+
+    private void findVerifiedShows(List<Show> shows) {
+        if(shows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
     }
 
     private Show findVerifiedShow(Long id) {
@@ -77,5 +140,23 @@ public class ShowService {
                         new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND));
                 return findShow;
 
+    }
+
+    private Integer getCalendarTotalDay(Integer year, Integer month){
+
+        Integer day = null;
+
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+            day = 31;
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+            day = 30;
+        } else {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                day = 29;
+            } else {
+                day = 28;
+            }
+        }
+        return day;
     }
 }
