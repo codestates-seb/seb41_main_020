@@ -136,12 +136,7 @@ public class ArticleService {
 
         ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
 
-        // TODO: 리팩토링 1개의 메서드는 1개의 기능
-        if (findArticleLike == null) {
-            return createArticleLike(findArticle, findMember);
-        } else {
-            return deleteArticleLike(findArticleLike);
-        }
+        return findArticleLike == null ? createArticleLike(findArticle, findMember) : deleteArticleLike(findArticleLike);
     }
 
     /**
