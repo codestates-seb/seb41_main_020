@@ -34,5 +34,6 @@
     "react/prop-types": "off",
     "no-extra-boolean-cast": "off",
     "import/no-unresolved": "off"
+    "react/display-name": "off"
   }
 }
