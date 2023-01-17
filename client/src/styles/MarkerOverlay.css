@@ -1,0 +1,47 @@
+.marker_container {
+  top: -130px;
+  left: -200px;
+}
+
+
+.marker_box {
+  width:150px;
+  height:max-content; 
+  display:flex; 
+  padding: 10px 8px;
+  border-radius: 20px;
+  flex-direction:column; 
+  align-items:center;
+  justify-content: center;
+  background-color:white;
+  position: absolute;
+  box-shadow: 0 5px 20px black;
+  top: -130px;
+  left: -200px;
+}
+
+.marker_title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 3px;
+} 
+
+.marker_address{
+  font-size: 9px;
+  font-weight: 500;
+  margin-bottom: 3px;
+  overflow-anchor: initial;
+  white-space: normal;
+}
+
+.marker_date {
+  font-size: 10px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.triangle {
+  position: absolute;
+  left: -60px;
+  top: -50px;
+}
