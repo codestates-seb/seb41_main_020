@@ -1,4 +1,4 @@
-import { PageWrapper, ContentWrapper } from "../Boards/Board/BoardList.jsx";
+import { PageWrapper } from "../Boards/Board/BoardList.jsx";
 import {
   PostWrapper,
   PostBoard,
@@ -13,12 +13,14 @@ import {
   misc,
   secondary,
   mbFontSize,
+  primary,
 } from "../../styles/mixins.js";
 import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
 
 const TicketsCreateContentWrapper = styled(PostWrapper)`
   @media screen and (max-width: ${breakpoint.mobile}) {
@@ -27,11 +29,17 @@ const TicketsCreateContentWrapper = styled(PostWrapper)`
 `;
 
 const TicketsBoard = styled(PostBoard)`
-  height: 1450px;
+  height: max-content;
   width: 100%;
+
+  .postDiv {
+    font-size: ${dtFontSize.medium};
+    margin-bottom: 10px;
+  }
 `;
 
 const TicketsCreateInputDiv = styled(TitleInputDiv)`
+  padding-top: 0;
   font-size: ${dtFontSize.medium};
   font-weight: 600;
   .titleInput {
@@ -62,14 +70,36 @@ const TicketsCreateInputDiv = styled(TitleInputDiv)`
 `;
 
 const ChoiceButtonDiv = styled.div`
-  background-color: green;
+  display: flex;
+  flex-direction: column;
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
+
+  .place {
+    background-color: white;
+    width: max-content;
+    height: max-content;
+    border-radius: 10px;
+    padding: 8px;
+    border: 2px solid ${primary.primary400};
+    margin-bottom: 5px;
+  }
+
+  .placeInput {
+    background-color: white;
+    width: 100%;
+    height: max-content;
+    border-radius: 10px;
+    padding: 8px;
+    border: 2px solid ${primary.primary400};
+    margin-bottom: 5px;
+    font-size: ${dtFontSize.medium};
+  }
 `;
 
-const ChoiceButton = styled(OKButton)`
+export const ChoiceButton = styled(OKButton)`
   width: 150px;
-  height: 40px;
+  height: 30px;
 `;
 
 const ButtonDiv = styled.div`
@@ -98,6 +128,23 @@ const CancelButton = styled(PostButton)`
 `;
 export default function TicketsCreate() {
   const [ticketsValue, setTicketsValue] = useState("");
+  const [place, setPlace] = useState("공연장소");
+
+  useEffect(() => {
+    const { kakao } = window;
+    var geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch(
+      place,
+      function (result, status) {
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+          console.log(result[0].x);
+          console.log(result[0].y);
+        }
+      },
+      [place]
+    );
+  });
   return (
     <PageWrapper>
       <TicketsCreateContentWrapper>
@@ -117,12 +164,14 @@ export default function TicketsCreate() {
           <div className="postDiv">공연 포스터</div>
           <div className="postDiv">공연 장소</div>
           <ChoiceButtonDiv>
-            <ChoiceButton>공연 장소 선택하기</ChoiceButton>
+            <div className="place">{place}</div>
+            <input className="placeInput" placeholder="상세 주소 입력" />
+            <Postcode setPlace={setPlace}></Postcode>
           </ChoiceButtonDiv>
 
           <div className="postDiv">공연 기간</div>
           <ChoiceButtonDiv>
-            <ChoiceButton>공연 장소 선택하기</ChoiceButton>
+            <ChoiceButton>공연 기간 선택하기</ChoiceButton>
           </ChoiceButtonDiv>
           <div className="postDiv">공연 좌석 수</div>
           <TicketsCreateInputDiv>
