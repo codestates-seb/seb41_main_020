@@ -5,6 +5,7 @@ export const locationDummyArr = [
     latitude: 37.556,
     longitude: 126.9723,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "용산역",
@@ -12,6 +13,7 @@ export const locationDummyArr = [
     latitude: 37.52985,
     longitude: 126.96481,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "구로역",
@@ -19,6 +21,7 @@ export const locationDummyArr = [
     latitude: 37.503408,
     longitude: 126.88391,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "강남역",
@@ -26,6 +29,7 @@ export const locationDummyArr = [
     latitude: 37.398132,
     longitude: 127.027805,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "홍대역",
@@ -33,6 +37,7 @@ export const locationDummyArr = [
     latitude: 37.557239,
     longitude: 126.9245,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "마곡역",
@@ -40,6 +45,7 @@ export const locationDummyArr = [
     latitude: 37.560119,
     longitude: 126.82595,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "성수역",
@@ -47,6 +53,7 @@ export const locationDummyArr = [
     latitude: 37.544611,
     longitude: 127.056409,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "잠실역",
@@ -54,6 +61,7 @@ export const locationDummyArr = [
     latitude: 37.513402,
     longitude: 127.099186,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "종로3가역",
@@ -61,6 +69,7 @@ export const locationDummyArr = [
     latitude: 37.570299,
     longitude: 126.992151,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "강동역",
@@ -68,6 +77,7 @@ export const locationDummyArr = [
     latitude: 37.535693,
     longitude: 127.132294,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "응암역",
@@ -75,6 +85,7 @@ export const locationDummyArr = [
     latitude: 37.598469,
     longitude: 126.915776,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "노량진역",
@@ -82,6 +93,7 @@ export const locationDummyArr = [
     latitude: 37.514153,
     longitude: 126.940961,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
   {
     title: "명동역",
@@ -89,5 +101,6 @@ export const locationDummyArr = [
     latitude: 37.561091,
     longitude: 127.986305,
     date: "2020년03월25일",
+    img: "https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286",
   },
 ];
