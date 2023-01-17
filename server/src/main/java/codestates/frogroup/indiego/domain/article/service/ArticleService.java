@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,7 +127,7 @@ public class ArticleService {
      * 게시글 좋아요
      */
     @Transactional
-    public void articleLike(Long articleId, Long memberId) {
+    public HttpStatus articleLike(Long articleId, Long memberId) {
         Article findArticle = findVerifiedArticle(articleId);
 
         // TODO: 리팩토링 memberService에서 사용하자
@@ -137,13 +138,9 @@ public class ArticleService {
 
         // TODO: 리팩토링 1개의 메서드는 1개의 기능
         if (findArticleLike == null) {
-            articleLikeRepository.save(
-                    ArticleLike.builder()
-                            .article(findArticle)
-                            .member(findMember)
-                            .build());
+            return createArticleLike(findArticle, findMember);
         } else {
-            articleLikeRepository.delete(findArticleLike);
+            return deleteArticleLike(findArticleLike);
         }
     }
 
@@ -205,6 +202,29 @@ public class ArticleService {
         Optional.ofNullable(article.getBoard().getCategory())
                 .ifPresent(category -> findArticle.getBoard().setCategory(category));
 
+    }
+
+    /**
+     * 좋아요
+     */
+    private HttpStatus createArticleLike(Article findArticle, Member findMember) {
+
+        articleLikeRepository.save(
+                ArticleLike.builder()
+                        .article(findArticle)
+                        .member(findMember)
+                        .build());
+
+        return HttpStatus.CREATED;
+    }
+
+    /**
+     * 좋아요 취소
+     */
+    private HttpStatus deleteArticleLike(ArticleLike findArticleLike) {
+        articleLikeRepository.delete(findArticleLike);
+
+        return HttpStatus.NO_CONTENT;
     }
 
 }

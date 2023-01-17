@@ -9,7 +9,6 @@ import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
-import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,8 +36,7 @@ public class ArticleController {
      */
     @PostMapping
     public ResponseEntity postArticle(@Valid @RequestBody ArticleDto.Post articlePostDto,
-                                      @LoginMemberId Long memberId,
-                                      @AuthenticationPrincipal AuthMember authMember) {
+                                      @LoginMemberId Long memberId) {
 
         Article article = mapper.articlePostToArticle(articlePostDto);
         ArticleDto.Response response = articleService.createArticle(article, memberId);
@@ -119,9 +116,9 @@ public class ArticleController {
     public ResponseEntity articleLike(@PathVariable("article-id") Long articleId,
                                       @LoginMemberId Long memberId) {
 
-        articleService.articleLike(articleId, memberId);
+        HttpStatus httpStatus = articleService.articleLike(articleId, memberId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(httpStatus);
     }
 
 }
