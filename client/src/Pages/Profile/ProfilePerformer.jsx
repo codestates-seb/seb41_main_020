@@ -1,5 +1,6 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
+import performerBadge from "../../assets/performerBadge.jpg";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -7,6 +8,7 @@ import {
   primary,
   secondary,
   sub,
+  misc,
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
@@ -14,7 +16,8 @@ import {
 //라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components/macro";
-import AllShowList from "../../Components/Profile/AllShowList.jsx";
+import ShowList from "../../Components/Profile/ShowList.jsx";
+import AllShowListPerformer from "../../Components/Profile/AllShowListPerformer.jsx";
 
 const Container = styled.div`
   align-items: center;
@@ -61,7 +64,7 @@ const HeaderTitleContainer = styled.div`
 
   > h1 {
     all: unset;
-    color: ${primary.primary500};
+    color: ${secondary.secondary600};
     font-size: ${dtFontSize.xxlarge};
     font-weight: 700;
 
@@ -101,6 +104,7 @@ const ProfileInfoContainer = styled.div`
   > div {
     display: flex;
     align-items: flex-end;
+
     > img {
       border: 2px solid ${sub.sub200};
       border-radius: 100%;
@@ -122,17 +126,46 @@ const ProfileInfoContainer = styled.div`
         margin-left: 4%;
       }
 
-      > .user-nickname {
-        color: ${primary.primary500};
+      > .performer-nickname {
+        color: ${secondary.secondary600};
         font-size: ${dtFontSize.xlarge};
         font-weight: 600;
+        margin-bottom: 5px;
 
         @media screen and (max-width: ${breakpoint.mobile}) {
           font-size: ${mbFontSize.large};
         }
       }
 
-      > .user-email {
+      > div {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+
+        > .user-type {
+          color: ${secondary.secondary600};
+          font-size: ${dtFontSize.medium};
+          font-weight: 600;
+
+          @media screen and (max-width: ${breakpoint.mobile}) {
+            font-size: ${mbFontSize.medium};
+          }
+        }
+
+        > img {
+          border-radius: 100%;
+          width: 25px;
+          height: 25px;
+          margin-left: 5px;
+
+          @media screen and (max-width: ${breakpoint.mobile}) {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+
+      > .performer-email {
         color: ${sub.sub400};
         font-size: ${dtFontSize.medium};
         font-weight: 400;
@@ -156,7 +189,7 @@ const ProfileInfoContainer = styled.div`
     > .profile-edit-button {
       all: unset;
       color: white;
-      background-color: ${primary.primary300};
+      background-color: ${secondary.secondary500};
       border-radius: 20px;
       cursor: pointer;
       font-weight: 600;
@@ -167,7 +200,7 @@ const ProfileInfoContainer = styled.div`
       text-align: center;
 
       &:hover {
-        background-color: ${secondary.secondary500};
+        background-color: ${primary.primary200};
       }
 
       @media screen and (max-width: ${breakpoint.mobile}) {
@@ -203,7 +236,7 @@ const LocationandAboutContainer = styled.div`
     flex-direction: column;
 
     > .sub-title {
-      color: ${primary.primary500};
+      color: ${secondary.secondary600};
       font-size: ${dtFontSize.large};
       font-weight: 600;
       margin-bottom: 5px;
@@ -251,8 +284,12 @@ export default function Profile() {
             <div>
               <img alt="dummy profile" src={dummyProfileImage} />
               <div>
-                <span className="user-nickname">김아무개</span>
-                <span className="user-email">amugae1234@gmail.com</span>
+                <span className="performer-nickname">김아무개</span>
+                <div>
+                  <span className="user-type">퍼포머 회원</span>
+                  <img alt="performer badge" src={performerBadge} />
+                </div>
+                <span className="performer-email">amugae1234@gmail.com</span>
               </div>
             </div>
             <div className="button-container">
@@ -276,7 +313,7 @@ export default function Profile() {
             </div>
           </LocationandAboutContainer>
         </ContentInnerContainer>
-        <AllShowList />
+        <AllShowListPerformer />
       </ContentContainer>
     </Container>
   );

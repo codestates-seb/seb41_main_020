@@ -10,6 +10,7 @@ import Signup from "./Pages/Signup/Signup.jsx";
 import SignupPerformer from "./Pages/Signup/SignupPerformer.jsx";
 import Login from "./Pages/Login.jsx";
 import Profile from "./Pages/Profile/Profile.jsx";
+import ProfilePerformer from "./Pages/Profile/ProfilePerformer.jsx";
 import ProfileEdit from "./Pages/Profile/ProfileEdit.jsx";
 import BoardList from "./Pages/Boards/Board/BoardList.jsx";
 import Board from "./Pages/Boards/Board/Board.jsx";
@@ -42,6 +43,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         {/* 프로파일 */}
         <Route path="/user/:id" element={<Profile />}></Route>
+        <Route path="/performer/:id" element={<ProfilePerformer />}></Route>
         <Route path="/user/:id/edit" element={<ProfileEdit />}></Route>
 
         {/* 티케팅게시판 */}

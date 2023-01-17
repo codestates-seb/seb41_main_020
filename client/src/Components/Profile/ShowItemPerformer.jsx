@@ -84,7 +84,7 @@ const ItemContentContainer = styled.div`
         flex-direction: column;
 
         > .period {
-          color: ${primary.primary500};
+          color: ${secondary.secondary800};
           font-weight: 600;
           font-size: ${dtFontSize.small};
 
@@ -141,6 +141,31 @@ const ItemContentContainer = styled.div`
       }
     }
   }
+
+  > .empty-seat-and-profit-container {
+    border-left: 1px solid ${sub.sub400};
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    justify-content: center;
+    padding: 2%;
+    width: 40%;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 33%;
+      height: 70px;
+    }
+
+    > span {
+      color: ${sub.sub800};
+      font-weight: 600;
+      font-size: ${dtFontSize.medium};
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        font-size: ${mbFontSize.small};
+      }
+    }
+  }
 `;
 
 export default function ShowItem() {
@@ -155,18 +180,14 @@ export default function ShowItem() {
               <span>우리 동네 락밴드</span>
             </div>
             <div className="period-and-location-container">
-              <span className="period">예약일시: 2023.01.16</span>
+              <span className="period">공연기간: 2023.01.16~2023.01.30</span>
               <span className="location">서울특별시 종로구 종로운동장</span>
             </div>
           </div>
         </div>
-        <div className="button-container">
-          <button className="map-button">
-            <img alt="kakao map icon" src={KakaoMapIcon} />
-          </button>
-          <PillButton color={misc.red} hoverColor={misc.lightred}>
-            취소
-          </PillButton>
+        <div className="empty-seat-and-profit-container">
+          <span className="empty-seat">잔여 좌석: 35 / 70</span>
+          <span className="profit">현재 수익: 123,456 원</span>
         </div>
       </ItemContentContainer>
     </ShowItemContainer>
