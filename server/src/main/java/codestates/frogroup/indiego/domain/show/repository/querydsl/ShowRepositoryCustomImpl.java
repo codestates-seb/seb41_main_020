@@ -4,7 +4,7 @@ package codestates.frogroup.indiego.domain.show.repository.querydsl;
 import codestates.frogroup.indiego.domain.show.dto.QShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -95,11 +95,31 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount); // 최적화
     }
 
-    // category : null일 경우 전체, 전체, 음악, 연극
-    // LocalDate : start, end : start(goe) end(loe) 사이에 있는 공연
-    // address : null일 경우 강남구, 그 외에는 OO구
-    // filter : null일 경우 조건 X, 공연명(title), 공연하는사람(nickname)
-    // search : 입력한 검색어
+    @Override
+    public List<ShowListResponseDto> findShowScoreOrCreatedAtDesc(String address, String status) {
+
+        return queryFactory
+                .select(new QShowListResponseDto(
+                        show.id,
+                        show.member.profile.nickname,
+                        show.showBoard.detailAddress,
+                        show.showBoard.board.title,
+                        show.showBoard.board.image,
+                        show.scoreAverage,
+                        show.showBoard.board.category,
+                        show.showBoard.expiredAt,
+                        show.showBoard.showAt,
+                        show.showBoard.price
+                ))
+                .from(show)
+                .where(
+                        addressEq(address),
+                        show.showBoard.showAt.gt(LocalDate.now()))
+                .orderBy(sortDesc(status))
+                .limit(10)
+                .fetch();
+    }
+
     private BooleanExpression categoryEq(String category) {
 
         if (Objects.isNull(category) || category.equals("전체")) {
@@ -163,6 +183,10 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         return Expressions.allOf(isGoeStartDate, isLoeEndDate);
     }
 
+    private static OrderSpecifier<?> sortDesc(String sort) {
+        return sort.equals("최신순") ? show.createdAt.desc() : show.scoreAverage.desc();
+    }
+
 //    private BooleanExpression searchEq(String search) {
 //
 //        if (Objects.isNull(search)) {
@@ -170,17 +194,20 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
 //        } else {
 //            return article.member.profile.nickname.containsIgnoreCase(search)
 //                    .or(article.board.title.containsIgnoreCase(search))
+
 //                    .or(article.board.content.containsIgnoreCase(search));
 //        }
-
 //    }
 //    private BooleanExpression categoryEq(String category) {
 //        return hasText(category) ? article.board.category.eq(category) : article.board.category.eq("자유게시판");
 //    }
 //
+
 //    private BooleanExpression searchTitleEq(String search) {
 //        return hasText(search) ? article.board.title.containsIgnoreCase(search) : null;
 
 //    }
+
     // LocalDate : start, end : start(goe) end(loe) 사이에 있는 공연
+
 }

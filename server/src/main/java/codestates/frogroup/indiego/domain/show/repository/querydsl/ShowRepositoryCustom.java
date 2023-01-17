@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ShowRepositoryCustom {
 
@@ -15,5 +16,7 @@ public interface ShowRepositoryCustom {
     // search : 입력한 검색어
     Page<ShowListResponseDto> findAllByShowSearch(String search, String category, String address, String filter,
                                                   LocalDate start, LocalDate end, Pageable pageable);
+
+    List<ShowListResponseDto> findShowScoreOrCreatedAtDesc(String address, String sort);
 
 }
