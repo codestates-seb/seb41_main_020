@@ -1,23 +1,14 @@
 package codestates.frogroup.indiego.domain.show.dto;
 
-import codestates.frogroup.indiego.domain.common.embedding.Board;
-import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
-import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Comment;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ShowDto {

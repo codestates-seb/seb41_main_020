@@ -4,7 +4,6 @@ import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.repository.querydsl.ShowRepositoryCustom;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import javax.naming.ldap.SortResponseControl;
 import java.time.LocalDate;
 import java.util.List;
 
