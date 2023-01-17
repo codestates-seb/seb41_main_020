@@ -3,7 +3,6 @@ package codestates.frogroup.indiego.domain.show.entity;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.common.auditing.BaseTime;
 import lombok.*;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -2,18 +2,14 @@ package codestates.frogroup.indiego.domain.show.service;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.MemberBookMark;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.entity.Show;
-import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import codestates.frogroup.indiego.domain.show.repository.MemberBookMarkRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

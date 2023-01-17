@@ -2,12 +2,10 @@ package codestates.frogroup.indiego.domain.show.controller;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
-import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import codestates.frogroup.indiego.domain.show.mapper.ShowReservationMapper;
-import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowReservationRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowReservationService;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
@@ -19,12 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/shows/reservations")

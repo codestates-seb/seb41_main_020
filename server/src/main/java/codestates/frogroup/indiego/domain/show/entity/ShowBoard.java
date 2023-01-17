@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

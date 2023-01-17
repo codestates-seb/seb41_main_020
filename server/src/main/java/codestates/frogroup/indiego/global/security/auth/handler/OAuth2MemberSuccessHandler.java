@@ -1,6 +1,5 @@
 package codestates.frogroup.indiego.global.security.auth.handler;
 
-
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.redis.RedisDao;
@@ -12,7 +11,6 @@ import codestates.frogroup.indiego.global.security.auth.oauth.OAuthUserProfile;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -29,7 +27,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 
 @Slf4j
 @AllArgsConstructor
