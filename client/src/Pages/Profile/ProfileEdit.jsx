@@ -263,7 +263,7 @@ const EditProfileImageButton = styled.button`
 `;
 
 export default function ProfileEdit() {
-  const [isPerformer, setIsPerFormer] = useState(false);
+  const [isPerformer, setIsPerFormer] = useState(true);
   const [fontColor, setfontColor] = useState("");
   const [buttonColor, setButtonColor] = useState("");
   const [buttonHoverColor, setButtonHoverColor] = useState("");
