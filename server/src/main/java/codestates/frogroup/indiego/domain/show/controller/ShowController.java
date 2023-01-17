@@ -7,6 +7,7 @@ import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
+import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,15 @@ public class ShowController {
                 new SingleResponseDto<>(response),
                 HttpStatus.OK);
 
+    }
+
+    @GetMapping("/sorts")
+    public ResponseEntity getSortShows(@RequestParam(required = false) String address,
+                                       @RequestParam String status) {
+
+        List<ShowListResponseDto> responses = showService.findSortShows(address, status);
+
+        return new ResponseEntity<>(new PagelessMultiResponseDto<>(responses), HttpStatus.OK);
     }
 
     @GetMapping("/location")

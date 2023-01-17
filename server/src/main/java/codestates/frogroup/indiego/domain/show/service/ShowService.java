@@ -122,8 +122,9 @@ public class ShowService {
         return showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
     }
 
-    public Page<Article> findShows(Pageable pageables) {
-        return null;
+    public List<ShowListResponseDto> findSortShows(String address, String status) {
+
+        return showRepository.findShowScoreOrCreatedAtDesc(address, status);
     }
 
     private void findVerifiedShows(List<Show> shows) {
