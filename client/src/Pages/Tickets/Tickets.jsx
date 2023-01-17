@@ -1,8 +1,13 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+
 import React, { useState, useEffect } from "react";
 
 import SearchBar from "../../Components/Main/SearchBar.jsx";
 import Button from "../../Components/Main/Button.jsx";
 import ItemList from "../../Components/Ticktes/ItemList.jsx";
+import SeoulMap from "../../Components/Main/Popups/SeoulMap.jsx";
+import Overlay from "../../Components/Main/Popups/Overlay.jsx";
 
 import breakpoint from "../../styles/breakpoint";
 import {
@@ -134,10 +139,6 @@ const ButtonExtended = styled(Button)`
   }
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-`;
-
 const ItemListContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -231,6 +232,7 @@ const DatePickerContainer = styled.div`
 
   :hover {
     background-color: ${secondary.secondary400};
+    cursor: pointer;
   }
 `;
 
@@ -248,9 +250,74 @@ const RadioGroup = styled.div`
   height: max-content;
 `;
 
+const LocationPopupContainer = styled.div`
+  width: 80%;
+  height: max-content;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+
+  h1 {
+    font-size: ${dtFontSize.xlarge};
+    text-align: center;
+    color: ${sub.sub800};
+    margin-top: 10px;
+  }
+
+  .location {
+    font-weight: 600;
+  }
+
+  .location_indicator_container {
+    display: flex;
+    align-items: center;
+  }
+
+  span {
+    font-weight: 600;
+    color: ${primary.primary300};
+  }
+
+  .reset_location {
+    background-color: ${primary.primary300};
+    padding: 5px;
+    border-radius: 20px;
+    color: white;
+    margin-left: 10px;
+    font-size: ${dtFontSize.small};
+
+    :hover {
+      cursor: pointer;
+      background-color: ${secondary.secondary500};
+    }
+  }
+`;
+
+const CloseButton = styled.button`
+  width: 30%;
+  max-width: 180px;
+  padding: 10px;
+  border-radius: 20px;
+  border: 2px solid ${sub.sub800};
+  color: ${sub.sub800};
+  margin: 10px;
+  font-weight: 600;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${primary.primary300};
+    color: white;
+    border-color: ${primary.primary300};
+  }
+`;
+
 export default function Tickets() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [location, setLocation] = useState("없음");
 
   useEffect(() => {
     if (endDate < startDate) {
@@ -260,8 +327,44 @@ export default function Tickets() {
     }
   }, [endDate]);
 
+  const locationPopupClickHandler = (e) => {
+    setLocation(e.target.attributes.value.value);
+  };
+
+  const locationButtonClickHandler = () => {
+    setPopupOpen(true);
+  };
+
   return (
     <Container>
+      {popupOpen && (
+        <Overlay>
+          <LocationPopupContainer>
+            <h1>검색할 지역 선택하기</h1>
+            <SeoulMap clickHandler={locationPopupClickHandler} />
+            <div className="location_indicator_container">
+              <p className="location">
+                선택한 위치 : <span>{location}</span>
+              </p>
+              <p
+                className="reset_location"
+                onClick={() => {
+                  setLocation("없음");
+                }}
+              >
+                초기화
+              </p>
+            </div>
+            <CloseButton
+              onClick={() => {
+                setPopupOpen(false);
+              }}
+            >
+              닫기
+            </CloseButton>
+          </LocationPopupContainer>
+        </Overlay>
+      )}
       <ContentHeaderContainer>
         <HeaderTitleContainer>
           <h1>공연 검색</h1>
@@ -316,12 +419,14 @@ export default function Tickets() {
               </DatePickerContainer>
             </SelectDateContainer>
             <div className="mobile_top_selector_group">
-              <ButtonExtended>종로구</ButtonExtended>
+              <ButtonExtended clickEvent={locationButtonClickHandler}>
+                {location}
+              </ButtonExtended>
               <RadioGroup>
                 <div className="selector_group">
                   <label htmlFor="all">전체</label>
                   <input
-                    checked
+                    defaultChecked
                     id="all"
                     name="category"
                     type="radio"
@@ -340,10 +445,7 @@ export default function Tickets() {
             </div>
           </SelectorContainer>
           <SearchBarMainContainer>
-            <ButtonContainer>
-              {/* <ButtonExtended>2022.12.24 ~ 2022.12.25</ButtonExtended> */}
-            </ButtonContainer>
-            <SearchBarExtended></SearchBarExtended>
+            <SearchBarExtended />
           </SearchBarMainContainer>
         </SearchBarContainer>
         <ItemListContainer>
