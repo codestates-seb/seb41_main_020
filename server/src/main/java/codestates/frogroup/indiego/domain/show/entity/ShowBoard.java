@@ -24,11 +24,17 @@ public class ShowBoard {
     @Column(length = 100, nullable = false)
     private String address;
 
+    @Column
+    private String detailAddress;
+
     @Column(nullable = false)
     private LocalDate expiredAt; // 만료날짜
 
     @Column(nullable = false)
     private LocalDate showAt; // 공연날짜
+
+    @Column
+    private String showTime;
 
     @Column
     private String detailImage;

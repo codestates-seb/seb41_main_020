@@ -21,6 +21,7 @@ import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
+import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
 
 const TicketsCreateContentWrapper = styled(PostWrapper)`
   @media screen and (max-width: ${breakpoint.mobile}) {
@@ -97,6 +98,16 @@ const ChoiceButtonDiv = styled.div`
   }
 `;
 
+const DatePickerDiv = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 50px;
+  color: ${primary.primary200};
+  font-size: ${dtFontSize.xlarge};
+  font-weight: 700;
+`;
+
 export const ChoiceButton = styled(OKButton)`
   width: 150px;
   height: 30px;
@@ -129,6 +140,8 @@ const CancelButton = styled(PostButton)`
 export default function TicketsCreate() {
   const [ticketsValue, setTicketsValue] = useState("");
   const [place, setPlace] = useState("공연장소");
+  const [startDate, setStartDate] = useState("");
+  const [lastDate, setLastDate] = useState("");
 
   useEffect(() => {
     const { kakao } = window;
@@ -170,9 +183,12 @@ export default function TicketsCreate() {
           </ChoiceButtonDiv>
 
           <div className="postDiv">공연 기간</div>
-          <ChoiceButtonDiv>
-            <ChoiceButton>공연 기간 선택하기</ChoiceButton>
-          </ChoiceButtonDiv>
+          <DatePickerDiv>
+            <ReactDatePicker setDate={setStartDate}></ReactDatePicker>~~
+            <ReactDatePicker setDate={setLastDate}></ReactDatePicker>
+            {console.log(startDate)}
+            {console.log(lastDate)}
+          </DatePickerDiv>
           <div className="postDiv">공연 좌석 수</div>
           <TicketsCreateInputDiv>
             <input
