@@ -34,6 +34,9 @@ public class ShowBoard {
     private LocalDate showAt; // 공연날짜
 
     @Column
+    private String showTime;
+
+    @Column
     private String detailImage;
 
 }
