@@ -1,8 +1,6 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import Header from "../../Components/Header.jsx";
 import TicketsDetailTap from "../../Components/TicketsDetail/TicketsDetailTapMenu.jsx";
-import NaverMapIcon from "../../assets/naverMapIcon.jpg";
-import KakaoMapIcon from "../../assets/kakaoMapIcon.jpg";
+import KakaoMapButton from "../../Components/TicketsDetail/KakaoMapButton.jsx";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -324,6 +322,13 @@ const TopRightContainer = styled.div`
 `;
 
 export default function TicketsDetail() {
+  const dummyLocation = {
+    title: "연우 소극장",
+    address: "서울 종로구 창경궁로35길 21",
+    latitude: 37.586999383263084,
+    longitude: 127.00176624935142,
+  };
+
   return (
     <>
       <Container>
@@ -367,7 +372,7 @@ export default function TicketsDetail() {
                 </span>
               </div>
               <div>
-                <span className="sub-title">공연 상세</span>
+                <span className="sub-title">공연 소개</span>
                 <span className="description">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -390,9 +395,7 @@ export default function TicketsDetail() {
                     서울특별시 종로구 132-38 (종로운동장)
                   </span>
                 </div>
-                <button>
-                  <img alt="kakao map icon" src={KakaoMapIcon} />
-                </button>
+                <KakaoMapButton location={dummyLocation} />
               </div>
             </TopRightContainer>
           </ContentTopContainer>

@@ -1,5 +1,7 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
+import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
+import WithdrawModal from "../../Components/Profile/WithdrawModal";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -34,6 +36,19 @@ const ContentContainer = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
+  }
+
+  > .withdraw-button {
+    all: unset;
+    cursor: pointer;
+    color: ${sub.sub400};
+    font-size: ${dtFontSize.medium};
+    font-weight: 400;
+    margin-top: 5%;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
 `;
 
@@ -238,8 +253,11 @@ const LocationandAboutContainer = styled.div`
 `;
 
 export default function Profile() {
+  const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
+
   return (
     <Container>
+      <WithdrawModal />
       <ContentHeaderContainer>
         <HeaderTitleContainer>
           <h1>마이페이지</h1>
@@ -277,6 +295,9 @@ export default function Profile() {
           </LocationandAboutContainer>
         </ContentInnerContainer>
         <AllShowList />
+        <button className="withdraw-button" onClick={setOpenModal}>
+          회원 탈퇴하기
+        </button>
       </ContentContainer>
     </Container>
   );

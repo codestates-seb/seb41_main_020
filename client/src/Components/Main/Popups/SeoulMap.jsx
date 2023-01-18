@@ -17,6 +17,7 @@ const MapContainer = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
+    min-width: 100px;
     min-height: 100px;
     padding-top: 30px;
   }

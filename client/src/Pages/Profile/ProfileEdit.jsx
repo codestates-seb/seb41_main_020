@@ -3,6 +3,9 @@ import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PillButton } from "../Tickets/TicketsDetail";
+import useSelectProfileLocationModalStore from "../../store/useSelectProfileLocationModalStore";
+import useSelectedProfileLocationStore from "../../store/useSelectedProfileLocationStore.js";
+import SelectProfileLocationModal from "../../Components/Profile/SelectProfileLocationModal";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -263,13 +266,20 @@ const EditProfileImageButton = styled.button`
 `;
 
 export default function ProfileEdit() {
-  const [isPerformer, setIsPerFormer] = useState(false);
+  const [isPerformer, setIsPerFormer] = useState(true);
   const [fontColor, setfontColor] = useState("");
   const [buttonColor, setButtonColor] = useState("");
   const [buttonHoverColor, setButtonHoverColor] = useState("");
   const [nickname, setNickname] = useState();
   const [nicknameValid, setNicknameValid] = useState(false);
   const [nicknameInputOnFocus, setNicknameInputOnFocus] = useState(false);
+
+  const { openModal, setOpenModal } = useSelectProfileLocationModalStore(
+    (state) => state
+  );
+  const { location, setLocation } = useSelectedProfileLocationStore(
+    (selectedLocation) => selectedLocation
+  );
 
   const handleProfilEditPageColor = () => {
     if (isPerformer) {
@@ -295,8 +305,11 @@ export default function ProfileEdit() {
     }
   }, [nickname]);
 
+  console.log(openModal);
+
   return (
     <Container>
+      <SelectProfileLocationModal />
       <ContentHeaderContainer>
         <PageTitleContainer>
           <PageTitle fontColor={fontColor}>마이페이지</PageTitle>
@@ -358,8 +371,12 @@ export default function ProfileEdit() {
               우리 동네
             </EditContainerSubTitle>
             <div>
-              <input className="location-input" />
-              <PillButton color={buttonColor} hoverColor={buttonHoverColor}>
+              <input className="location-input" value={location} />
+              <PillButton
+                color={buttonColor}
+                hoverColor={buttonHoverColor}
+                onClick={setOpenModal}
+              >
                 지역 선택
               </PillButton>
             </div>
