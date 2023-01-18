@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/shows")
 @Valid
