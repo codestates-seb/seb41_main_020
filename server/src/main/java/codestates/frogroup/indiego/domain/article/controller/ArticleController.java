@@ -8,6 +8,8 @@ import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
+import codestates.frogroup.indiego.global.fileupload.ImageUploadService;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +19,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +34,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleMapper mapper;
+    private final ImageUploadService awsS3Service;
 
     /**
      * 게시글 작성
@@ -48,7 +53,7 @@ public class ArticleController {
      * 게시글 수정
      */
     @PatchMapping("/{article-id}")
-    public ResponseEntity patchArticle(@PathVariable("article-id") Long articleId,
+    public ResponseEntity patchArticle(@Positive @PathVariable("article-id") Long articleId,
                                        @LoginMemberId Long memberId,
                                        @Valid @RequestBody ArticleDto.Patch articlePatchDto) {
 
@@ -68,7 +73,6 @@ public class ArticleController {
                                       @PageableDefault(page = 1) Pageable pageable) {
 
         log.info("conditionIsNull?={}", Objects.isNull(category));
-
         Page<ArticleListResponseDto> responses = articleService.findArticles(category, search, status, pageable);
 
         return new ResponseEntity<>(new MultiResponseDto<>(responses.getContent(), responses), HttpStatus.OK);
@@ -89,7 +93,7 @@ public class ArticleController {
      * 게시글 단일 조회
      */
     @GetMapping("/{article-id}")
-    public ResponseEntity getArticle(@PathVariable("article-id") Long articleId) {
+    public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId) {
 
         articleService.updateView(articleId);
         ArticleDto.Response response = articleService.findArticle(articleId);
@@ -101,7 +105,7 @@ public class ArticleController {
      * 게시글 삭제
      */
     @DeleteMapping("/{article-id}")
-    public ResponseEntity deleteArticle(@PathVariable("article-id") Long articleId,
+    public ResponseEntity deleteArticle(@Positive @PathVariable("article-id") Long articleId,
                                         @LoginMemberId Long memberId) {
 
         articleService.deleteArticle(articleId, memberId);
@@ -113,12 +117,23 @@ public class ArticleController {
      * 게시글 좋아요
      */
     @PutMapping("/{article-id}")
-    public ResponseEntity articleLike(@PathVariable("article-id") Long articleId,
+    public ResponseEntity articleLike(@Positive @PathVariable("article-id") Long articleId,
                                       @LoginMemberId Long memberId) {
 
         HttpStatus httpStatus = articleService.articleLike(articleId, memberId);
 
         return new ResponseEntity<>(httpStatus);
+    }
+
+    /**
+     * 이미지 업로드
+     */
+    @PostMapping("/image")
+    public ResponseEntity postArticleImage(@RequestParam MultipartFile file, @LoginMemberId Long memberId) {
+
+        String url = awsS3Service.StoreImage(file, AwsS3Path.ARTICLES);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(url), HttpStatus.OK);
     }
 
 }
