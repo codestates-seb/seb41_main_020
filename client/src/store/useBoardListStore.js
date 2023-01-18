@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const boardListStore = create((set) => ({
+const useBoardListStore = create((set) => ({
   boardList: [],
 
   getBoardListData(data) {
@@ -10,4 +10,4 @@ const boardListStore = create((set) => ({
   },
 }));
 
-export default boardListStore;
+export default useBoardListStore;

@@ -4,6 +4,7 @@ import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
+import AnswerList from "../../../Components/Board/Answer/AnswerList";
 
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -124,6 +125,7 @@ const BoardCreate = () => {
             <PostButton type="submit">글 올리기</PostButton>
           </PostBoard>
         </form>
+        <AnswerList></AnswerList>
       </PostWrapper>
     </PageWrapper>
   );
