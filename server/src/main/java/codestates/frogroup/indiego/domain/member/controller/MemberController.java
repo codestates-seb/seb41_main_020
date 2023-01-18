@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @Validated
 @RequiredArgsConstructor
