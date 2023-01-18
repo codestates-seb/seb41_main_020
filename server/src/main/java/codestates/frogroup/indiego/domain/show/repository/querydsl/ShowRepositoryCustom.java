@@ -15,7 +15,7 @@ public interface ShowRepositoryCustom {
     // filter : null일 경우 조건 X, 공연명(title), 공연하는사람(nickname)
     // search : 입력한 검색어
     Page<ShowListResponseDto> findAllByShowSearch(String search, String category, String address, String filter,
-                                                  LocalDate start, LocalDate end, Pageable pageable);
+                                                  String start, String end, Pageable pageable);
 
     List<ShowListResponseDto> findShowScoreOrCreatedAtDesc(String address, String sort);
 
