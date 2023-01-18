@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import { primary, sub } from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint";
 import Arrow from "../../../assets/arrow.svg";
+import { useInterval } from "../../../utils/useInterval";
 
 import styled from "styled-components";
 
@@ -14,8 +15,6 @@ const CarouselContainer = styled.div`
   max-width: ${(props) => props.maxWidth};
   min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height};
-  /* max-height: ${(props) => props.height};
-  min-height: ${(props) => props.height}; */
   background-color: ${sub.sub200};
   border-radius: 20px;
   display: flex;
@@ -97,19 +96,18 @@ export default function Carousel({
   const CarouselItemList = carouselItemList;
 
   const pageButtonClickHandler = (num) => {
-    if (isMultiple) {
-      if (
-        currentIdx + num < parseInt(data.length / 3) &&
-        currentIdx + num >= 0
-      ) {
-        setCurrentIdx(currentIdx + num);
-      }
-    } else {
-      if (currentIdx + num < data.length && currentIdx + num >= 0) {
-        setCurrentIdx(currentIdx + num);
-      }
+    if (currentIdx + num < data.length && currentIdx + num >= 0) {
+      setCurrentIdx(currentIdx + num);
     }
   };
+
+  useInterval(() => {
+    if (currentIdx + 1 >= data.length) {
+      setCurrentIdx(0);
+    } else {
+      setCurrentIdx(currentIdx + 1);
+    }
+  }, 3500);
 
   return (
     <CarouselContainer

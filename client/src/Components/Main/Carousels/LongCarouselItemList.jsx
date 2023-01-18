@@ -26,7 +26,7 @@ const ItemsContainer = styled.div`
   padding-left: 10px;
   margin-left: ${(props) => props.currentIdx * -100}%;
 
-  transition: all 0.5s ease-in-out;
+  transition: ${(props) => (props.isLast ? "unset" : "all 0.5s ease-in-out")};
 
   @media screen and (max-width: 900px) {
     margin-left: ${(props) => props.currentIdx * -100}%;
@@ -36,7 +36,7 @@ const ItemsContainer = styled.div`
 export default function LongCarouselItemList({ data, currentIdx }) {
   return (
     <ListContainer>
-      <ItemsContainer currentIdx={currentIdx}>
+      <ItemsContainer currentIdx={currentIdx} isLast={currentIdx === 0}>
         {data.map((item, index) => (
           <LongCarouselItem data={item} key={index} />
         ))}
