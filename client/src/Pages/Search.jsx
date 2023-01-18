@@ -105,38 +105,93 @@ export default function Search() {
         // 지도에 마커 추가
         marker.setMap(map);
 
-        // 마커 팝업 마크업
-        const markerClickPopup = `
-        <div class="marker_container">
-          <div class="marker_box">
-          <img width="80px"; style="margin-bottom: 10px;" src=${locObj.img} />
-            <p class="marker_title">
-            ${locObj.title}
-            </p>
-            <p class="marker_address">
-            ${locObj.address}
-            </p>
-            <p class="marker_date">${locObj.date}
-            </p>
-          </div>
-          <img>
-          <svg class="triangle" width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
-            <path fill="white" d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/>
-          </svg>
-        </div>
-        `;
-
-        // 마커 호버 마크업
-        const markerHoverPopup = `<div style="padding:5px; background-color:blue; color:white;">${locObj.title}</div>`;
-
-        // 카카오 맵 이밴트 핸들러
+        // 클릭시 커스텀 오버레이 생성
         const popupWindow = new kakao.maps.CustomOverlay({
-          content: markerClickPopup,
           position: marker.getPosition(),
         });
 
-        const hoverWindow = new kakao.maps.InfoWindow({
+        // 마커 팝업 마크업 생성 및 이벤트 핸들러 할당
+        const markerClickPopup = document.createElement("div");
+        markerClickPopup.setAttribute("class", "marker_container");
+
+        const markerBox = document.createElement("div");
+        markerBox.setAttribute("class", "marker_box");
+
+        const imgElement = document.createElement("img");
+        Object.assign(imgElement, {
+          width: 80,
+          className: "poster",
+          src: locObj.img,
+        });
+
+        const titleElement = document.createElement("p");
+        titleElement.setAttribute("class", "marker_title");
+        titleElement.textContent = locObj.title;
+
+        const addressElement = document.createElement("p");
+        addressElement.setAttribute("class", "marker_address");
+        addressElement.textContent = locObj.address;
+
+        const dateElement = document.createElement("p");
+        dateElement.setAttribute("class", "marker_date");
+        dateElement.textContent = locObj.date;
+
+        const closeButtonElement = document.createElement("div");
+        closeButtonElement.setAttribute("class", "close");
+        closeButtonElement.textContent = "닫기";
+        closeButtonElement.onclick = function () {
+          popupWindow.setMap(null);
+        };
+
+        const svgElement = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg"
+        );
+        svgElement.setAttribute("class", "triangle");
+        svgElement.setAttribute("viewBox", "0 0 300 512");
+
+        const trianglePathElem = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path"
+        );
+
+        trianglePathElem.setAttribute("class", "triangle_path");
+
+        trianglePathElem.setAttributeNS(
+          null,
+          "d",
+          "M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"
+        );
+
+        svgElement.appendChild(trianglePathElem);
+
+        markerBox.append(
+          imgElement,
+          titleElement,
+          addressElement,
+          dateElement,
+          closeButtonElement,
+          svgElement
+        );
+
+        markerClickPopup.appendChild(markerBox);
+
+        popupWindow.setContent(markerClickPopup);
+
+        // 마커 호버 마크업
+        const markerHoverPopup = `
+        <div class="hover_container">
+        <p class="hover_title">${locObj.title}</p>
+        <p class="hover_date">${locObj.date}</p>
+        </div>`;
+
+        const hoverWindow = new kakao.maps.CustomOverlay({
           content: markerHoverPopup,
+          position: marker.getPosition(),
+        });
+
+        closeButtonElement.addEventListener("onclick", () => {
+          popupWindow.setMap(null);
         });
 
         // 카카오 맵 이벤트 리스너
@@ -145,29 +200,23 @@ export default function Search() {
           "click",
           (() => {
             return function () {
-              console.log("executed");
               popupWindow.setMap(map);
               const moveLocation = new kakao.maps.LatLng(
                 locObj.latitude,
                 locObj.longitude
               );
               map.setLevel(4, { anchor: moveLocation });
-              setIsHover(false);
-              console.log(isHover);
+              map.setCenter(moveLocation);
             };
           })(locObj)
         );
 
         kakao.maps.event.addListener(marker, "mouseover", function () {
-          if (isHover) {
-            hoverWindow.open(map, marker);
-          } else {
-            // setIsHover(true);
-          }
+          hoverWindow.setMap(map);
         });
 
         kakao.maps.event.addListener(marker, "mouseout", function () {
-          hoverWindow.close();
+          hoverWindow.setMap(null);
         });
 
         return marker;
