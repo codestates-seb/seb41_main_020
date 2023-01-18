@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -16,13 +17,14 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
 
 import static codestates.frogroup.indiego.domain.show.entity.QShow.show;
 
-
+@Slf4j
 public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implements ShowRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -41,7 +43,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
     // 쿼리의 신 박성호.
     @Override
     public Page<ShowListResponseDto> findAllByShowSearch(String search, String category, String address, String filter,
-                                                         LocalDate start, LocalDate end, Pageable pageable) {
+                                                         String start, String end, Pageable pageable) {
 
         // Querydsl 리포지토리 지원을 받는 경우에는
         // from(article)로 시작
@@ -72,7 +74,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .where(
                         searchDateFilter(start, end),
                         categoryEq(category),
-                        addressEq(address),
+                        addressEqOfFindAll(address),
                         filterEq(filter, search)
                         )
                 .orderBy(show.createdAt.desc()) //최신순
@@ -86,7 +88,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .where(
                         searchDateFilter(start, end),
                         categoryEq(category),
-                        addressEq(address),
+                        addressEqOfFindAll(address),
                         filterEq(filter, search)
                 )
                 .orderBy(show.createdAt.desc());
@@ -112,7 +114,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 ))
                 .from(show)
                 .where(
-                        addressEq(address),
+                        addressEqOfFindShow(address),
                         show.showBoard.showAt.gt(LocalDate.now()))
                 .orderBy(sortDesc(status))
                 .limit(10)
@@ -132,7 +134,11 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         return null;
     }
 
-    private BooleanExpression addressEq(String address) {
+    private BooleanExpression addressEqOfFindAll(String address) {
+        return Objects.isNull(address) ? null : show.showBoard.address.eq(address);
+    }
+
+    private BooleanExpression addressEqOfFindShow(String address) {
         if (Objects.isNull(address)) {
             address = "강남구";
         }
@@ -166,18 +172,13 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         return show.member.profile.nickname.containsIgnoreCase(search);
     }
 
-    private BooleanExpression searchDateFilter(LocalDate start, LocalDate end) {
+    private BooleanExpression searchDateFilter(String start, String end) {
 
-        if (Objects.isNull(start)) {
-            start = LocalDate.now();
-        }
+        LocalDate startDate = Objects.isNull(start) ? LocalDate.now() : LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
+        LocalDate endDate = Objects.isNull(end) ? LocalDate.now() : LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
 
-        if (Objects.isNull(end)) {
-            end = LocalDate.now();
-        }
-
-        BooleanExpression isGoeStartDate = show.showBoard.showAt.goe(LocalDate.from(LocalDateTime.of(start, LocalTime.MIN)));
-        BooleanExpression isLoeEndDate = show.showBoard.expiredAt.loe(LocalDate.from(LocalDateTime.of(end, LocalTime.MAX).withNano(0)));
+        BooleanExpression isGoeStartDate = show.showBoard.showAt.goe(LocalDate.from(LocalDateTime.of(startDate, LocalTime.MIN)));
+        BooleanExpression isLoeEndDate = show.showBoard.expiredAt.loe(LocalDate.from(LocalDateTime.of(endDate, LocalTime.MAX).withNano(0)));
 
         return Expressions.allOf(isGoeStartDate, isLoeEndDate);
     }
