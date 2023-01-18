@@ -13,6 +13,7 @@ const FooterContainer = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   p {
     font-size: ${dtFontSize.small};

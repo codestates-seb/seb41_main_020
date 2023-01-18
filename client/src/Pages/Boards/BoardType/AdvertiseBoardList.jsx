@@ -1,13 +1,12 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import heart from "../../../assets/heart.svg";
 import pen from "../../../assets/pen.svg";
-import right from "../../../assets/right.svg";
-import left from "../../../assets/left.svg";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Aside from "../Aside/Aside.jsx";
 import MobileAside from "../Aside/MobileAside.jsx";
 import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
+import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 
 //로컬 모듈
 import {
@@ -23,6 +22,10 @@ import BoardDummy from "../../../DummyData/BoardDummy.js";
 //라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import boardListStore from "../../../store/boardListStore";
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -135,16 +138,24 @@ const BoardItemContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  .titleDiv {
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    justify-content: flex-start;
+  }
+
+  .titleButton {
+    width: max-content;
     margin-top: 10px;
     font-size: ${dtFontSize.medium};
     font-weight: 700;
     text-align: left;
     color: ${sub.sub900};
+    background-color: white;
+    border: none;
+    cursor: pointer;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       margin-top: 10px;
-      font-size: ${mbFontSize.xlarge};
+      font-size: ${mbFontSize.large};
     }
   }
   .contentDiv {
@@ -154,8 +165,8 @@ const BoardItemContent = styled.div`
     color: ${sub.sub700};
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.large};
-      margin-bottom: 20px;
+      margin-top: 10px;
+      font-size: ${mbFontSize.medium};
     }
   }
 `;
@@ -212,95 +223,46 @@ const WriteButton = styled(OKButton)`
   }
 `;
 
-const PageNationDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
+export default function BoardList() {
+  const navigate = useNavigate();
+  // const { boardList, getBoardListData } = boardListStore();
 
-  .movePageButton {
-    border-radius: 100%;
-    width: 15px;
-    height: 15px;
-    background-color: ${sub.sub500};
-    border: none;
-    padding: 0;
+  // const axiosBoardList = async () => {
+  //   const response = await axios.get(
+  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
+  //     { withCredentials: true }
+  //   );
+  //   return response.data.data;
+  // };
 
-    .arrowLeftImage {
-      width: 6px;
-    }
+  // const { isLoading, isError, data, error } = useQuery(
+  //   ["axiosBoardList"],
+  //   axiosBoardList
+  // );
 
-    .arrowRightImage {
-      width: 6px;
-      margin-left: 1px;
-    }
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  .pageButton {
-    background-color: white;
-    border: none;
-    color: ${sub.sub900};
-    font-size: ${dtFontSize.medium};
-    width: 20px;
-    height: 35px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0;
-  }
-`;
+  // if (isError) {
+  //   return <div>Error : {error.message}</div>;
+  // }
 
-const SearchBarDiv = styled.div`
-  display: flex;
-  text-align: center;
-  justify-content: center;
+  // console.log(data);
+  // getBoardListData(data); // zustand로 가져감
 
-  .aSearchBarDiv {
-    border: 3px solid ${sub.sub500};
-    position: relative;
-    display: flex;
-    align-items: center;
-    border-radius: 20px;
-    padding-right: 4px;
-
-    .searchBarInput {
-      border-radius: 20px;
-      padding: 10px;
-      height: 40px;
-      border: none;
-
-      &:focus-within {
-        outline: none;
-      }
-    }
-
-    .searchImage {
-      width: 17px;
-      height: 17px;
-    }
-    &:focus-within {
-      border: 3px solid ${primary.primary200};
-    }
-  }
-
-  .listButton {
-    background-color: blue;
-  }
-`;
-
-export default function AdvertiseBoardList() {
   return (
     <PageWrapper>
       <Aside></Aside>
       <MobileAside></MobileAside>
       <BoardWrapper>
         <div className="title">홍보게시판</div>
-        <div className="titleInfo">
-          멋진 공연을 홍보할 수 있는 게시판 입니다.
-        </div>
+        <div className="titleInfo">공연을 홍보할 수 있는 게시판 입니다.</div>
         <div className="dropboxDiv">
           <Dropdown></Dropdown>
         </div>
         <div className="lineDiv"></div>
+        {/* boardList 가져오기 */}
         {BoardDummy.map((it) => (
           <BoardItem key={it.id}>
             <div className="likeDiv">
@@ -315,7 +277,14 @@ export default function AdvertiseBoardList() {
               <img width={50} src={heart} alt="heart"></img>
             </div>
             <BoardItemContent>
-              <div className="titleDiv">{it.title}</div>
+              <button
+                className="titleButton"
+                onClick={() => {
+                  navigate("/board/1");
+                }}
+              >
+                {it.title}
+              </button>
               <div className="contentDiv">{it.content}</div>
               <BoardItemCreateInfo>
                 <div className="authorDiv">{it.author}</div>
@@ -325,23 +294,16 @@ export default function AdvertiseBoardList() {
           </BoardItem>
         ))}
         <WriteButtonDiv>
-          <WriteButton>
+          <WriteButton
+            onClick={() => {
+              navigate("/board/create");
+            }}
+          >
             <img className="pencelImage" src={pen} alt="pen"></img>
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
         </WriteButtonDiv>
-        <PageNationDiv>
-          <button className="movePageButton">
-            <img className="arrowLeftImage" src={left} alt="이전 버튼" />
-          </button>
-          <button className="pageButton">1</button>
-          <button className="pageButton">2</button>
-          <button className="pageButton">3</button>
-          <button className="pageButton">4</button>
-          <button className="movePageButton">
-            <img className="arrowRightImage" src={right} alt="다음 버튼" />
-          </button>
-        </PageNationDiv>
+        <PageNation></PageNation>
         <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
       </BoardWrapper>
     </PageWrapper>
