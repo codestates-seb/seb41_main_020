@@ -18,18 +18,16 @@ const ItemsContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  margin-left: ${(props) =>
-    props.isMultiple
-      ? `${props.currentIdx * -98}%`
-      : `${props.currentIdx * -100}%`};
-
-  transition: all 0.5s ease-in-out;
+  margin-left: ${(props) => props.currentIdx * -100}%;
+  transition: ${(props) => (props.isLast ? "unset" : "all 0.5s ease-in-out")};
 `;
 
 export default function CarouselItemList({ data, currentIdx }) {
+  console.log(currentIdx + 1, data.length);
+
   return (
     <RendererContainer>
-      <ItemsContainer currentIdx={currentIdx}>
+      <ItemsContainer isLast={currentIdx === 0} currentIdx={currentIdx}>
         {data.map((item, index) => {
           return <Item data={item} key={index} />;
         })}

@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { primary, sub, dtFontSize } from "../../../styles/mixins";
 import Arrow from "../../../assets/arrow.svg";
+import { useInterval } from "../../../utils/useInterval";
 
 import Button from "../Button.jsx";
 import LongCarouselItemList from "./LongCarouselItemList.jsx";
@@ -126,6 +127,34 @@ export default function Carousel({ data }) {
       }
     }
   };
+
+  useInterval(() => {
+    const viewPort = window.innerWidth;
+    if (viewPort > 900) {
+      if (currentIdx + 1 < parseInt(data.length / 3)) {
+        setCurrentIdx(currentIdx + 1);
+      } else {
+        setCurrentIdx(0);
+      }
+    } else {
+      if (data.length % 2) {
+        if (
+          currentIdx + 1 < parseInt(data.length / 4) + 1 &&
+          currentIdx + 1 >= 0
+        ) {
+          setCurrentIdx(currentIdx + 1);
+        } else {
+          setCurrentIdx(0);
+        }
+      } else {
+        if (currentIdx + 1 < parseInt(data.length / 4) && currentIdx + 1 >= 0) {
+          setCurrentIdx(currentIdx + 1);
+        } else {
+          setCurrentIdx(0);
+        }
+      }
+    }
+  }, 3000);
 
   return (
     <Container>
