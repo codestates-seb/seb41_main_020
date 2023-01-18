@@ -101,4 +101,13 @@ public class MemberController {
         memberService.reissueAccessToken(refreshToken,request,response);
         return new ResponseEntity("Refresh Token 재발급 완료!",HttpStatus.CREATED);
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(@CookieValue(value = "refreshToken", required = false) String refreshToken,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response){
+
+        memberService.logout(refreshToken);
+        return new ResponseEntity<>(new SingleResponseDto<>("로그아웃에 성공하였습니다."), HttpStatus.CREATED);
+    }
 }

@@ -132,10 +132,7 @@ public class MemberService {
 
     public void reissueAccessToken(String refreshToken, HttpServletRequest request, HttpServletResponse response){
 
-        if(refreshToken == null){
-            throw new BusinessLogicException(ExceptionCode.COOKIE_REFRESH_TOKEN_NOT_FOUND);
-        }
-
+        validatedRefeshToken(refreshToken);
         String accessToken = tokenProvider.resolveToken(request);
         String redisAccessToken = redisDao.getValues(refreshToken);
 
@@ -155,6 +152,33 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
         } else {
             throw new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_SAME);
+        }
+    }
+
+    public void logout(String refreshToken){
+        validatedRefeshToken(refreshToken);
+        String redisAccessToken = redisDao.getValues(refreshToken);
+        log.info("redisAccessToken = {}", redisAccessToken);
+        if(redisDao.validateValue(redisAccessToken)){
+            redisDao.deleteValues(refreshToken);
+            log.info("# test =======>1");
+        }
+        log.info("# test =======>2");
+        deleteValuesCheck(refreshToken);
+        log.info("# test =======>3");
+    }
+
+    public void validatedRefeshToken(String refreshToken){
+        if(refreshToken == null){
+            throw new BusinessLogicException(ExceptionCode.COOKIE_REFRESH_TOKEN_NOT_FOUND);
+        }
+    }
+
+    public void deleteValuesCheck(String refreshToken){
+        String redisAccessToken = redisDao.getValues(refreshToken);
+        log.info("# redisAccessToken = {}", redisAccessToken);
+        if(redisAccessToken != null){
+            throw new BusinessLogicException(ExceptionCode.TOKEN_DELETE_FAIL);
         }
     }
 }
