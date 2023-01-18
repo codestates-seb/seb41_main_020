@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 @Slf4j
 @RestController
@@ -24,7 +25,7 @@ public class ArticleCommentController {
      * 댓글 작성
      */
     @PostMapping
-    public ResponseEntity postArticleComment(@PathVariable("article-id") Long articleId,
+    public ResponseEntity postArticleComment(@Positive @PathVariable("article-id") Long articleId,
                                              @LoginMemberId Long memberId,
                                              @Valid @RequestBody ArticleCommentDto.Post articleCommentPostDto) {
 
@@ -39,8 +40,8 @@ public class ArticleCommentController {
      * 댓글 수정
      */
     @PatchMapping("/{comment-id}")
-    public ResponseEntity patchArticleComment(@PathVariable("article-id") Long articleId,
-                                              @PathVariable("comment-id") Long commentId,
+    public ResponseEntity patchArticleComment(@Positive @PathVariable("article-id") Long articleId,
+                                              @Positive @PathVariable("comment-id") Long commentId,
                                               @LoginMemberId Long memberId,
                                               @Valid @RequestBody ArticleCommentDto.Patch articleCommentPatchDto) {
 
@@ -55,8 +56,8 @@ public class ArticleCommentController {
      * 댓글 삭제
      */
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteArticleComment(@PathVariable("article-id") Long articleId,
-                                               @PathVariable("comment-id") Long commentId,
+    public ResponseEntity deleteArticleComment(@Positive @PathVariable("article-id") Long articleId,
+                                               @Positive @PathVariable("comment-id") Long commentId,
                                                @LoginMemberId Long memberId) {
 
         articleCommentService.deleteArticleComment(articleId, commentId, memberId);
@@ -68,8 +69,8 @@ public class ArticleCommentController {
      * 댓글 좋아요
      */
     @PutMapping("/{comment-id}")
-    public ResponseEntity articleCommentLike(@PathVariable("article-id") Long articleId,
-                                             @PathVariable("comment-id") Long commentId,
+    public ResponseEntity articleCommentLike(@Positive @PathVariable("article-id") Long articleId,
+                                             @Positive @PathVariable("comment-id") Long commentId,
                                              @LoginMemberId Long memberId) {
 
 

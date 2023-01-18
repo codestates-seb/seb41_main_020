@@ -110,7 +110,7 @@ public class ShowService {
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
-                                               LocalDate start, LocalDate end, Pageable pageable){
+                                               String start, String end, Pageable pageable){
 
         pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
 
