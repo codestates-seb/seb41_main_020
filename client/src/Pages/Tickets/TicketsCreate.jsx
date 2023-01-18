@@ -37,6 +37,10 @@ const TicketsBoard = styled(PostBoard)`
   .postDiv {
     font-size: ${dtFontSize.medium};
     margin-bottom: 10px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
 `;
 
@@ -100,9 +104,6 @@ const ChoiceButtonDiv = styled.div`
 `;
 
 const DatePickerDiv = styled.div`
-  /* background-color: white;
-  border: 2px solid ${primary.primary300};
-  padding: 5px; */
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
@@ -123,6 +124,10 @@ const DatePickerDiv = styled.div`
       height: 30px;
     }
   }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${dtFontSize.small};
+  }
 `;
 
 export const ChoiceButton = styled(OKButton)`
@@ -138,6 +143,9 @@ const ButtonDiv = styled.div`
   margin-top: 50px;
   margin-bottom: 50px;
   justify-content: center;
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    display: flex;
+  }
 `;
 
 const PostButton = styled(OKButton)`

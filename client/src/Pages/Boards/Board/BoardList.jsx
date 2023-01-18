@@ -23,6 +23,9 @@ import BoardDummy from "../../../DummyData/BoardDummy.js";
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import boardListStore from "../../../store/boardListStore";
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -135,6 +138,10 @@ const BoardItemContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    justify-content: flex-start;
+  }
+
   .titleButton {
     width: max-content;
     margin-top: 10px;
@@ -148,7 +155,7 @@ const BoardItemContent = styled.div`
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       margin-top: 10px;
-      font-size: ${mbFontSize.xlarge};
+      font-size: ${mbFontSize.large};
     }
   }
   .contentDiv {
@@ -158,8 +165,8 @@ const BoardItemContent = styled.div`
     color: ${sub.sub700};
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.large};
-      margin-bottom: 20px;
+      margin-top: 10px;
+      font-size: ${mbFontSize.medium};
     }
   }
 `;
@@ -218,6 +225,32 @@ const WriteButton = styled(OKButton)`
 
 export default function BoardList() {
   const navigate = useNavigate();
+  // const { boardList, getBoardListData } = boardListStore();
+
+  // const axiosBoardList = async () => {
+  //   const response = await axios.get(
+  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
+  //     { withCredentials: true }
+  //   );
+  //   return response.data.data;
+  // };
+
+  // const { isLoading, isError, data, error } = useQuery(
+  //   ["axiosBoardList"],
+  //   axiosBoardList
+  // );
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error : {error.message}</div>;
+  // }
+
+  // console.log(data);
+  // getBoardListData(data); // zustand로 가져감
+
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -231,6 +264,7 @@ export default function BoardList() {
           <Dropdown></Dropdown>
         </div>
         <div className="lineDiv"></div>
+        {/* boardList 가져오기 */}
         {BoardDummy.map((it) => (
           <BoardItem key={it.id}>
             <div className="likeDiv">
