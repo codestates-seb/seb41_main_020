@@ -76,14 +76,13 @@ public class ShowController {
                                   @RequestParam(required = false) String category,
                                   @RequestParam(required = false) String address,
                                   @RequestParam(required = false) String filter,
-                                  @RequestParam(required = false) LocalDate start,
-                                  @RequestParam(required = false) LocalDate end,
-                                  @PageableDefault(page = 1, size = 5) Pageable pageable){
+                                  @RequestParam(required = false) String start,
+                                  @RequestParam(required = false) String end,
+                                  @PageableDefault(page = 1, size = 12) Pageable pageable){
 
         Page<ShowListResponseDto> responses = showService.findShows(search, category, address, filter, start, end, pageable);
 
-        return new ResponseEntity<>(new MultiResponseDto<>(responses.getContent(), responses), HttpStatus.OK
-        );
+        return new ResponseEntity<>(new MultiResponseDto<>(responses.getContent(), responses), HttpStatus.OK);
     }
 
     @GetMapping("/{show-id}")
