@@ -367,7 +367,7 @@ export default function TicketsDetail() {
                 </span>
               </div>
               <div>
-                <span className="sub-title">공연 상세</span>
+                <span className="sub-title">공연 소개</span>
                 <span className="description">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.

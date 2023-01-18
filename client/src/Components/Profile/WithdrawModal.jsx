@@ -21,22 +21,20 @@ import { useNavigate } from "react-router-dom";
 
 const ModalBackdrop = styled.div`
   align-items: center;
-  backdrop-filter: blur(2px);
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: ${sub.sub800}D2;
   display: flex;
   height: 100%;
   justify-content: center;
   left: 0;
   position: fixed;
   top: 0;
-  width: 100vw;
+  width: 100%;
 `;
 
 const ModalWindow = styled.div`
   align-items: center;
-  background-color: white;
+  background-color: ${sub.sub100};
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.2);
   display: flex;
   position: relative;
   justify-content: center;
@@ -77,7 +75,7 @@ const ModalWindow = styled.div`
 
 const ModalButton = styled.button`
   all: unset;
-  border: 1px solid ${sub.sub300};
+  border: 1px solid ${sub.sub400};
   color: ${(props) => props.color};
   cursor: pointer;
   width: 80px;
@@ -86,11 +84,11 @@ const ModalButton = styled.button`
   border-radius: 6px;
   font-weight: 600;
   font-size: ${dtFontSize.medium};
-  background-color: white;
+  background-color: ${sub.sub100};
   text-align: center;
 
   &:hover {
-    background-color: ${sub.sub200};
+    background-color: ${sub.sub300};
   }
 
   @media screen and (max-width: ${breakpoint.mobile}) {

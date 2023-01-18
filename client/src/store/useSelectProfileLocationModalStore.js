@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-const useWithdrawModalStore = create((set) => ({
+const useSelectProfileLocationModalStore = create((set) => ({
   openModal: false,
   setOpenModal: () => set((state) => ({ openModal: !state.openModal })),
 }));
 
-export default useWithdrawModalStore;
+export default useSelectProfileLocationModalStore;
