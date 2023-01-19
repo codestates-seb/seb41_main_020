@@ -1,5 +1,6 @@
 package codestates.frogroup.indiego.domain.show.controller;
 
+import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
@@ -19,6 +20,7 @@ import org.springframework.data.web.PageableDefault;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -110,6 +112,45 @@ public class ShowController {
 
     }
 
+    @GetMapping("/seller")
+    public ResponseEntity getShowsOfSeller(@PageableDefault(page = 1, size = 3) Pageable pageable,
+                                           @AuthenticationPrincipal Member member){
+        Page<Show> showPage = showService.findShowOfSeller(member.getId(), pageable);
+        List<Show> shows = showPage.getContent();
+
+        //Rssponse List생성해서 맵퍼 사용해서 데이터넣기
+        //세터로 잔여좌석수, 현재 수익, 만료 여부 셋팅
+        List<ShowDto.showListToShowListResponseOfSeller> response= new ArrayList<>();
+        for(int i=0; i<shows.size(); i++){
+            ShowDto.showListToShowListResponseOfSeller responseOfSeller =
+                    ShowDto.showListToShowListResponseOfSeller.builder()
+                        .id(shows.get(i).getId())
+                        .title(shows.get(i).getShowBoard().getBoard().getTitle())
+                        .nickname(shows.get(i).getMember().getProfile().getNickname())
+                        .image(shows.get(i).getShowBoard().getBoard().getImage())
+                        .detailAddress(shows.get(i).getShowBoard().getDetailAddress())
+                        .showAt(shows.get(i).getShowBoard().getShowAt())
+                        .expiredAt(shows.get(i).getShowBoard().getExpiredAt())
+                    .build();
+
+            responseOfSeller.setEmptySeats(showService.getEmptySeats(shows.get(i).getId()));
+            responseOfSeller.setRevenue(showService.getRevenue(shows.get(i).getId()));
+
+            if(responseOfSeller.getEmptySeats().equals(0)){
+                responseOfSeller.setExpired(true);
+            }else{
+                responseOfSeller.setExpired(false);
+            }
+
+            response.add(responseOfSeller);
+        }
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(response, showPage), HttpStatus.OK);
+    }
+
+
+
     @GetMapping("/sorts")
     public ResponseEntity getSortShows(@RequestParam(required = false) String address,
                                        @RequestParam String status) {
@@ -132,9 +173,9 @@ public class ShowController {
     public ResponseEntity getMonthMarker(@Positive @RequestParam("year") Integer year,
                                          @Positive @RequestParam("month") Integer month){
 
-        Map<String, String> markerShows = showService.findMarkerShows(year, month);
+       int[] hasShow = showService.findMarkerShows(year, month);
 
-        return new ResponseEntity(new SingleResponseDto<>(markerShows), HttpStatus.OK);
+        return new ResponseEntity(new SingleResponseDto<>(hasShow), HttpStatus.OK);
     }
 
     @GetMapping("/dates")

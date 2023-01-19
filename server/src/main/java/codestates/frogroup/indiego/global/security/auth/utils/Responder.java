@@ -1,6 +1,7 @@
 package codestates.frogroup.indiego.global.security.auth.utils;
 
 import codestates.frogroup.indiego.domain.member.dto.MemberDto;
+import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ErrorResponse;
@@ -27,13 +28,14 @@ public class Responder {
         throw new BusinessLogicException(code);
     }
 
-    public static void loginSuccessResponse(HttpServletResponse response, AuthMember authMember) throws IOException {
+    public static void loginSuccessResponse(HttpServletResponse response, Member member) throws IOException {
         Gson gson = new Gson();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
-                .id(authMember.getId())
-                .email(authMember.getEmail())
-                .role(authMember.getRoles().get(0))
+                .id(member.getId())
+                .email(member.getEmail())
+                .nickname(member.getProfile().getNickname())
+                .role(member.getRoles().get(0))
                 .build();
 
         response.getWriter().write(gson.toJson(new SingleResponseDto<>(loginResponse),SingleResponseDto.class));

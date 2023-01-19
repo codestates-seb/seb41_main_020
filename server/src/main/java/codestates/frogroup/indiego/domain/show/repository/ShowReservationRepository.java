@@ -4,4 +4,5 @@ import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShowReservationRepository extends JpaRepository<ShowReservation,Long> {
+    public Integer countByShowId(Long showId);
 }

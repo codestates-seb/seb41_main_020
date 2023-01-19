@@ -87,6 +87,7 @@ public class MemberDto {
     public static class LoginResponse {
         private Long id;
         private String email;
+        private String nickname;
         private String role;
     }
 
