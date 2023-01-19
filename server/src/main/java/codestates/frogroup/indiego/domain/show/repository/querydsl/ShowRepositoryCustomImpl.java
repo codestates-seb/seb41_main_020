@@ -23,6 +23,7 @@ import java.util.Objects;
 
 
 import static codestates.frogroup.indiego.domain.show.entity.QShow.show;
+import static java.time.LocalDate.*;
 
 @Slf4j
 public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implements ShowRepositoryCustom {
@@ -115,7 +116,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .from(show)
                 .where(
                         addressEqOfFindShow(address),
-                        show.showBoard.showAt.gt(LocalDate.now()))
+                        show.showBoard.showAt.gt(now()))
                 .orderBy(sortDesc(status))
                 .limit(10)
                 .fetch();
@@ -174,13 +175,11 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
 
     private BooleanExpression searchDateFilter(String start, String end) {
 
-        LocalDate startDate = Objects.isNull(start) ? LocalDate.now() : LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
-        LocalDate endDate = Objects.isNull(end) ? LocalDate.now() : LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
+        LocalDate startDate = Objects.isNull(start) ? now() : parse(start, DateTimeFormatter.ISO_DATE);
+        LocalDate endDate = Objects.isNull(end) ? now() : parse(end, DateTimeFormatter.ISO_DATE);
 
-        BooleanExpression isGoeStartDate = show.showBoard.showAt.goe(LocalDate.from(LocalDateTime.of(startDate, LocalTime.MIN)));
-        BooleanExpression isLoeEndDate = show.showBoard.expiredAt.loe(LocalDate.from(LocalDateTime.of(endDate, LocalTime.MAX).withNano(0)));
-
-        return Expressions.allOf(isGoeStartDate, isLoeEndDate);
+        return show.showBoard.showAt.between(LocalDate.from(LocalDateTime.of(startDate, LocalTime.MIN)),
+                LocalDate.from(LocalDateTime.of(endDate, LocalTime.MAX).withNano(0)));
     }
 
     private static OrderSpecifier<?> sortDesc(String sort) {
