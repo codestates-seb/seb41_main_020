@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -40,7 +41,12 @@ public class ShowReservationService {
     }
 
     public Integer countReservation(Long showId){
-        return showReservationRepository.countByShowId(showId);
+        List<ShowReservation> reservations = showReservationRepository.findByShowId(showId);
+        Integer cnt = 0;
+        for(int i=0; i<reservations.size(); i++){
+            cnt += reservations.get(i).getTicketCount();
+        }
+        return cnt;
     }
 
     private ShowReservation findVerifiedReservation(Long id) {

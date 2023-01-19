@@ -9,6 +9,7 @@ import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,8 @@ public class ShowService {
     private final ShowRepository showRepository;
     private final MemberRepository memberRepository;
     private final CustomBeanUtils<Show> utils;
-
     private final ShowReservationService reservationService;
+
 
 
 
