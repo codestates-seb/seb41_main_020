@@ -21,6 +21,8 @@ import {
 import { React, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 // import { Outlet } from "react-router-dom";
 
 const Container = styled.div`
@@ -281,6 +283,17 @@ const SignupContainer = styled.div`
       background-color: ${secondary.secondary500};
     }
   }
+
+  .error-message {
+    all: unset;
+    color: ${misc.red};
+    font-size: ${dtFontSize.small};
+    margin-top: 10px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
+    }
+  }
 `;
 
 export default function Signup() {
@@ -303,6 +316,7 @@ export default function Signup() {
     type: "password",
     visible: false,
   });
+  const [isInputEmpty, setIsInputEmpty] = useState(false);
 
   const navigate = useNavigate();
 
@@ -358,6 +372,50 @@ export default function Signup() {
       setPasswordSpecialLetterRegexValid(false);
     }
   }, [password]);
+
+  const data = {
+    nickname: nickname,
+    email: email,
+    password: password,
+    role: "USER",
+  };
+
+  const postSignupData = () => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+
+    return axios.post(
+      `${process.env.REACT_APP_SERVER_URI}members/signup`,
+      data,
+      headers
+    );
+  };
+
+  const createMemberOnSuccess = () => {
+    window.alert("회원가입이 성공적으로 완료되었습니다!");
+    navigate("/login");
+  };
+
+  const createMemberOnError = () => {
+    window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+  };
+
+  const { mutate: createMember } = useMutation({
+    mutationKey: ["postSignupData"],
+    mutationFn: postSignupData,
+    onSuccess: createMemberOnSuccess,
+    onError: createMemberOnError,
+  });
+
+  const handleSignupOnClick = () => {
+    if (!nickname || !email || !password) {
+      setIsInputEmpty(true);
+      return;
+    }
+    createMember();
+  };
 
   return (
     <Container>
@@ -485,7 +543,12 @@ export default function Signup() {
                 ""
               )}
             </div>
-            <button>회원가입</button>
+            <button onClick={handleSignupOnClick}>회원가입</button>
+            {isInputEmpty ? (
+              <span className="error-message">⚠︎ 모든 정보를 입력해주세요</span>
+            ) : (
+              ""
+            )}
           </SignupContainer>
           <div className="move-to-performer-signup-container">
             <span>자신의 공연을 등록하고 싶은 인디 예술인이라면?</span>
