@@ -75,6 +75,15 @@ public interface ShowMapper {
     ShowDto.Response showToShowResponse(Show show);
 
     @Mapping(source = "id", target = "id")
+    @Mapping(source = "showBoard.board.title", target = "title")
+    @Mapping(source = "showBoard.board.image", target = "image")
+    @Mapping(source = "member.profile.nickname", target = "nickname")
+    @Mapping(source = "showBoard.showAt", target = "showAt")
+    @Mapping(source = "showBoard.expiredAt", target = "expiredAt")
+    @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
+    ShowDto.showListToShowListResponseOfSeller showToShowResponseOfSeller(Show show);
+
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "member.profile.nickname", target = "nickname")
     @Mapping(source = "showBoard.board.title", target = "title")
     @Mapping(source = "showBoard.board.content", target = "content")
