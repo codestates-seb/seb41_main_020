@@ -170,31 +170,33 @@ const WriteButton = styled(OKButton)`
 
 export default function BoardList() {
   const navigate = useNavigate();
-  // const { boardList, getBoardListData } = boardListStore();
+  const { boardList, setBoardListData } = useBoardListStore();
 
-  // const axiosBoardList = async () => {
-  //   const response = await axios.get(
-  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
-  //     { withCredentials: true }
-  //   );
-  //   return response.data.data;
-  // };
+  const axiosBoardList = async () => {
+    const response = await axios.get(`http://indiego.kro.kr:80/articles`, {
+      withCredentials: true,
+    });
+    return response.data;
+  };
 
-  // const { isLoading, isError, data, error } = useQuery(
-  //   ["axiosBoardList"],
-  //   axiosBoardList
-  // );
+  const axiosBoardListSuccess = (response) => {
+    console.log(response.data);
+    setBoardListData(response.data);
+  };
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["axiosBoardList"],
+    queryFn: axiosBoardList,
+    onSuccess: axiosBoardListSuccess,
+  });
 
-  // if (isError) {
-  //   return <div>Error : {error.message}</div>;
-  // }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // console.log(data);
-  // getBoardListData(data); // zustand로 가져감
+  if (isError) {
+    return <div>Error : {error.message}</div>;
+  }
 
   return (
     <PageWrapper>
@@ -210,7 +212,7 @@ export default function BoardList() {
         </div>
         <div className="lineDiv"></div>
         {/* boardList 가져오기 */}
-        {BoardDummy.map((it) => (
+        {boardList.map((it) => (
           <BoardListItem key={it.id} {...it} />
         ))}
         <WriteButtonDiv>
