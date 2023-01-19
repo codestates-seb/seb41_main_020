@@ -54,7 +54,7 @@ public class ShowController {
         );
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/uploads")
     public ResponseEntity uploadProfileImage(@RequestParam MultipartFile file,
                                              @LoginMemberId Long loginMemberId){
         memberService.findVerifiedMember(loginMemberId);
