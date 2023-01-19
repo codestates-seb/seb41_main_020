@@ -99,7 +99,7 @@ public class MemberController {
                                   HttpServletResponse response){
 
         memberService.reissueAccessToken(refreshToken,request,response);
-        return new ResponseEntity("Refresh Token 재발급 완료!",HttpStatus.CREATED);
+        return new ResponseEntity("Access Token 재발급 완료!",HttpStatus.CREATED);
     }
 
     @GetMapping("/logout")
