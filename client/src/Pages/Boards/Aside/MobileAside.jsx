@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const MobileAsideDiv = styled.div`
   z-index: 15;
   position: fixed;
-  width: 767px;
+  width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
@@ -36,7 +36,7 @@ const MobileAsideDiv = styled.div`
       color: ${primary.primary500};
       font-size: ${mbFontSize.medium};
       width: 120px;
-      height: 50px;
+      height: 40px;
       margin: 0 10px;
       font-weight: 700;
       cursor: pointer;
@@ -49,7 +49,7 @@ const MobileAsideDiv = styled.div`
       color: white;
       font-size: ${mbFontSize.medium};
       width: 120px;
-      height: 50px;
+      height: 40px;
       margin: 0 10px;
       font-weight: 700;
       cursor: pointer;

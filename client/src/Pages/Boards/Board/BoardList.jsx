@@ -142,6 +142,7 @@ const WriteButtonDiv = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     justify-content: center;
+    margin: 30px 0;
   }
 
   & :hover {
