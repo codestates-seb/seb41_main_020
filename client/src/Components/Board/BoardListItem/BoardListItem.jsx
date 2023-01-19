@@ -85,13 +85,13 @@ const BoardListItem = (props) => {
             <img width={30} src={heart} alt="heart"></img>
           </div>
         </div>
-        <div className="heartCount">157</div>
+        <div className="heartCount">{props.likeCount}</div>
       </div>
       <div className="imageDiv">
         <img width={50} src={heart} alt="heart"></img>
       </div>
       <BoardItemContent>
-        <Link to="/board/1" className="titleLink">
+        <Link to={`/board/${props.id}`} className="titleLink">
           {props.title}
         </Link>
         <div className="contentDiv">{props.content}</div>

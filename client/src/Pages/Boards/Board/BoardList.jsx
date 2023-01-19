@@ -20,9 +20,9 @@ import breakpoint from "../../../styles/breakpoint";
 import BoardDummy from "../../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
@@ -173,21 +173,18 @@ export default function BoardList() {
   const { boardList, setBoardListData } = useBoardListStore();
 
   const axiosBoardList = async () => {
-    const response = await axios.get(`http://indiego.kro.kr:80/articles`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`http://indiego.kro.kr:80/articles`);
     return response.data;
   };
 
-  const axiosBoardListSuccess = (response) => {
-    console.log(response.data);
+  const axiosBoardListOnSuccess = (response) => {
     setBoardListData(response.data);
   };
 
   const { isLoading, isError, error } = useQuery({
     queryKey: ["axiosBoardList"],
     queryFn: axiosBoardList,
-    onSuccess: axiosBoardListSuccess,
+    onSuccess: axiosBoardListOnSuccess,
   });
 
   if (isLoading) {
@@ -197,6 +194,8 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
+
+  console.log(boardList);
 
   return (
     <PageWrapper>
@@ -211,7 +210,6 @@ export default function BoardList() {
           <Dropdown></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {/* boardList 가져오기 */}
         {boardList.map((it) => (
           <BoardListItem key={it.id} {...it} />
         ))}

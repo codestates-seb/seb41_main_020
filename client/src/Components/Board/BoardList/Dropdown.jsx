@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import useBoardListStore from "../../../store/useBoardListStore";
 
 import { sub, dtFontSize, primary } from "../../../styles/mixins";
 
@@ -42,8 +44,9 @@ const DropdownContainer = styled.div`
 
   > ul {
     > li {
+      height: 26px;
       list-style: none;
-      padding: 2px 0;
+      padding: 3px 0;
       font-size: ${dtFontSize.small};
       cursor: pointer;
 
@@ -57,10 +60,15 @@ const DropdownContainer = styled.div`
 const Dropdown = () => {
   const [toggle, setToggle] = useState(false);
   const [value, setValue] = useState("최신순");
+  const { setBoardListData } = useBoardListStore();
 
   const handleDropdown = (props) => {
     setValue(props);
     setToggle(!toggle);
+
+    axios
+      .get(`http://indiego.kro.kr:80/articles?status=${props}`)
+      .then((res) => setBoardListData(res.data.data));
   };
   return (
     <DropdownDiv>
