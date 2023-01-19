@@ -33,6 +33,8 @@ public class ShowService {
     private final MemberRepository memberRepository;
     private final CustomBeanUtils<Show> utils;
 
+    private final ShowReservationService reservationService;
+
 
 
     @Transactional
@@ -103,6 +105,21 @@ public class ShowService {
         findVerifiedShows(shows);
         return shows;
     }
+    //판매자용 공연 조회
+    public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
+
+        pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+
+        return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
+    }
+
+    public Integer getEmptySeats(Long showId){
+        return (findShow(showId).getTotal() - reservationService.countReservation(showId));
+    }
+
+    public Integer getRevenue(Long showId){
+        return reservationService.countReservation(showId) * findShow(showId).getShowBoard().getPrice();
+    }
 
     public Show findShow(long showId){
         return findVerifiedShow(showId);
@@ -154,4 +171,6 @@ public class ShowService {
         }
         return day;
     }
+
+
 }

@@ -44,7 +44,7 @@ export default function KakaoMapButton({ location }) {
 
   axios
     .get(
-      `https://dapi.kakao.com/v2/local/search/keyword.json?y=${location.latitude}&x=${location.longitude}&query=${location.title} &page=1&size=1`,
+      `https://dapi.kakao.com/v2/local/search/keyword.json?y=${location.latitude}&x=${location.longitude}&query=${location.title}&page=1&size=1`,
       { headers }
     )
     .then((response) => {
@@ -56,6 +56,7 @@ export default function KakaoMapButton({ location }) {
   };
 
   console.log(process.env.REACT_APP_REST_API_KEY);
+  console.log(location);
 
   return (
     <ButtonComponent onClick={handleButtonClick}>

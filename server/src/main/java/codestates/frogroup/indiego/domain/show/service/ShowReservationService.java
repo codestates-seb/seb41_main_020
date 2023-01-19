@@ -38,11 +38,11 @@ public class ShowReservationService {
         showReservationRepository.delete(reservation);
 
     }
-//
-//    public Page<Article> findShow(Pageable pageable) {
-//        return null;
-//    }
-//
+
+    public Integer countReservation(Long showId){
+        return showReservationRepository.countByShowId(showId);
+    }
+
     private ShowReservation findVerifiedReservation(Long id) {
         Optional<ShowReservation> optionalShow = showReservationRepository.findById(id);
 
