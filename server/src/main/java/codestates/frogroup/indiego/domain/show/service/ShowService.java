@@ -77,23 +77,22 @@ public class ShowService {
         return shows;
     }
 
-    public Map<String, String> findMarkerShows(Integer year, Integer month){
+    public int[] findMarkerShows(Integer year, Integer month){
 
         Integer day = getCalendarTotalDay(year, month);
         LocalDate startTime = LocalDate.of(year, month, 1);
         LocalDate endTime = LocalDate.of(year, month, day);
 
         List<Show> shows = showRepository.findAllByShowBoardShowAtBetweenAndStatus(startTime, endTime, ShowStatus.SALE,
-                Sort.by(Sort.Order.desc("showBoard.showAt")));
+                Sort.by(Sort.Order.asc("showBoard.showAt")));
         findVerifiedShows(shows);
 
-        Map<String, String> map = new LinkedHashMap<>();
-        for (int i=shows.size()-1; i>=0; i--){
+        int[] hasShow = new int[shows.size()];
+        for (int i=0; i<shows.size(); i++){
             String showAt = shows.get(i).getShowBoard().getShowAt().toString();
-            String key = showAt.substring(showAt.length() - 2);
-            map.put(key,"true");
+            hasShow[i] = Integer.parseInt(showAt.substring(showAt.length() - 2));
         }
-        return map;
+        return Arrays.stream(hasShow).distinct().toArray();
     }
 
     public List<Show> findCalendarShows(Integer year, Integer month, Integer day){
