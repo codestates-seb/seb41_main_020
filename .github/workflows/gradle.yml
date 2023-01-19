@@ -36,12 +36,12 @@ jobs:
           distribution: 'temurin'
           
       - uses: actions/checkout@v3
-      - run: touch ./server/src/main/resources/application.yml
-      - run: echo "${{ secrets.APPLICATION }}" > ./server/src/main/resources/application.yml
+      - run: touch ./src/main/resources/application.yml
+      - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
       - uses: actions/upload-artifact@v2
         with:
           name: applicaiton.yml
-          path: ./server/src/main/resources/application.yml
+          path: ./src/main/resources/application.yml
 
       - name: Add permission
         run: chmod +x ./gradlew
