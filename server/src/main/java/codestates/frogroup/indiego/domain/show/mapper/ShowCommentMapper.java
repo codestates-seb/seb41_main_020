@@ -20,6 +20,7 @@ public interface ShowCommentMapper {
     @Mapping(source = "member.id", target = "memberId")
     @Mapping(source = "show.id", target = "showId")
     @Mapping(source = "id", target = "commentId")
+    @Mapping(source = "score", target = "score")
     ShowCommentDto.Response commentToResponseDto(ShowComment showComment);
 
     List<ShowCommentDto.Response> commentListToResponseDtoList(List<ShowComment> showCommentList);

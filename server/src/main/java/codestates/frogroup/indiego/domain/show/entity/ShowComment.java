@@ -26,8 +26,8 @@ public class ShowComment extends BaseTime {
     private Member member;
 
     @Column(nullable = false)
-    @Setter
-    private Double score;
+    @Setter @Getter
+    private double score;
 
     @Column(nullable = false)
     @Setter

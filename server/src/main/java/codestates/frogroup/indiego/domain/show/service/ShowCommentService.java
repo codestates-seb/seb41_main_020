@@ -39,10 +39,11 @@ public class ShowCommentService {
     }
 
     private void inputScoreAverage(ShowComment showComment, Show show) {
-        Double scoreAverage = Double.parseDouble(redisDao.getValues("scoreAverage"));
+        String key = String.format("{}@scoreAverage", show.getId());
+        Double scoreAverage = Double.parseDouble(redisDao.getValues(key));
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        redisDao.setValues("scoreAverage", s);
+        redisDao.setValues(key, s);
     }
 
     public Page<ShowComment> findShowComment(Long showId, int page, int size ){
@@ -75,12 +76,13 @@ public class ShowCommentService {
     }
 
     private void modifyScoreAverage(ShowComment showComment, Show show) {
-        Double scoreAverage = Double.parseDouble(redisDao.getValues("scoreAverage"));
+        String key = String.format("{}@scoreAverage", show.getId());
+        Double scoreAverage = Double.parseDouble(redisDao.getValues(key));
         scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
         scoreAverage += showComment.getScore();
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        redisDao.setValues("scoreAverage", s);
+        redisDao.setValues(key, s);
     }
 
     public void deleteShowComment(Long commentId, Long memberId, Show show){
