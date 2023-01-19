@@ -9,7 +9,7 @@ import breakpoint from "../../../styles/breakpoint";
 //라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import axios from "axios";
 // import { useQuery } from "@tanstack/react-query";
 // import useBoardListStore from "../../../store/useBoardListStore";
@@ -24,7 +24,8 @@ const BoardItemContent = styled.div`
     justify-content: flex-start;
   }
 
-  .titleButton {
+  .titleLink {
+    text-decoration-line: none;
     width: max-content;
     margin-top: 10px;
     font-size: ${dtFontSize.medium};
@@ -76,7 +77,6 @@ const BoardItemCreateInfo = styled.div`
 `;
 
 const BoardListItem = (props) => {
-  const navigate = useNavigate();
   return (
     <BoardItem key={props.id}>
       <div className="likeDiv">
@@ -91,14 +91,9 @@ const BoardListItem = (props) => {
         <img width={50} src={heart} alt="heart"></img>
       </div>
       <BoardItemContent>
-        <button
-          className="titleButton"
-          onClick={() => {
-            navigate("/board/1");
-          }}
-        >
+        <Link to="/board/1" className="titleLink">
           {props.title}
-        </button>
+        </Link>
         <div className="contentDiv">{props.content}</div>
         <BoardItemCreateInfo>
           <div className="authorDiv">{props.author}</div>

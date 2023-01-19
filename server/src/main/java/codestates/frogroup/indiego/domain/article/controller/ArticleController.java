@@ -125,7 +125,7 @@ public class ArticleController {
     /**
      * 이미지 업로드
      */
-    @PostMapping("/image")
+    @PostMapping("/uploads")
     public ResponseEntity postArticleImage(@RequestParam MultipartFile file, @LoginMemberId Long memberId) {
 
         String url = articleService.uploadArticleImage(file, memberId);

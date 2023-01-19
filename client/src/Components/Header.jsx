@@ -348,7 +348,7 @@ const NavbarLinkerContainer = styled.div`
 export default function Header() {
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   useWindowSize(setNavOpen);
 
   return (

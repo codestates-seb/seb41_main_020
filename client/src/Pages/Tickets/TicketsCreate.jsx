@@ -179,7 +179,7 @@ export default function TicketsCreate() {
   const [ticketName, setTicketName] = useState("");
   // 장소
   const [gu, setGu] = useState("구");
-  const [place, setPlace] = useState("공연장소");
+  const [place, setPlace] = useState("어디서 공연을 하시나요?");
 
   // 공연 시작 정보
   const [startDate, setStartDate] = useState("");
@@ -269,11 +269,12 @@ export default function TicketsCreate() {
             <div className="DatePickerInfoDiv">
               <input
                 type="text"
+                max="25"
                 className="DatePickerInput"
                 placeholder="시작 시간"
                 value={startTime}
                 onChange={(e) => {
-                  setStartTime(e.target.value);
+                  setStartTime(e.target.value.replace(/[^0-9]/g, ""));
                 }}
               />
             </div>
@@ -285,7 +286,7 @@ export default function TicketsCreate() {
               placeholder="공연 좌석 수를 입력해주세요."
               value={sit}
               onChange={(e) => {
-                setSit(e.target.value);
+                setSit(e.target.value.replace(/[^0-9]/g, ""));
               }}
             />
           </TicketsCreateInputDiv>
@@ -296,7 +297,7 @@ export default function TicketsCreate() {
               placeholder="티켓 가격을 입력해주세요"
               value={ticketPrice}
               onChange={(e) => {
-                setTicketPrice(e.target.value);
+                setTicketPrice(e.target.value.replace(/[^0-9]/g, ""));
               }}
             />{" "}
             원
