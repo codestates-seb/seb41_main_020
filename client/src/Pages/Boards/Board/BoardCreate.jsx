@@ -15,7 +15,8 @@ export const PostWrapper = styled(ContentWrapper)`
   padding-right: 10px;
   height: max-content;
   @media screen and (max-width: ${breakpoint.mobile}) {
-    width: 87%;
+    width: 99%;
+    /* padding: 0 10px; */
   }
 `;
 
@@ -125,7 +126,6 @@ const BoardCreate = () => {
             <PostButton type="submit">글 올리기</PostButton>
           </PostBoard>
         </form>
-        <AnswerList></AnswerList>
       </PostWrapper>
     </PageWrapper>
   );
