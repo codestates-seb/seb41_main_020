@@ -34,7 +34,7 @@ public class ShowService {
     private final MemberRepository memberRepository;
     private final CustomBeanUtils<Show> utils;
     private final ShowReservationService reservationService;
-
+    private final RedisDao redisDao;
 
 
 
@@ -46,6 +46,8 @@ public class ShowService {
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         show.setMember(member);
+
+        redisDao.setValues("scoreAverage","0");
 
         return showRepository.save(show);
     }

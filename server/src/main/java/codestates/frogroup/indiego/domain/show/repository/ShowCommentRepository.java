@@ -7,5 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShowCommentRepository extends JpaRepository<ShowComment,Long> {
     Page<ShowComment> findAllByShowId(Long showId, Pageable pageable);
+    Integer countByShowId(Long showId);
+
+    ShowComment findByMember_Id(Long memberId);
 
 }

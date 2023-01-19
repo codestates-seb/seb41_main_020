@@ -9,6 +9,7 @@ import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import codestates.frogroup.indiego.domain.show.repository.ShowCommentRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,14 +28,21 @@ import java.util.Optional;
 public class ShowCommentService {
 
     private final ShowCommentRepository showCommentRepository;
-    private final CustomBeanUtils<ShowComment> utils;
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
-
+    private final RedisDao redisDao;
     public ShowComment createShowComment(ShowComment showComment, Show show, Member member){
         showComment.addShow(show);
         showComment.addMember(member);
+
+        inputScoreAverage(showComment, show);
         return showCommentRepository.save(showComment);
+    }
+
+    private void inputScoreAverage(ShowComment showComment, Show show) {
+        Double scoreAverage = Double.parseDouble(redisDao.getValues("scoreAverage"));
+        Integer cntPeople = showCommentRepository.countByShowId(show.getId());
+        String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
+        redisDao.setValues("scoreAverage", s);
     }
 
     public Page<ShowComment> findShowComment(Long showId, int page, int size ){
@@ -61,7 +69,18 @@ public class ShowCommentService {
         Optional.ofNullable(showComment.getScore()).ifPresent(score -> findShowComment.setScore(score));
         Optional.ofNullable(showComment.getComment()).ifPresent(comment -> findShowComment.setComment(comment));
 
+        modifyScoreAverage(showComment, show);
+
         return findShowComment;
+    }
+
+    private void modifyScoreAverage(ShowComment showComment, Show show) {
+        Double scoreAverage = Double.parseDouble(redisDao.getValues("scoreAverage"));
+        scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
+        scoreAverage += showComment.getScore();
+        Integer cntPeople = showCommentRepository.countByShowId(show.getId());
+        String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
+        redisDao.setValues("scoreAverage", s);
     }
 
     public void deleteShowComment(Long commentId, Long memberId, Show show){
