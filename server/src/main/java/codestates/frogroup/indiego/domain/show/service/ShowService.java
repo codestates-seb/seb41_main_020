@@ -37,7 +37,6 @@ public class ShowService {
     private final ShowReservationService reservationService;
     private final RedisDao redisDao;
 
-    private final ShowReservationService reservationService;
 
 
 

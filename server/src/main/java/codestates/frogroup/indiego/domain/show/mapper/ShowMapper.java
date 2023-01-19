@@ -71,6 +71,7 @@ public interface ShowMapper {
     @Mapping(source = "status", target = "status")
     @Mapping(source = "showBoard.detailImage", target = "detailImage")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
+    @Mapping(source = "showBoard.showTime", target = "showTime")
     ShowDto.Response showToShowResponse(Show show);
 
     @Mapping(source = "id", target = "id")
