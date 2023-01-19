@@ -34,6 +34,14 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          
+      - uses: actions/checkout@v3
+      - run: touch ./server/src/main/resources/application.yml
+      - run: echo "${{ secrets.APPLICATION }}" > ./server/src/main/resources/application.yml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: applicaiton.yml
+          path: ./server/src/main/resources/application.yml
 
       - name: Add permission
         run: chmod +x ./gradlew
