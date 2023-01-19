@@ -26,7 +26,7 @@ public class AwsS3Service implements ImageUploadService {
 	private String bucketName;
 
 	public String StoreImage(MultipartFile file, AwsS3Path awsS3Path) {
-		;
+
 		if (file.isEmpty()) {
 			throw new BusinessLogicException(ExceptionCode.UPLOAD_FAILED);
 		}

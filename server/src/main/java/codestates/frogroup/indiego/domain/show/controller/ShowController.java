@@ -1,5 +1,6 @@
 package codestates.frogroup.indiego.domain.show.controller;
 
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
@@ -8,6 +9,8 @@ import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
+import codestates.frogroup.indiego.global.fileupload.AwsS3Service;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -31,7 +35,9 @@ import java.util.*;
 public class ShowController {
 
     private final ShowService showService;
+    private final MemberService memberService;
     private final ShowMapper mapper;
+    private final AwsS3Service awsS3Service;
 
 
     @PostMapping
@@ -47,6 +53,15 @@ public class ShowController {
                 , HttpStatus.CREATED
         );
     }
+
+    @PostMapping("/uploads")
+    public ResponseEntity uploadProfileImage(@RequestParam MultipartFile file,
+                                             @LoginMemberId Long loginMemberId){
+        memberService.findVerifiedMember(loginMemberId);
+        String url = awsS3Service.StoreImage(file, AwsS3Path.SHOWS);
+        return new ResponseEntity<>(new SingleResponseDto<>(url), HttpStatus.CREATED);
+    }
+
 
     @PatchMapping ("/{show-id}")
     public ResponseEntity patchShow(@PathVariable("show-id") long showId,

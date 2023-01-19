@@ -87,7 +87,8 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         article.createdAt))
                 .from(article)
                 .where(
-                        article.board.category.eq(category),
+                        categoryEq(category),
+//                        article.board.category.eq(category),
                         searchEq(search)
                 )
                 .orderBy(sortStatusEq(status))
@@ -99,7 +100,8 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .select(article.count())
                 .from(article)
                 .where(
-                        article.board.category.eq(category),
+                        categoryEq(category),
+//                        article.board.category.eq(category),
                         searchEq(search)
                 )
                 .orderBy(sortStatusEq(status));

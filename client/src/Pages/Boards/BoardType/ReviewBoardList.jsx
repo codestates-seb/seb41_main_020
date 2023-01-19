@@ -25,7 +25,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import boardListStore from "../../../store/boardListStore";
+import useBoardListStore from "../../../store/useBoardListStore";
 
 export const PageWrapper = styled.div`
   display: flex;

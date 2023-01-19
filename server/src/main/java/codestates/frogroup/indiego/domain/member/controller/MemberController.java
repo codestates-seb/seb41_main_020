@@ -42,7 +42,7 @@ public class MemberController {
         return new ResponseEntity<>(new SingleResponseDto<>(postResponse), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{member-id}/upload")
+    @PostMapping("/{member-id}/uploads")
     public ResponseEntity uploadProfileImage(@RequestParam MultipartFile file,
                                              @Positive @PathVariable("member-id") Long memberId,
                                              @LoginMemberId Long loginMemberId){
@@ -99,6 +99,15 @@ public class MemberController {
                                   HttpServletResponse response){
 
         memberService.reissueAccessToken(refreshToken,request,response);
-        return new ResponseEntity("Refresh Token 재발급 완료!",HttpStatus.CREATED);
+        return new ResponseEntity("Access Token 재발급 완료!",HttpStatus.CREATED);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(@CookieValue(value = "refreshToken", required = false) String refreshToken,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response){
+
+        memberService.logout(refreshToken);
+        return new ResponseEntity<>(new SingleResponseDto<>("로그아웃에 성공하였습니다."), HttpStatus.CREATED);
     }
 }
