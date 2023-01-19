@@ -1,5 +1,4 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import heart from "../../../assets/heart.svg";
 import pen from "../../../assets/pen.svg";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Aside from "../Aside/Aside.jsx";
@@ -43,8 +42,9 @@ export const ContentWrapper = styled.div`
   height: 1400px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-left: 50px;
-    width: 90%;
+    width: 95%;
+    margin-left: 10px;
+    padding-left: 0;
   }
 
   .title {
@@ -139,6 +139,11 @@ const WriteButtonDiv = styled.div`
   flex-direction: row;
   justify-content: right;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    justify-content: center;
+    margin: 30px 0;
+  }
+
   & :hover {
     background-color: ${secondary.secondary500};
   }
@@ -165,31 +170,33 @@ const WriteButton = styled(OKButton)`
 
 export default function BoardList() {
   const navigate = useNavigate();
-  // const { boardList, getBoardListData } = boardListStore();
+  const { boardList, setBoardListData } = useBoardListStore();
 
-  // const axiosBoardList = async () => {
-  //   const response = await axios.get(
-  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
-  //     { withCredentials: true }
-  //   );
-  //   return response.data.data;
-  // };
+  const axiosBoardList = async () => {
+    const response = await axios.get(`http://indiego.kro.kr:80/articles`, {
+      withCredentials: true,
+    });
+    return response.data;
+  };
 
-  // const { isLoading, isError, data, error } = useQuery(
-  //   ["axiosBoardList"],
-  //   axiosBoardList
-  // );
+  const axiosBoardListSuccess = (response) => {
+    console.log(response.data);
+    setBoardListData(response.data);
+  };
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["axiosBoardList"],
+    queryFn: axiosBoardList,
+    onSuccess: axiosBoardListSuccess,
+  });
 
-  // if (isError) {
-  //   return <div>Error : {error.message}</div>;
-  // }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // console.log(data);
-  // getBoardListData(data); // zustand로 가져감
+  if (isError) {
+    return <div>Error : {error.message}</div>;
+  }
 
   return (
     <PageWrapper>
@@ -205,7 +212,7 @@ export default function BoardList() {
         </div>
         <div className="lineDiv"></div>
         {/* boardList 가져오기 */}
-        {BoardDummy.map((it) => (
+        {boardList.map((it) => (
           <BoardListItem key={it.id} {...it} />
         ))}
         <WriteButtonDiv>

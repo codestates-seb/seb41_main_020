@@ -97,7 +97,7 @@ public class SecurityConfiguration {
 		public void configure(HttpSecurity builder) throws Exception {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, tokenProvider, redisDao);
+			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, memberService, tokenProvider, redisDao);
 			jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler()); // 추후 refreshTokenRepository 넣기
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());

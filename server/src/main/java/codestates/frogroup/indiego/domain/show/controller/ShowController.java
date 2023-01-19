@@ -175,9 +175,9 @@ public class ShowController {
     public ResponseEntity getMonthMarker(@Positive @RequestParam("year") Integer year,
                                          @Positive @RequestParam("month") Integer month){
 
-        Map<String, String> markerShows = showService.findMarkerShows(year, month);
+       int[] hasShow = showService.findMarkerShows(year, month);
 
-        return new ResponseEntity(new SingleResponseDto<>(markerShows), HttpStatus.OK);
+        return new ResponseEntity(new SingleResponseDto<>(hasShow), HttpStatus.OK);
     }
 
     @GetMapping("/dates")

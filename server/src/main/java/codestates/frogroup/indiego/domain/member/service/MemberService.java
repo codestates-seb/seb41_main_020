@@ -158,14 +158,10 @@ public class MemberService {
     public void logout(String refreshToken){
         validatedRefeshToken(refreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
-        log.info("redisAccessToken = {}", redisAccessToken);
         if(redisDao.validateValue(redisAccessToken)){
             redisDao.deleteValues(refreshToken);
-            log.info("# test =======>1");
         }
-        log.info("# test =======>2");
         deleteValuesCheck(refreshToken);
-        log.info("# test =======>3");
     }
 
     public void validatedRefeshToken(String refreshToken){
@@ -176,7 +172,6 @@ public class MemberService {
 
     public void deleteValuesCheck(String refreshToken){
         String redisAccessToken = redisDao.getValues(refreshToken);
-        log.info("# redisAccessToken = {}", redisAccessToken);
         if(redisAccessToken != null){
             throw new BusinessLogicException(ExceptionCode.TOKEN_DELETE_FAIL);
         }

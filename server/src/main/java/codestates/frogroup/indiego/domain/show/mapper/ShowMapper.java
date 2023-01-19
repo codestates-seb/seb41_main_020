@@ -71,18 +71,16 @@ public interface ShowMapper {
     @Mapping(source = "status", target = "status")
     @Mapping(source = "showBoard.detailImage", target = "detailImage")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
-    @Mapping(source = "showBoard.showTime", target = "showTime")
-    @Mapping(source = "scoreAverage" , target = "scoreAverage")
     ShowDto.Response showToShowResponse(Show show);
 
-//    @Mapping(source = "id", target = "id")
-//    @Mapping(source = "showBoard.board.title", target = "title")
-//    @Mapping(source = "showBoard.board.image", target = "image")
-//    @Mapping(source = "member.profile.nickname", target = "nickname")
-//    @Mapping(source = "showBoard.showAt", target = "showAt")
-//    @Mapping(source = "showBoard.expiredAt", target = "expiredAt")
-//    @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
-//    ShowDto.showListToShowListResponseOfSeller showToShowResponseOfSeller(Show show);
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "showBoard.board.title", target = "title")
+    @Mapping(source = "showBoard.board.image", target = "image")
+    @Mapping(source = "member.profile.nickname", target = "nickname")
+    @Mapping(source = "showBoard.showAt", target = "showAt")
+    @Mapping(source = "showBoard.expiredAt", target = "expiredAt")
+    @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
+    ShowDto.showListToShowListResponseOfSeller showToShowResponseOfSeller(Show show);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "member.profile.nickname", target = "nickname")
