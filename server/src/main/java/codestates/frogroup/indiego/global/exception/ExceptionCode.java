@@ -23,6 +23,8 @@ public enum ExceptionCode {
     TOKEN_UNSUPPORTED(400, "Token Unsupported"),
     TOKEN_ILLEGAL_ARGUMENT(400, "Token Illegal Argument"),
     ANONYMOUS_USER(404, "Anonymous User"),
+    TOKEN_DELETE_FAIL(400, "Refresh Token 삭제를 실패하였습니다."),
+
     // ARITCLE
     ARTICLE_NOT_FOUND(404, "게시글을 찾을 수 없습니다."),
     ARTICLE_COMMENT_NOT_FOUND(404, "해당 게시글의 댓글을 찾을 수 없습니다."),
