@@ -1,0 +1,97 @@
+.marker_container {
+  top: -130px;
+  left: -200px;
+}
+
+
+.marker_box {
+  width:150px;
+  height:max-content; 
+  display:flex; 
+  padding: 10px 8px;
+  border-radius: 20px;
+  flex-direction:column; 
+  align-items:center;
+  justify-content: center;
+  background-color:white;
+  position: absolute;
+  box-shadow: 0 5px 20px black;
+  top: -130px;
+  left: -200px;
+}
+
+.marker_title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+} 
+
+.marker_address{
+  font-size: 9px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  overflow-anchor: initial;
+  white-space: normal;
+}
+
+.marker_date {
+  font-size: 10px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.triangle {
+  position: absolute;
+  left: 110px;
+  top: 50px;
+  width: 80px;
+  height: 80px;
+}
+
+.triangle_path {
+  fill: white;
+}
+
+.close {
+  font-size: 10px;
+  border: 1px solid gray;
+  padding: 2px;
+  margin-top: 10px;
+}
+
+.close:hover {
+  background-color: #487EEB;
+  color: white;
+  cursor: pointer;
+}
+
+.poster {
+  margin-bottom: 10px;
+  box-shadow: 0 5px 5px gray;
+}
+
+.hover_container {
+  position: absolute;
+  top: -135px;
+  left: -50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  height: max-content;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.hover_title {
+  font-weight: 600;
+  color :#487EEB;
+  margin-bottom: 5px;
+}
+
+.hover_date {
+  font-weight: 400;
+  font-size: 12px;
+}

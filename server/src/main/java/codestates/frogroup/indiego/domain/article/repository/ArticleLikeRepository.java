@@ -1,0 +1,15 @@
+package codestates.frogroup.indiego.domain.article.repository;
+
+import codestates.frogroup.indiego.domain.article.entity.ArticleLike;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ArticleLikeRepository extends JpaRepository<ArticleLike, Long> {
+
+    List<ArticleLike> findAllByArticleId(Long articleId);
+
+    ArticleLike findByMemberId(Long memberId);
+
+    long countByArticleId(long articleId);
+}
