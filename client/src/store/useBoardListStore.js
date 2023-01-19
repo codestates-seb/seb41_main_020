@@ -3,7 +3,7 @@ import { create } from "zustand";
 const useBoardListStore = create((set) => ({
   boardList: [],
 
-  getBoardListData(data) {
+  setBoardListData(data) {
     set((state) => ({
       boardList: [...data],
     }));
