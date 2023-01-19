@@ -60,10 +60,10 @@ function App() {
 
         {/* 게시판 분류 */}
         {/* 자유게시판 (게시판 홈)*/}
-        <Route path="/board" element={<BoardList />}></Route>
-        <Route path="/board/create" element={<BoardCreate />}></Route>
-        <Route path="/board/:id" element={<Board />}></Route>
-        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
+        <Route path="/board/free" element={<BoardList />}></Route>
+        <Route path="/board/free/create" element={<BoardCreate />}></Route>
+        <Route path="/board/free/:id" element={<Board />}></Route>
+        <Route path="/board/free/:id/edit" element={<BoardEdit />}></Route>
         {/* 구인게시판 */}
         <Route path="/board/employ" element={<EmployBoardList />}></Route>
         <Route path="/board/employ/create" element={<BoardCreate />}></Route>

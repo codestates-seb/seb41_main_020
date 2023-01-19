@@ -173,7 +173,9 @@ export default function BoardList() {
   const { boardList, setBoardListData } = useBoardListStore();
 
   const axiosBoardList = async () => {
-    const response = await axios.get(`http://indiego.kro.kr:80/articles`);
+    const response = await axios.get(
+      `http://indiego.kro.kr:80/articles?category=자유게시판&?status=최신순&page=1&size=10`
+    );
     return response.data;
   };
 
@@ -216,7 +218,7 @@ export default function BoardList() {
         <WriteButtonDiv>
           <WriteButton
             onClick={() => {
-              navigate("/board/create");
+              navigate("/board/free/create");
             }}
           >
             <img className="pencelImage" src={pen} alt="pen"></img>

@@ -91,13 +91,15 @@ const BoardListItem = (props) => {
         <img width={50} src={heart} alt="heart"></img>
       </div>
       <BoardItemContent>
-        <Link to={`/board/${props.id}`} className="titleLink">
+        <Link to={`/board/free/${props.id}`} className="titleLink">
           {props.title}
         </Link>
         <div className="contentDiv">{props.content}</div>
         <BoardItemCreateInfo>
-          <div className="authorDiv">{props.author}</div>
-          <div className="createDateDiv">{props.createdData}</div>
+          <div className="authorDiv">{props.nickname}</div>
+          <div className="createDateDiv">
+            {new Date(props.createdAt).toLocaleString()}
+          </div>
         </BoardItemCreateInfo>
       </BoardItemContent>
     </BoardItem>
