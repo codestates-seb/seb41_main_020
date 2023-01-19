@@ -23,6 +23,7 @@ public interface ShowMapper {
     @Mapping(source = "longitude", target = "coordinate.longitude")
     @Mapping(source = "detailImage", target = "showBoard.detailImage")
     @Mapping(source = "detailAddress", target = "showBoard.detailAddress")
+    @Mapping(source = "showTime", target = "showBoard.showTime")
     Show showPostDtoToShow(ShowDto.Post post);
 
     @Mapping(source = "title", target = "showBoard.board.title")
@@ -37,6 +38,7 @@ public interface ShowMapper {
     @Mapping(source = "latitude", target = "coordinate.latitude")
     @Mapping(source = "detailImage", target = "showBoard.detailImage")
     @Mapping(source = "detailAddress", target = "showBoard.detailAddress")
+    @Mapping(source = "showTime", target = "showBoard.showTime")
     Show showPatchDtoToShow(ShowDto.Patch patch);
 
     @Mapping(source = "showBoard.board.title", target = "title")
@@ -52,6 +54,7 @@ public interface ShowMapper {
     @Mapping(source = "status", target = "status")
     @Mapping(source = "showBoard.detailImage", target = "detailImage")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
+    @Mapping(source = "showBoard.showTime", target = "showTime")
     ShowDto.postResponse showToShowPostResponse(Show show);
 
     @Mapping(source = "showBoard.board.title", target = "title")
@@ -68,6 +71,7 @@ public interface ShowMapper {
     @Mapping(source = "status", target = "status")
     @Mapping(source = "showBoard.detailImage", target = "detailImage")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
+    @Mapping(source = "showBoard.showTime", target = "showTime")
     ShowDto.Response showToShowResponse(Show show);
 
     @Mapping(source = "id", target = "id")
