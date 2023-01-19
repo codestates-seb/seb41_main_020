@@ -176,7 +176,7 @@ public class TokenProvider {
 				.path("/")
 				//.secure(true) // http, https 구분
 				.sameSite("None") // 서로 다른 도메인간 쿠키 전송에 대한 보안설정
-				.httpOnly(true) // XSS 공격을 막기위함
+//				.httpOnly(true) // XSS 공격을 막기위함
 				.build();
 		response.setHeader("Set-Cookie", cookie.toString()); // Refresh Token Cookie 에 전송
 		return cookie;
