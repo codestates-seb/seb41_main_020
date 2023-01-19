@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+import Spinner from "../../Spinner";
 
 import { primary, sub } from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint";
@@ -9,6 +11,8 @@ import Arrow from "../../../assets/arrow.svg";
 import { useInterval } from "../../../utils/useInterval";
 
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const CarouselContainer = styled.div`
   width: ${(props) => props.width};
@@ -70,36 +74,61 @@ const NextButton = styled.button`
 const Rank = styled.h2`
   position: absolute;
   font-size: calc(60px + 2vw);
-  top: 42%;
-  left: 12%;
+  top: 50%;
+  left: 8%;
   color: ${primary.primary200};
   font-style: italic;
   pointer-events: none;
 
   @media screen and (min-width: 1400px) {
-    font-size: 100px;
+    font-size: 80px;
+  }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: 60px;
+    top: 50%;
+    left: calc(5% + 8vw);
+  }
+
+  @media screen and (max-width: 500px) {
+    top: 70%;
+    left: 20%;
+    font-size: 40px;
   }
 `;
 
 export default function Carousel({
   width,
   height,
-  data,
   carouselItemList,
   isRankMode,
-  isMultiple,
   minWidth,
   maxWidth,
+  sort,
 }) {
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [data, setData] = useState([]);
 
   const CarouselItemList = carouselItemList;
+  const serverURI = process.env.REACT_APP_SERVER_URI;
 
-  const pageButtonClickHandler = (num) => {
-    if (currentIdx + num < data.length && currentIdx + num >= 0) {
-      setCurrentIdx(currentIdx + num);
-    }
+  const fetchShowData = () => {
+    return axios.get(`${serverURI}/shows`, {
+      params: { sort },
+    });
   };
+
+  const fetchShowDataOnSuccess = (response) => {
+    const data = response.data.data;
+    setData(data);
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchShowData", sort],
+    queryFn: fetchShowData,
+    onSuccess: fetchShowDataOnSuccess,
+    keepPreviousData: true,
+  });
 
   useInterval(() => {
     if (currentIdx + 1 >= data.length) {
@@ -109,6 +138,11 @@ export default function Carousel({
     }
   }, 3500);
 
+  const pageButtonClickHandler = (num) => {
+    if (currentIdx + num < data.length && currentIdx + num >= 0) {
+      setCurrentIdx(currentIdx + num);
+    }
+  };
   return (
     <CarouselContainer
       width={width}
@@ -123,12 +157,11 @@ export default function Carousel({
       >
         <img src={Arrow} alt="prev" />
       </PrevButton>
-      {CarouselItemList && (
-        <CarouselItemList
-          data={data}
-          currentIdx={currentIdx}
-          isMultiple={isMultiple}
-        />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        CarouselItemList &&
+        data && <CarouselItemList data={data} currentIdx={currentIdx} />
       )}
       {isRankMode && <Rank>{currentIdx + 1}</Rank>}
       <NextButton

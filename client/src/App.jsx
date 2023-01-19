@@ -29,64 +29,80 @@ import "./App.css";
 
 // 그다음에는 라이브러리
 import { Route, Routes } from "react-router-dom";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
 
-        {/* 로그인 및 회원가입 */}
-        <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/signup/performer" element={<SignupPerformer />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        {/* 프로파일 */}
-        <Route path="mypage/user/:id" element={<Profile />}></Route>
-        <Route
-          path="mypage/performer/:id"
-          element={<ProfilePerformer />}
-        ></Route>
-        <Route path="/mypage/:id/edit" element={<ProfileEdit />}></Route>
+          {/* 로그인 및 회원가입 */}
+          <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/signup/performer" element={<SignupPerformer />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          {/* 프로파일 */}
+          <Route path="mypage/user/:id" element={<Profile />}></Route>
+          <Route
+            path="mypage/performer/:id"
+            element={<ProfilePerformer />}
+          ></Route>
+          <Route path="/mypage/:id/edit" element={<ProfileEdit />}></Route>
 
-        {/* 티케팅게시판 */}
-        <Route path="/tickets" element={<Tickets />}></Route>
-        <Route path="/tickets/create" element={<TicketsCreate />}></Route>
-        <Route path="/tickets/:id" element={<TicketsDetail />}></Route>
-        <Route path="/tickets/:id/edit" element={<TicketsEdit />}></Route>
+          {/* 티케팅게시판 */}
+          <Route path="/tickets" element={<Tickets />}></Route>
+          <Route path="/tickets/create" element={<TicketsCreate />}></Route>
+          <Route path="/tickets/:id" element={<TicketsDetail />}></Route>
+          <Route path="/tickets/:id/edit" element={<TicketsEdit />}></Route>
 
-        {/* 공연찾기게시판 */}
-        <Route path="/search" element={<Search />}></Route>
+          {/* 공연찾기게시판 */}
+          <Route path="/search" element={<Search />}></Route>
 
-        {/* 게시판 분류 */}
-        {/* 자유게시판 (게시판 홈)*/}
-        <Route path="/board" element={<BoardList />}></Route>
-        <Route path="/board/create" element={<BoardCreate />}></Route>
-        <Route path="/board/:id" element={<Board />}></Route>
-        <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
-        {/* 구인게시판 */}
-        <Route path="/board/employ" element={<EmployBoardList />}></Route>
-        <Route path="/board/employ/create" element={<BoardCreate />}></Route>
-        <Route path="/board/employ/:id" element={<Board />}></Route>
-        <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
-        {/* 요청게시판 */}
-        <Route path="/board/request" element={<RequestBoardList />}></Route>
-        <Route path="/board/request/create" element={<BoardCreate />}></Route>
-        <Route path="/board/request/:id" element={<Board />}></Route>
-        <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
-        {/* 홍보게시판 */}
-        <Route path="/board/advertise" element={<AdvertiseBoardList />}></Route>
-        <Route path="/board/advertise/create" element={<BoardCreate />}></Route>
-        <Route path="/board/advertise/:id" element={<Board />}></Route>
-        <Route path="/board/advertise/:id/edit" element={<BoardEdit />}></Route>
-        {/* 후기게시판 */}
-        <Route path="/board/review" element={<ReviewBoardList />}></Route>
-        <Route path="/board/review/create" element={<BoardCreate />}></Route>
-        <Route path="/board/review/:id" element={<Board />}></Route>
-        <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
-        <Route path="*" element={<NotFound />}></Route>
-      </Routes>
-      <Footer />
+          {/* 게시판 분류 */}
+          {/* 자유게시판 (게시판 홈)*/}
+          <Route path="/board" element={<BoardList />}></Route>
+          <Route path="/board/create" element={<BoardCreate />}></Route>
+          <Route path="/board/:id" element={<Board />}></Route>
+          <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
+          {/* 구인게시판 */}
+          <Route path="/board/employ" element={<EmployBoardList />}></Route>
+          <Route path="/board/employ/create" element={<BoardCreate />}></Route>
+          <Route path="/board/employ/:id" element={<Board />}></Route>
+          <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
+          {/* 요청게시판 */}
+          <Route path="/board/request" element={<RequestBoardList />}></Route>
+          <Route path="/board/request/create" element={<BoardCreate />}></Route>
+          <Route path="/board/request/:id" element={<Board />}></Route>
+          <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
+          {/* 홍보게시판 */}
+          <Route
+            path="/board/advertise"
+            element={<AdvertiseBoardList />}
+          ></Route>
+          <Route
+            path="/board/advertise/create"
+            element={<BoardCreate />}
+          ></Route>
+          <Route path="/board/advertise/:id" element={<Board />}></Route>
+          <Route
+            path="/board/advertise/:id/edit"
+            element={<BoardEdit />}
+          ></Route>
+          {/* 후기게시판 */}
+          <Route path="/board/review" element={<ReviewBoardList />}></Route>
+          <Route path="/board/review/create" element={<BoardCreate />}></Route>
+          <Route path="/board/review/:id" element={<Board />}></Route>
+          <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
+        <Footer />
+      </QueryClientProvider>
     </>
   );
 }

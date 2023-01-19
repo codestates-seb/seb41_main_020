@@ -4,6 +4,7 @@ import React from "react";
 import { dtFontSize, primary, sub } from "../../../styles/mixins";
 
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const ItemContainer = styled.div`
   display: flex;
@@ -11,6 +12,15 @@ const ItemContainer = styled.div`
   width: 80%;
   height: 100%;
   margin: 0 10%;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    :hover {
+      color: none;
+    }
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -19,7 +29,7 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 10px;
+  margin-left: 50px;
 
   img {
     height: calc(100px + 2vw);
@@ -92,14 +102,16 @@ export default function Item({ data }) {
   return (
     <ItemContainer>
       <ImageContainer>
-        <img src={data.img} alt="poster" />
+        <img src={data.image} alt="poster" />
       </ImageContainer>
-      <ConcertDetailsContainer>
-        <h2>{data.title}</h2>
-        <h3>{data.artist}</h3>
-        <h4 className="date">{data.date}</h4>
-        <h4 className="location">{data.location}</h4>
-      </ConcertDetailsContainer>
+      <Link to={`tickets/${data.id}`}>
+        <ConcertDetailsContainer>
+          <h2>{data.title}</h2>
+          <h3>{data.nickname}</h3>
+          <h4 className="date">{`${data.showAt} - ${data.expiredAt}`}</h4>
+          <h4 className="location">{data.detailAddress}</h4>
+        </ConcertDetailsContainer>
+      </Link>
     </ItemContainer>
   );
 }
