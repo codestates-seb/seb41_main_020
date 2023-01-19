@@ -102,8 +102,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .host(serverName)
                 //.host("localhost")
                 .port(80) // 기본 포트가 80이기 때문에 괜찮다
-                .path("/")
-                .queryParams(queryParams)
+                .path("/token")
+//                .queryParams(queryParams)
                 .build()
                 .toUri();
     }
