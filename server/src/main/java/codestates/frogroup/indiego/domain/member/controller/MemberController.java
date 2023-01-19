@@ -42,7 +42,7 @@ public class MemberController {
         return new ResponseEntity<>(new SingleResponseDto<>(postResponse), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{member-id}/upload")
+    @PostMapping("/{member-id}/uploads")
     public ResponseEntity uploadProfileImage(@RequestParam MultipartFile file,
                                              @Positive @PathVariable("member-id") Long memberId,
                                              @LoginMemberId Long loginMemberId){
