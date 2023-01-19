@@ -43,8 +43,9 @@ export const ContentWrapper = styled.div`
   height: 1400px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-left: 50px;
-    width: 90%;
+    width: 95%;
+    margin-left: 10px;
+    padding-left: 0;
   }
 
   .title {
@@ -138,6 +139,10 @@ const WriteButtonDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: right;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    justify-content: center;
+  }
 
   & :hover {
     background-color: ${secondary.secondary500};
