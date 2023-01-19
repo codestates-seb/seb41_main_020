@@ -108,4 +108,12 @@ public class MemberController {
         memberService.logout(refreshToken);
         return new ResponseEntity<>(new SingleResponseDto<>("로그아웃에 성공하였습니다."), HttpStatus.CREATED);
     }
+
+    @GetMapping("/token")
+    public ResponseEntity giveMemberInfo(@LoginMemberId Long memberId) {
+        Member member = memberService.findVerifiedMember(memberId);
+        MemberDto.PostResponse response = memberMapper.memberToPostResponse(member);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+    }
+
 }
