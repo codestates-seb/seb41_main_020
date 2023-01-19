@@ -1,5 +1,4 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import heart from "../../../assets/heart.svg";
 import pen from "../../../assets/pen.svg";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Aside from "../Aside/Aside.jsx";

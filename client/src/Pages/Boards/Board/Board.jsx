@@ -1,20 +1,24 @@
+//페이지, 리액트 컴포넌트, 정적 파일
+import breakpoint from "../../../styles/breakpoint.js";
+import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
+import Aside from "../Aside/Aside.jsx";
+import heart from "../../../assets/heart.svg";
+import AnswerList from "../../../Components/Board/Answer/AnswerList";
+
+//로컬 모듈
 import {
   primary,
   dtFontSize,
   sub,
-  secondary,
   mbFontSize,
 } from "../../../styles/mixins.js";
-import breakpoint from "../../../styles/breakpoint.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
-import Aside from "../Aside/Aside.jsx";
-import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
-import heart from "../../../assets/heart.svg";
-import AnswerList from "../../../Components/Board/Answer/AnswerList";
 
-import React, { useState } from "react";
+//라이브러리 및 라이브러리 메소드
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const QuillViewDiv = styled.div`
   display: flex;
@@ -60,6 +64,29 @@ const EditDeleteDiv = styled.div`
 
 const Board = () => {
   const navigate = useNavigate();
+
+  // const axiosBoard = async () => {
+  //   const response = await axios.get(
+  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
+  //     { withCredentials: true }
+  //   );
+  //   return response.data.data;
+  // };
+
+  // const { isLoading, isError, data, error } = useQuery(
+  //   ["axiosBoard"],
+  //   axiosBoard
+  // );
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error : {error.message}</div>;
+  // }
+
+  // console.log(data);
 
   return (
     <PageWrapper>
