@@ -1,7 +1,11 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useState } from "react";
 import { primary, sub } from "../../../styles/mixins";
 import search from "../../../assets/search.svg";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import useBoardListStore from "../../../store/useBoardListStore";
+import ScrollTop from "../../../utils/ScrollTop";
 
 const SearchBarDiv = styled.div`
   display: flex;
@@ -44,13 +48,60 @@ const SearchBarDiv = styled.div`
 `;
 
 const SearchBar = ({ placeholder }) => {
+  const [value, setValue] = useState("");
+  const { setBoardListData } = useBoardListStore();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // searchBoardList();
+    axios
+      .get(
+        `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}&page=1&size=10
+        `
+      )
+      .then((res) => setBoardListData(res.data.data));
+    window.scrollTo(0, 0);
+  };
+
+  // const searchBoardList = async () => {
+  //   const response = await axios.get(
+  //     `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}`
+  //   );
+  //   return response.data.data;
+  // };
+
+  // const searchBoardListOnSuccess = (response) => {
+  //   setBoardListData(response);
+  // };
+  // const { isLoading, isError, error } = useQuery({
+  //   queryKey: ["searchBoardList"],
+  //   queryFn: searchBoardList,
+  //   onSuccess: searchBoardListOnSuccess,
+  // });
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error : {error.message}</div>;
+  // }
+
   return (
-    <SearchBarDiv>
-      <div className="aSearchBarDiv">
-        <input className="searchBarInput" placeholder={placeholder} />
-        <img className="searchImage" src={search} alt="돋보기"></img>
-      </div>
-    </SearchBarDiv>
+    <form onSubmit={handleSubmit}>
+      <SearchBarDiv>
+        <div className="aSearchBarDiv">
+          <input
+            className="searchBarInput"
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+          />
+          <img className="searchImage" src={search} alt="돋보기"></img>
+        </div>
+      </SearchBarDiv>
+    </form>
   );
 };
 
