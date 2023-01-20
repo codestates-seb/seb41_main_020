@@ -5,7 +5,6 @@ import search from "../../../assets/search.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useBoardListStore from "../../../store/useBoardListStore";
-import ScrollTop from "../../../utils/ScrollTop";
 
 const SearchBarDiv = styled.div`
   display: flex;
@@ -46,44 +45,43 @@ const SearchBarDiv = styled.div`
     background-color: blue;
   }
 `;
-
-const SearchBar = ({ category, placeholder }) => {
+const SearchBar = ({ urlCategory, urlStatus, urlPage, placeholder }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .get(
-        `http://indiego.kro.kr:80/articles?articles?category=${category}&search=${value}&page=1&size=10
+        `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&search=${value}&page=${urlPage}&size=10
         `
       )
       .then((res) => setBoardListData(res.data.data));
     window.scrollTo(0, 0);
   };
 
-  const searchBoardList = async () => {
-    const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}`
-    );
-    return response.data.data;
-  };
+  // const searchBoardList = async () => {
+  //   const response = await axios.get(
+  //     `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}`
+  //   );
+  //   return response.data.data;
+  // };
 
-  const searchBoardListOnSuccess = (response) => {
-    setBoardListData(response);
-  };
-  const { isLoading, isError, error } = useQuery({
-    queryKey: ["searchBoardList"],
-    queryFn: searchBoardList,
-    onSuccess: searchBoardListOnSuccess,
-  });
+  // const searchBoardListOnSuccess = (response) => {
+  //   setBoardListData(response);
+  // };
+  // const { isLoading, isError, error } = useQuery({
+  //   queryKey: ["searchBoardList"],
+  //   queryFn: searchBoardList,
+  //   onSuccess: searchBoardListOnSuccess,
+  // });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (isError) {
-    return <div>Error : {error.message}</div>;
-  }
+  // if (isError) {
+  //   return <div>Error : {error.message}</div>;
+  // }
 
   return (
     <form onSubmit={handleSubmit}>

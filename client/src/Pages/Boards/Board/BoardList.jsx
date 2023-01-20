@@ -177,13 +177,14 @@ export default function BoardList() {
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
 
+  console.log(`${urlPage} ${urlCategory} ${urlStatus}`);
+
   const axiosBoardList = async () => {
     const response = await axios.get(
       `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=10`
     );
     return response.data;
   };
-
   const axiosBoardListOnSuccess = (response) => {
     setBoardListData(response.data);
     setPageData(response.pageInfo);
@@ -203,8 +204,9 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-  // console.log(boardList);
-
+  console.log("*************************");
+  console.log(boardList);
+  console.log("*************************");
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -232,13 +234,15 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`/board/free?category=${urlCategory}`}
+          location={`/board/free?category=${urlCategory}&?status=${urlStatus}&size=10`}
           pageData={pageData}
         ></PageNation>
         {console.log(pageData)}
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          category="자유게시판"
+          urlCategory={urlCategory}
+          urlStatus={urlStatus}
+          urlPage={urlPage}
         ></SearchBar>
       </BoardWrapper>
     </PageWrapper>

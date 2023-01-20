@@ -10,9 +10,6 @@ import breakpoint from "../../../styles/breakpoint";
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-// import axios from "axios";
-// import { useQuery } from "@tanstack/react-query";
-// import useBoardListStore from "../../../store/useBoardListStore";
 
 const BoardItemContent = styled.div`
   margin-left: 30px;
@@ -88,7 +85,7 @@ const BoardListItem = (props) => {
         <div className="heartCount">{props.likeCount}</div>
       </div>
       <div className="imageDiv">
-        <img width={50} src={heart} alt="heart"></img>
+        <img width={50} src={props.image} alt="heart"></img>
       </div>
       <BoardItemContent>
         <Link to={`/board/free/${props.id}`} className="titleLink">
