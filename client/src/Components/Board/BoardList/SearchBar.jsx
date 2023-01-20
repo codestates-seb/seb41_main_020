@@ -52,7 +52,6 @@ const SearchBar = ({ category, placeholder }) => {
   const { setBoardListData } = useBoardListStore();
   const handleSubmit = (e) => {
     e.preventDefault();
-    // searchBoardList();
     axios
       .get(
         `http://indiego.kro.kr:80/articles?articles?category=${category}&search=${value}&page=1&size=10
@@ -62,29 +61,29 @@ const SearchBar = ({ category, placeholder }) => {
     window.scrollTo(0, 0);
   };
 
-  // const searchBoardList = async () => {
-  //   const response = await axios.get(
-  //     `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}`
-  //   );
-  //   return response.data.data;
-  // };
+  const searchBoardList = async () => {
+    const response = await axios.get(
+      `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}`
+    );
+    return response.data.data;
+  };
 
-  // const searchBoardListOnSuccess = (response) => {
-  //   setBoardListData(response);
-  // };
-  // const { isLoading, isError, error } = useQuery({
-  //   queryKey: ["searchBoardList"],
-  //   queryFn: searchBoardList,
-  //   onSuccess: searchBoardListOnSuccess,
-  // });
+  const searchBoardListOnSuccess = (response) => {
+    setBoardListData(response);
+  };
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["searchBoardList"],
+    queryFn: searchBoardList,
+    onSuccess: searchBoardListOnSuccess,
+  });
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // if (isError) {
-  //   return <div>Error : {error.message}</div>;
-  // }
+  if (isError) {
+    return <div>Error : {error.message}</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

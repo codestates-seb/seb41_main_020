@@ -175,10 +175,11 @@ export default function BoardList() {
   const [searchParams] = useSearchParams();
   const urlPage = searchParams.get("page");
   const urlCategory = searchParams.get("category");
+  const urlStatus = searchParams.get("status");
 
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=최신순&page=${urlPage}&size=10`
+      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=10`
     );
     return response.data;
   };
@@ -186,10 +187,11 @@ export default function BoardList() {
   const axiosBoardListOnSuccess = (response) => {
     setBoardListData(response.data);
     setPageData(response.pageInfo);
+    window.scrollTo(0, 0);
   };
 
   const { isLoading, isError, error } = useQuery({
-    queryKey: ["axiosBoardList"],
+    queryKey: ["axiosBoardList", urlPage],
     queryFn: axiosBoardList,
     onSuccess: axiosBoardListOnSuccess,
   });
@@ -201,7 +203,6 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-
   // console.log(boardList);
 
   return (
@@ -231,10 +232,10 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={"/board/free"}
-          category={urlCategory}
+          location={`/board/free?category=${urlCategory}`}
           pageData={pageData}
         ></PageNation>
+        {console.log(pageData)}
         <SearchBar
           placeholder="검색어를 입력해주세요"
           category="자유게시판"

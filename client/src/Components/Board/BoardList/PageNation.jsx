@@ -58,32 +58,9 @@ const PageNationDiv = styled.div`
       }
     }
   }
-  /* .pageButton {
-    background-color: white;
-    border: none;
-    color: ${sub.sub900};
-    font-size: ${dtFontSize.medium};
-    width: 20px;
-    height: 35px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0;
-  }
-
-  .pageButtonOn {
-    background-color: white;
-    border: none;
-    color: ${primary.primary200};
-    font-size: ${dtFontSize.medium};
-    width: 20px;
-    height: 35px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0;
-  } */
 `;
 
-const PageNation = ({ pageData, category, location }) => {
+const PageNation = ({ pageData, location }) => {
   const PageLengthData = [...Array(pageData.totalPages)].map((it, idx) => {
     return (it = {
       nowNum: pageData.page === idx + 1 ? true : false,
@@ -99,9 +76,7 @@ const PageNation = ({ pageData, category, location }) => {
       <ul>
         {PageLengthData.map((it, idx) => (
           <li key={idx} className={it.nowNum ? "on" : ""}>
-            <Link to={`${location}?category=${category}&page=${it.num}`}>
-              {it.num}
-            </Link>
+            <Link to={`${location}&page=${it.num}`}>{it.num}</Link>
           </li>
         ))}
       </ul>
