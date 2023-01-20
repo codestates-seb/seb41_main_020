@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.global.email.event.MemberRegistrationApplicationEvent;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.redis.RedisDao;
@@ -15,6 +16,7 @@ import codestates.frogroup.indiego.global.security.auth.utils.CustomAuthorityUti
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +40,19 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final TokenProvider tokenProvider;
     private final RedisDao redisDao;
+    private final ApplicationEventPublisher publisher;
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
         makeSecretPassword(member);
         createRoles(member);
-        return memberRepository.save(member);
+
+        Member savedMember = memberRepository.save(member);
+
+        // 회원가입 시 이메일 발송(계정 경로에 한글이 있는 경우 사용 불가능)
+        publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
+
+        return savedMember;
     }
 
     // OAuth2 인증 완료후 회원가입 및 업데이트
@@ -175,5 +184,15 @@ public class MemberService {
         if(redisAccessToken != null){
             throw new BusinessLogicException(ExceptionCode.TOKEN_DELETE_FAIL);
         }
+    }
+
+    /**
+     * 이메일 확인 실패시 회원 삭제
+     */
+    @Transactional
+    public void emailVerifyFailed(Long id) {
+        Member verifiedMember = findVerifiedMember(id);
+
+        memberRepository.delete(verifiedMember);
     }
 }
