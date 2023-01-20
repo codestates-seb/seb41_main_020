@@ -14,10 +14,13 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../styles/mixins";
+import useIsLoginStore from "../store/useLoginStore";
 
 //라이브러리 및 라이브러리 메소드
 import { React, useState, useRef } from "react";
 import styled from "styled-components/macro";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 
 const Container = styled.div`
   align-items: center;
@@ -205,6 +208,10 @@ export default function Login() {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
+  const data = { email: email, password: password };
+
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+
   const handlePasswordInputType = () => {
     if (!passwordInputType.visible) {
       setPasswordInputType({ type: "text", visible: true });
@@ -212,6 +219,41 @@ export default function Login() {
       setPasswordInputType({ type: "password", visible: false });
     }
   };
+
+  const postLoginData = () => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+
+    return axios.post(
+      `${process.env.REACT_APP_SERVER_URI}members/login`,
+      data,
+      headers,
+      { withCredentials: true }
+    );
+  };
+
+  const postLoginOnSuccess = (response) => {
+    const accessToken = response.headers.get("Authorization").split(" ")[1];
+    sessionStorage.setItem("accessToken", accessToken);
+    // axios.defaults.headers.common["Authorization"] = accessToken;
+    setIsLogin(true);
+    localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
+  };
+
+  const postLoginOnError = (err) => {
+    if (err.response.status === 401) {
+      setErrorMessageContent("이메일 혹은 비밀번호를 다시 확인해주세요");
+    }
+  };
+
+  const { mutate: postLogin } = useMutation({
+    mutationKey: ["postLoginData"],
+    mutationFn: postLoginData,
+    onSuccess: postLoginOnSuccess,
+    onError: postLoginOnError,
+  });
 
   const handleLogin = () => {
     if (!email) {
@@ -223,6 +265,7 @@ export default function Login() {
       setErrorMessageContent("⚠︎비밀번호를 입력해주세요");
     } else {
       setErrorMessageContent("");
+      postLogin();
     }
   };
 
@@ -231,6 +274,10 @@ export default function Login() {
       handleLogin();
     }
   };
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfoStorage"));
+
+  console.log(userInfo);
 
   return (
     <Container>
