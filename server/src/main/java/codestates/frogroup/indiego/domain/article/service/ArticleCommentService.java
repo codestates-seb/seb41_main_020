@@ -10,7 +10,7 @@ import codestates.frogroup.indiego.domain.article.repository.ArticleCommentRepos
 import codestates.frogroup.indiego.domain.article.repository.ArticleRepository;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class ArticleCommentService {
 
     private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final ArticleCommentLikeRepository articleCommentLikeRepository;
     private final ArticleCommentMapper mapper;
     private final CustomBeanUtils<ArticleComment> beanUtils;
@@ -37,11 +37,11 @@ public class ArticleCommentService {
      */
     @Transactional
     public ArticleCommentDto.Response createArticleComment(Long articleId,
-                                               Long memberId,
-                                               ArticleCommentDto.Post articleCommentPostDto) {
+                                                           Long memberId,
+                                                           ArticleCommentDto.Post articleCommentPostDto) {
+
         Article findArticle = findVerifiedArticle(articleId);
-        // TODO: 리팩토링 memberService에서 사용하자
-        Member findMember = findVerifiedMember(memberId);
+        Member findMember = memberService.findVerifiedMember(memberId);
 
         // mapper 활용 방법
         ArticleComment articleComment = mapper.articleCommentPostToArticleComment(articleCommentPostDto);
@@ -69,7 +69,8 @@ public class ArticleCommentService {
                                                            Long memberId,
                                                            ArticleCommentDto.Patch articleCommentPatchDto) {
 
-        findVerifiedArticle(articleId);
+        memberService.findVerifiedMember(memberId);
+//        findVerifiedArticle(articleId);
         ArticleComment findArticleComment = findVerifiedArticleComment(articleCommentId);
 
         if (findArticleComment.getMember().getId().equals(memberId)) {
@@ -90,7 +91,8 @@ public class ArticleCommentService {
      */
     @Transactional
     public void deleteArticleComment(Long articleId, Long commentId, Long memberId) {
-        findVerifiedArticle(articleId);
+//        findVerifiedArticle(articleId);
+        memberService.findVerifiedMember(memberId);
         ArticleComment findArticleComment = findVerifiedArticleComment(commentId);
 
         if (findArticleComment.getMember().getId().equals(memberId)) {
@@ -110,7 +112,8 @@ public class ArticleCommentService {
         findVerifiedArticle(articleId);
         ArticleComment findArticleComment = findVerifiedArticleComment(commentId);
         // TODO: 리팩토링 memberService에서 사용하자
-        Member findMember = findVerifiedMember(memberId);
+//        Member findMember = findVerifiedMember(memberId);
+        Member findMember = memberService.findVerifiedMember(memberId);
 
         ArticleCommentLike articleCommentLike = articleCommentLikeRepository.findByMemberId(findArticleComment.getId());
 
@@ -131,17 +134,17 @@ public class ArticleCommentService {
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    // TODO: 리팩토링 memberService에서 사용하자
-    private Member findVerifiedMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
     private Article findVerifiedArticle(Long articleId) {
 
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
     }
+
+//    // TODO: 리팩토링 memberService에서 사용하자
+//    private Member findVerifiedMember(Long memberId) {
+//        return memberRepository.findById(memberId).orElseThrow(
+//                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//    }
 
 //    private ArticleCommentDto.Response getResponse(ArticleComment articleComment) {
 //

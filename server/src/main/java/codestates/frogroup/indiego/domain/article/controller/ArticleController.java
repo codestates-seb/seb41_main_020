@@ -8,8 +8,6 @@ import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
-import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
-import codestates.frogroup.indiego.global.fileupload.ImageUploadService;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +32,6 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleMapper mapper;
-    private final ImageUploadService awsS3Service;
 
     /**
      * 게시글 작성
@@ -128,10 +125,10 @@ public class ArticleController {
     /**
      * 이미지 업로드
      */
-    @PostMapping("/image")
+    @PostMapping("/uploads")
     public ResponseEntity postArticleImage(@RequestParam MultipartFile file, @LoginMemberId Long memberId) {
 
-        String url = awsS3Service.StoreImage(file, AwsS3Path.ARTICLES);
+        String url = articleService.uploadArticleImage(file, memberId);
 
         return new ResponseEntity<>(new SingleResponseDto<>(url), HttpStatus.OK);
     }

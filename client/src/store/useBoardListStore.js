@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
-const boardListStore = create((set) => ({
+const useBoardListStore = create((set) => ({
   boardList: [],
 
-  getBoardListData(data) {
+  setBoardListData(data) {
     set((state) => ({
       boardList: [...data],
     }));
   },
 }));
 
-export default boardListStore;
+export default useBoardListStore;

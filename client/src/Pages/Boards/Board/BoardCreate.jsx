@@ -4,6 +4,7 @@ import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
+import AnswerList from "../../../Components/Board/Answer/AnswerList";
 
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -14,7 +15,8 @@ export const PostWrapper = styled(ContentWrapper)`
   padding-right: 10px;
   height: max-content;
   @media screen and (max-width: ${breakpoint.mobile}) {
-    width: 87%;
+    width: 99%;
+    /* padding: 0 10px; */
   }
 `;
 

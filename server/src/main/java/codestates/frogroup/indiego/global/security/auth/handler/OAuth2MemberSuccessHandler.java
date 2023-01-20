@@ -78,7 +78,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // Token을 토대로 URI를 만들어서 String으로 변환
         String uri = createURI(request, accessToken, refreshToken).toString();
 
-        tokenProvider.accessTokenSetHeader(accessToken, response); // Access Token 헤더에 전송
+        // tokenProvider.accessTokenSetHeader(accessToken, response); // Access Token 헤더에 전송
         tokenProvider.refreshTokenSetCookie(refreshToken,response); // Refresh Token 쿠키에 전송
         int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
         redisDao.setValues(refreshToken,accessToken, Duration.ofMinutes(refreshTokenExpirationMinutes)); // redis 저장
@@ -91,7 +91,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // 리다이렉트시 JWT를 URI로 보내는 방법
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
-        //queryParams.add("refresh_token", refreshToken);
+        // queryParams.add("refresh_token", refreshToken);
 
         String serverName = request.getServerName();
         // log.info("# serverName = {}",serverName);
@@ -101,8 +101,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .scheme("http")
                 .host(serverName)
                 //.host("localhost")
-                .port(8080) // 기본 포트가 80이기 때문에 괜찮다
-                .path("/receive-token.html")
+                .port(80) // 기본 포트가 80이기 때문에 괜찮다
+                .path("/token")
                 .queryParams(queryParams)
                 .build()
                 .toUri();

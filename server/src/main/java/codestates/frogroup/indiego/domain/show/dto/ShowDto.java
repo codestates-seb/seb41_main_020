@@ -2,14 +2,15 @@ package codestates.frogroup.indiego.domain.show.dto;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.*;
+import net.bytebuddy.asm.Advice;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
+
 
 public class ShowDto {
 
@@ -176,6 +177,39 @@ public class ShowDto {
             this.image = showBoard.getBoard().getImage();
             this.expiredAt = showBoard.getExpiredAt().toString();
             this.showAt = showBoard.getShowAt().toString();
+        }
+    }
+
+    @Data
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class showListToShowListResponseOfSeller{
+        private Long id;
+        private String title;
+        private String nickname;
+        private LocalDate showAt;
+        private LocalDate expiredAt;
+        private String detailAddress;
+        private String image;
+        @Setter
+        private Integer emptySeats;
+        @Setter
+        private Integer revenue;
+        @Setter
+        private boolean isExpired;
+
+        @QueryProjection
+        @Builder
+        public showListToShowListResponseOfSeller(Long id, String title, String nickname,
+                                                  LocalDate showAt, LocalDate expiredAt, String detailAddress, String image) {
+            this.id = id;
+            this.title = title;
+            this.nickname = nickname;
+            this.showAt = showAt;
+            this.expiredAt = expiredAt;
+            this.detailAddress = detailAddress;
+            this.image = image;
         }
     }
 

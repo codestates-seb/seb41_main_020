@@ -9,9 +9,11 @@ import codestates.frogroup.indiego.domain.article.repository.ArticleLikeReposito
 import codestates.frogroup.indiego.domain.article.repository.ArticleRepository;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
+import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
+import codestates.frogroup.indiego.global.fileupload.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +37,8 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleLikeRepository articleLikeRepository;
     private final ArticleMapper mapper;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
+    private final AwsS3Service awsS3Service;
     private final CustomBeanUtils<Article> beanUtils;
 
     /**
@@ -43,8 +47,7 @@ public class ArticleService {
     @Transactional
     public ArticleDto.Response createArticle(Article article, Long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         article.setMember(member);
 
@@ -131,12 +134,21 @@ public class ArticleService {
         Article findArticle = findVerifiedArticle(articleId);
 
         // TODO: 리팩토링 memberService에서 사용하자
-        Member findMember = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member findMember = memberService.findVerifiedMember(memberId);
 
         ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
 
         return findArticleLike == null ? createArticleLike(findArticle, findMember) : deleteArticleLike(findArticleLike);
+    }
+
+    /**
+     * 게시글 이미지 업로드
+     */
+    @Transactional
+    public String uploadArticleImage(MultipartFile file, Long memberId) {
+        memberService.findVerifiedMember(memberId);
+
+        return awsS3Service.StoreImage(file, AwsS3Path.ARTICLES);
     }
 
     /**

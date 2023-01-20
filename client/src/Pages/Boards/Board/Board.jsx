@@ -1,20 +1,24 @@
+//페이지, 리액트 컴포넌트, 정적 파일
+import breakpoint from "../../../styles/breakpoint.js";
+import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
+import Aside from "../Aside/Aside.jsx";
+import heart from "../../../assets/heart.svg";
+import AnswerList from "../../../Components/Board/Answer/AnswerList";
+
+//로컬 모듈
 import {
   primary,
   dtFontSize,
   sub,
-  secondary,
   mbFontSize,
 } from "../../../styles/mixins.js";
-import breakpoint from "../../../styles/breakpoint.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
-import Aside from "../Aside/Aside.jsx";
-import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
-import heart from "../../../assets/heart.svg";
-import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 
+//라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const QuillViewDiv = styled.div`
   display: flex;
@@ -43,164 +47,6 @@ const HeartItem = styled(BoardItem)`
   }
 `;
 
-const AnswerWrapper = styled.div`
-  margin-top: 60px;
-  width: 100%;
-  text-align: left;
-
-  .answerCount {
-    font-size: ${dtFontSize.large};
-    font-weight: 700;
-    color: ${primary.primary500};
-    margin-bottom: 30px;
-
-    @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.large};
-    }
-  }
-  .answerInputDiv {
-    height: 65px;
-
-    .answerInput {
-      border: 2px solid ${primary.primary500};
-      border-radius: 20px;
-      width: 100%;
-      height: 50px;
-      padding-left: 12px;
-    }
-  }
-`;
-const AnswerCreateButtonDiv = styled.div`
-  text-align: right;
-  width: 100%;
-  margin-bottom: 50px;
-`;
-
-const AnswerCreateButton = styled(OKButton)`
-  width: 100px;
-  height: 40px;
-
-  &:hover {
-    background-color: ${secondary.secondary500};
-  }
-`;
-
-const AnswerListWrapper = styled.div`
-  width: 100%;
-  > ul {
-    padding-left: 0px;
-    list-style: none;
-
-    > li {
-    }
-  }
-`;
-
-const AnswerListUserDiv = styled.div`
-  display: flex;
-  justify-content: left;
-  margin-bottom: 35px;
-  border-bottom: 1px solid ${sub.sub200};
-`;
-
-const AnswerListImageDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  .userImage {
-    width: 70px;
-    border-radius: 50%;
-  }
-`;
-
-const AnswerListInfoDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding-left: 15px;
-
-  .answerListUserName {
-    background-color: white;
-    height: 20px;
-    text-align: left;
-    color: ${primary.primary400};
-    font-size: ${dtFontSize.medium};
-    font-weight: 500;
-    @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.medium};
-    }
-  }
-  .answerListCreateDate {
-    background-color: white;
-    height: 20px;
-    text-align: left;
-    color: ${sub.sub300};
-    font-size: ${dtFontSize.small};
-    font-weight: 300;
-    @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.small};
-    }
-  }
-`;
-
-const AnswerListContentDiv = styled.div`
-  text-align: left;
-  background-color: white;
-  padding-bottom: 5px;
-  font-size: ${dtFontSize.medium};
-  color: ${sub.sub800};
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    font-size: ${mbFontSize.medium};
-  }
-`;
-
-const AnswerListFunctionDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 5px;
-  margin-bottom: 10px;
-
-  .heartDiv {
-    display: flex;
-    justify-content: center;
-
-    .heartButton {
-      width: 20px;
-      height: 20px;
-      background-color: white;
-      border: none;
-      margin: 0;
-      padding: 0;
-      cursor: pointer;
-      .heartImage {
-        width: 20px;
-        height: 20px;
-      }
-    }
-
-    .heartCount {
-      margin-left: 5px;
-      margin-top: 1px;
-      color: ${primary.primary400};
-      font-size: ${dtFontSize.small};
-    }
-  }
-
-  .edDiv {
-    .edButton {
-      cursor: pointer;
-      width: 40px;
-      height: 20px;
-      border: none;
-      background-color: white;
-      color: ${sub.sub400};
-      margin-right: 5px;
-    }
-  }
-`;
-
 const EditDeleteDiv = styled.div`
   display: flex;
   justify-content: right;
@@ -218,6 +64,30 @@ const EditDeleteDiv = styled.div`
 
 const Board = () => {
   const navigate = useNavigate();
+
+  // const axiosBoard = async () => {
+  //   const response = await axios.get(
+  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
+  //     { withCredentials: true }
+  //   );
+  //   return response.data.data;
+  // };
+
+  // const { isLoading, isError, data, error } = useQuery(
+  //   ["axiosBoard"],
+  //   axiosBoard
+  // );
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error : {error.message}</div>;
+  // }
+
+  // console.log(data);
+
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -245,53 +115,7 @@ const Board = () => {
           </button>
           <button className="edButton">삭제</button>
         </EditDeleteDiv>
-        <form>
-          <AnswerWrapper>
-            <div className="answerCount">156개의 댓글</div>
-            <div className="answerInputDiv">
-              <input
-                className="answerInput"
-                type="text"
-                placeholder="댓글을 입력하세요."
-              />
-            </div>
-            <AnswerCreateButtonDiv>
-              <AnswerCreateButton type="submit">작성하기</AnswerCreateButton>
-            </AnswerCreateButtonDiv>
-          </AnswerWrapper>
-        </form>
-        <AnswerListWrapper>
-          {AnswerDummy.map((it) => (
-            <ul key={it.id}>
-              <li>
-                <AnswerListUserDiv>
-                  <AnswerListImageDiv>
-                    <img className="userImage" src={it.image} alt="userImage" />
-                  </AnswerListImageDiv>
-                  <AnswerListInfoDiv>
-                    <div className="answerListUserName">{it.nickname}</div>
-                    <div className="answerListCreateDate">
-                      {new Date(it.createAt).toLocaleString()}
-                    </div>
-                    <AnswerListContentDiv>{it.comment}</AnswerListContentDiv>
-                    <AnswerListFunctionDiv>
-                      <div className="heartDiv">
-                        <button className="heartButton">
-                          <img className="heartImage" src={heart} alt="하트" />
-                        </button>
-                        <span className="heartCount">{it.likeCount}</span>
-                      </div>
-                      <div className="edDiv">
-                        <button className="edButton">수정</button>
-                        <button className="edButton">삭제</button>
-                      </div>
-                    </AnswerListFunctionDiv>
-                  </AnswerListInfoDiv>
-                </AnswerListUserDiv>
-              </li>
-            </ul>
-          ))}
-        </AnswerListWrapper>
+        <AnswerList />
       </ContentWrapper>
     </PageWrapper>
   );

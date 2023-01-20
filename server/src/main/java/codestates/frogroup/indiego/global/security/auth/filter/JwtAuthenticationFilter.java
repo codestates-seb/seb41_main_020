@@ -1,5 +1,7 @@
 package codestates.frogroup.indiego.global.security.auth.filter;
 
+import codestates.frogroup.indiego.domain.member.entity.Member;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.dto.LoginDto;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
@@ -24,11 +26,13 @@ import java.time.Duration;
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final MemberService memberService;
     private final TokenProvider tokenProvider;
     private final RedisDao redisDao;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, TokenProvider tokenProvider, RedisDao redisDao) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, MemberService memberService, TokenProvider tokenProvider, RedisDao redisDao) {
         this.authenticationManager = authenticationManager;
+        this.memberService = memberService;
         this.tokenProvider = tokenProvider;
         this.redisDao = redisDao;
     }
@@ -60,7 +64,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         tokenProvider.accessTokenSetHeader(accessToken,response); // AccessToken Header response 생성
         //tokenProvider.refreshTokenSetHeader(refreshToken,response); // RefreshToken Header response 생성
         tokenProvider.refreshTokenSetCookie(refreshToken,response); // RefreshToken Cookie로 설정
-        Responder.loginSuccessResponse(response,authMember); // login 완료시 Response 응답 만들기
+        Member findMember = memberService.findVerifiedMember(authMember.getId());
+
+        Responder.loginSuccessResponse(response,findMember); // login 완료시 Response 응답 만들기
 
         // 로그인 성공시 Refresh Token Redis 저장 ( key = Refresh Token / value = Access Token )
         int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
