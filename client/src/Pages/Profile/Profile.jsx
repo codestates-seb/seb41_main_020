@@ -17,6 +17,7 @@ import {
 import React from "react";
 import styled from "styled-components/macro";
 import AllShowList from "../../Components/Profile/AllShowList.jsx";
+import instance from "../../api/core/default";
 
 const Container = styled.div`
   align-items: center;
