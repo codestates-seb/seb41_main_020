@@ -175,7 +175,7 @@ public class TokenProvider {
 				.maxAge(1 * 24 * 60 * 60) // 만료시간 설정 days * hours * min * sec
 				.path("/")
 				//.domain("localhost")
-				.secure(false) // http, https 구분
+				.secure(true) // http, https 구분
 				.sameSite("None") // 서로 다른 도메인간 쿠키 전송에 대한 보안설정
 				.httpOnly(true) // XSS 공격을 막기위함
 				.build();
