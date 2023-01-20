@@ -66,10 +66,10 @@ public class ArticleService {
 
         if (findArticle.getMember().getId().equals(memberId)) {
 
-            changeArticle(article, findArticle);
-//            Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
+//            changeArticle(article, findArticle);
+            Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
+            Article savedArticle = articleRepository.save(updateArticle);
 
-            Article savedArticle = articleRepository.save(findArticle);
             return getResponse(savedArticle);
         }
 
