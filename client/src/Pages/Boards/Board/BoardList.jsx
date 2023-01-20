@@ -20,9 +20,9 @@ import breakpoint from "../../../styles/breakpoint";
 import BoardDummy from "../../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
@@ -171,23 +171,30 @@ const WriteButton = styled(OKButton)`
 export default function BoardList() {
   const navigate = useNavigate();
   const { boardList, setBoardListData } = useBoardListStore();
+  const [pageData, setPageData] = useState([]);
+  const [searchParams] = useSearchParams();
+  const urlPage = searchParams.get("page");
+  const urlCategory = searchParams.get("category");
+  const urlStatus = searchParams.get("status");
+
+  console.log(`${urlPage} ${urlCategory} ${urlStatus}`);
 
   const axiosBoardList = async () => {
-    const response = await axios.get(`http://indiego.kro.kr:80/articles`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=10`
+    );
     return response.data;
   };
-
-  const axiosBoardListSuccess = (response) => {
-    console.log(response.data);
+  const axiosBoardListOnSuccess = (response) => {
     setBoardListData(response.data);
+    setPageData(response.pageInfo);
+    window.scrollTo(0, 0);
   };
 
   const { isLoading, isError, error } = useQuery({
-    queryKey: ["axiosBoardList"],
+    queryKey: ["axiosBoardList", urlPage],
     queryFn: axiosBoardList,
-    onSuccess: axiosBoardListSuccess,
+    onSuccess: axiosBoardListOnSuccess,
   });
 
   if (isLoading) {
@@ -197,13 +204,15 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-
+  console.log("*************************");
+  console.log(boardList);
+  console.log("*************************");
   return (
     <PageWrapper>
       <Aside></Aside>
       <MobileAside></MobileAside>
       <BoardWrapper>
-        <div className="title">자유게시판</div>
+        <div className="title">{urlCategory}</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>
@@ -211,22 +220,30 @@ export default function BoardList() {
           <Dropdown></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {/* boardList 가져오기 */}
         {boardList.map((it) => (
           <BoardListItem key={it.id} {...it} />
         ))}
         <WriteButtonDiv>
           <WriteButton
             onClick={() => {
-              navigate("/board/create");
+              navigate("/board/free/create");
             }}
           >
             <img className="pencelImage" src={pen} alt="pen"></img>
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
         </WriteButtonDiv>
-        <PageNation></PageNation>
-        <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
+        <PageNation
+          location={`/board/free?category=${urlCategory}&?status=${urlStatus}&size=10`}
+          pageData={pageData}
+        ></PageNation>
+        {console.log(pageData)}
+        <SearchBar
+          placeholder="검색어를 입력해주세요"
+          urlCategory={urlCategory}
+          urlStatus={urlStatus}
+          urlPage={urlPage}
+        ></SearchBar>
       </BoardWrapper>
     </PageWrapper>
   );
