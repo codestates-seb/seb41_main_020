@@ -9,6 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@tanstack/react-query": "^4.20.9",
+    "@tanstack/react-query-devtools": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -33,7 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve-dummy": "npx json-server --watch src/jsonserver/db.json -p 8000 --routes src/jsonserver/routes.json"
+    "serve-dummy": "npx json-server --watch src/jsonserver/db.json -p 8000 --routes src/jsonserver/routes.json",
+    "start_https" : "HTTPS=true SSL_CRT_FILE=cert.pem SSL_KEY_FILE=key.pem react-scripts start"
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +63,5 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0"
-  },
-  "proxy": "http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com"
+  }
 }

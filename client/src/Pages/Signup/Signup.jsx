@@ -387,7 +387,7 @@ export default function Signup() {
     };
 
     return axios.post(
-      `${process.env.REACT_APP_SERVER_URI}members/signup`,
+      `${process.env.REACT_APP_SERVER_URI}/members/signup`,
       data,
       headers
     );

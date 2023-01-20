@@ -1,9 +1,0 @@
-{
-  "/shows" : "/",
-  "/shows?sort=new" : "/new",
-  "/shows?sort=hot" : "/hot",
-  "/shows/location?address=:address" : "/location",
-  "/shows/marker?year=:year&month=:month" : "/date",
-  "/shows/dates?year=:year&month=:month&day=:day" : "/day",
-  "/articles?category=:category": "/articles"
-}

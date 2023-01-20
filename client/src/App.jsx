@@ -29,34 +29,40 @@ import "./App.css";
 
 // 그다음에는 라이브러리
 import { Route, Routes } from "react-router-dom";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
 
-        {/* 로그인 및 회원가입 */}
-        <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/signup/performer" element={<SignupPerformer />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        {/* 프로파일 */}
-        <Route path="mypage/user/:id" element={<Profile />}></Route>
-        <Route
-          path="mypage/performer/:id"
-          element={<ProfilePerformer />}
-        ></Route>
-        <Route path="/mypage/:id/edit" element={<ProfileEdit />}></Route>
+          {/* 로그인 및 회원가입 */}
+          <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/signup/performer" element={<SignupPerformer />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          {/* 프로파일 */}
+          <Route path="mypage/user/:id" element={<Profile />}></Route>
+          <Route
+            path="mypage/performer/:id"
+            element={<ProfilePerformer />}
+          ></Route>
+          <Route path="/mypage/:id/edit" element={<ProfileEdit />}></Route>
 
-        {/* 티케팅게시판 */}
-        <Route path="/tickets" element={<Tickets />}></Route>
-        <Route path="/tickets/create" element={<TicketsCreate />}></Route>
-        <Route path="/tickets/:id" element={<TicketsDetail />}></Route>
-        <Route path="/tickets/:id/edit" element={<TicketsEdit />}></Route>
+          {/* 티케팅게시판 */}
+          <Route path="/tickets" element={<Tickets />}></Route>
+          <Route path="/tickets/create" element={<TicketsCreate />}></Route>
+          <Route path="/tickets/:id" element={<TicketsDetail />}></Route>
+          <Route path="/tickets/:id/edit" element={<TicketsEdit />}></Route>
 
-        {/* 공연찾기게시판 */}
-        <Route path="/search" element={<Search />}></Route>
+          {/* 공연찾기게시판 */}
+          <Route path="/search" element={<Search />}></Route>
 
         {/* 게시판 분류 */}
         {/* 자유게시판 (게시판 홈)*/}
@@ -87,6 +93,7 @@ function App() {
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <Footer />
+     </QueryClientProvider>
     </>
   );
 }
