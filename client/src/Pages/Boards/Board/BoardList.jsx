@@ -22,7 +22,7 @@ import BoardDummy from "../../../DummyData/BoardDummy.js";
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
@@ -171,16 +171,21 @@ const WriteButton = styled(OKButton)`
 export default function BoardList() {
   const navigate = useNavigate();
   const { boardList, setBoardListData } = useBoardListStore();
+  const [pageData, setPageData] = useState([]);
+  const [searchParams] = useSearchParams();
+  const urlPage = searchParams.get("page");
+  const urlCategory = searchParams.get("category");
 
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=자유게시판&?status=최신순&page=1&size=10`
+      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=최신순&page=${urlPage}&size=10`
     );
     return response.data;
   };
 
   const axiosBoardListOnSuccess = (response) => {
     setBoardListData(response.data);
+    setPageData(response.pageInfo);
   };
 
   const { isLoading, isError, error } = useQuery({
@@ -197,14 +202,14 @@ export default function BoardList() {
     return <div>Error : {error.message}</div>;
   }
 
-  console.log(boardList);
+  // console.log(boardList);
 
   return (
     <PageWrapper>
       <Aside></Aside>
       <MobileAside></MobileAside>
       <BoardWrapper>
-        <div className="title">자유게시판</div>
+        <div className="title">{urlCategory}</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>
@@ -225,8 +230,15 @@ export default function BoardList() {
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
         </WriteButtonDiv>
-        <PageNation></PageNation>
-        <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
+        <PageNation
+          location={"/board/free"}
+          category={urlCategory}
+          pageData={pageData}
+        ></PageNation>
+        <SearchBar
+          placeholder="검색어를 입력해주세요"
+          category="자유게시판"
+        ></SearchBar>
       </BoardWrapper>
     </PageWrapper>
   );

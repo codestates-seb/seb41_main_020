@@ -47,7 +47,7 @@ const SearchBarDiv = styled.div`
   }
 `;
 
-const SearchBar = ({ placeholder }) => {
+const SearchBar = ({ category, placeholder }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
   const handleSubmit = (e) => {
@@ -55,7 +55,7 @@ const SearchBar = ({ placeholder }) => {
     // searchBoardList();
     axios
       .get(
-        `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}&page=1&size=10
+        `http://indiego.kro.kr:80/articles?articles?category=${category}&search=${value}&page=1&size=10
         `
       )
       .then((res) => setBoardListData(res.data.data));

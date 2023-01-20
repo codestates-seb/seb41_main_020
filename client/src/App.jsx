@@ -65,7 +65,7 @@ function App() {
         <Route path="/board/free/:id" element={<Board />}></Route>
         <Route path="/board/free/:id/edit" element={<BoardEdit />}></Route>
         {/* 구인게시판 */}
-        <Route path="/board/employ" element={<EmployBoardList />}></Route>
+        <Route path="/board/employ" element={<BoardList />}></Route>
         <Route path="/board/employ/create" element={<BoardCreate />}></Route>
         <Route path="/board/employ/:id" element={<Board />}></Route>
         <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
