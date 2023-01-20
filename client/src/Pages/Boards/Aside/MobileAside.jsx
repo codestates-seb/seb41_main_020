@@ -69,10 +69,12 @@ const MobileAside = () => {
       <div className="mobileAsideList">
         <button
           className={
-            pathname === "/board" ? "thisMobileAsideItem" : "mobileAsideItem"
+            pathname === "/board/free"
+              ? "thisMobileAsideItem"
+              : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board");
+            navigate("/board/free");
           }}
         >
           자유 게시판

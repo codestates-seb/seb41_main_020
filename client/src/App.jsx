@@ -64,45 +64,36 @@ function App() {
           {/* 공연찾기게시판 */}
           <Route path="/search" element={<Search />}></Route>
 
-          {/* 게시판 분류 */}
-          {/* 자유게시판 (게시판 홈)*/}
-          <Route path="/board" element={<BoardList />}></Route>
-          <Route path="/board/create" element={<BoardCreate />}></Route>
-          <Route path="/board/:id" element={<Board />}></Route>
-          <Route path="/board/:id/edit" element={<BoardEdit />}></Route>
-          {/* 구인게시판 */}
-          <Route path="/board/employ" element={<EmployBoardList />}></Route>
-          <Route path="/board/employ/create" element={<BoardCreate />}></Route>
-          <Route path="/board/employ/:id" element={<Board />}></Route>
-          <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
-          {/* 요청게시판 */}
-          <Route path="/board/request" element={<RequestBoardList />}></Route>
-          <Route path="/board/request/create" element={<BoardCreate />}></Route>
-          <Route path="/board/request/:id" element={<Board />}></Route>
-          <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
-          {/* 홍보게시판 */}
-          <Route
-            path="/board/advertise"
-            element={<AdvertiseBoardList />}
-          ></Route>
-          <Route
-            path="/board/advertise/create"
-            element={<BoardCreate />}
-          ></Route>
-          <Route path="/board/advertise/:id" element={<Board />}></Route>
-          <Route
-            path="/board/advertise/:id/edit"
-            element={<BoardEdit />}
-          ></Route>
-          {/* 후기게시판 */}
-          <Route path="/board/review" element={<ReviewBoardList />}></Route>
-          <Route path="/board/review/create" element={<BoardCreate />}></Route>
-          <Route path="/board/review/:id" element={<Board />}></Route>
-          <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-        <Footer />
-      </QueryClientProvider>
+        {/* 게시판 분류 */}
+        {/* 자유게시판 (게시판 홈)*/}
+        <Route path="/board/free" element={<BoardList />}></Route>
+        <Route path="/board/free/create" element={<BoardCreate />}></Route>
+        <Route path="/board/free/:id" element={<Board />}></Route>
+        <Route path="/board/free/:id/edit" element={<BoardEdit />}></Route>
+        {/* 구인게시판 */}
+        <Route path="/board/employ" element={<BoardList />}></Route>
+        <Route path="/board/employ/create" element={<BoardCreate />}></Route>
+        <Route path="/board/employ/:id" element={<Board />}></Route>
+        <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
+        {/* 요청게시판 */}
+        <Route path="/board/request" element={<RequestBoardList />}></Route>
+        <Route path="/board/request/create" element={<BoardCreate />}></Route>
+        <Route path="/board/request/:id" element={<Board />}></Route>
+        <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
+        {/* 홍보게시판 */}
+        <Route path="/board/advertise" element={<AdvertiseBoardList />}></Route>
+        <Route path="/board/advertise/create" element={<BoardCreate />}></Route>
+        <Route path="/board/advertise/:id" element={<Board />}></Route>
+        <Route path="/board/advertise/:id/edit" element={<BoardEdit />}></Route>
+        {/* 후기게시판 */}
+        <Route path="/board/review" element={<ReviewBoardList />}></Route>
+        <Route path="/board/review/create" element={<BoardCreate />}></Route>
+        <Route path="/board/review/:id" element={<Board />}></Route>
+        <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
+      </Routes>
+      <Footer />
+     </QueryClientProvider>
     </>
   );
 }
