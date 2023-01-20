@@ -227,7 +227,7 @@ export default function Login() {
     };
 
     return axios.post(
-      `${process.env.REACT_APP_SERVER_URI}members/login`,
+      `${process.env.REACT_APP_SERVER_URI}/members/login`,
       data,
       headers,
       { withCredentials: true }
