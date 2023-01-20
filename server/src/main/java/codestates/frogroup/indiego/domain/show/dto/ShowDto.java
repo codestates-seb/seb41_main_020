@@ -2,6 +2,7 @@ package codestates.frogroup.indiego.domain.show.dto;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import net.bytebuddy.asm.Advice;
 
@@ -198,6 +199,7 @@ public class ShowDto {
         @Setter
         private boolean isExpired;
 
+        @QueryProjection
         @Builder
         public showListToShowListResponseOfSeller(Long id, String title, String nickname,
                                                   LocalDate showAt, LocalDate expiredAt, String detailAddress, String image) {
