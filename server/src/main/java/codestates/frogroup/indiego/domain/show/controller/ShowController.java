@@ -12,6 +12,7 @@ import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Service;
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ public class ShowController {
     private final MemberService memberService;
     private final ShowMapper mapper;
     private final AwsS3Service awsS3Service;
+    private final RedisDao redisDao;
 
 
     @PostMapping

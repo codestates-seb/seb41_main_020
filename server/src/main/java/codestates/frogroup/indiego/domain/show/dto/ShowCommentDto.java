@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
+
 public class ShowCommentDto {
 
     @Getter
     @AllArgsConstructor
     public static class Post{
-        private Double score;
+        @NotNull
+        private double score;
         private String comment;
     }
 
@@ -17,7 +20,8 @@ public class ShowCommentDto {
     @AllArgsConstructor
     @Builder
     public static class Patch{
-        private Double score;
+        @NotNull
+        private double score;
         private String comment;
     }
 
@@ -29,7 +33,7 @@ public class ShowCommentDto {
         private Long showId; // 정희님에게 물어보기!!
         private Long memberId; // 정희님에게 물어보기!!
         private String nickname;
-        private Double score;
+        private double score;
         private String comment;
     }
 }

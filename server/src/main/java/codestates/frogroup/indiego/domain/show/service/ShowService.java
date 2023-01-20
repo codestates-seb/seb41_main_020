@@ -3,12 +3,14 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
+import codestates.frogroup.indiego.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,8 +34,9 @@ public class ShowService {
     private final ShowRepository showRepository;
     private final MemberRepository memberRepository;
     private final CustomBeanUtils<Show> utils;
-
     private final ShowReservationService reservationService;
+    private final RedisDao redisDao;
+
 
 
 
@@ -45,6 +48,9 @@ public class ShowService {
                 () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         show.setMember(member);
+
+        String key = String.format("{}@scoreAverage", show.getId());
+        redisDao.setValues(key,"0");
 
         return showRepository.save(show);
     }
@@ -122,7 +128,20 @@ public class ShowService {
     }
 
     public Show findShow(long showId){
-        return findVerifiedShow(showId);
+
+        Show show = findVerifiedShow(showId);
+        setScoreAverage(showId, show);
+        return show;
+    }
+
+    private void setScoreAverage(long showId, Show show) {
+        String key = String.format("{}@scoreAverage", showId);
+        show.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
+    }
+
+    private void setScoreAverage(long showId, ShowListResponseDto responseDto) {
+        String key = String.format("{}@scoreAverage", showId);
+        responseDto.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
@@ -130,7 +149,14 @@ public class ShowService {
 
         pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
 
-        return showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
+        Page<ShowListResponseDto> allByShowSearch = showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
+        for(int i =0; i<allByShowSearch.getContent().size(); i++){
+            ShowListResponseDto responseDto = allByShowSearch.getContent().get(i);
+            setScoreAverage(responseDto.getId(), responseDto);
+        }
+
+        return allByShowSearch;
+
     }
 
     public List<ShowListResponseDto> findSortShows(String address, String status) {
