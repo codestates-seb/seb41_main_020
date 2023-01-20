@@ -204,7 +204,7 @@ export default function Home() {
           </Button>
           <Button clickEvent={datePopupOnClickHanlder}>날짜별 공연 현황</Button>
         </ButtonsContainer>
-        <SearchBar />
+        <SearchBar navigateTo="/tickets" fetchMode={false} defaultValue={""} />
         <CarouselContainer>
           <CarouselDisplayBox>
             <CarouselDisplay>
