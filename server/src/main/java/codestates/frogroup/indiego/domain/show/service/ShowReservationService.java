@@ -40,6 +40,10 @@ public class ShowReservationService {
 
     }
 
+    public Optional<ShowReservation> findShowReservation(Long showId, Long memberId){
+        return showReservationRepository.findByShowIdAndMemberId(showId, memberId);
+    }
+
     public Integer countReservation(Long showId){
         List<ShowReservation> reservations = showReservationRepository.findByShowId(showId);
         Integer cnt = 0;
