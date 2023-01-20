@@ -49,7 +49,8 @@ public class ShowService {
 
         show.setMember(member);
 
-        String key = String.format("{}@scoreAverage", show.getId());
+        String id = String.valueOf(memberId);
+        String key = id +"@scoreAverage";
         redisDao.setValues(key,"0");
 
         return showRepository.save(show);
@@ -130,18 +131,25 @@ public class ShowService {
     public Show findShow(long showId){
 
         Show show = findVerifiedShow(showId);
-        setScoreAverage(showId, show);
+        //setScoreAverage(showId, show);
         return show;
     }
 
-    private void setScoreAverage(long showId, Show show) {
-        String key = String.format("{}@scoreAverage", showId);
-        show.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
-    }
+//    private void setScoreAverage(long showId, Show show) {
+//
+//        String id = String.valueOf(showId);
+//        String key = id + "@scoreAverage";
+//        redisDao.setValues(key,String.valueOf(show.getScoreAverage()));
+//        //show.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
+//    }
 
-    private void setScoreAverage(long showId, ShowListResponseDto responseDto) {
-        String key = String.format("{}@scoreAverage", showId);
-        responseDto.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
+    private Double setScoreAverage(long showId) {
+        String id = String.valueOf(showId);
+        String key = id + "@scoreAverage";
+        Show show = findShow(showId);
+        redisDao.setValues(key, String.valueOf(show.getScoreAverage()));
+
+        return Double.valueOf(Double.valueOf(redisDao.getValues(key)));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
@@ -152,8 +160,9 @@ public class ShowService {
         Page<ShowListResponseDto> allByShowSearch = showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
         for(int i =0; i<allByShowSearch.getContent().size(); i++){
             ShowListResponseDto responseDto = allByShowSearch.getContent().get(i);
-            setScoreAverage(responseDto.getId(), responseDto);
+            responseDto.setScoreAverage(setScoreAverage(responseDto.getId()));
         }
+
 
         return allByShowSearch;
 
