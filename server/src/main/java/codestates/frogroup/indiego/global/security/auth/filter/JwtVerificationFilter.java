@@ -47,7 +47,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         try {
             // 헤더에서 AccessToken 토큰 꺼내오기
-            String jwt = tokenProvider.resolveToken(request);
+            String jwt = tokenProvider.resolveAccessToken(request);
 
             // 토큰 검증을 통과하면 다음 필터 진행
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt,response)) {

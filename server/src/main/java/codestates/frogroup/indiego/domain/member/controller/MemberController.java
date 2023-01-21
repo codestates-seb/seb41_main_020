@@ -94,18 +94,18 @@ public class MemberController {
     }
 
     @GetMapping("/reissue")
-    public ResponseEntity reissue(@CookieValue(value = "refreshToken", required = false) String refreshToken,
-                                  HttpServletRequest request,
+    public ResponseEntity reissue(HttpServletRequest request,
                                   HttpServletResponse response){
+        // @CookieValue(value = "refreshToken", required = false) String refreshToken // 쿠키사용
 
-        memberService.reissueAccessToken(refreshToken,request,response);
+        memberService.reissueAccessToken(request,response);
         return new ResponseEntity(new SingleResponseDto<>("Access Token 재발급 완료!"),HttpStatus.CREATED);
     }
 
     @GetMapping("/logout")
-    public ResponseEntity logout(@CookieValue(value = "refreshToken", required = false) String refreshToken){
-
-        memberService.logout(refreshToken);
+    public ResponseEntity logout(HttpServletRequest request){
+        // @CookieValue(value = "refreshToken", required = false) String refreshToken // 쿠키사용
+        memberService.logout(request);
         return new ResponseEntity<>(new SingleResponseDto<>("로그아웃에 성공하였습니다."), HttpStatus.CREATED);
     }
 
