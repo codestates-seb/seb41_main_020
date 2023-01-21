@@ -2,16 +2,11 @@ package codestates.frogroup.indiego.domain.show.repository;
 
 import codestates.frogroup.indiego.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 
-@RequiredArgsConstructor
-public class ScoreRepository {
-    RedisDao redisDao;
-
-    public void setValues(String key, String value){
-        redisDao.setValues(key, value);
+public class ScoreRepository extends RedisDao{
+    public ScoreRepository(RedisTemplate<String, Object> redisTemplate) {
+        super(redisTemplate);
     }
 
-    public String getValues(String key){
-        return redisDao.getValues(key);
-    }
 }
