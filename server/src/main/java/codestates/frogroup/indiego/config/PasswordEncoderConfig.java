@@ -1,4 +1,4 @@
-package codestates.frogroup.indiego.global.security.config;
+package codestates.frogroup.indiego.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
