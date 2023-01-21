@@ -1,5 +1,6 @@
 package codestates.frogroup.indiego.global.security.auth.handler;
 
+import codestates.frogroup.indiego.config.AES128Config;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.global.redis.RedisDao;
@@ -34,6 +35,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final TokenProvider tokenProvider;
     private final MemberService memberService;
     private final RedisDao redisDao;
+    private final AES128Config aes128Config;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -76,10 +78,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         // 받은 정보를 토대로 AccessToken, Refresh Token을 만듬
         // Token을 토대로 URI를 만들어서 String으로 변환
-        String uri = createURI(request, accessToken, refreshToken).toString();
+        String secretRefreshToken = aes128Config.encryptAes(refreshToken);
+        String uri = createURI(request, accessToken, secretRefreshToken).toString();
 
         // tokenProvider.accessTokenSetHeader(accessToken, response); // Access Token 헤더에 전송
-        tokenProvider.refreshTokenSetCookie(refreshToken,response); // Refresh Token 쿠키에 전송
+        // tokenProvider.refreshTokenSetHeader(secretRefreshToken,response); // Refresh Token 쿠키에 전송
         int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
         redisDao.setValues(refreshToken,accessToken, Duration.ofMinutes(refreshTokenExpirationMinutes)); // redis 저장
 
@@ -87,11 +90,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         getRedirectStrategy().sendRedirect(request,response,uri);
     }
 
-    private URI createURI(HttpServletRequest request, String accessToken, String refreshToken){
+    private URI createURI(HttpServletRequest request, String accessToken, String secretRefreshToken){
         // 리다이렉트시 JWT를 URI로 보내는 방법
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
-        // queryParams.add("refresh_token", refreshToken);
+        queryParams.add("refresh_token", secretRefreshToken);
 
         String serverName = request.getServerName();
         // log.info("# serverName = {}",serverName);
@@ -101,7 +104,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .scheme("http")
                 .host(serverName)
                 //.host("localhost")
-                .port(80) // 기본 포트가 80이기 때문에 괜찮다
+                .port(3000) // 기본 포트가 80이기 때문에 괜찮다
                 .path("/token")
                 .queryParams(queryParams)
                 .build()

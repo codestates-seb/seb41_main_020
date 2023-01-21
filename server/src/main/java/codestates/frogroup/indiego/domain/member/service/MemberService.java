@@ -1,5 +1,6 @@
 package codestates.frogroup.indiego.domain.member.service;
 
+import codestates.frogroup.indiego.config.AES128Config;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
@@ -41,6 +42,7 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final RedisDao redisDao;
     private final ApplicationEventPublisher publisher;
+    private final AES128Config aes128Config;
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
@@ -139,10 +141,11 @@ public class MemberService {
         return profileImage;
     }
 
-    public void reissueAccessToken(String refreshToken, HttpServletRequest request, HttpServletResponse response){
-
-        validatedRefeshToken(refreshToken);
-        String accessToken = tokenProvider.resolveToken(request);
+    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response){
+        String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
+        validatedRefeshToken(secretRefreshToken);
+        String accessToken = tokenProvider.resolveAccessToken(request);
+        String refreshToken = aes128Config.decryptAes(secretRefreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
 
         // Refresh Token이 Redis에 존재할 경우 Access Token 생성
@@ -154,7 +157,8 @@ public class MemberService {
             AuthMember authMember = AuthMember.of(member.getId(), member.getEmail(), member.getRoles());
             TokenDto tokenDto = tokenProvider.generateTokenDto(authMember); // Token 만들기
             int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
-            redisDao.setValues(refreshToken, tokenDto.getAccessToken(), Duration.ofMinutes(refreshTokenExpirationMinutes));
+            redisDao.setValues(refreshToken, tokenDto.getAccessToken(),
+                    Duration.ofMinutes(refreshTokenExpirationMinutes));
             tokenProvider.accessTokenSetHeader(tokenDto.getAccessToken(),response);
 
         } else if(!redisDao.validateValue(redisAccessToken)){
@@ -164,8 +168,10 @@ public class MemberService {
         }
     }
 
-    public void logout(String refreshToken){
-        validatedRefeshToken(refreshToken);
+    public void logout(HttpServletRequest request){
+        String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
+        validatedRefeshToken(secretRefreshToken);
+        String refreshToken = aes128Config.decryptAes(secretRefreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
         if(redisDao.validateValue(redisAccessToken)){
             redisDao.deleteValues(refreshToken);
@@ -175,7 +181,7 @@ public class MemberService {
 
     public void validatedRefeshToken(String refreshToken){
         if(refreshToken == null){
-            throw new BusinessLogicException(ExceptionCode.COOKIE_REFRESH_TOKEN_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.HEADER_REFRESH_TOKEN_NOT_FOUND);
         }
     }
 
