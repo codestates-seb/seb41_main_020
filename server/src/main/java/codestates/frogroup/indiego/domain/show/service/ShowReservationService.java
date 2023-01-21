@@ -21,9 +21,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ShowReservationService {
     private final ShowReservationRepository showReservationRepository;
-    private final MemberService memberService;
-
-    private final MemberRepository memberRepository;
     private final CustomBeanUtils<ShowReservation> utils;
 
 

@@ -7,6 +7,7 @@ import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
+import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowCommentRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
@@ -30,7 +31,7 @@ public class ShowCommentService {
 
     private final ShowCommentRepository showCommentRepository;
     private final MemberService memberService;
-    private final RedisDao redisDao;
+    private final ScoreRepository scoreRepository;
     private final ShowReservationService showReservationService;
     public ShowComment createShowComment(ShowComment showComment, Show show, Member member){
         Optional<ShowReservation>  optionalShowReservation = showReservationService.findShowReservation(
@@ -48,10 +49,10 @@ public class ShowCommentService {
     private void inputScoreAverage(ShowComment showComment, Show show) {
         String showId = String.valueOf(show.getId());
         String key = showId +"@scoreAverage";
-        Double scoreAverage = Double.parseDouble(redisDao.getValues(key));
+        Double scoreAverage = Double.parseDouble(scoreRepository.getValues(key));
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        redisDao.setValues(key, s);
+        scoreRepository.setValues(key, s);
     }
 
     public Page<ShowComment> findShowComment(Long showId, int page, int size ){
@@ -91,7 +92,7 @@ public class ShowCommentService {
         scoreAverage += showComment.getScore();
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        redisDao.setValues(key, s);
+        scoreRepository.setValues(key, s);
         show.setScoreAverage(Double.valueOf(s));
 
     }
