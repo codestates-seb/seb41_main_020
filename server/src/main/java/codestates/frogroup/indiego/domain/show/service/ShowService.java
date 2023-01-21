@@ -13,6 +13,7 @@ import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.redis.RedisDao;
+import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ public class ShowService {
     private final CustomBeanUtils<Show> utils;
     private final ShowReservationService reservationService;
     private final ScoreRepository scoreRepository;
+    private final RedisKey redisKey;
 
 
 
@@ -49,8 +51,7 @@ public class ShowService {
 
         show.setMember(member);
 
-        String id = String.valueOf(memberId);
-        String key = id +"@scoreAverage";
+        String key = redisKey.getScoreAvergeKey(show.getId());
         scoreRepository.setValues(key,"0");
 
         return showRepository.save(show);
@@ -133,8 +134,8 @@ public class ShowService {
     }
 
     private Double setScoreAverage(long showId) {
-        String id = String.valueOf(showId);
-        String key = id + "@scoreAverage";
+
+        String key = redisKey.getScoreAvergeKey(showId);
         Show show = findShow(showId);
         scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
 
