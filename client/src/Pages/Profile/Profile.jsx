@@ -2,6 +2,7 @@
 import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
 import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
 import WithdrawModal from "../../Components/Profile/WithdrawModal";
+import AllShowList from "../../Components/Profile/AllShowList.jsx";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -12,11 +13,14 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import { React, useState } from "react";
 import styled from "styled-components/macro";
-import AllShowList from "../../Components/Profile/AllShowList.jsx";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import instance from "../../api/core/default";
 
 const Container = styled.div`
@@ -255,6 +259,51 @@ const LocationandAboutContainer = styled.div`
 
 export default function Profile() {
   const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const [data, setData] = useState();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const fetchData = () => {
+    const accessToken = sessionStorage.getItem("accesstoken");
+    axios.defaults.withCredentials = true;
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "Application/json",
+      Accept: "*/*",
+    };
+
+    return axios.get(
+      `${process.env.REACT_APP_SERVER_URI}users/${params.id}/${params.username}`,
+      { headers }
+    );
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    response.data.data && setData(response.data.data);
+  };
+
+  const fetchDataOnError = (err) => {
+    if (err.response.status === 401) {
+      window.alert("Please log in first.");
+      navigate("/login");
+      setIsLogin(false);
+      sessionStorage.clear();
+    } else if (err.response.status === 405) {
+      window.alert("wrong approach!");
+      navigate("/");
+    }
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchData"],
+    queryFn: fetchData,
+    keepPreviousData: true,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
 
   return (
     <Container>

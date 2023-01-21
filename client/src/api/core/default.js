@@ -1,6 +1,9 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
 
+const accessToken = sessionStorage.getItem("accessToken");
+const refreshToken = localStorage.getItem("refreshToken");
+
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
   headers: {
@@ -9,8 +12,6 @@ const instance = axios.create({
   },
   withCredentials: true,
 });
-
-const accessToken = sessionStorage.getItem("accessToken");
 
 instance.interceptors.request.use(
   async (config) => {
@@ -32,7 +33,7 @@ instance.interceptors.response.use(
   (error) => {
     const { config, response, status } = error;
     if (status === 401) {
-      if (response.data.message === "뭐가올까요,,") {
+      if (response.data.message === "Token Expired") {
         const originalRequest = config; 
         const reissuesResponse  = axios.post(
           `${process.env.REACT_APP_SERVER_URI}members/reisuess`,
@@ -41,13 +42,15 @@ instance.interceptors.response.use(
               "Access-Control-Allow-Origin": "*",
               "Content-Type": "application/json",
               "Authorization": `Bearer ${accessToken}`,
+              "Refresh": refreshToken,
             },
           },
           { withCredentials: true }
         );
-        const newAccessTokenData = reissuesResponse.headers.get("Authorization").split(" ")[1];
         sessionStorage.clear();
-        sessionStorage.setItem("accessToken", newAccessTokenData);
+        localStorage.removeItem("refreshToken");
+        sessionStorage.setItem("accessToken", reissuesResponse.headers.get("Authorization").split(" ")[1]);
+        localStorage.setItem("refreshToken", localStorage.setItem(reissuesResponse.headers.get("Refresh")));
         const accessToken = sessionStorage.getItem("accessToken");
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return instance.request(originalRequest);

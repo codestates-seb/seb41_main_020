@@ -14,13 +14,14 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../styles/mixins";
-import useIsLoginStore from "../store/useLoginStore";
+import useIsLoginStore from "../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
 import { React, useState, useRef } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   align-items: center;
@@ -207,8 +208,8 @@ export default function Login() {
   const [errorMessageContent, setErrorMessageContent] = useState();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-
   const data = { email: email, password: password };
+  const navigate = useNavigate();
 
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
 
@@ -235,11 +236,14 @@ export default function Login() {
   };
 
   const postLoginOnSuccess = (response) => {
-    const accessToken = response.headers.get("Authorization").split(" ")[1];
-    sessionStorage.setItem("accessToken", accessToken);
-    // axios.defaults.headers.common["Authorization"] = accessToken;
-    setIsLogin(true);
+    sessionStorage.setItem(
+      "accessToken",
+      response.headers.get("Authorization").split(" ")[1]
+    );
+    localStorage.setItem("refreshToken", response.headers.get("Refresh"));
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
+    setIsLogin(true);
+    navigate("/");
   };
 
   const postLoginOnError = (err) => {
@@ -274,10 +278,6 @@ export default function Login() {
       handleLogin();
     }
   };
-
-  const userInfo = JSON.parse(localStorage.getItem("userInfoStorage"));
-
-  console.log(userInfo);
 
   return (
     <Container>
