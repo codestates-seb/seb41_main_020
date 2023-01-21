@@ -3,10 +3,12 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
+import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
@@ -32,10 +34,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ShowService {
     private final ShowRepository showRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CustomBeanUtils<Show> utils;
     private final ShowReservationService reservationService;
-    private final RedisDao redisDao;
+    private final ScoreRepository scoreRepository;
 
 
 
@@ -43,15 +45,13 @@ public class ShowService {
     @Transactional
     public Show createShow(Show show, long memberId) {
 
-        // ToDo security 적용 시 수정 -> getCurrentMember
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         show.setMember(member);
 
         String id = String.valueOf(memberId);
         String key = id +"@scoreAverage";
-        redisDao.setValues(key,"0");
+        scoreRepository.setValues(key,"0");
 
         return showRepository.save(show);
     }
@@ -61,8 +61,7 @@ public class ShowService {
         Show findShow = findVerifiedShow(show.getId());
 
         // ToDo security 적용 시 수정 -> getCurrentMember
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         Show updatedShow = utils.copyNonNullProperties(show, findShow);
 
@@ -129,27 +128,17 @@ public class ShowService {
     }
 
     public Show findShow(long showId){
-
         Show show = findVerifiedShow(showId);
-        //setScoreAverage(showId, show);
         return show;
     }
-
-//    private void setScoreAverage(long showId, Show show) {
-//
-//        String id = String.valueOf(showId);
-//        String key = id + "@scoreAverage";
-//        redisDao.setValues(key,String.valueOf(show.getScoreAverage()));
-//        //show.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
-//    }
 
     private Double setScoreAverage(long showId) {
         String id = String.valueOf(showId);
         String key = id + "@scoreAverage";
         Show show = findShow(showId);
-        redisDao.setValues(key, String.valueOf(show.getScoreAverage()));
+        scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
 
-        return Double.valueOf(Double.valueOf(redisDao.getValues(key)));
+        return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
