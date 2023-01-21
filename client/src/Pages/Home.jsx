@@ -52,7 +52,6 @@ const CarouselDisplayBox = styled.div`
   width: 100%;
   height: 100%;
   justify-content: center;
-  padding: 0 10%;
 `;
 
 const CarouselDisplay = styled.div`
@@ -71,6 +70,7 @@ const CarouselDisplay = styled.div`
     flex-direction: column;
     align-items: center;
     height: 100%;
+    width: 50%;
 
     h1 {
       color: ${primary.primary500};
@@ -79,6 +79,10 @@ const CarouselDisplay = styled.div`
       width: 73%;
       height: max-content;
       text-align: start;
+    }
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 100%;
     }
   }
 `;
@@ -94,7 +98,7 @@ const LongCarouselContainer = styled.div`
   /* padding: 0 13vw; */
 
   .longcarousel_display {
-    width: max-content;
+    width: 100%;
     height: max-content;
     display: flex;
     flex-direction: column;
@@ -131,7 +135,6 @@ const LongCarouselContainer = styled.div`
 
 const BoardsContainer = styled.div`
   width: 100%;
-  min-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -157,17 +160,16 @@ const BoardsContainer = styled.div`
 `;
 
 const BoardsGrid = styled.div`
-  min-width: 850px;
-  width: 80%;
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 45%);
-  column-gap: 10px;
+  grid-template-columns: repeat(2, 35%);
+  column-gap: 5%;
   row-gap: 20px;
   justify-content: center;
   margin-top: 30px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
-    grid-template-columns: repeat(1, 45%);
+    grid-template-columns: repeat(1, 80%);
   }
 `;
 
@@ -211,7 +213,7 @@ export default function Home() {
               <div className="carousel_box">
                 <h1>월간 예매율 순위</h1>
                 <Carousel
-                  width={"80%"}
+                  width={"70%"}
                   minWidth={"300px"}
                   maxWidth={"480px"}
                   height={"100%"}
@@ -223,7 +225,7 @@ export default function Home() {
               <div className="carousel_box">
                 <h1>새로 추가된 공연</h1>
                 <Carousel
-                  width={"80%"}
+                  width={"70%"}
                   minWidth={"300px"}
                   maxWidth={"480px"}
                   height={"100%"}
@@ -240,11 +242,19 @@ export default function Home() {
         <BoardsContainer>
           <h1 className="title">커뮤니티 인기 게시글</h1>
           <BoardsGrid>
-            <Boards category="자유게시판">자유게시판</Boards>
-            <Boards category="구인게시판">구인게시판</Boards>
-            <Boards category="초청게시판">초청게시판</Boards>
-            <Boards category="홍보게시판">홍보게시판</Boards>
-            <Boards category="후기게시판">공연후기</Boards>
+            <Boards>자유게시판</Boards>
+            <Boards path="employ" category="구인게시판">
+              구인게시판
+            </Boards>
+            <Boards path="request" category="초청게시판">
+              초청게시판
+            </Boards>
+            <Boards path="advertise" category="홍보게시판">
+              홍보게시판
+            </Boards>
+            <Boards path="review" category="후기게시판">
+              공연후기
+            </Boards>
           </BoardsGrid>
         </BoardsContainer>
       </MainContainer>

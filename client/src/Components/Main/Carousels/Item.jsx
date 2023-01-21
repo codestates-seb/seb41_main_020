@@ -5,13 +5,15 @@ import { dtFontSize, primary, sub } from "../../../styles/mixins";
 
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import breakpoint from "../../../styles/breakpoint";
 
 const ItemContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 80%;
   height: 100%;
-  margin: 0 10%;
+  box-sizing: content-box;
+  margin: 10%;
 
   a {
     text-decoration: none;
@@ -21,6 +23,11 @@ const ItemContainer = styled.div`
       color: none;
     }
   }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 75%;
+    margin-right: 40px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -29,16 +36,20 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 50px;
+  margin-left: 15px;
 
   img {
     height: calc(100px + 2vw);
     max-height: 150px;
   }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-left: 50px;
+  }
 `;
 
 const ConcertDetailsContainer = styled.div`
-  width: 200px;
+  width: 150px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -57,17 +68,21 @@ const ConcertDetailsContainer = styled.div`
     }
   }
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 150px;
+  }
+
   h2 {
-    font-size: calc(8px + 0.5vw);
+    font-size: calc(10px + 0.5vw);
     text-align: center;
 
     @media screen and (min-width: 1400px) {
-      font-size: ${dtFontSize.medium};
+      font-size: ${dtFontSize.small};
     }
   }
 
   h3 {
-    font-size: calc(2px + 0.5vw);
+    font-size: calc(7px + 0.5vw);
     margin-top: 10px;
     text-align: center;
     @media screen and (min-width: 1400px) {
@@ -76,7 +91,7 @@ const ConcertDetailsContainer = styled.div`
   }
 
   .date {
-    font-size: calc(2px + 0.3vw);
+    font-size: calc(5px + 0.3vw);
     font-weight: 400;
     color: ${sub.sub400};
     margin-top: 10px;
@@ -88,7 +103,7 @@ const ConcertDetailsContainer = styled.div`
   }
 
   .location {
-    font-size: calc(2px + 0.3vw);
+    font-size: calc(5px + 0.3vw);
     font-weight: 800;
     color: ${sub.sub400};
     margin-top: 10px;

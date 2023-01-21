@@ -3,7 +3,13 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 
 import List from "./List.jsx";
-import { primary, sub, secondary, dtFontSize } from "../../../styles/mixins";
+import {
+  primary,
+  sub,
+  secondary,
+  dtFontSize,
+  mbFontSize,
+} from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint.js";
 
 import styled from "styled-components";
@@ -24,13 +30,17 @@ const PopupContainer = styled.div`
     text-align: center;
     color: ${sub.sub800};
     margin-top: 10px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.large};
+    }
   }
 `;
 
 const MapContainer = styled.div`
   width: 40%;
   height: max-content;
-  min-width: 400px;
+  min-width: 200px;
   min-height: 500px;
   display: flex;
   justify-content: center;
@@ -300,6 +310,12 @@ const CloseButton = styled.button`
     color: white;
     border-color: ${primary.primary300};
   }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    padding: 5px;
+    width: 30%;
+    margin: 15px 10px;
+  }
 `;
 
 const PopupLowerContainer = styled.div`
@@ -331,20 +347,12 @@ const ConcertListContainer = styled.div`
   margin: 0 5%;
   margin-top: 20px;
 
-  .location {
-    width: max-content;
-    padding: 5px 30px;
-    border-radius: 20px;
-    background-color: ${primary.primary300};
-    color: white;
-  }
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: row;
     justify-content: space-evenly;
     height: 40%;
     width: 100%;
-    margin-top: 0;
+    margin: 0;
   }
 `;
 
@@ -1027,7 +1035,6 @@ export default function LocationPopup({ popupHandler }) {
           {/* 서울지도svg */}
         </MapContainer>
         <ConcertListContainer>
-          <div className="location">{`${location} : 15개`}</div>
           <List searchBy={"location"} search={location} />
         </ConcertListContainer>
       </ContentsContainer>
