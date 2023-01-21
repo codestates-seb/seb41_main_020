@@ -55,15 +55,15 @@ const Aside = () => {
     <Side>
       <SideList>
         <Link
-          className={pathname === "/board" ? "thisLinkNav" : "linkNav"}
-          to="/board"
+          className={pathname === "/board/free" ? "thisLinkNav" : "linkNav"}
+          to="/board/free?category=자유게시판&page=1"
         >
           자유게시판
         </Link>
         <br />
         <Link
           className={pathname === "/board/employ" ? "thisLinkNav" : "linkNav"}
-          to="/board/employ"
+          to="/board/employ?category=구인게시판&page=1"
         >
           구인게시판
         </Link>

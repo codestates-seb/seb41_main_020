@@ -374,7 +374,7 @@ export default function Header() {
         </Link>
         <Link
           className={location.pathname.includes("board") ? "current" : ""}
-          to="board"
+          to="board/free?category=자유게시판&status=최신순&page=1&size=5"
         >
           커뮤니티
         </Link>

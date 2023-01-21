@@ -11,6 +11,9 @@ import Button from "../Button.jsx";
 import LongCarouselItemList from "./LongCarouselItemList.jsx";
 
 import styled from "styled-components";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../../Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -96,8 +99,29 @@ const NextButton = styled.button`
   }
 `;
 
-export default function Carousel({ data }) {
+export default function Carousel() {
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [data, setData] = useState([]);
+
+  const serverURI = process.env.REACT_APP_SERVER_URI;
+
+  const fetchShowDataByLocation = () => {
+    return axios.get(`${serverURI}/shows/location`, {
+      params: { address: "종로구" },
+    });
+  };
+
+  const fetchShowDataByLocationOnSuccess = (response) => {
+    const data = response.data.data.shows;
+    setData(data);
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchShowDataByLocation"],
+    queryFn: fetchShowDataByLocation,
+    onSuccess: fetchShowDataByLocationOnSuccess,
+    keepPreviousData: true,
+  });
 
   const pageButtonClickHandler = (num) => {
     const viewport = window.innerWidth;
@@ -170,7 +194,11 @@ export default function Carousel({ data }) {
         >
           <img src={Arrow} alt="prev" />
         </PrevButton>
-        <LongCarouselItemList data={data} currentIdx={currentIdx} />
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          data && <LongCarouselItemList data={data} currentIdx={currentIdx} />
+        )}
         <NextButton
           onClick={() => {
             pageButtonClickHandler(1);

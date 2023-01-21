@@ -16,7 +16,6 @@ export const PostWrapper = styled(ContentWrapper)`
   height: max-content;
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 99%;
-    /* padding: 0 10px; */
   }
 `;
 

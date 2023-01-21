@@ -1028,7 +1028,7 @@ export default function LocationPopup({ popupHandler }) {
         </MapContainer>
         <ConcertListContainer>
           <div className="location">{`${location} : 15개`}</div>
-          <List />
+          <List searchBy={"location"} search={location} />
         </ConcertListContainer>
       </ContentsContainer>
       <PopupLowerContainer>

@@ -10,8 +10,9 @@ import OKButton from "../BoardList/OKButton.jsx";
 import AnswerItem from "./AnswerItem.jsx";
 
 import AnswerDummy from "../../../DummyData/AnswerDummy.js";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useAnswerListStore from "../../../store/useAnswerListStore.js";
+import axios from "axios";
 
 const AnswerWrapper = styled.div`
   margin-top: 60px;
@@ -66,27 +67,40 @@ const AnswerListWrapper = styled.div`
   }
 `;
 
-const AnswerList = () => {
-  const { answerList, getAnswerListData } = useAnswerListStore();
-  useEffect(() => {
-    getAnswerListData([...AnswerDummy]);
-  }, []);
+const AnswerList = ({ boardData, answerListData, id }) => {
+  const [answerData, setAnswerData] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://indiego.kro.kr:80/articles/${id}/comments`, {
+        comment: answerData,
+      })
+      .then((res) => console.log(res));
+  };
   return (
     <AnswerWrapper>
-      <div className="answerCount">156개의 댓글</div>
-      <div className="answerInputDiv">
-        <input
-          className="answerInput"
-          type="text"
-          placeholder="댓글을 입력하세요."
-        />
+      <div className="answerCount">
+        {boardData.articleCommentCount}개의 댓글
       </div>
-      <AnswerCreateButtonDiv>
-        <AnswerCreateButton type="submit">작성하기</AnswerCreateButton>
-      </AnswerCreateButtonDiv>
+      <form onSubmit={handleSubmit}>
+        <div className="answerInputDiv">
+          <input
+            className="answerInput"
+            type="text"
+            placeholder="댓글을 입력하세요."
+            value={answerData}
+            onChange={(e) => {
+              setAnswerData(e.target.value);
+            }}
+          />
+        </div>
+        <AnswerCreateButtonDiv>
+          <AnswerCreateButton type="submit">작성하기</AnswerCreateButton>
+        </AnswerCreateButtonDiv>
+      </form>
       <AnswerListWrapper>
         <ul>
-          {answerList.map((it) => (
+          {answerListData.map((it) => (
             <li key={it.id}>
               <AnswerItem {...it} />
             </li>

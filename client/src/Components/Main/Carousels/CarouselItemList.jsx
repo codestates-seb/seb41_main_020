@@ -23,8 +23,6 @@ const ItemsContainer = styled.div`
 `;
 
 export default function CarouselItemList({ data, currentIdx }) {
-  console.log(currentIdx + 1, data.length);
-
   return (
     <RendererContainer>
       <ItemsContainer isLast={currentIdx === 0} currentIdx={currentIdx}>
