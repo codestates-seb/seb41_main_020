@@ -85,40 +85,40 @@ const DetailContainer = styled.div`
   }
 `;
 
-const BookmarkContainer = styled.div`
-  display: flex;
-  position: absolute;
+// const BookmarkContainer = styled.div`
+//   display: flex;
+//   position: absolute;
 
-  svg {
-    width: 15px;
-    height: 15px;
+//   svg {
+//     width: 15px;
+//     height: 15px;
 
-    path {
-      fill: ${sub.sub500};
-    }
+//     path {
+//       fill: ${sub.sub500};
+//     }
 
-    :hover {
-      path {
-        fill: ${misc.orange};
-      }
-    }
-  }
-`;
+//     :hover {
+//       path {
+//         fill: ${misc.orange};
+//       }
+//     }
+//   }
+// `;
 
 export default function CardItem({ data }) {
   return (
     <CardItemContainer>
       <Link to="/tickets/:id">
         <ImageContainer>
-          <img src={data.img} alt="poster" />
+          <img src={data.image} alt="poster" />
         </ImageContainer>
         <DetailContainer>
           <h2>{data.title}</h2>
           <h3>{data.artist}</h3>
-          <h4>{data.detail}</h4>
+          <h4>{data.category}</h4>
           <h4 className="price">{`${data.price} ₩`}</h4>
-          <h4>{data.location}</h4>
-          <h4>{data.date}</h4>
+          <h4>{data.detailAddress}</h4>
+          <h4>{`${data.showAt} - ${data.expiredAt}`}</h4>
         </DetailContainer>
       </Link>
     </CardItemContainer>

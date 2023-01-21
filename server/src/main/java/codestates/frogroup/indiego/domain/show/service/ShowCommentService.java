@@ -52,7 +52,7 @@ public class ShowCommentService {
         Double scoreAverage = Double.parseDouble(scoreRepository.getValues(key));
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        scoreRepository.setValues(key, s);
+        redisDao.setValues(key, s);
     }
 
     public Page<ShowComment> findShowComment(Long showId, int page, int size ){

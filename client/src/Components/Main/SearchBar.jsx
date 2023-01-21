@@ -8,6 +8,7 @@ import breakpoint from "../../styles/breakpoint";
 import Search from "../../assets/search.svg";
 
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const SearchBarContainer = styled.div`
   margin-top: 20px;
@@ -107,6 +108,14 @@ const InputContainer = styled.div`
 
   svg {
     margin: 10px 10px 0 0;
+
+    :hover {
+      path {
+        fill: ${primary.primary300};
+      }
+
+      cursor: pointer;
+    }
   }
 
   input {
@@ -136,9 +145,25 @@ const InputContainer = styled.div`
   }
 `;
 
-export default function SearchBar({ className }) {
+export default function SearchBar({
+  className,
+  navigateTo,
+  fetchMode,
+  defaultValue,
+  additionalParams,
+  refetch,
+}) {
   const [isSearchOptionsClicked, setIsSearchOptionsClicked] = useState(false);
   const [searchOption, setSearchOption] = useState("공연명");
+  const [searchInput, setSearchInput] = useState(defaultValue);
+  const navigate = useNavigate();
+
+  let searchURI = `${navigateTo}?search=${searchInput}&filter=${searchOption}`;
+  additionalParams?.forEach((param) => {
+    if (Array.isArray(param)) {
+      searchURI += "&" + param[0] + "=" + param[1];
+    }
+  });
 
   const searchOptionsContainerEventHandler = (e, props) => {
     if (props === "blur") {
@@ -151,6 +176,22 @@ export default function SearchBar({ className }) {
       }
     } else {
       setIsSearchOptionsClicked(!isSearchOptionsClicked);
+    }
+  };
+
+  const searchInputOnChangeHandler = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const searchInputOnKeyUpHandler = (e) => {
+    if (searchInput && e.key === "Enter") {
+      navigate(searchURI);
+    }
+  };
+
+  const searchIconClickHandler = () => {
+    if (searchInput) {
+      navigate(searchURI);
     }
   };
 
@@ -185,13 +226,19 @@ export default function SearchBar({ className }) {
         </OptionsList>
       </OptionContainer>
       <InputContainer className="input_container">
-        <input placeholder="검색어를 입력하세요." />
+        <input
+          placeholder="검색어를 입력하세요."
+          value={searchInput}
+          onChange={searchInputOnChangeHandler}
+          onKeyUp={searchInputOnKeyUpHandler}
+        />
         {/* search icon */}
         <svg
           width={20}
           height={20}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
+          onClick={searchIconClickHandler}
         >
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
         </svg>

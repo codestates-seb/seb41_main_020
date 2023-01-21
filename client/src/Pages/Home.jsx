@@ -204,7 +204,7 @@ export default function Home() {
           </Button>
           <Button clickEvent={datePopupOnClickHanlder}>날짜별 공연 현황</Button>
         </ButtonsContainer>
-        <SearchBar />
+        <SearchBar navigateTo="/tickets" fetchMode={false} defaultValue={""} />
         <CarouselContainer>
           <CarouselDisplayBox>
             <CarouselDisplay>
@@ -215,7 +215,7 @@ export default function Home() {
                   minWidth={"300px"}
                   maxWidth={"480px"}
                   height={"100%"}
-                  data={dummyArr}
+                  sort="hot"
                   carouselItemList={CarouselItemList}
                   isRankMode={true}
                 ></Carousel>
@@ -227,7 +227,7 @@ export default function Home() {
                   minWidth={"300px"}
                   maxWidth={"480px"}
                   height={"100%"}
-                  data={dummyArr}
+                  sort="new"
                   carouselItemList={CarouselItemList}
                 ></Carousel>
               </div>
@@ -235,16 +235,16 @@ export default function Home() {
           </CarouselDisplayBox>
         </CarouselContainer>
         <LongCarouselContainer>
-          <LongCarousel data={dummyArr} />
+          <LongCarousel />
         </LongCarouselContainer>
         <BoardsContainer>
           <h1 className="title">커뮤니티 인기 게시글</h1>
           <BoardsGrid>
-            <Boards>자유게시판</Boards>
-            <Boards>구인게시판</Boards>
-            <Boards>요청게시판</Boards>
-            <Boards>홍보게시판</Boards>
-            <Boards>공연후기</Boards>
+            <Boards category="자유게시판">자유게시판</Boards>
+            <Boards category="구인게시판">구인게시판</Boards>
+            <Boards category="초청게시판">초청게시판</Boards>
+            <Boards category="홍보게시판">홍보게시판</Boards>
+            <Boards category="후기게시판">공연후기</Boards>
           </BoardsGrid>
         </BoardsContainer>
       </MainContainer>

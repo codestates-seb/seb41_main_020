@@ -152,13 +152,13 @@ export default function LongCarouselItem({ data }) {
   return (
     <ItemContainer>
       <ImageContainer>
-        <img src={data.img} alt="poster" />
+        <img src={data.image} alt="poster" />
       </ImageContainer>
       <ConcertDetailsContainer>
         <h2 className="title">{data.title}</h2>
-        <h3 className="artist">{data.artist}</h3>
-        <h4 className="date">{data.date}</h4>
-        <h4 className="location">{data.location}</h4>
+        <h3 className="artist">{data.nickname}</h3>
+        <h4 className="date">{`${data.showAt} - ${data.expiredAt}`}</h4>
+        <h4 className="location">{data.detailAddress}</h4>
       </ConcertDetailsContainer>
     </ItemContainer>
   );
