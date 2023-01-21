@@ -3,10 +3,13 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import React, { useState, useEffect, useRef } from "react";
 
-import { dtFontSize, primary, sub } from "../../../styles/mixins";
+import { dtFontSize, primary, sub, misc } from "../../../styles/mixins";
 
 import styled from "styled-components";
 import dayjs from "dayjs";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../../Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -90,6 +93,15 @@ const CalendarGrid = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+
+    .dot {
+      position: absolute;
+      top: 30px;
+      font-size: 20px;
+      font-weight: 800;
+      color: ${misc.orange};
+    }
   }
 
   .date {
@@ -113,6 +125,22 @@ const CalendarGrid = styled.div`
     }
   }
 
+  .date.previous {
+    color: ${sub.sub300};
+
+    :hover {
+      color: white;
+    }
+  }
+
+  .date.weekend {
+    color: ${misc.red};
+
+    :hover {
+      color: white;
+    }
+  }
+
   p.selected {
     background-color: ${primary.primary300};
     color: white;
@@ -120,13 +148,41 @@ const CalendarGrid = styled.div`
   }
 `;
 
-export default function Calendar({ setSelectedDate }) {
-  const [daysArr, setDaysArr] = useState([]);
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedDay, setSelectedDay] = useState("");
-  const isMounted = useRef(0);
+const SpinnerExtended = styled(Spinner)`
+  position: absolute;
+  left: 45%;
+  top: 40%;
+`;
 
+export default function Calendar({ setSelectedDate, setDateInfo }) {
+  const now = dayjs();
+  const [daysArr, setDaysArr] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(now.year());
+  const [selectedMonth, setSelectedMonth] = useState(now.month() + 1);
+  const [selectedDay, setSelectedDay] = useState(now.date());
+  const [hasShow, setHasShow] = useState();
+
+  const serverURI = process.env.REACT_APP_SERVER_URI;
+
+  const fetchHasShowArr = () => {
+    return axios.get(`${serverURI}/shows/marker`, {
+      params: { year: selectedYear, month: selectedMonth, day: selectedDay },
+    });
+  };
+
+  const fetchHasShowArrOnSuccess = (response) => {
+    let data = response.data.data;
+    setHasShow(data);
+  };
+
+  const { isLoading, refetch: refetchHasShowArr } = useQuery({
+    queryKey: ["fetchHasShowArr", selectedYear, selectedMonth],
+    queryFn: fetchHasShowArr,
+    onSuccess: fetchHasShowArrOnSuccess,
+    enabled: !!selectedMonth,
+  });
+
+  // 이전 날짜를 계산해서 추가해주는 함수
   const addPreviousMonthDays = (dateObj, daysArr) => {
     const yearAndDate = `${dateObj.year()}-${dateObj.month() + 1}-`;
     const DOWofFirstDay = dayjs(yearAndDate + "01").$W;
@@ -137,64 +193,85 @@ export default function Calendar({ setSelectedDate }) {
         `${dateObj.year()}${dateObj.month() - 1}${dateObj.date()}`
       ).daysInMonth();
 
-      const lastMonthDaysArr = new Array(DOWofFirstDay).fill(0);
+      let lastMonthDaysArr = new Array(DOWofFirstDay).fill(0);
       lastMonthDaysArr.reduce((acc, cur, index, arr) => {
         arr[index] = acc;
         return acc - 1;
       }, lastMonthDays);
       lastMonthDaysArr.reverse();
+      lastMonthDaysArr = lastMonthDaysArr.map((day) => {
+        return { day, previous: true };
+      });
       daysArr = lastMonthDaysArr.concat(daysArr);
       return daysArr;
     }
   };
 
+  // 달력 날짜를 데이터에 맞게 렌더링하는 함수
   useEffect(() => {
-    const now = dayjs();
-    setSelectedYear(now.year());
-    setSelectedMonth(now.month() + 1);
-    setSelectedDay(now.date());
-    setSelectedDate(now.format("YYYY년 MM월 DD일"));
-    let newDaysArr = new Array(now.daysInMonth()).fill(1);
-    newDaysArr.reduce((acc, current, index, arr) => {
-      arr[index] = acc + 1;
-      return acc + current;
-    });
-    newDaysArr = addPreviousMonthDays(now, newDaysArr);
-    setDaysArr(newDaysArr);
-  }, []);
-
-  useEffect(() => {
-    if (isMounted.current > 2) {
-      const selected = dayjs()
-        .set("year", selectedYear)
-        .set("month", selectedMonth - 1)
-        .set("date", selectedDay);
+    const selected = dayjs()
+      .set("year", selectedYear)
+      .set("month", selectedMonth - 1)
+      .set("date", selectedDay);
+    if (!hasShow) {
+      setSelectedDate(now.format("YYYY년 MM월 DD일"));
+      setDateInfo({
+        year: selected.year(),
+        month: selected.month() + 1,
+        day: selected.date(),
+      });
+    } else {
       let newDaysArr = new Array(selected.daysInMonth()).fill(1);
       newDaysArr.reduce((acc, current, index, arr) => {
         arr[index] = acc + 1;
         return acc + current;
       });
+      newDaysArr = newDaysArr.map((day) => {
+        if (hasShow.indexOf(day) !== -1) {
+          return { day, hasShow: true };
+        } else {
+          return { day, hasShow: false };
+        }
+      });
+      newDaysArr.forEach((day) => {
+        const whatDay = selected.date(day.day).$W;
+        if (whatDay === 0 || whatDay === 6) {
+          day.weekend = true;
+        }
+      });
       newDaysArr = addPreviousMonthDays(selected, newDaysArr);
       setDaysArr(newDaysArr);
-      setSelectedDate(selected.format("YYYY년 MM월 DD일"));
-    } else {
-      isMounted.current++;
     }
+  }, [hasShow]);
+
+  // 월과 년도가 변경되면 hasShow를 다시 불러오며, 관련 상태를 업데이트 해주는 함수
+  useEffect(() => {
+    setSelectedDate(`${selectedYear}년 ${selectedMonth}월 ${selectedDay}일`);
+    setDateInfo({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+    });
+    refetchHasShowArr();
   }, [selectedMonth, selectedYear]);
 
   const dateOnClickHandler = (e) => {
-    const selected = e.target.textContent;
+    const selected = parseInt(e.target.textContent);
     setSelectedDay(selected);
     setSelectedDate(`${selectedYear}년 ${selectedMonth}월 ${selected}일`);
+    setDateInfo({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selected,
+    });
+    console.log("setting date");
   };
 
   const monthSelectorOnClickHandler = (num) => {
     if (selectedMonth <= 1 && num === -1) {
-      console.log("<= 1", selectedMonth);
       setSelectedYear(selectedYear - 1);
       setSelectedMonth(12);
     } else if (selectedMonth >= 11 && num === 1) {
-      console.log("over 12", selectedMonth);
       setSelectedYear(selectedYear + 1);
       setSelectedMonth(1);
     } else {
@@ -231,21 +308,27 @@ export default function Calendar({ setSelectedDate }) {
         <p className="item days">목</p>
         <p className="item days">금</p>
         <p className="item days last">토</p>
-        {daysArr.map((day, index) => {
-          return (
-            <div className="date_container" key={index}>
-              <p
-                tabIndex={0}
-                className={`${
-                  parseInt(selectedDay) === day ? "selected" : ""
-                } date`}
-                onClick={dateOnClickHandler}
-              >
-                {day}
-              </p>
-            </div>
-          );
-        })}
+        {!hasShow ? (
+          <SpinnerExtended />
+        ) : (
+          daysArr.map((day, index) => {
+            return (
+              <div className="date_container" key={index}>
+                <p
+                  tabIndex={0}
+                  className={`${selectedDay === day ? "selected" : ""} date 
+                ${day.previous ? "previous" : ""} 
+                ${day.weekend ? "weekend" : ""}
+              `}
+                  onClick={dateOnClickHandler}
+                >
+                  {day.day}
+                </p>
+                {day.hasShow && <p className="dot">.</p>}
+              </div>
+            );
+          })
+        )}
       </CalendarGrid>
     </Container>
   );

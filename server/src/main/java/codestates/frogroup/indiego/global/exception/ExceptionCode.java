@@ -37,6 +37,8 @@ public enum ExceptionCode {
 
     BOOKMARK_NOT_FOUND(404, "북마크가 존재하지 않습니다."),
 
+    SHOWRESERVATION_NOT_FOUND(404, "후기를 작성할 수 있는 권한이 없습니다."),
+
     // File Upload
     UPLOAD_FAILED(404, "File Upload Failed !"),
     UPLOAD_VOLUME_OVER(404, "File Size가 10MB를 초과하였습니다 !");

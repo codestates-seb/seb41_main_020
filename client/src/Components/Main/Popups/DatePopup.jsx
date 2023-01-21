@@ -92,7 +92,7 @@ const ConcertListContainer = styled.div`
   margin: 0 5%;
   margin-top: 20px;
 
-  .location {
+  .date_result {
     width: max-content;
     padding: 5px 30px;
     border-radius: 20px;
@@ -111,8 +111,8 @@ const ConcertListContainer = styled.div`
 
 export default function DatePopup({ popupHandler }) {
   const [selectedDate, setSelectedDate] = useState("");
-
-  console.log(selectedDate);
+  const [dateInfo, setDateInfo] = useState();
+  console.log(dateInfo, "what?!");
 
   const closePopupHandler = () => {
     popupHandler(false);
@@ -123,11 +123,14 @@ export default function DatePopup({ popupHandler }) {
       <h1>날짜별 공연 현황</h1>
       <ContentsContainer>
         <CalendarContainer>
-          <Calendar setSelectedDate={setSelectedDate} />
+          <Calendar
+            setSelectedDate={setSelectedDate}
+            setDateInfo={setDateInfo}
+          />
         </CalendarContainer>
         <ConcertListContainer>
-          <div className="location">{`${selectedDate} : 15개`}</div>
-          <List />
+          <div className="date_result">{`${selectedDate} : 15개`}</div>
+          {dateInfo && <List searchBy="date" search={dateInfo} />}
         </ConcertListContainer>
       </ContentsContainer>
       <PopupLowerContainer>

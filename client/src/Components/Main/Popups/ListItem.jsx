@@ -44,11 +44,11 @@ const ListItemContainer = styled.div`
   }
 `;
 
-export default function ListItem() {
+export default function ListItem({ data }) {
   return (
     <ListItemContainer>
-      <p className="title">우리동네 락밴드 크리스마스 공연</p>
-      <p className="date">2022 년 12 월 24일 ~ 2022년 12월 25일</p>
+      <p className="title">{data.title}</p>
+      <p className="date">{`${data.showAt} - ${data.expiredAt}`}</p>
     </ListItemContainer>
   );
 }

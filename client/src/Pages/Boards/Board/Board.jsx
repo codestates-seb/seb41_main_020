@@ -14,11 +14,40 @@ import {
 } from "../../../styles/mixins.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import useBoardStore from "../../../store/useBoardStore.js";
+
+const BoardInfoWrapper = styled(ContentWrapper)`
+  .titleDiv {
+    display: flex;
+    justify-content: space-between;
+    .title {
+      font-size: ${dtFontSize.xlarge};
+      color: ${primary.primary500};
+      font-weight: 700;
+      text-align: left;
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        font-size: ${mbFontSize.xlarge};
+      }
+    }
+    .titleInfo {
+      font-size: ${dtFontSize.medium};
+      margin-top: 10px;
+      color: ${sub.sub300};
+      text-align: left;
+      margin-bottom: 10px;
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        font-size: ${mbFontSize.medium};
+      }
+    }
+  }
+`;
 
 const QuillViewDiv = styled.div`
   display: flex;
@@ -64,44 +93,54 @@ const EditDeleteDiv = styled.div`
 
 const Board = () => {
   const navigate = useNavigate();
+  const [boardData, setBoardData] = useState({});
+  const [answerListData, setAnswerListData] = useState([]);
+  const { id } = useParams();
 
-  // const axiosBoard = async () => {
-  //   const response = await axios.get(
-  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
-  //     { withCredentials: true }
-  //   );
-  //   return response.data.data;
-  // };
+  const axiosBoard = async () => {
+    const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
+    return response.data;
+  };
 
-  // const { isLoading, isError, data, error } = useQuery(
-  //   ["axiosBoard"],
-  //   axiosBoard
-  // );
+  const axiosBoardSuccess = (response) => {
+    setBoardData(response.data);
+    setAnswerListData(response.data.articleComments);
+  };
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["axiosBoard"],
+    queryFn: axiosBoard,
+    onSuccess: axiosBoardSuccess,
+  });
 
-  // if (isError) {
-  //   return <div>Error : {error.message}</div>;
-  // }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // console.log(data);
-
+  if (isError) {
+    return <div>Error : {error.message}</div>;
+  }
   return (
     <PageWrapper>
       <Aside></Aside>
-      <ContentWrapper>
-        <div className="title">글 제목(ex 난 누구인가 여긴 어디인가)</div>
-        <div className="titleInfo">작성날짜,작성자</div>
+      <BoardInfoWrapper>
+        <div className="title">{boardData.title}</div>
+        <div className="titleDiv">
+          <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
+          <div className="titleInfo">
+            {new Date(boardData.createdAt).toLocaleString()} || 조회수 :{" "}
+            {boardData.view}
+          </div>
+        </div>
+
         <div className="lineDiv"></div>
-        <QuillViewDiv>본문 내용 입니다.</QuillViewDiv>
+        <QuillViewDiv>{boardData.content}</QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton">
               <img width={45} src={heart} alt="heart"></img>
             </button>
-            <div className="heartCount">157</div>
+            <div className="heartCount">{boardData.likeCount}</div>
           </div>
         </HeartItem>
         <EditDeleteDiv>
@@ -115,8 +154,12 @@ const Board = () => {
           </button>
           <button className="edButton">삭제</button>
         </EditDeleteDiv>
-        <AnswerList />
-      </ContentWrapper>
+        <AnswerList
+          boardData={boardData}
+          answerListData={answerListData}
+          id={id}
+        />
+      </BoardInfoWrapper>
     </PageWrapper>
   );
 };
