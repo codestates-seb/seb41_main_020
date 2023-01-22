@@ -108,14 +108,10 @@ public class ArticleService {
     public ArticleDto.Response findArticle(Long articleId) {
         Article findArticle = findVerifiedArticle(articleId);
 
-        Long viewCount = incrementView(articleId);
+        Long viewCount = articleRepository.incrementViewCount(articleId);
         ArticleDto.Response response = getResponse(findArticle);
         response.setView(viewCount);
         return response;
-    }
-
-    private Long incrementView(Long articleId) {
-        return redisTemplate.opsForValue().increment("article:" + articleId + ":viewCount", 1);
     }
 
     /**
