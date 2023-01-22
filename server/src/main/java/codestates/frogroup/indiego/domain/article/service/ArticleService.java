@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,6 @@ public class ArticleService {
     private final MemberService memberService;
     private final AwsS3Service awsS3Service;
     private final CustomBeanUtils<Article> beanUtils;
-    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 게시글 작성
@@ -166,24 +164,7 @@ public class ArticleService {
         long likeCount = articleLikeRepository.countByArticleId(article.getId());
         response.setLikeCount(likeCount);
 
-//        List<ArticleLike> articleLikes = articleLikeRepository.findAllByArticleId(article.getId());
-//
-//        if (articleLikes.isEmpty()) {
-//            response.setLikeCount(0);
-//        } else {
-//            response.setLikeCount(articleLikes.size());
-//        }
-
         return response;
-    }
-
-    /**
-     * 조회수 증가
-     */
-    @Transactional
-    public void updateView(Long articleId) {
-        findVerifiedArticle(articleId).updateView();
-//        return articleRepository.updateView(articleId);
     }
 
     /**
@@ -193,25 +174,6 @@ public class ArticleService {
 
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
-    }
-
-    /**
-     * 게시글 수정 메서드
-     */
-    private static void changeArticle(Article article, Article findArticle) {
-
-        Optional.ofNullable(article.getBoard().getTitle())
-                .ifPresent(title -> findArticle.getBoard().setTitle(title));
-
-        Optional.ofNullable(article.getBoard().getContent())
-                .ifPresent(content -> findArticle.getBoard().setContent(content));
-
-        Optional.ofNullable(article.getBoard().getImage())
-                .ifPresent(image -> findArticle.getBoard().setImage(image));
-
-        Optional.ofNullable(article.getBoard().getCategory())
-                .ifPresent(category -> findArticle.getBoard().setCategory(category));
-
     }
 
     /**
@@ -235,6 +197,33 @@ public class ArticleService {
         articleLikeRepository.delete(findArticleLike);
 
         return HttpStatus.NO_CONTENT;
+    }
+
+    /**
+     * 조회수 증가
+     */
+    @Transactional
+    public void updateView(Long articleId) {
+        findVerifiedArticle(articleId).updateView();
+    }
+
+    /**
+     * 게시글 수정 메서드
+     */
+    private static void changeArticle(Article article, Article findArticle) {
+
+        Optional.ofNullable(article.getBoard().getTitle())
+                .ifPresent(title -> findArticle.getBoard().setTitle(title));
+
+        Optional.ofNullable(article.getBoard().getContent())
+                .ifPresent(content -> findArticle.getBoard().setContent(content));
+
+        Optional.ofNullable(article.getBoard().getImage())
+                .ifPresent(image -> findArticle.getBoard().setImage(image));
+
+        Optional.ofNullable(article.getBoard().getCategory())
+                .ifPresent(category -> findArticle.getBoard().setCategory(category));
+
     }
 
 }
