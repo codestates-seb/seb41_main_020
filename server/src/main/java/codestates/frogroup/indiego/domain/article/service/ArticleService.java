@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,7 @@ public class ArticleService {
     private final MemberService memberService;
     private final AwsS3Service awsS3Service;
     private final CustomBeanUtils<Article> beanUtils;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 게시글 작성
@@ -105,10 +107,15 @@ public class ArticleService {
      */
     public ArticleDto.Response findArticle(Long articleId) {
         Article findArticle = findVerifiedArticle(articleId);
-//        updateView(articleId);
-//        findArticle.updateView();
 
-        return getResponse(findArticle);
+        Long viewCount = incrementView(articleId);
+        ArticleDto.Response response = getResponse(findArticle);
+        response.setView(viewCount);
+        return response;
+    }
+
+    private Long incrementView(Long articleId) {
+        return redisTemplate.opsForValue().increment("article:" + articleId + ":viewCount", 1);
     }
 
     /**

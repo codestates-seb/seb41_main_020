@@ -10,4 +10,8 @@ public class RedisKey {
         return String.valueOf(showId) + SCORE_AVERAGE;
     }
 
+    public String getKeyById(Long id, String var) {
+        return String.valueOf(id) + var;
+    }
+
 }
