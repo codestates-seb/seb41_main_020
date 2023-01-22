@@ -3,6 +3,7 @@ import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
 import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
 import WithdrawModal from "../../Components/Profile/WithdrawModal";
 import AllShowList from "../../Components/Profile/AllShowList.jsx";
+import Spinner from "../../Components/Spinner";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -16,7 +17,7 @@ import {
 import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState } from "react";
+import { React, useId, useState } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -262,37 +263,22 @@ export default function Profile() {
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const [data, setData] = useState();
   const navigate = useNavigate();
-  const params = useParams();
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   const fetchData = () => {
-    const accessToken = sessionStorage.getItem("accesstoken");
-    axios.defaults.withCredentials = true;
-
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "Application/json",
-      Accept: "*/*",
-    };
-
-    return axios.get(
-      `${process.env.REACT_APP_SERVER_URI}users/${params.id}/${params.username}`,
-      { headers }
-    );
+    return instance({
+      method: "get",
+      url: `/members/${userId}/mypage`,
+    });
   };
 
   const fetchDataOnSuccess = (response) => {
-    response.data.data && setData(response.data.data);
+    setData(response.data);
   };
 
   const fetchDataOnError = (err) => {
-    if (err.response.status === 401) {
-      window.alert("Please log in first.");
-      navigate("/login");
-      setIsLogin(false);
-      sessionStorage.clear();
-    } else if (err.response.status === 405) {
-      window.alert("wrong approach!");
-      navigate("/");
+    if (err.response.status === 400) {
+      console.log("gk..");
     }
   };
 
@@ -317,10 +303,16 @@ export default function Profile() {
         <ContentInnerContainer>
           <ProfileInfoContainer>
             <div>
-              <img alt="dummy profile" src={dummyProfileImage} />
+              {isLoading ? (
+                Spinner
+              ) : (
+                <img alt="dummy profile" src={data && data.profile[0].image} />
+              )}
               <div>
-                <span className="user-nickname">김아무개</span>
-                <span className="user-email">amugae1234@gmail.com</span>
+                <span className="user-nickname">
+                  {data && data.profile[0].nickname}
+                </span>
+                <span className="user-email">{data && data.email}</span>
               </div>
             </div>
             <div className="button-container">
@@ -330,16 +322,18 @@ export default function Profile() {
           <LocationandAboutContainer>
             <div>
               <span className="sub-title">활동 지역</span>
-              <span className="sub-location-info">종로구</span>
+              <span className="sub-location-info">
+                {data && data.profile[0].address
+                  ? data && data.profile[0].address
+                  : "없음"}
+              </span>
             </div>
             <div>
               <span className="sub-title">소개</span>
               <span className="sub-info">
-                국무총리 또는 행정각부의 장은 소관사무에 관하여 법률이나
-                대통령령의 위임 또는 직권으로 총리령 또는 부령을 발할 수 있다.
-                대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과
-                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수
-                있다.
+                {data && data.profile[0].introduction
+                  ? data && data.profile[0].introduction
+                  : "없음"}
               </span>
             </div>
           </LocationandAboutContainer>

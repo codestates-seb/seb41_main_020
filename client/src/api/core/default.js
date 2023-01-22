@@ -7,7 +7,7 @@ const refreshToken = localStorage.getItem("refreshToken");
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
   headers: {
-    "Access-Control-Allow-Origin": "*",
+    "Accept": "*/*",
     "Content-Type": "application/json",
   },
   withCredentials: true,
@@ -32,11 +32,11 @@ instance.interceptors.response.use(
   },
   (error) => {
     const { config, response, status } = error;
-    if (status === 401) {
+    if (status === 400) {
       if (response.data.message === "Token Expired") {
         const originalRequest = config; 
         const reissuesResponse  = axios.post(
-          `${process.env.REACT_APP_SERVER_URI}members/reisuess`,
+          `${process.env.REACT_APP_SERVER_URI}members/reissue`,
           {
             headers: {
               "Access-Control-Allow-Origin": "*",

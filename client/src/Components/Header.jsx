@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
+import axios from "axios";
+
 import Overlay from "./Main/Popups/Overlay.jsx";
 
 import {
@@ -351,6 +353,26 @@ export default function Header() {
   const [isLogin, setIsLogin] = useState(true);
   useWindowSize(setNavOpen);
 
+  const logoutHandler = () => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const headers = {
+      "Content-Type": "application/json",
+      // eslint-disable-next-line prettier/prettier
+      "Authorization": `Bearer ${accessToken}`,
+      // eslint-disable-next-line prettier/prettier
+      "Refresh" : refreshToken,
+    };
+
+    return axios
+      .get(`${process.env.REACT_APP_SERVER_URI}/members/logout`, { headers })
+      .then((response) => {
+        sessionStorage.clear();
+        localStorage.clear();
+        setIsLogin(false);
+      });
+  };
+
   return (
     <HeaderContainer>
       <HeaderSearchIcon>
@@ -392,7 +414,7 @@ export default function Header() {
         </Link>
       </HeaderLinkContainer>
       {isLogin ? (
-        <UserStatus>
+        <UserStatus onClick={logoutHandler}>
           <p className="welcome">환영합니다!</p>
           <div className="iconbox">
             <p className="username">unknown user 님!</p>
