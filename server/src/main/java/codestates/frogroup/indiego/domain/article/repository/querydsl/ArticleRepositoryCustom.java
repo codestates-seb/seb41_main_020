@@ -13,4 +13,6 @@ public interface ArticleRepositoryCustom {
     Page<ArticleListResponseDto> findAllSearch(String category, String search, String status, Pageable pageable);
 
     List<ArticleListResponseDto> findLikeCountDesc(String category);
+
+    Long incrementViewCount(Long articleId);
 }
