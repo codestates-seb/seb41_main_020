@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface ArticleRepositoryCustom {
 
@@ -15,4 +16,8 @@ public interface ArticleRepositoryCustom {
     List<ArticleListResponseDto> findLikeCountDesc(String category);
 
     Long incrementViewCount(Long articleId);
+
+    Long findViewCountFromRedis(Long articleId);
+
+    void saveViewCountToRedis(Long articleId, Long viewCount);
 }

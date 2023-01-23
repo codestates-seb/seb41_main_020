@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
@@ -22,13 +23,14 @@ import java.util.Objects;
 import static codestates.frogroup.indiego.domain.article.entity.QArticle.article;
 import static org.springframework.util.StringUtils.hasText;
 
+@Repository
 public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport implements ArticleRepositoryCustom {
 
     private final String VIEW_COUNT_KEY = "article:%s:viewCount";
     private final JPAQueryFactory queryFactory;
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Long> redisTemplate;
 
     // Querydsl의 리포지토리 지원 받는 부분
     public ArticleRepositoryCustomImpl(EntityManager em) {
@@ -39,6 +41,15 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
     @Override
     public Long incrementViewCount(Long articleId) {
         return redisTemplate.opsForValue().increment(String.format(VIEW_COUNT_KEY, articleId), 1L);
+    }
+
+    public Long findViewCountFromRedis(Long articleId) {
+        return redisTemplate.opsForValue().get(String.format(VIEW_COUNT_KEY, articleId));
+    }
+
+    @Override
+    public void saveViewCountToRedis(Long articleId, Long viewCount) {
+        redisTemplate.opsForValue().set(String.format(VIEW_COUNT_KEY, articleId), viewCount);
     }
 
     @Override

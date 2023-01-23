@@ -106,9 +106,19 @@ public class ArticleService {
     public ArticleDto.Response findArticle(Long articleId) {
         Article findArticle = findVerifiedArticle(articleId);
 
-        Long viewCount = articleRepository.incrementViewCount(articleId);
+        Long viewCount = articleRepository.findViewCountFromRedis(articleId);
+        log.info("viewCount1={}", viewCount);
+        if (viewCount == null) {
+            viewCount = articleRepository.findView(articleId);
+            log.info("viewCount2={}", viewCount);
+            articleRepository.saveViewCountToRedis(articleId, viewCount);
+        }
+
+        viewCount = articleRepository.incrementViewCount(articleId);
+        log.info("viewCount3={}", viewCount);
         ArticleDto.Response response = getResponse(findArticle);
         response.setView(viewCount);
+
         return response;
     }
 
