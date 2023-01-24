@@ -1,21 +1,24 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import useIsLoginStore from "../../store/useIsLoginStore";
+
+
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
   headers: {
-    "Access-Control-Allow-Origin": "*",
+    "Accept": "*/*",
     "Content-Type": "application/json",
   },
   withCredentials: true,
 });
 
-const accessToken = sessionStorage.getItem("accessToken");
-
 instance.interceptors.request.use(
   async (config) => {
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    if (localStorage.getItem("accessToken")) {
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
+      console.log(localStorage.getItem("accessToken"));
     }
     return config;
   },
@@ -25,38 +28,42 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-  (response) => {
-    const res = response.data;
-    return res;
+  function (response) {
+    return response;
   },
-  (error) => {
-    const { config, response, status } = error;
-    if (status === 401) {
-      if (response.data.message === "뭐가올까요,,") {
-        const originalRequest = config; 
-        const reissuesResponse  = axios.post(
-          `${process.env.REACT_APP_SERVER_URI}members/reisuess`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${accessToken}`,
-            },
-          },
-          { withCredentials: true }
-        );
-        const newAccessTokenData = reissuesResponse.headers.get("Authorization").split(" ")[1];
-        sessionStorage.clear();
-        sessionStorage.setItem("accessToken", newAccessTokenData);
-        const accessToken = sessionStorage.getItem("accessToken");
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return instance.request(originalRequest);
-      } else {
-        return Promise.reject(error);
+  async function (error) {
+    const { config, response } = error;
+
+    if (response.status === 400) {
+      const originalRequest = config;
+
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+        "Refresh": localStorage.getItem("refreshToken"),
       }
-    } else {
+
+      try {
+        const data = await axios({
+          url: `${process.env.REACT_APP_SERVER_URI}/members/reissue`,
+          method: "GET",
+          headers
+        });
+        if (data) {
+          localStorage.setItem("accessToken", data.headers.get("Authorization").split(" ")[1]);
+          originalRequest.headers.Authorization = `Bearer ${data.headers.get("Authorization").split(" ")[1]}`;
+          return await axios.request(originalRequest);
+        }
+      } catch (error) {
+        axios({
+          url: `${process.env.REACT_APP_SERVER_URI}/members/logout`,
+          method: "GET",
+          headers
+        });
+      }
       return Promise.reject(error);
     }
+    return Promise.reject(error);
   }
 );
 
