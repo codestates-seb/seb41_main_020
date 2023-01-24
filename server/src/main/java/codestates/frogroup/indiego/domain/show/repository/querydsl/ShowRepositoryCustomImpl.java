@@ -175,11 +175,12 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
 
     private BooleanExpression searchDateFilter(String start, String end) {
 
-        LocalDate startDate = Objects.isNull(start) ? now() : parse(start, DateTimeFormatter.ISO_DATE);
-        LocalDate endDate = Objects.isNull(end) ? now() : parse(end, DateTimeFormatter.ISO_DATE);
+        LocalDate startDate = Objects.isNull(start) ? MIN.withYear(LocalDate.now().getYear()) : parse(start, DateTimeFormatter.ISO_DATE);
+        LocalDate endDate = Objects.isNull(end) ? MAX.withYear(LocalDate.now().getYear()) : parse(end, DateTimeFormatter.ISO_DATE);
 
         return show.showBoard.showAt.between(LocalDate.from(LocalDateTime.of(startDate, LocalTime.MIN)),
-                LocalDate.from(LocalDateTime.of(endDate, LocalTime.MAX).withNano(0)));
+                LocalDate.from(LocalDateTime.of(endDate, LocalTime.MAX).withNano(0)))
+                .and(show.status.eq(Show.ShowStatus.SALE));
     }
 
     private static OrderSpecifier<?> sortDesc(String sort) {
