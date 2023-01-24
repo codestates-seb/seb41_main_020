@@ -43,6 +43,11 @@ const BoardItemContent = styled.div`
     font-weight: 500;
     text-align: left;
     color: ${sub.sub700};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 400px;
+    height: 15px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       margin-top: 10px;
@@ -91,7 +96,10 @@ const BoardListItem = (props) => {
         <Link to={`/board/${props.id}`} className="titleLink">
           {props.title}
         </Link>
-        <div className="contentDiv">{props.content}</div>
+        <div
+          className="contentDiv"
+          dangerouslySetInnerHTML={{ __html: props.content }}
+        ></div>
         <BoardItemCreateInfo>
           <div className="authorDiv">{props.nickname}</div>
           <div className="createDateDiv">

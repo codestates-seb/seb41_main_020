@@ -5,12 +5,13 @@ import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import instance from "../../../api/core/default.js";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import React, { useState } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import { useMutation } from "@tanstack/react-query";
+import useBoardStore from "../../../store/useBoardStore.js";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -92,10 +93,12 @@ const PostButton = styled(OKButton)`
 `;
 
 const BoardEdit = () => {
+  const { boardStoreData } = useBoardStore();
   const [categoryValue, setCategoryValue] = useState("");
-  const [titleValue, setTitleValue] = useState("");
-  const [contentValue, setContentValue] = useState("");
+  const [titleValue, setTitleValue] = useState(boardStoreData.title);
+  const [contentValue, setContentValue] = useState(boardStoreData.content);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const data = {
     title: titleValue,
@@ -116,10 +119,14 @@ const BoardEdit = () => {
     return response.data;
   };
 
-  const { mutate } = useMutation({
+  const handleButtonOnSuccess = () => {
+    navigate(`/board/${id}`);
+  };
+
+  const { mutate: editBoard } = useMutation({
     mutationKey: ["handleButton"],
     mutationFn: handleButton,
-    // onSuccess: postButtonOnSuccess,
+    onSuccess: handleButtonOnSuccess,
     // onError: postButtonOnError,
   });
 
@@ -153,7 +160,7 @@ const BoardEdit = () => {
               placeholder={"내용을 입력해주세요."}
             ></Editor>
           </ContentInputDiv>
-          <PostButton type="button" onClick={() => mutate()}>
+          <PostButton type="button" onClick={() => editBoard()}>
             수정하기
           </PostButton>
         </PostBoard>

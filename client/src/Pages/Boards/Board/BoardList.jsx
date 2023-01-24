@@ -178,8 +178,6 @@ export default function BoardList() {
   const urlStatus = searchParams.get("status");
   const urlSize = searchParams.get("size");
 
-  console.log(`${urlPage} ${urlCategory} ${urlStatus} ${urlSize}`);
-
   const axiosBoardList = async () => {
     const response = await axios.get(
       `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`
@@ -205,9 +203,7 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-  console.log("*************************");
-  console.log(boardList);
-  console.log("*************************");
+
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -224,6 +220,9 @@ export default function BoardList() {
         {boardList.map((it) => (
           <BoardListItem key={it.id} {...it} />
         ))}
+        {console.log("*******************************")}
+        {console.log(boardList)}
+        {console.log("*******************************")}
         <WriteButtonDiv>
           <WriteButton
             onClick={() => {
@@ -238,7 +237,6 @@ export default function BoardList() {
           location={`/board?category=${urlCategory}&?status=${urlStatus}&size=${urlSize}`}
           pageData={pageData}
         ></PageNation>
-        {console.log(pageData)}
         <SearchBar
           placeholder="검색어를 입력해주세요"
           location={`articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}

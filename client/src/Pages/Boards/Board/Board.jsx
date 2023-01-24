@@ -51,10 +51,11 @@ const BoardInfoWrapper = styled(ContentWrapper)`
 `;
 
 const QuillViewDiv = styled.div`
-  display: flex;
   margin-top: 20px;
   margin-bottom: 60px;
   height: max-content;
+  text-align: left;
+  padding-left: 10px;
 `;
 
 const HeartItem = styled(BoardItem)`
@@ -97,6 +98,7 @@ const Board = () => {
   const [boardData, setBoardData] = useState({});
   const [answerListData, setAnswerListData] = useState([]);
   const { id } = useParams();
+  const { setBoardStoreData } = useBoardStore();
 
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
@@ -115,6 +117,7 @@ const Board = () => {
   const axiosBoardSuccess = (response) => {
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
+    setBoardStoreData(response.data);
   };
 
   const { isLoading, isError, error } = useQuery({
@@ -144,7 +147,9 @@ const Board = () => {
         </div>
 
         <div className="lineDiv"></div>
-        <QuillViewDiv>{boardData.content}</QuillViewDiv>
+        <QuillViewDiv
+          dangerouslySetInnerHTML={{ __html: boardData.content }}
+        ></QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton">

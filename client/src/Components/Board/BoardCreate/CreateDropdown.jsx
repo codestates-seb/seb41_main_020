@@ -57,13 +57,14 @@ const DropdownContainer = styled.div`
 
 const CreateDropdown = ({ setCategoryValue }) => {
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState("최신순");
+  const [value, setValue] = useState("게시판 선택");
 
   const handleDropdown = (props) => {
     setValue(props);
     setToggle(!toggle);
-    setCategoryValue(value);
+    setCategoryValue(props);
   };
+
   return (
     <DropdownDiv>
       <SelectButton type="button" onClick={() => setToggle(!toggle)}>
