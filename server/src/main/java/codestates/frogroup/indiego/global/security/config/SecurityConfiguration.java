@@ -88,7 +88,7 @@ public class SecurityConfiguration {
 				"http://indiego.kro.kr:80"));
 		configuration.setAllowCredentials(true);
 		configuration.addExposedHeader("Authorization");
-		configuration.addExposedHeader("Set-Cookie");
+		configuration.addExposedHeader("Refresh");
 		configuration.addAllowedHeader("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
 
