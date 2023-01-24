@@ -13,7 +13,7 @@ public enum ExceptionCode {
     // JWT, 인증관련
     ACCESS_TOKEN_NOT_FOUND(404,"Access Token을 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(404,"Refresh Token을 찾을 수 없습니다."),
-    COOKIE_REFRESH_TOKEN_NOT_FOUND(404,"Cookie 정보에 Refresh Token 정보가 없습니다."),
+    HEADER_REFRESH_TOKEN_NOT_FOUND(404,"Header 정보에 Refresh Token 정보가 없습니다."),
     TOKEN_IS_NOT_SAME(404,"Refresh Token과 발급된 Access Token 정보가 일치하지 않습니다."),
     NO_ACCESS_TOKEN(403, "권한 정보가 없는 토큰입니다."),
     TOKEN_EXPIRED(400, "Token Expired"),
@@ -37,9 +37,15 @@ public enum ExceptionCode {
 
     BOOKMARK_NOT_FOUND(404, "북마크가 존재하지 않습니다."),
 
+    SHOWRESERVATION_NOT_FOUND(404, "후기를 작성할 수 있는 권한이 없습니다."),
+
     // File Upload
     UPLOAD_FAILED(404, "File Upload Failed !"),
-    UPLOAD_VOLUME_OVER(404, "File Size가 10MB를 초과하였습니다 !");
+    UPLOAD_VOLUME_OVER(404, "File Size가 10MB를 초과하였습니다 !"),
+
+    // AES
+    ENCRYPTION_FAIED(404, "암호화에 실패하였습니다."),
+    DECRYPTION_FAIED(404, "복호화에 실패하였습니다.");
 
     @Getter
     private int status;

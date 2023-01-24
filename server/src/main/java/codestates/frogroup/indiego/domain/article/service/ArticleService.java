@@ -66,10 +66,10 @@ public class ArticleService {
 
         if (findArticle.getMember().getId().equals(memberId)) {
 
-            changeArticle(article, findArticle);
-//            Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
+//            changeArticle(article, findArticle);
+            Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
+            Article savedArticle = articleRepository.save(updateArticle);
 
-            Article savedArticle = articleRepository.save(findArticle);
             return getResponse(savedArticle);
         }
 
@@ -105,10 +105,21 @@ public class ArticleService {
      */
     public ArticleDto.Response findArticle(Long articleId) {
         Article findArticle = findVerifiedArticle(articleId);
-//        updateView(articleId);
-//        findArticle.updateView();
 
-        return getResponse(findArticle);
+        Long viewCount = articleRepository.findViewCountFromRedis(articleId);
+        log.info("viewCount1={}", viewCount);
+        if (viewCount == null) {
+            viewCount = articleRepository.findView(articleId);
+            log.info("viewCount2={}", viewCount);
+            articleRepository.saveViewCountToRedis(articleId, viewCount);
+        }
+
+        viewCount = articleRepository.incrementViewCount(articleId);
+        log.info("viewCount3={}", viewCount);
+        ArticleDto.Response response = getResponse(findArticle);
+        response.setView(viewCount);
+
+        return response;
     }
 
     /**
@@ -163,24 +174,7 @@ public class ArticleService {
         long likeCount = articleLikeRepository.countByArticleId(article.getId());
         response.setLikeCount(likeCount);
 
-//        List<ArticleLike> articleLikes = articleLikeRepository.findAllByArticleId(article.getId());
-//
-//        if (articleLikes.isEmpty()) {
-//            response.setLikeCount(0);
-//        } else {
-//            response.setLikeCount(articleLikes.size());
-//        }
-
         return response;
-    }
-
-    /**
-     * 조회수 증가
-     */
-    @Transactional
-    public void updateView(Long articleId) {
-        findVerifiedArticle(articleId).updateView();
-//        return articleRepository.updateView(articleId);
     }
 
     /**
@@ -190,25 +184,6 @@ public class ArticleService {
 
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
-    }
-
-    /**
-     * 게시글 수정 메서드
-     */
-    private static void changeArticle(Article article, Article findArticle) {
-
-        Optional.ofNullable(article.getBoard().getTitle())
-                .ifPresent(title -> findArticle.getBoard().setTitle(title));
-
-        Optional.ofNullable(article.getBoard().getContent())
-                .ifPresent(content -> findArticle.getBoard().setContent(content));
-
-        Optional.ofNullable(article.getBoard().getImage())
-                .ifPresent(image -> findArticle.getBoard().setImage(image));
-
-        Optional.ofNullable(article.getBoard().getCategory())
-                .ifPresent(category -> findArticle.getBoard().setCategory(category));
-
     }
 
     /**
@@ -232,6 +207,33 @@ public class ArticleService {
         articleLikeRepository.delete(findArticleLike);
 
         return HttpStatus.NO_CONTENT;
+    }
+
+    /**
+     * 조회수 증가
+     */
+    @Transactional
+    public void updateView(Long articleId) {
+        findVerifiedArticle(articleId).updateView();
+    }
+
+    /**
+     * 게시글 수정 메서드
+     */
+    private static void changeArticle(Article article, Article findArticle) {
+
+        Optional.ofNullable(article.getBoard().getTitle())
+                .ifPresent(title -> findArticle.getBoard().setTitle(title));
+
+        Optional.ofNullable(article.getBoard().getContent())
+                .ifPresent(content -> findArticle.getBoard().setContent(content));
+
+        Optional.ofNullable(article.getBoard().getImage())
+                .ifPresent(image -> findArticle.getBoard().setImage(image));
+
+        Optional.ofNullable(article.getBoard().getCategory())
+                .ifPresent(category -> findArticle.getBoard().setCategory(category));
+
     }
 
 }

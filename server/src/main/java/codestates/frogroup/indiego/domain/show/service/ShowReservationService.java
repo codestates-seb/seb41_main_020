@@ -21,9 +21,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ShowReservationService {
     private final ShowReservationRepository showReservationRepository;
-    private final MemberService memberService;
-
-    private final MemberRepository memberRepository;
     private final CustomBeanUtils<ShowReservation> utils;
 
 
@@ -38,6 +35,10 @@ public class ShowReservationService {
         ShowReservation reservation = findVerifiedReservation(id);
         showReservationRepository.delete(reservation);
 
+    }
+
+    public Optional<ShowReservation> findShowReservation(Long showId, Long memberId){
+        return showReservationRepository.findByShowIdAndMemberId(showId, memberId);
     }
 
     public Integer countReservation(Long showId){

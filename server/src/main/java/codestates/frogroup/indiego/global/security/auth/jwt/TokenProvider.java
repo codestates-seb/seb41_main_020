@@ -36,6 +36,7 @@ public class TokenProvider {
 	 */
 	public static final String BEARER_TYPE = "Bearer";
 	public static final String AUTHORIZATION_HEADER = "Authorization";
+	public static final String REFRESH_HEADER = "Refresh";
 	public static final String BEARER_PREFIX = "Bearer ";
 
 	@Getter
@@ -162,19 +163,19 @@ public class TokenProvider {
 	public void accessTokenSetHeader(String accessToken, HttpServletResponse response){
 		String headerValue = BEARER_PREFIX + accessToken;
 		response.setHeader(AUTHORIZATION_HEADER,headerValue);
-		log.info("# accessToken = {}",headerValue);
+		//log.info("# accessToken = {}",headerValue);
 	}
 
 	public void refreshTokenSetHeader(String refreshToken, HttpServletResponse response){
 		response.setHeader("Refresh",refreshToken);
-		log.info("# refreshToken = {}",refreshToken);
+		//log.info("# refreshToken = {}",refreshToken);
 	}
 
 	public ResponseCookie refreshTokenSetCookie(String refreshToken, HttpServletResponse response){
 		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 				.maxAge(1 * 24 * 60 * 60) // 만료시간 설정 days * hours * min * sec
 				.path("/")
-				//.domain("localhost")
+				// .domain("localhost")
 				.secure(true) // http, https 구분
 				.sameSite("None") // 서로 다른 도메인간 쿠키 전송에 대한 보안설정
 				.httpOnly(true) // XSS 공격을 막기위함
@@ -185,12 +186,20 @@ public class TokenProvider {
 
 
 	// Request Header Access Token 정보를 꺼내오는 메소드
-	public String resolveToken(HttpServletRequest request) {
+	public String resolveAccessToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 			return bearerToken.substring(7);
 		}
+		return null;
+	}
 
+	// Request Header Refresh Token 정보를 꺼내오는 메소드
+	public String resolveRefreshToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader(REFRESH_HEADER);
+		if (StringUtils.hasText(bearerToken)) {
+			return bearerToken;
+		}
 		return null;
 	}
 

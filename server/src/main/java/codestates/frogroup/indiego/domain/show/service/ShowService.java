@@ -3,14 +3,17 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
+import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.redis.RedisDao;
+import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,10 +35,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ShowService {
     private final ShowRepository showRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CustomBeanUtils<Show> utils;
     private final ShowReservationService reservationService;
-    private final RedisDao redisDao;
+    private final ScoreRepository scoreRepository;
+    private final RedisKey redisKey;
 
 
 
@@ -43,14 +47,12 @@ public class ShowService {
     @Transactional
     public Show createShow(Show show, long memberId) {
 
-        // ToDo security 적용 시 수정 -> getCurrentMember
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         show.setMember(member);
 
-        String key = String.format("{}@scoreAverage", show.getId());
-        redisDao.setValues(key,"0");
+        String key = redisKey.getScoreAvergeKey(show.getId());
+        scoreRepository.setValues(key,"0");
 
         return showRepository.save(show);
     }
@@ -60,8 +62,7 @@ public class ShowService {
         Show findShow = findVerifiedShow(show.getId());
 
         // ToDo security 적용 시 수정 -> getCurrentMember
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         Show updatedShow = utils.copyNonNullProperties(show, findShow);
 
@@ -128,20 +129,17 @@ public class ShowService {
     }
 
     public Show findShow(long showId){
-
         Show show = findVerifiedShow(showId);
-        setScoreAverage(showId, show);
         return show;
     }
 
-    private void setScoreAverage(long showId, Show show) {
-        String key = String.format("{}@scoreAverage", showId);
-        show.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
-    }
+    private Double setScoreAverage(long showId) {
 
-    private void setScoreAverage(long showId, ShowListResponseDto responseDto) {
-        String key = String.format("{}@scoreAverage", showId);
-        responseDto.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
+        String key = redisKey.getScoreAvergeKey(showId);
+        Show show = findShow(showId);
+        scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+
+        return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
@@ -152,8 +150,9 @@ public class ShowService {
         Page<ShowListResponseDto> allByShowSearch = showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
         for(int i =0; i<allByShowSearch.getContent().size(); i++){
             ShowListResponseDto responseDto = allByShowSearch.getContent().get(i);
-            setScoreAverage(responseDto.getId(), responseDto);
+            responseDto.setScoreAverage(setScoreAverage(responseDto.getId()));
         }
+
 
         return allByShowSearch;
 
