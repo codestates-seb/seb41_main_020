@@ -136,6 +136,7 @@ const LoginContainer = styled.div`
         border: 1.5px solid ${sub.sub200};
         border-radius: 2px;
         margin-right: 5px;
+        padding: 0;
 
         @media screen and (max-width: ${breakpoint.mobile}) {
           width: 16px;
@@ -206,6 +207,7 @@ export default function Login() {
     visible: false,
   });
   const [errorMessageContent, setErrorMessageContent] = useState();
+  const [checked, setChecked] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const data = { email: email, password: password };
@@ -219,6 +221,10 @@ export default function Login() {
     } else {
       setPasswordInputType({ type: "password", visible: false });
     }
+  };
+
+  const handleCheckbox = () => {
+    setChecked(!checked);
   };
 
   const postLoginData = () => {
@@ -236,11 +242,13 @@ export default function Login() {
   };
 
   const postLoginOnSuccess = (response) => {
+    if (checked) {
+      localStorage.setItem("refreshToken", response.headers.get("Refresh"));
+    }
     localStorage.setItem(
       "accessToken",
       response.headers.get("Authorization").split(" ")[1]
     );
-    localStorage.setItem("refreshToken", response.headers.get("Refresh"));
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
     setIsLogin(true);
     navigate("/");
@@ -330,6 +338,8 @@ export default function Login() {
                 id="keepLogin"
                 type="checkbox"
                 className="keep-login-checkbox"
+                checked={checked}
+                onChange={handleCheckbox}
               />
               <label label htmlFor="keepLogin" id="keepLogin">
                 로그인 유지
