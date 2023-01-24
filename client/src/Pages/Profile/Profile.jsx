@@ -273,13 +273,14 @@ export default function Profile() {
   };
 
   const fetchDataOnSuccess = (response) => {
-    setData(response.data);
+    setData(response.data.data && response.data.data);
   };
 
   const fetchDataOnError = (err) => {
-    if (err.response.status === 400) {
-      console.log("gk..");
-    }
+    window.alert("다시 로그인해주세요.");
+    setIsLogin(false);
+    localStorage.clear();
+    navigate("/");
   };
 
   const { isLoading } = useQuery({
@@ -303,11 +304,7 @@ export default function Profile() {
         <ContentInnerContainer>
           <ProfileInfoContainer>
             <div>
-              {isLoading ? (
-                Spinner
-              ) : (
-                <img alt="dummy profile" src={data && data.profile[0].image} />
-              )}
+              <img alt="dummy profile" src={data && data.profile[0].image} />
               <div>
                 <span className="user-nickname">
                   {data && data.profile[0].nickname}

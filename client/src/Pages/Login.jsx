@@ -236,14 +236,14 @@ export default function Login() {
   };
 
   const postLoginOnSuccess = (response) => {
-    sessionStorage.setItem(
+    localStorage.setItem(
       "accessToken",
       response.headers.get("Authorization").split(" ")[1]
     );
     localStorage.setItem("refreshToken", response.headers.get("Refresh"));
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
     setIsLogin(true);
-    navigate("/");
+    // navigate("/");
   };
 
   const postLoginOnError = (err) => {

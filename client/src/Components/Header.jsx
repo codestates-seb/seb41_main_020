@@ -354,7 +354,7 @@ export default function Header() {
   useWindowSize(setNavOpen);
 
   const logoutHandler = () => {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
     const headers = {
       "Content-Type": "application/json",
@@ -367,9 +367,7 @@ export default function Header() {
     return axios
       .get(`${process.env.REACT_APP_SERVER_URI}/members/logout`, { headers })
       .then((response) => {
-        sessionStorage.clear();
         localStorage.clear();
-        setIsLogin(false);
       });
   };
 

@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import useIsLoginStore from "../../store/useIsLoginStore";
 
-const accessToken = sessionStorage.getItem("accessToken");
-const refreshToken = localStorage.getItem("refreshToken");
+
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
@@ -15,8 +16,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    if (localStorage.getItem("accessToken")) {
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
+      console.log(localStorage.getItem("accessToken"));
     }
     return config;
   },
@@ -26,40 +28,42 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-  (response) => {
-    const res = response.data;
-    return res;
+  function (response) {
+    return response;
   },
-  (error) => {
-    const { config, response, status } = error;
-    if (status === 400) {
-      if (response.data.message === "Token Expired") {
-        const originalRequest = config; 
-        const reissuesResponse  = axios.post(
-          `${process.env.REACT_APP_SERVER_URI}members/reissue`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${accessToken}`,
-              "Refresh": refreshToken,
-            },
-          },
-          { withCredentials: true }
-        );
-        sessionStorage.clear();
-        localStorage.removeItem("refreshToken");
-        sessionStorage.setItem("accessToken", reissuesResponse.headers.get("Authorization").split(" ")[1]);
-        localStorage.setItem("refreshToken", localStorage.setItem(reissuesResponse.headers.get("Refresh")));
-        const accessToken = sessionStorage.getItem("accessToken");
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return instance.request(originalRequest);
-      } else {
-        return Promise.reject(error);
+  async function (error) {
+    const { config, response } = error;
+
+    if (response.status === 400) {
+      const originalRequest = config;
+
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+        "Refresh": localStorage.getItem("refreshToken"),
       }
-    } else {
+
+      try {
+        const data = await axios({
+          url: `${process.env.REACT_APP_SERVER_URI}/members/reissue`,
+          method: "GET",
+          headers
+        });
+        if (data) {
+          localStorage.setItem("accessToken", data.headers.get("Authorization").split(" ")[1]);
+          originalRequest.headers.Authorization = `Bearer ${data.headers.get("Authorization").split(" ")[1]}`;
+          return await axios.request(originalRequest);
+        }
+      } catch (error) {
+        axios({
+          url: `${process.env.REACT_APP_SERVER_URI}/members/logout`,
+          method: "GET",
+          headers
+        });
+      }
       return Promise.reject(error);
     }
+    return Promise.reject(error);
   }
 );
 

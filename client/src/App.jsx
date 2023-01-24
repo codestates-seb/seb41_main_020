@@ -26,15 +26,45 @@ import Header from "./Components/Header.jsx";
 import Footer from "./Components/Footer.jsx";
 // 그다음에는 로컬 모듈
 import "./App.css";
+import useIsLoginStore from "./store/useIsLoginStore.js";
 
 // 그다음에는 라이브러리
 import { Route, Routes } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import axios from "axios";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (refreshToken) {
+      setIsLogin(true);
+      axios
+        .get(`${process.env.REACT_APP_SERVER_URI}/members/reissue`, {
+          headers: {
+            "Content-Type": "application/json",
+            // eslint-disable-next-line prettier/prettier
+          "Authorization": `Bearer ${accessToken}`,
+            // eslint-disable-next-line prettier/prettier
+          "Refresh": refreshToken,
+          },
+        })
+        .then((response) => {
+          localStorage.setItem(
+            "accessToken",
+            response.headers.get("Authorization").split(" ")[1]
+          );
+        });
+    }
+  }, []);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
