@@ -3,6 +3,8 @@ import logo from "../assets/logo.svg";
 import { faEye } from "@fortawesome/free-solid-svg-icons/faEye";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons/faEyeSlash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import naverIcon from "../assets/naverIcon.jpg";
+import kakaoIcon from "../assets/kakaoIcon.jpg";
 
 //로컬 모듈
 import breakpoint from "../styles/breakpoint";
@@ -45,7 +47,6 @@ const ContentContainer = styled.div`
     width: 220px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      margin-bottom: 10px;
       width: 153px;
     }
   }
@@ -53,12 +54,102 @@ const ContentContainer = styled.div`
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
   }
+
+  > .social-signup-button-container {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 350px;
+
+    > .naver-button {
+      all: unset;
+      cursor: pointer;
+      height: 40px;
+      width: 40px;
+      margin-right: 20px;
+
+      > img {
+        height: 40px;
+        width: 40px;
+      }
+    }
+
+    > .kakao-button {
+      all: unset;
+      cursor: pointer;
+      height: 40px;
+      width: 40px;
+
+      > img {
+        height: 40px;
+        width: 40px;
+      }
+    }
+  }
+`;
+
+const SelectLoginTypeTab = styled.div`
+  align-items: center;
+  display: flex;
+
+  > .type-user-tab-menu {
+    all: unset;
+    align-items: center;
+    background-color: ${primary.primary100};
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-sizing: border-box;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-size: ${dtFontSize.medium};
+    font-weight: 600;
+    height: 45px;
+    justify-content: center;
+    padding: 10px;
+    width: 225px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+      height: 35px;
+      width: 160px;
+    }
+  }
+
+  > .type-performer-tab-menu {
+    all: unset;
+    align-items: center;
+    background-color: ${secondary.secondary300};
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-sizing: border-box;
+    color: ${secondary.secondary700};
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-size: ${dtFontSize.medium};
+    font-weight: 600;
+    height: 45px;
+    justify-content: center;
+    padding: 10px;
+    width: 225px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+      height: 35px;
+      width: 160px;
+    }
+  }
 `;
 
 const LoginContainer = styled.div`
   align-items: center;
-  background-color: ${primary.primary100};
-  border-radius: 10px;
+  background-color: ${(props) => props.color};
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   display: flex;
   flex-direction: column;
   height: max-content;
@@ -94,7 +185,7 @@ const LoginContainer = styled.div`
       width: max-content;
       position: relative;
 
-      > input {
+      > .login-input {
         border: none;
         border-radius: 5px;
         color: ${sub.sub400};
@@ -106,7 +197,7 @@ const LoginContainer = styled.div`
         @media screen and (max-width: ${breakpoint.mobile}) {
           font-size: ${mbFontSize.small};
           width: 250px;
-          height: 25px;
+          height: 35px;
         }
       }
 
@@ -128,40 +219,6 @@ const LoginContainer = styled.div`
       align-items: center;
       display: flex;
       margin-top: 20px;
-
-      > .keep-login-checkbox {
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border: 1.5px solid ${sub.sub200};
-        border-radius: 2px;
-        margin-right: 5px;
-        padding: 0;
-
-        @media screen and (max-width: ${breakpoint.mobile}) {
-          width: 16px;
-          height: 16px;
-        }
-
-        &:checked {
-          border-color: transparent;
-          background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-          background-size: 100% 100%;
-          background-position: 50%;
-          background-repeat: no-repeat;
-          background-color: ${primary.primary300};
-        }
-      }
-
-      > label {
-        color: white;
-        font-size: ${dtFontSize.medium};
-        font-weight: 600;
-
-        @media screen and (max-width: ${breakpoint.mobile}) {
-          font-size: ${mbFontSize.medium};
-        }
-      }
     }
   }
 
@@ -174,28 +231,73 @@ const LoginContainer = styled.div`
       font-size: ${mbFontSize.medium};
     }
   }
+`;
 
-  > button {
-    all: unset;
-    background-color: ${primary.primary300};
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    font-size: ${dtFontSize.medium};
-    font-weight: 600;
-    text-align: center;
-    width: 350px;
-    height: 50px;
+const InputLabel = styled.span`
+  color: ${(props) => props.fontColor};
+  font-size: ${dtFontSize.medium};
+  font-weight: 600;
+  margin-bottom: 10px;
 
-    @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.medium};
-      width: 250px;
-      height: 40px;
-    }
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${mbFontSize.medium};
+  }
+`;
 
-    &:hover {
-      background-color: ${secondary.secondary500};
-    }
+const LoginButton = styled.button`
+  all: unset;
+  background-color: ${(props) => props.color};
+  border-radius: 5px;
+  color: ${(props) => props.fontColor};
+  cursor: pointer;
+  font-size: ${dtFontSize.medium};
+  font-weight: 600;
+  text-align: center;
+  width: 350px;
+  height: 50px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${mbFontSize.medium};
+    width: 250px;
+    height: 40px;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.hoverColor};
+  }
+`;
+
+const KeepLoginCheckbox = styled.input`
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid ${(props) => props.borderColor};
+  border-radius: 2px;
+  margin-right: 5px;
+  padding: 0;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:checked {
+    border-color: transparent;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-color: ${(props) => props.color};
+  }
+`;
+
+const KeepLoginCheckboxLabel = styled.span`
+  color: ${(props) => props.fontColor};
+  font-size: ${dtFontSize.medium};
+  font-weight: 600;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${mbFontSize.medium};
   }
 `;
 
@@ -208,12 +310,25 @@ export default function Login() {
   });
   const [errorMessageContent, setErrorMessageContent] = useState();
   const [checked, setChecked] = useState(false);
+  const [isLoginTypeUser, setIsLoginTypeUser] = useState(true);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const data = { email: email, password: password };
   const navigate = useNavigate();
 
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+
+  const handleKakaoOauthLogin = () => {
+    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/kakao`;
+  };
+
+  const handleNaverOauthLogin = () => {
+    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/naver`;
+  };
+
+  const handleLoginType = () => {
+    setIsLoginTypeUser(!isLoginTypeUser);
+  };
 
   const handlePasswordInputType = () => {
     if (!passwordInputType.visible) {
@@ -291,13 +406,38 @@ export default function Login() {
     <Container>
       <ContentContainer>
         <img alt="logo" className="logo" src={logo} />
-        <LoginContainer>
+        {isLoginTypeUser ? (
+          <div className="social-signup-button-container">
+            <button className="naver-button" onClick={handleNaverOauthLogin}>
+              <img alt="naver icon" src={naverIcon} />
+            </button>
+            <button className="kakao-button" onClick={handleKakaoOauthLogin}>
+              <img alt="kakao-icon" src={kakaoIcon} />
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
+        <SelectLoginTypeTab>
+          <button className="type-user-tab-menu" onClick={handleLoginType}>
+            일반 로그인
+          </button>
+          <button className="type-performer-tab-menu" onClick={handleLoginType}>
+            퍼포머 로그인
+          </button>
+        </SelectLoginTypeTab>
+        <LoginContainer
+          color={isLoginTypeUser ? primary.primary100 : secondary.secondary300}
+        >
           <div className="input-container">
-            <label htmlFor="e-mail" id="e-mail">
+            <InputLabel
+              fontColor={isLoginTypeUser ? "white" : secondary.secondary700}
+            >
               이메일
-            </label>
+            </InputLabel>
             <div>
               <input
+                className="login-input"
                 id="e-mail"
                 onKeyPress={handleEnterPressLogin}
                 onChange={(e) => {
@@ -310,9 +450,11 @@ export default function Login() {
             </div>
           </div>
           <div className="input-container">
-            <label htmlFor="password" id="password">
+            <InputLabel
+              fontColor={isLoginTypeUser ? "white" : secondary.secondary700}
+            >
               비밀번호
-            </label>
+            </InputLabel>
             <div>
               <button onClick={handlePasswordInputType}>
                 {passwordInputType.visible ? (
@@ -322,6 +464,7 @@ export default function Login() {
                 )}
               </button>
               <input
+                className="login-input"
                 id="password"
                 ref={passwordInputRef}
                 onChange={(e) => {
@@ -334,16 +477,21 @@ export default function Login() {
               />
             </div>
             <div className="keep-login-container">
-              <input
-                id="keepLogin"
-                type="checkbox"
-                className="keep-login-checkbox"
+              <KeepLoginCheckbox
+                borderColor={isLoginTypeUser ? "white" : secondary.secondary700}
+                color={
+                  isLoginTypeUser ? primary.primary300 : secondary.secondary500
+                }
                 checked={checked}
+                type="checkbox"
                 onChange={handleCheckbox}
               />
-              <label label htmlFor="keepLogin" id="keepLogin">
+              <KeepLoginCheckboxLabel
+                id="keepLogin"
+                fontColor={isLoginTypeUser ? "white" : secondary.secondary700}
+              >
                 로그인 유지
-              </label>
+              </KeepLoginCheckboxLabel>
             </div>
           </div>
           {errorMessageContent ? (
@@ -351,7 +499,18 @@ export default function Login() {
           ) : (
             ""
           )}
-          <button onClick={handleLogin}>로그인</button>
+          <LoginButton
+            onClick={handleLogin}
+            color={
+              isLoginTypeUser ? primary.primary300 : secondary.secondary500
+            }
+            fontColor={"white"}
+            hoverColor={
+              isLoginTypeUser ? secondary.secondary500 : primary.primary300
+            }
+          >
+            로그인
+          </LoginButton>
         </LoginContainer>
       </ContentContainer>
     </Container>

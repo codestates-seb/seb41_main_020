@@ -1,20 +1,15 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
-import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
-import WithdrawModal from "../../Components/Profile/WithdrawModal";
-import AllShowList from "../../Components/Profile/AllShowList.jsx";
-import Spinner from "../../Components/Spinner";
+import Spinner from "../Components/Spinner";
 
 //로컬 모듈
-import breakpoint from "../../styles/breakpoint";
+import breakpoint from "../styles/breakpoint";
 import {
   primary,
   secondary,
   sub,
   dtFontSize,
   mbFontSize,
-} from "../../styles/mixins";
-import useIsLoginStore from "../../store/useIsLoginStore";
+} from "../styles/mixins";
 
 //라이브러리 및 라이브러리 메소드
 import { React, useState } from "react";
@@ -22,7 +17,7 @@ import styled from "styled-components/macro";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import instance from "../../api/core/default";
+import instance from "../api/core/default";
 
 const Container = styled.div`
   align-items: center;
@@ -259,8 +254,6 @@ const LocationandAboutContainer = styled.div`
 `;
 
 export default function Profile() {
-  const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
-  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const [data, setData] = useState();
   const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
@@ -277,8 +270,6 @@ export default function Profile() {
   };
 
   const fetchDataOnError = (err) => {
-    window.alert("다시 로그인해주세요.");
-    setIsLogin(false);
     localStorage.clear();
     navigate("/");
   };
@@ -294,7 +285,6 @@ export default function Profile() {
 
   return (
     <Container>
-      <WithdrawModal />
       <ContentHeaderContainer>
         <HeaderTitleContainer>
           <h1>마이페이지</h1>
@@ -335,10 +325,6 @@ export default function Profile() {
             </div>
           </LocationandAboutContainer>
         </ContentInnerContainer>
-        <AllShowList />
-        <button className="withdraw-button" onClick={setOpenModal}>
-          회원 탈퇴하기
-        </button>
       </ContentContainer>
     </Container>
   );
