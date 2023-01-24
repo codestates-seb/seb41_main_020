@@ -292,6 +292,13 @@ export default function Profile() {
     retry: false,
   });
 
+  const handleWithdraw = () => {
+    return instance({
+      method: "delete",
+      url: `/members/${userId}`,
+    });
+  };
+
   return (
     <Container>
       <WithdrawModal />

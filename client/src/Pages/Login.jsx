@@ -243,7 +243,7 @@ export default function Login() {
     localStorage.setItem("refreshToken", response.headers.get("Refresh"));
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
     setIsLogin(true);
-    // navigate("/");
+    navigate("/");
   };
 
   const postLoginOnError = (err) => {
@@ -266,7 +266,7 @@ export default function Login() {
       return;
     } else if (!password) {
       passwordInputRef.current.focus();
-      setErrorMessageContent("⚠︎비밀번호를 입력해주세요");
+      setErrorMessageContent("⚠︎ 비밀번호를 입력해주세요");
     } else {
       setErrorMessageContent("");
       postLogin();
@@ -319,6 +319,7 @@ export default function Login() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
+                onKeyPress={handleEnterPressLogin}
                 placeholder="비밀번호"
                 value={password || ""}
                 type={passwordInputType.type}
