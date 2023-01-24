@@ -189,4 +189,56 @@ public class ShowController {
         return new ResponseEntity(new SingleResponseDto<>(showsResponses), HttpStatus.OK);
     }
 
+    @GetMapping("/maps")
+    public ResponseEntity getMaps(){
+
+        List<ShowDto.ShowMapsResponse> showMapsResponses = new ArrayList<>();
+        ShowDto.ShowMapsResponse sr1 = new ShowDto.ShowMapsResponse();
+        sr1.setTitle("공연 1입니다.");
+        sr1.setAddress("서울특별시 중구 소공동 세종대로18길 2");
+        sr1.setLatitude(37.556D);
+        sr1.setLongitude(126.9723D);
+        sr1.setDate(LocalDate.now());
+        sr1.setImg("https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286");
+
+        ShowDto.ShowMapsResponse sr2 = new ShowDto.ShowMapsResponse();
+        sr2.setTitle("공연 2입니다.");
+        sr2.setAddress("서울특별시 용산구 한강대로23길");
+        sr2.setLatitude(37.52985D);
+        sr2.setLongitude(126.96481D);
+        sr2.setDate(LocalDate.now());
+        sr2.setImg("https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286");
+
+        ShowDto.ShowMapsResponse sr3 = new ShowDto.ShowMapsResponse();
+        sr3.setTitle("공연 3입니다.");
+        sr3.setAddress("서울 구로구 구로중앙로 174 구로역");
+        sr3.setLatitude(37.503408D);
+        sr3.setLongitude(126.88391D);
+        sr3.setDate(LocalDate.now());
+        sr3.setImg("https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286");
+
+        ShowDto.ShowMapsResponse sr4 = new ShowDto.ShowMapsResponse();
+        sr4.setTitle("공연 4입니다.");
+        sr4.setAddress("서울 강남구 강남대로 396");
+        sr4.setLatitude(37.398132D);
+        sr4.setLongitude(127.027805D);
+        sr4.setDate(LocalDate.now());
+        sr4.setImg("https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286");
+
+        ShowDto.ShowMapsResponse sr5 = new ShowDto.ShowMapsResponse();
+        sr5.setTitle("공연 5입니다.");
+        sr5.setAddress("서울 마포구 양화로 160 홍대입구역");
+        sr5.setLatitude(37.557239D);
+        sr5.setLongitude(126.9245D);
+        sr5.setDate(LocalDate.now());
+        sr5.setImg("https://dictionary.cambridge.org/ko/images/thumb/poster_noun_002_28550.jpg?version=5.0.286");
+
+        showMapsResponses.add(sr1);
+        showMapsResponses.add(sr2);
+        showMapsResponses.add(sr3);
+        showMapsResponses.add(sr4);
+        showMapsResponses.add(sr5);
+
+        return new ResponseEntity(new SingleResponseDto<>(showMapsResponses), HttpStatus.OK);
+    }
 }
