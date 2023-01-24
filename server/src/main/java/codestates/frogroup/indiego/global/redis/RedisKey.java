@@ -7,7 +7,7 @@ public class RedisKey {
     public static String SCORE_AVERAGE = "@scoreAverage";
 
     public String getScoreAvergeKey(Long showId){
-        return String.valueOf(showId) + SCORE_AVERAGE;
+        return showId.toString() + SCORE_AVERAGE;
     }
 
 }

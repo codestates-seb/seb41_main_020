@@ -50,11 +50,12 @@ public class ShowService {
         Member member = memberService.findVerifiedMember(memberId);
 
         show.setMember(member);
+        Show savedShow = showRepository.save(show);
 
         String key = redisKey.getScoreAvergeKey(show.getId());
         scoreRepository.setValues(key,"0");
 
-        return showRepository.save(show);
+        return savedShow;
     }
 
     @Transactional
