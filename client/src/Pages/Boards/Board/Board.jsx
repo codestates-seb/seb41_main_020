@@ -4,6 +4,7 @@ import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import heart from "../../../assets/heart.svg";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
+import instance from "../../../api/core/default.js";
 
 //로컬 모듈
 import {
@@ -100,6 +101,15 @@ const Board = () => {
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
     return response.data;
+
+    // const response = await instance({
+    //   method: "get",
+    //   url: `http://indiego.kro.kr:80/articles/${id}`,
+    // });
+    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    // console.log(response.data);
+    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    // return response.data;
   };
 
   const axiosBoardSuccess = (response) => {

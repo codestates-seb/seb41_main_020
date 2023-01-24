@@ -88,7 +88,7 @@ const BoardListItem = (props) => {
         <img width={50} src={props.image} alt="heart"></img>
       </div>
       <BoardItemContent>
-        <Link to={`/board/free/${props.id}`} className="titleLink">
+        <Link to={`/board/${props.id}`} className="titleLink">
           {props.title}
         </Link>
         <div className="contentDiv">{props.content}</div>

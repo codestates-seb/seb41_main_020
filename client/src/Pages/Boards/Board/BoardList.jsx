@@ -176,12 +176,13 @@ export default function BoardList() {
   const urlPage = searchParams.get("page");
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
+  const urlSize = searchParams.get("size");
 
-  console.log(`${urlPage} ${urlCategory} ${urlStatus}`);
+  console.log(`${urlPage} ${urlCategory} ${urlStatus} ${urlSize}`);
 
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=10`
+      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`
     );
     return response.data;
   };
@@ -226,7 +227,7 @@ export default function BoardList() {
         <WriteButtonDiv>
           <WriteButton
             onClick={() => {
-              navigate("/board/free/create");
+              navigate("/board/create");
             }}
           >
             <img className="pencelImage" src={pen} alt="pen"></img>
@@ -234,15 +235,17 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`/board/free?category=${urlCategory}&?status=${urlStatus}&size=10`}
+          location={`/board?category=${urlCategory}&?status=${urlStatus}&size=${urlSize}`}
           pageData={pageData}
         ></PageNation>
         {console.log(pageData)}
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          urlCategory={urlCategory}
-          urlStatus={urlStatus}
-          urlPage={urlPage}
+          // urlCategory={urlCategory}
+          // urlStatus={urlStatus}
+          // urlPage={urlPage}
+          // urlSize={urlSize}
+          location={`articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
         ></SearchBar>
       </BoardWrapper>
     </PageWrapper>
