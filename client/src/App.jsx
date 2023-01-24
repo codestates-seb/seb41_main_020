@@ -26,15 +26,45 @@ import Header from "./Components/Header.jsx";
 import Footer from "./Components/Footer.jsx";
 // 그다음에는 로컬 모듈
 import "./App.css";
+import useIsLoginStore from "./store/useIsLoginStore.js";
 
 // 그다음에는 라이브러리
 import { Route, Routes } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import axios from "axios";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (refreshToken) {
+      setIsLogin(true);
+      axios
+        .get(`${process.env.REACT_APP_SERVER_URI}/members/reissue`, {
+          headers: {
+            "Content-Type": "application/json",
+            // eslint-disable-next-line prettier/prettier
+          "Authorization": `Bearer ${accessToken}`,
+            // eslint-disable-next-line prettier/prettier
+          "Refresh": refreshToken,
+          },
+        })
+        .then((response) => {
+          localStorage.setItem(
+            "accessToken",
+            response.headers.get("Authorization").split(" ")[1]
+          );
+        });
+    }
+  }, []);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -64,36 +94,45 @@ function App() {
           {/* 공연찾기게시판 */}
           <Route path="/search" element={<Search />}></Route>
 
-        {/* 게시판 분류 */}
-        {/* 자유게시판 (게시판 홈)*/}
-        <Route path="/board/free" element={<BoardList />}></Route>
-        <Route path="/board/free/create" element={<BoardCreate />}></Route>
-        <Route path="/board/free/:id" element={<Board />}></Route>
-        <Route path="/board/free/:id/edit" element={<BoardEdit />}></Route>
-        {/* 구인게시판 */}
-        <Route path="/board/employ" element={<BoardList />}></Route>
-        <Route path="/board/employ/create" element={<BoardCreate />}></Route>
-        <Route path="/board/employ/:id" element={<Board />}></Route>
-        <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
-        {/* 요청게시판 */}
-        <Route path="/board/request" element={<RequestBoardList />}></Route>
-        <Route path="/board/request/create" element={<BoardCreate />}></Route>
-        <Route path="/board/request/:id" element={<Board />}></Route>
-        <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
-        {/* 홍보게시판 */}
-        <Route path="/board/advertise" element={<AdvertiseBoardList />}></Route>
-        <Route path="/board/advertise/create" element={<BoardCreate />}></Route>
-        <Route path="/board/advertise/:id" element={<Board />}></Route>
-        <Route path="/board/advertise/:id/edit" element={<BoardEdit />}></Route>
-        {/* 후기게시판 */}
-        <Route path="/board/review" element={<ReviewBoardList />}></Route>
-        <Route path="/board/review/create" element={<BoardCreate />}></Route>
-        <Route path="/board/review/:id" element={<Board />}></Route>
-        <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
-        <Route path="*" element={<NotFound />}></Route>
-      </Routes>
-      <Footer />
-     </QueryClientProvider>
+          {/* 게시판 분류 */}
+          {/* 자유게시판 (게시판 홈)*/}
+          <Route path="/board/free" element={<BoardList />}></Route>
+          <Route path="/board/free/create" element={<BoardCreate />}></Route>
+          <Route path="/board/free/:id" element={<Board />}></Route>
+          <Route path="/board/free/:id/edit" element={<BoardEdit />}></Route>
+          {/* 구인게시판 */}
+          <Route path="/board/employ" element={<BoardList />}></Route>
+          <Route path="/board/employ/create" element={<BoardCreate />}></Route>
+          <Route path="/board/employ/:id" element={<Board />}></Route>
+          <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
+          {/* 요청게시판 */}
+          <Route path="/board/request" element={<RequestBoardList />}></Route>
+          <Route path="/board/request/create" element={<BoardCreate />}></Route>
+          <Route path="/board/request/:id" element={<Board />}></Route>
+          <Route path="/board/request/:id/edit" element={<BoardEdit />}></Route>
+          {/* 홍보게시판 */}
+          <Route
+            path="/board/advertise"
+            element={<AdvertiseBoardList />}
+          ></Route>
+          <Route
+            path="/board/advertise/create"
+            element={<BoardCreate />}
+          ></Route>
+          <Route path="/board/advertise/:id" element={<Board />}></Route>
+          <Route
+            path="/board/advertise/:id/edit"
+            element={<BoardEdit />}
+          ></Route>
+          {/* 후기게시판 */}
+          <Route path="/board/review" element={<ReviewBoardList />}></Route>
+          <Route path="/board/review/create" element={<BoardCreate />}></Route>
+          <Route path="/board/review/:id" element={<Board />}></Route>
+          <Route path="/board/review/:id/edit" element={<BoardEdit />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
+        <Footer />
+      </QueryClientProvider>
     </>
   );
 }
