@@ -43,6 +43,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         return redisTemplate.opsForValue().increment(String.format(VIEW_COUNT_KEY, articleId), 1L);
     }
 
+    @Override
     public Long findViewCountFromRedis(Long articleId) {
         return redisTemplate.opsForValue().get(String.format(VIEW_COUNT_KEY, articleId));
     }
