@@ -281,7 +281,7 @@ const MapContainer = styled.div`
     z-index: 100;
     fill: ${primary.primary300};
     cursor: pointer;
-    transform: translate(0, -20px);
+    transform: translate(0, -10px);
     filter: drop-shadow(3px 10px ${secondary.secondary500});
   }
 
@@ -289,7 +289,7 @@ const MapContainer = styled.div`
     fill: ${primary.primary300};
     outline: none;
     cursor: pointer;
-    transform: translate(0, -20px);
+    transform: translate(0, -10px);
     filter: drop-shadow(3px 10px ${secondary.secondary500});
   }
 `;
