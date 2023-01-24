@@ -4,10 +4,13 @@ import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
+import instance from "../../../api/core/default.js";
+import { useParams } from "react-router-dom";
 
 import React, { useState } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
+import { useMutation } from "@tanstack/react-query";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -89,38 +92,71 @@ const PostButton = styled(OKButton)`
 `;
 
 const BoardEdit = () => {
+  const [categoryValue, setCategoryValue] = useState("");
+  const [titleValue, setTitleValue] = useState("");
   const [contentValue, setContentValue] = useState("");
+  const { id } = useParams();
+
+  const data = {
+    title: titleValue,
+    content: contentValue,
+    // image: "",
+    category: categoryValue,
+  };
+
+  const handleButton = async () => {
+    const response = await instance({
+      method: "patch",
+      url: `http://indiego.kro.kr:80/articles/${id}`,
+      data,
+    });
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    console.log(response.data);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    return response.data;
+  };
+
+  const { mutate } = useMutation({
+    mutationKey: ["handleButton"],
+    mutationFn: handleButton,
+    // onSuccess: postButtonOnSuccess,
+    // onError: postButtonOnError,
+  });
+
   return (
     <PageWrapper>
       <Aside></Aside>
       <PostWrapper>
         <div className="title">글 수정하기</div>
         <div className="titleInfo">게시판을 수정 할 수 있습니다.</div>
-        <form>
-          <PostBoard>
-            <div className="postDiv">분류</div>
-            <ClassificationDiv>
-              <CreateDropdown></CreateDropdown>
-            </ClassificationDiv>
-            <div className="postDiv">제목</div>
-            <TitleInputDiv>
-              <input
-                className="titleInput"
-                placeholder="게시글의 제목을 작성해주세요."
-              />
-            </TitleInputDiv>
-            <div className="postDiv">본문</div>
-            <ContentInputDiv>
-              <Editor
-                value={contentValue}
-                setValue={setContentValue}
-                placeholder={"내용을 입력해주세요."}
-              ></Editor>
-              {/* {console.log(contentValue)} */}
-            </ContentInputDiv>
-            <PostButton type="submit">글 올리기</PostButton>
-          </PostBoard>
-        </form>
+        <PostBoard>
+          <div className="postDiv">분류</div>
+          <ClassificationDiv>
+            <CreateDropdown
+              setCategoryValue={setCategoryValue}
+            ></CreateDropdown>
+          </ClassificationDiv>
+          <div className="postDiv">제목</div>
+          <TitleInputDiv>
+            <input
+              className="titleInput"
+              value={titleValue}
+              onChange={(e) => setTitleValue(e.target.value)}
+              placeholder="게시글의 제목을 작성해주세요."
+            />
+          </TitleInputDiv>
+          <div className="postDiv">본문</div>
+          <ContentInputDiv>
+            <Editor
+              value={contentValue}
+              setValue={setContentValue}
+              placeholder={"내용을 입력해주세요."}
+            ></Editor>
+          </ContentInputDiv>
+          <PostButton type="button" onClick={() => mutate()}>
+            수정하기
+          </PostButton>
+        </PostBoard>
       </PostWrapper>
     </PageWrapper>
   );

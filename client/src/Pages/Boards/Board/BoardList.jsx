@@ -241,10 +241,6 @@ export default function BoardList() {
         {console.log(pageData)}
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          // urlCategory={urlCategory}
-          // urlStatus={urlStatus}
-          // urlPage={urlPage}
-          // urlSize={urlSize}
           location={`articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
         ></SearchBar>
       </BoardWrapper>

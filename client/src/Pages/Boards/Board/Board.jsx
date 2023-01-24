@@ -157,7 +157,7 @@ const Board = () => {
           <button
             className="edButton"
             onClick={() => {
-              navigate("/board/1/edit");
+              navigate(`/board/${id}/edit`);
             }}
           >
             수정
