@@ -51,14 +51,13 @@ export default function Boards({ category, children, path }) {
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchBoardData = () => {
-    return axios.get(`${serverURI}/articles`, {
+    return axios.get(`${serverURI}/articles/populars`, {
       params: { category },
     });
   };
 
   const fetchBoardDataOnSuccess = (response) => {
     const data = response.data.data;
-    console.log(data);
     setData(data);
   };
 

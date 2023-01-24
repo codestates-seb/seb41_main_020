@@ -159,11 +159,14 @@ export default function SearchBar({
   const navigate = useNavigate();
 
   let searchURI = `${navigateTo}?search=${searchInput}&filter=${searchOption}`;
+
   additionalParams?.forEach((param) => {
     if (Array.isArray(param)) {
       searchURI += "&" + param[0] + "=" + param[1];
     }
   });
+
+  console.log(searchURI);
 
   const searchOptionsContainerEventHandler = (e, props) => {
     if (props === "blur") {
