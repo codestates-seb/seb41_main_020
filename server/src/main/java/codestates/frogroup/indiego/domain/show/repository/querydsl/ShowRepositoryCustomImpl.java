@@ -92,7 +92,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                         addressEqOfFindAll(address),
                         filterEq(filter, search)
                 )
-                .orderBy(show.createdAt.desc());
+                .orderBy(show.showBoard.showAt.asc());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount); // 최적화
     }
