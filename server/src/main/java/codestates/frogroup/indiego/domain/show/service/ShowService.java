@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +41,6 @@ public class ShowService {
     private final ShowReservationService reservationService;
     private final ScoreRepository scoreRepository;
     private final RedisKey redisKey;
-
-
-
 
     @Transactional
     public Show createShow(Show show, long memberId) {
@@ -132,11 +130,20 @@ public class ShowService {
     public Show findShow(long showId){
         Show show = findVerifiedShow(showId);
         String key = redisKey.getScoreAvergeKey(showId);
-        if(scoreRepository.getValues(key).equals(null)){
+        if(scoreRepository.getValues(key).equals("false")){
             scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }else{
+            Show show1 = new Show(showId,
+                    show.getMember(),
+                    show.getShowBoard(),
+                    show.getCoordinate(),
+                    show.getStatus(),
+                    Double.valueOf(scoreRepository.getValues(key)),
+                    show.getTotal()
+                    );
+            //show.setScoreAverage(); // 변경감지
+            return show1;
         }
-
-        show.setScoreAverage(Double.valueOf(scoreRepository.getValues(key)));
 
         return show;
     }
