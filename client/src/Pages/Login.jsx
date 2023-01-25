@@ -3,7 +3,7 @@ import logo from "../assets/logo.svg";
 import { faEye } from "@fortawesome/free-solid-svg-icons/faEye";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons/faEyeSlash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import naverIcon from "../assets/naverIcon.jpg";
+import googleIcon from "../assets/googleIcon.jpg";
 import kakaoIcon from "../assets/kakaoIcon.jpg";
 
 //로컬 모듈
@@ -41,6 +41,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: max-content;
+  position: relative;
 
   > .logo {
     margin-bottom: 20px;
@@ -60,10 +61,11 @@ const ContentContainer = styled.div`
     align-items: center;
     height: 40px;
     justify-content: center;
-    margin-bottom: 20px;
+    position: absolute;
     width: 350px;
+    bottom: -50px;
 
-    > .naver-button {
+    > .google-button {
       all: unset;
       cursor: pointer;
       height: 40px;
@@ -322,10 +324,6 @@ export default function Login() {
     location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/kakao`;
   };
 
-  const handleNaverOauthLogin = () => {
-    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/naver`;
-  };
-
   const handleLoginType = () => {
     setIsLoginTypeUser(!isLoginTypeUser);
   };
@@ -406,18 +404,6 @@ export default function Login() {
     <Container>
       <ContentContainer>
         <img alt="logo" className="logo" src={logo} />
-        {isLoginTypeUser ? (
-          <div className="social-signup-button-container">
-            <button className="naver-button" onClick={handleNaverOauthLogin}>
-              <img alt="naver icon" src={naverIcon} />
-            </button>
-            <button className="kakao-button" onClick={handleKakaoOauthLogin}>
-              <img alt="kakao-icon" src={kakaoIcon} />
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
         <SelectLoginTypeTab>
           <button className="type-user-tab-menu" onClick={handleLoginType}>
             일반 로그인
@@ -512,6 +498,18 @@ export default function Login() {
             로그인
           </LoginButton>
         </LoginContainer>
+        {isLoginTypeUser ? (
+          <div className="social-signup-button-container">
+            <button className="google-button">
+              <img alt="google icon" src={googleIcon} />
+            </button>
+            <button className="kakao-button" onClick={handleKakaoOauthLogin}>
+              <img alt="kakao-icon" src={kakaoIcon} />
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </ContentContainer>
     </Container>
   );
