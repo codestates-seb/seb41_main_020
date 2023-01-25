@@ -1,9 +1,9 @@
 package codestates.frogroup.indiego.domain.show.repository.querydsl;
 
-import codestates.frogroup.indiego.domain.show.dto.QShowListResponseDto;
-import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.*;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -122,6 +123,51 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .fetch();
     }
 
+    @Override
+    public List<ShowMapsResponse> findAllByShowMapsSearch(Double x1, Double x2, Double y1, Double y2) {
+        return  queryFactory
+                .select(new QShowMapsResponse(
+                        show.id,
+                        show.member.profile.nickname,
+                        show.showBoard.board.title,
+                        show.showBoard.detailAddress,
+                        show.coordinate.latitude,
+                        show.coordinate.longitude,
+                        show.showBoard.showAt,
+                        show.showBoard.expiredAt,
+                        show.showBoard.board.image
+                ))
+                .from(show)
+                .where(
+                        mapLatFilter(x1, x2),
+                        mapLonFilter(y1, y2)
+                )
+                .orderBy(show.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<ShowMapsResponse> findAllByShowMapsSearch(String search, String filter) {
+        return  queryFactory
+                .select(new QShowMapsResponse(
+                        show.id,
+                        show.member.profile.nickname,
+                        show.showBoard.board.title,
+                        show.showBoard.detailAddress,
+                        show.coordinate.latitude,
+                        show.coordinate.longitude,
+                        show.showBoard.showAt,
+                        show.showBoard.expiredAt,
+                        show.showBoard.board.image
+                ))
+                .from(show)
+                .where(
+                    filterEq(filter,search).and(show.status.eq(Show.ShowStatus.SALE))
+                )
+                .orderBy(show.createdAt.desc())
+                .fetch();
+    }
+
     private BooleanExpression categoryEq(String category) {
 
         if (Objects.isNull(category) || category.equals("전체")) {
@@ -163,6 +209,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         if (Objects.isNull(search)) {
             return null;
         }
+        log.info("# Test titleContains = {}",search);
         return show.showBoard.board.title.containsIgnoreCase(search);
     }
 
@@ -170,6 +217,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         if (Objects.isNull(search)) {
             return null;
         }
+        log.info("# Test artistContains = {}",search);
         return show.member.profile.nickname.containsIgnoreCase(search);
     }
 
@@ -181,6 +229,14 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         return show.showBoard.showAt.between(LocalDate.from(LocalDateTime.of(startDate, LocalTime.MIN)),
                 LocalDate.from(LocalDateTime.of(endDate, LocalTime.MAX).withNano(0)))
                 .and(show.status.eq(Show.ShowStatus.SALE));
+    }
+
+    private BooleanExpression mapLatFilter(Double x1, Double x2) {
+        return show.coordinate.latitude.between(x1,x2).and(show.status.eq(Show.ShowStatus.SALE));
+    }
+
+    private BooleanExpression mapLonFilter(Double y1, Double y2) {
+        return show.coordinate.longitude.between(y1,y2).and(show.status.eq(Show.ShowStatus.SALE));
     }
 
     private static OrderSpecifier<?> sortDesc(String sort) {
