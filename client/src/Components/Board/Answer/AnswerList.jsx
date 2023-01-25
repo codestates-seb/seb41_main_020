@@ -13,6 +13,8 @@ import AnswerDummy from "../../../DummyData/AnswerDummy.js";
 import React, { useEffect, useState } from "react";
 import useAnswerListStore from "../../../store/useAnswerListStore.js";
 import axios from "axios";
+import instance from "../../../api/core/default.js";
+import { useMutation } from "@tanstack/react-query";
 
 const AnswerWrapper = styled.div`
   margin-top: 60px;
@@ -57,7 +59,15 @@ const AnswerCreateButton = styled(OKButton)`
 `;
 
 const AnswerListWrapper = styled.div`
+  border: 2px solid ${primary.primary500};
+  border-radius: 20px;
+  padding: 20px;
   width: 100%;
+  height: 800px;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   > ul {
     padding-left: 0px;
     list-style: none;
@@ -67,42 +77,60 @@ const AnswerListWrapper = styled.div`
   }
 `;
 
-const AnswerList = ({ boardData, answerListData, id }) => {
+const AnswerList = ({ boardData, answerListData, refetch, id }) => {
   const [answerData, setAnswerData] = useState("");
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post(`http://indiego.kro.kr:80/articles/${id}/comments`, {
-        comment: answerData,
-      })
-      .then((res) => console.log(res));
+  const rerender = refetch();
+  const handleButton = async () => {
+    const data = { comment: answerData };
+    return await instance({
+      method: "post",
+      url: `http://indiego.kro.kr:80/articles/${id}/comments`,
+      data,
+    });
   };
+
+  const handleButtonOnSuccess = (response) => {
+    console.log(response);
+    console.log(answerListData);
+    rerender;
+  };
+
+  const { mutate: createAnswer, isLoading } = useMutation({
+    mutationKey: ["handleButton"],
+    mutationFn: handleButton,
+    onSuccess: handleButtonOnSuccess,
+    // onError: postButtonOnError,
+  });
+
+  if (isLoading) {
+    <div>Loading....</div>;
+  }
   return (
     <AnswerWrapper>
       <div className="answerCount">
         {boardData.articleCommentCount}개의 댓글
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className="answerInputDiv">
-          <input
-            className="answerInput"
-            type="text"
-            placeholder="댓글을 입력하세요."
-            value={answerData}
-            onChange={(e) => {
-              setAnswerData(e.target.value);
-            }}
-          />
-        </div>
-        <AnswerCreateButtonDiv>
-          <AnswerCreateButton type="submit">작성하기</AnswerCreateButton>
-        </AnswerCreateButtonDiv>
-      </form>
+      <div className="answerInputDiv">
+        <input
+          className="answerInput"
+          type="text"
+          placeholder="댓글을 입력하세요."
+          value={answerData}
+          onChange={(e) => {
+            setAnswerData(e.target.value);
+          }}
+        />
+      </div>
+      <AnswerCreateButtonDiv>
+        <AnswerCreateButton type="button" onClick={() => createAnswer()}>
+          작성하기
+        </AnswerCreateButton>
+      </AnswerCreateButtonDiv>
       <AnswerListWrapper>
         <ul>
           {answerListData.map((it) => (
             <li key={it.id}>
-              <AnswerItem {...it} />
+              <AnswerItem {...it} rerender={rerender} />
             </li>
           ))}
         </ul>

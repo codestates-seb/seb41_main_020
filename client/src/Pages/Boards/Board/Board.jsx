@@ -104,15 +104,6 @@ const Board = () => {
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
     return response.data;
-
-    // const response = await instance({
-    //   method: "get",
-    //   url: `http://indiego.kro.kr:80/articles/${id}`,
-    // });
-    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    // console.log(response.data);
-    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    // return response.data;
   };
 
   const axiosBoardSuccess = (response) => {
@@ -121,8 +112,8 @@ const Board = () => {
     setBoardStoreData(response.data);
   };
 
-  const { isLoading, isError, error } = useQuery({
-    queryKey: ["axiosBoard"],
+  const { isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["axiosBoard", answerListData],
     queryFn: axiosBoard,
     onSuccess: axiosBoardSuccess,
   });
@@ -149,7 +140,7 @@ const Board = () => {
 
         <div className="lineDiv"></div>
         <QuillViewDiv
-          dangerouslySetInnerHTML={{ __html: boardData.content }}
+          dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
         ></QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
@@ -170,10 +161,13 @@ const Board = () => {
           </button>
           <button className="edButton">삭제</button>
         </EditDeleteDiv>
+        {/* 댓글 리스트로 이동 */}
         <AnswerList
           boardData={boardData}
           answerListData={answerListData}
+          setAnswerListData={setAnswerListData}
           id={id}
+          refetch={refetch}
         />
       </BoardInfoWrapper>
     </PageWrapper>

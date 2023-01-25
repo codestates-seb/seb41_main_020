@@ -118,7 +118,7 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = (response) => {
-    navigate(`${pathname}?category=자유게시판&status=최신순&page=1&size=10`);
+    navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
   };
 
   const { mutate: createBoard } = useMutation({

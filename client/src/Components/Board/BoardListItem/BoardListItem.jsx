@@ -39,6 +39,7 @@ const BoardItemContent = styled.div`
     }
   }
   .contentDiv {
+    display: flex;
     font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
