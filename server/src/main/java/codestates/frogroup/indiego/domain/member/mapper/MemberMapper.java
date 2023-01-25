@@ -18,6 +18,8 @@ public interface MemberMapper {
     @Mapping(source = "address", target = "profile.address")
     @Mapping(source = "image", target = "profile.image")
     @Mapping(source = "introduction", target = "profile.introduction")
+    @Mapping(source = "latitude", target = "coordinate.latitude")
+    @Mapping(source = "longitude", target = "coordinate.longitude")
     Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
 
     @Mapping(source = "profile.nickname", target = "nickname")
@@ -28,12 +30,16 @@ public interface MemberMapper {
     @Mapping(source = "profile.address", target = "address")
     @Mapping(source = "profile.image", target = "image")
     @Mapping(source = "profile.introduction", target = "introduction")
+    @Mapping(source = "coordinate.latitude", target = "latitude")
+    @Mapping(source = "coordinate.longitude", target = "longitude")
     MemberDto.PatchResponse memberToPatchResponse(Member member);
 
     @Mapping(source = "profile.nickname", target = "profile.nickname")
     @Mapping(source = "profile.address", target = "profile.address")
     @Mapping(source = "profile.image", target = "profile.image")
     @Mapping(source = "profile.introduction", target = "profile.introduction")
+    @Mapping(source = "coordinate.latitude", target = "latitude")
+    @Mapping(source = "coordinate.longitude", target = "longitude")
     @Mapping(source = "roles", target = "role")
     MemberDto.GetResponse memberToGetResponse(Member member);
 
