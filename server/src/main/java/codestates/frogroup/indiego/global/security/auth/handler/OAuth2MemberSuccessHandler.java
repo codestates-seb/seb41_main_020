@@ -17,13 +17,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +50,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         Map<String, Object> attributes = oAuthCustomUser.getAttributes();
         String registrationId = oAuthCustomUser.getName();
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) oAuthCustomUser.getAuthorities();
-
 
         List<String> roles = authorities.stream()
                 .map(authority -> {
@@ -96,13 +98,13 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         queryParams.add("access_token", accessToken);
         queryParams.add("refresh_token", secretRefreshToken);
 
-        String serverName = request.getServerName();
+        // String serverName = request.getServerName();
         // log.info("# serverName = {}",serverName);
 
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host(serverName)
+                .host("localhost")
                 //.host("localhost")
                 .port(3000) // 기본 포트가 80이기 때문에 괜찮다
                 .path("/token")
