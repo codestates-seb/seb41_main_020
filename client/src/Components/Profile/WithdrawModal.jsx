@@ -13,6 +13,7 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import instance from "../../api/core/default";
 
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
@@ -97,14 +98,20 @@ const ModalButton = styled.button`
 `;
 
 export default function WithdrawModal() {
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
   const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
   const navigate = useNavigate();
 
   const handleWithdraw = () => {
-    setOpenModal();
-    window.alert("회원 탈퇴가 정상적으로 처리되었습니다.");
-    navigate("/");
-    window.scrollTo(0, 0);
+    return instance({
+      method: "delete",
+      url: `/members/${userId}`,
+    }).then((response) => {
+      setOpenModal(false);
+      localStorage.clear();
+      window.alert("회원 탈퇴가 성공적으로 완료되었습니다.");
+      navigate("/");
+    });
   };
 
   return (

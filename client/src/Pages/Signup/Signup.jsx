@@ -417,6 +417,14 @@ export default function Signup() {
     createMember();
   };
 
+  const handleKakaoOauthLogin = () => {
+    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/kakao`;
+  };
+
+  const handleNaverOauthLogin = () => {
+    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/naver`;
+  };
+
   return (
     <Container>
       <ContentContainer>
@@ -561,10 +569,10 @@ export default function Signup() {
             </button>
           </div>
           <div className="social-signup-button-container">
-            <button className="naver-button">
+            <button className="naver-button" onClick={handleNaverOauthLogin}>
               <img alt="naver icon" src={naverIcon} />
             </button>
-            <button className="kakao-button">
+            <button className="kakao-button" onClick={handleKakaoOauthLogin}>
               <img alt="kakao-icon" src={kakaoIcon} />
             </button>
           </div>
