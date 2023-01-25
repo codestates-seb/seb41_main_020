@@ -79,7 +79,6 @@ const AnswerListWrapper = styled.div`
 
 const AnswerList = ({ boardData, answerListData, refetch, id }) => {
   const [answerData, setAnswerData] = useState("");
-  const rerender = refetch();
   const handleButton = async () => {
     const data = { comment: answerData };
     return await instance({
@@ -92,7 +91,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
   const handleButtonOnSuccess = (response) => {
     console.log(response);
     console.log(answerListData);
-    rerender;
+    refetch();
   };
 
   const { mutate: createAnswer, isLoading } = useMutation({
@@ -130,7 +129,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
         <ul>
           {answerListData.map((it) => (
             <li key={it.id}>
-              <AnswerItem {...it} rerender={rerender} />
+              <AnswerItem {...it} refetch={refetch} />
             </li>
           ))}
         </ul>

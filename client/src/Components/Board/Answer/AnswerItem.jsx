@@ -123,7 +123,7 @@ const AnswerListFunctionDiv = styled.div`
   }
 `;
 
-const AnswerItem = (props, { rerender }) => {
+const AnswerItem = (props) => {
   const [toggle, setToggle] = useState(false);
   const [editValue, setEditValue] = useState(props.comment);
 
@@ -145,7 +145,7 @@ const AnswerItem = (props, { rerender }) => {
 
   const handleCompleteOnSuccess = () => {
     setToggle(!toggle);
-    rerender;
+    props.refetch();
   };
 
   const { mutate: editAnswer } = useMutation({

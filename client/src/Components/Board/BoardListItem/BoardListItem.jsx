@@ -39,7 +39,7 @@ const BoardItemContent = styled.div`
     }
   }
   .contentDiv {
-    display: flex;
+    display: block;
     font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
@@ -48,7 +48,7 @@ const BoardItemContent = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 400px;
-    height: 15px;
+    height: 20px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       margin-top: 10px;
@@ -98,10 +98,9 @@ const BoardListItem = (props) => {
         <Link to={`${pathname}/${props.id}`} className="titleLink">
           {props.title}
         </Link>
-        <div
-          className="contentDiv"
-          dangerouslySetInnerHTML={{ __html: props.content }}
-        ></div>
+        <div className="contentDiv">
+          {props.content.replace(/(<([^>]+)>)/gi, "")}
+        </div>
         <BoardItemCreateInfo>
           <div className="authorDiv">{props.nickname}</div>
           <div className="createDateDiv">

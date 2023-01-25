@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
 
 const BoardInfoWrapper = styled(ContentWrapper)`
@@ -101,12 +101,40 @@ const Board = () => {
   const { setBoardStoreData } = useBoardStore();
   const { pathname } = useLocation();
 
+  // const handleHeartButton = () => {
+  //   instance({
+  //     method: "put",
+  //     url: `http://indiego.kro.kr:80/articles/${id}`,
+  //   });
+  //   console.log(123);
+  // };
+
+  const handleHeartCount = async () => {
+    return await instance({
+      method: "put",
+      url: `http://indiego.kro.kr:80/articles/${id}`,
+    });
+  };
+
+  const handleHeartCountOnSuccess = () => {
+    refetch();
+  };
+  const { mutate: heartCount } = useMutation({
+    mutationKey: ["handleHeartCount"],
+    mutationFn: handleHeartCount,
+    onSuccess: handleHeartCountOnSuccess,
+    // onError: postButtonOnError,
+  });
+
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
     return response.data;
   };
 
   const axiosBoardSuccess = (response) => {
+    console.log("&&&&&&&&&&&&&&&&&");
+    console.log(response);
+    console.log("&&&&&&&&&&&&&&&&&");
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
@@ -144,7 +172,7 @@ const Board = () => {
         ></QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
-            <button className="heartButton">
+            <button className="heartButton" onClick={() => heartCount()}>
               <img width={45} src={heart} alt="heart"></img>
             </button>
             <div className="heartCount">{boardData.likeCount}</div>
