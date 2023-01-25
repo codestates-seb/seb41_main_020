@@ -23,6 +23,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
 import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
+import { useMutation } from "@tanstack/react-query";
+import instance from "../../api/core/default.js";
+import { useNavigate } from "react-router-dom";
 
 const TicketsCreateContentWrapper = styled(PostWrapper)`
   @media screen and (max-width: ${breakpoint.mobile}) {
@@ -174,26 +177,53 @@ const CancelButton = styled(PostButton)`
 
 export default function TicketsCreate() {
   // 카테고리
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(""); // 사용
   // 공연명
-  const [ticketName, setTicketName] = useState("");
+  const [ticketName, setTicketName] = useState(""); // 사용
   // 장소
-  const [gu, setGu] = useState("구");
-  const [place, setPlace] = useState("어디서 공연을 하시나요?");
+  const [gu, setGu] = useState("구"); // 사용
+  const [place, setPlace] = useState("어디서 공연을 하시나요?"); // 사용
+  const [detailPlace, setDetailPlace] = useState(""); // 사용
 
   // 공연 시작 정보
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(""); // 사용
+  const [endDate, setEndDate] = useState(""); // 사용
   const [startTime, setStartTime] = useState("");
 
   // 공연 좌석 수
   const [sit, setSit] = useState("");
   // 티켓 가격
-  const [ticketPrice, setTicketPrice] = useState("");
+  const [ticketPrice, setTicketPrice] = useState(""); // 사용
   // 공연 상세
-  const [ticketInfo, setTicketInfo] = useState("");
+  const [ticketInfo, setTicketInfo] = useState(""); // 사용
   // quill 에디터
   const [ticketsValue, setTicketsValue] = useState("");
+
+  // 지도 좌표
+  const [latitude, setLatitude] = useState(""); // 위도 // 사용
+  const [longitude, setLongitude] = useState(""); // 경도 // 사용
+  const navigate = useNavigate();
+
+  // 티켓 post에 보낼 데이터
+  const data = {
+    title: ticketName,
+    content: ticketInfo,
+    image:
+      "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
+    category: category,
+    price: ticketPrice,
+    address: gu,
+    detailAddress: `${place} ${detailPlace}`,
+    expiredAt: endDate,
+    showAt: startTime,
+    //?
+    showTime: startTime,
+    detailImage:
+      "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
+    latitude: latitude,
+    longitude: longitude,
+    total: sit,
+  };
 
   console.log(category);
   console.log(ticketName);
@@ -206,6 +236,28 @@ export default function TicketsCreate() {
   console.log(ticketPrice);
   console.log(ticketInfo);
   console.log(ticketsValue);
+  console.log(latitude);
+  console.log(longitude);
+  // 티켓 post
+  const handleCreateTickets = async () => {
+    const response = await instance({
+      method: "post",
+      url: `http://indiego.kro.kr:80/shows`,
+      data,
+    });
+    console.log(response);
+  };
+
+  const handleCreateTicketsOnSuccess = (response) => {
+    navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
+  };
+
+  const { mutate: createTickets } = useMutation({
+    mutationKey: ["handleCreateTickets"],
+    mutationFn: handleCreateTickets,
+    onSuccess: handleCreateTicketsOnSuccess,
+    // onError: postButtonOnError,
+  });
 
   useEffect(() => {
     const { kakao } = window;
@@ -215,13 +267,17 @@ export default function TicketsCreate() {
       function (result, status) {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          console.log(result[0].x);
-          console.log(result[0].y);
+          setLatitude(result[0].x);
+          setLongitude(result[0].y);
         }
       },
       [place]
     );
   });
+
+  const handleCancel = () => {
+    navigate("/tickets");
+  };
 
   return (
     <PageWrapper>
@@ -251,7 +307,14 @@ export default function TicketsCreate() {
           <div className="postDiv">공연 장소</div>
           <ChoiceButtonDiv>
             <div className="place">{place}</div>
-            <input className="placeInput" placeholder="상세 주소 입력" />
+            <input
+              className="placeInput"
+              placeholder="상세 주소 입력"
+              value={detailPlace}
+              onChange={(e) => {
+                setDetailPlace(e.target.value);
+              }}
+            />
             <Postcode setPlace={setPlace} setGu={setGu}></Postcode>
           </ChoiceButtonDiv>
 
@@ -323,8 +386,8 @@ export default function TicketsCreate() {
         </TicketsBoard>
 
         <ButtonDiv>
-          <PostButton>글 올리기</PostButton>
-          <CancelButton>취소하기</CancelButton>
+          <PostButton onClick={() => createTickets()}>글 올리기</PostButton>
+          <CancelButton onClick={handleCancel}>취소하기</CancelButton>
         </ButtonDiv>
       </TicketsCreateContentWrapper>
     </PageWrapper>
