@@ -128,6 +128,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         return  queryFactory
                 .select(new QShowMapsResponse(
                         show.id,
+                        show.member.profile.nickname,
                         show.showBoard.board.title,
                         show.showBoard.detailAddress,
                         show.coordinate.latitude,
@@ -140,6 +141,28 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .where(
                         mapLatFilter(x1, x2),
                         mapLonFilter(y1, y2)
+                )
+                .orderBy(show.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<ShowMapsResponse> findAllByShowMapsSearch(String search, String filter) {
+        return  queryFactory
+                .select(new QShowMapsResponse(
+                        show.id,
+                        show.member.profile.nickname,
+                        show.showBoard.board.title,
+                        show.showBoard.detailAddress,
+                        show.coordinate.latitude,
+                        show.coordinate.longitude,
+                        show.showBoard.showAt,
+                        show.showBoard.expiredAt,
+                        show.showBoard.board.image
+                ))
+                .from(show)
+                .where(
+                    filterEq(filter,search).and(show.status.eq(Show.ShowStatus.SALE))
                 )
                 .orderBy(show.createdAt.desc())
                 .fetch();
@@ -186,6 +209,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         if (Objects.isNull(search)) {
             return null;
         }
+        log.info("# Test titleContains = {}",search);
         return show.showBoard.board.title.containsIgnoreCase(search);
     }
 
@@ -193,6 +217,7 @@ public class ShowRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         if (Objects.isNull(search)) {
             return null;
         }
+        log.info("# Test artistContains = {}",search);
         return show.member.profile.nickname.containsIgnoreCase(search);
     }
 

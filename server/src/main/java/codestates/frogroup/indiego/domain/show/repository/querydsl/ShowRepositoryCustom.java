@@ -22,4 +22,6 @@ public interface ShowRepositoryCustom {
     List<ShowListResponseDto> findShowScoreOrCreatedAtDesc(String address, String sort);
 
     List<ShowMapsResponse> findAllByShowMapsSearch(Double x1, Double x2, Double y1, Double y2);
+
+    List<ShowMapsResponse> findAllByShowMapsSearch(String search, String filter);
 }

@@ -190,14 +190,22 @@ public class ShowController {
         return new ResponseEntity(new SingleResponseDto<>(showsResponses), HttpStatus.OK);
     }
 
-    @GetMapping("/maps")
-    public ResponseEntity getMaps(@Positive @RequestParam("x1") Double x1,
-                                  @Positive @RequestParam("x2") Double x2,
-                                  @Positive @RequestParam("y1") Double y1,
-                                  @Positive @RequestParam("y2") Double y2,
-                                  @Positive @RequestParam(value = "level",required = false) Integer level){
-        log.info("# maps 로직 실행됨");
+    @GetMapping("/maps/location")
+    public ResponseEntity getMapShows(@Positive @RequestParam("x1") Double x1,
+                                      @Positive @RequestParam("x2") Double x2,
+                                      @Positive @RequestParam("y1") Double y1,
+                                      @Positive @RequestParam("y2") Double y2,
+                                      @Positive @RequestParam(value = "level",required = false) Integer level){
         List<ShowMapsResponse> mapShows = showService.findMapShows(x1, x2, y1, y2);
+
+        return new ResponseEntity(new SingleResponseDto<>(mapShows), HttpStatus.OK);
+    }
+
+    @GetMapping("/maps")
+    public ResponseEntity getMapShowsSearch(@RequestParam("search") String search,
+                                            @RequestParam("filter") String filter){
+        log.info("# getMapShowsSearch 로직 실행됨");
+        List<ShowMapsResponse> mapShows = showService.findMapShows(search,filter);
 
         return new ResponseEntity(new SingleResponseDto<>(mapShows), HttpStatus.OK);
     }
