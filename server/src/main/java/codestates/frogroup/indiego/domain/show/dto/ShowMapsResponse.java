@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 public class ShowMapsResponse {
     private Long id;
+    private String nickname;
     private String title;
     private String address;
     private Double latitude;
@@ -17,9 +18,10 @@ public class ShowMapsResponse {
     private String img;
 
     @QueryProjection
-    public ShowMapsResponse(Long id, String title, String address, Double latitude, Double longitude,
-                            LocalDate expiredAt, LocalDate showAt, String img) {
+    public ShowMapsResponse(Long id, String nickname, String title, String address, Double latitude,
+                            Double longitude, LocalDate expiredAt, LocalDate showAt, String img) {
         this.id = id;
+        this.nickname = nickname;
         this.title = title;
         this.address = address;
         this.latitude = latitude;

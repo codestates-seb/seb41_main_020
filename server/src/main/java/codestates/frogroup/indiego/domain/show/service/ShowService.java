@@ -119,6 +119,12 @@ public class ShowService {
         return showMapsResponse;
     }
 
+    public List<ShowMapsResponse> findMapShows(String search, String filter){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(search, filter);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
 
     //판매자용 공연 조회
     public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
