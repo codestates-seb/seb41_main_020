@@ -126,7 +126,6 @@ const ConcertListContainer = styled.div`
 export default function DatePopup({ popupHandler }) {
   const [selectedDate, setSelectedDate] = useState("");
   const [dateInfo, setDateInfo] = useState();
-  console.log(dateInfo, "what?!");
 
   const closePopupHandler = () => {
     popupHandler(false);

@@ -105,13 +105,11 @@ export default function List({ searchBy, search }) {
 
   const fetchListDataOnSuccess = (response) => {
     if (searchBy === "location") {
-      console.log(response);
       const data = response.data.data.shows;
       const total = response.data.data.total;
       setData(data);
       setTotal(total);
     } else {
-      console.log(response);
       const data = response.data.data;
       const total = response.data.data.length;
       setData(data);

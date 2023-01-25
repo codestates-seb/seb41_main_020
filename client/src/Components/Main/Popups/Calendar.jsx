@@ -301,7 +301,6 @@ export default function Calendar({ setSelectedDate, setDateInfo }) {
       month: selectedMonth,
       day: selected,
     });
-    console.log("setting date");
   };
 
   const monthSelectorOnClickHandler = (num) => {

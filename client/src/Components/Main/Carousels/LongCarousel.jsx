@@ -153,7 +153,6 @@ export default function Carousel() {
   };
 
   useInterval(() => {
-    console.log(data, "data is");
     const viewPort = window.innerWidth;
     if (viewPort > 900) {
       if (currentIdx + 1 < parseInt(data.length / 3)) {

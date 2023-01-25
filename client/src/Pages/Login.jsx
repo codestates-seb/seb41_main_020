@@ -211,7 +211,7 @@ export default function Login() {
   const data = { email: email, password: password };
   const navigate = useNavigate();
 
-  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const { isLogin, setUserInfo } = useIsLoginStore((state) => state);
 
   const handlePasswordInputType = () => {
     if (!passwordInputType.visible) {
@@ -242,8 +242,7 @@ export default function Login() {
     );
     localStorage.setItem("refreshToken", response.headers.get("Refresh"));
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
-    setIsLogin(true);
-    // navigate("/");
+    window.location.replace("./");
   };
 
   const postLoginOnError = (err) => {

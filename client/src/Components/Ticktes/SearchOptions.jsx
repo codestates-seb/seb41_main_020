@@ -256,8 +256,6 @@ export default function SearchOptions() {
   const [searchParams] = useSearchParams();
   const queryParams = [...searchParams.entries()];
 
-  console.log(startDate instanceof Date);
-
   const additionalParams = [
     dateSelectActive && ["start", `${startDate.toISOString().split("T")[0]}`],
     dateSelectActive && ["end", `${endDate.toISOString().split("T")[0]}`],

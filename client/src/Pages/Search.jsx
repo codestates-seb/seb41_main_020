@@ -7,6 +7,7 @@ import { primary, dtFontSize, sub } from "../styles/mixins";
 import breakpoint from "../styles/breakpoint.js";
 import marker from "../assets/marker.svg";
 import "../styles/MarkerOverlay.css";
+import useIsLoginStore from "../store/useIsLoginStore.js";
 
 import { locationDummyArr } from "../DummyData/locationDummy";
 
