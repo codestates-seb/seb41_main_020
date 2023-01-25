@@ -23,14 +23,18 @@ import java.util.Optional;
 public class ShowReservationService {
     private final ShowReservationRepository showReservationRepository;
     private final CustomBeanUtils<ShowReservation> utils;
-    private final ShowService showService;
+
 
 
     @Transactional
     public ShowReservation createReservation(ShowReservation reservation) {
         Show show = reservation.getShow();
-        show.setTotal(showService.getEmptySeats(show.getId()));
+        show.setTotal(getEmptySeats(show, show.getId()));
         return showReservationRepository.save(reservation);
+    }
+
+    public Integer getEmptySeats(Show show, Long showId){
+        return (show.getTotal() - countReservation(showId));
     }
 
     @Transactional
