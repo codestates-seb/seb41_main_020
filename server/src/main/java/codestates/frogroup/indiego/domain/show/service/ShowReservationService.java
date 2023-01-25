@@ -3,6 +3,7 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
+import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import codestates.frogroup.indiego.domain.show.repository.ShowReservationRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
@@ -24,9 +25,16 @@ public class ShowReservationService {
     private final CustomBeanUtils<ShowReservation> utils;
 
 
+
     @Transactional
     public ShowReservation createReservation(ShowReservation reservation) {
+        Show show = reservation.getShow();
+        show.setTotal(getEmptySeats(show, show.getId()));
         return showReservationRepository.save(reservation);
+    }
+
+    public Integer getEmptySeats(Show show, Long showId){
+        return (show.getTotal() - countReservation(showId));
     }
 
     @Transactional

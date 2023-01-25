@@ -1,17 +1,15 @@
 import { create } from "zustand";
 
 const useBoardStore = create((set) => ({
-  boardData: {},
-  answerListData: [],
+  boardStoreData: {},
 
-  setBoardData(data) {
+  setBoardStoreData(data) {
     set((state) => ({
-      board: { ...data },
-    }));
-  },
-  setAnswerListData(data) {
-    set((state) => ({
-      answerListData: [...data],
+      boardStoreData: {
+        title: data.title,
+        category: data.category,
+        content: data.content,
+      },
     }));
   },
 }));

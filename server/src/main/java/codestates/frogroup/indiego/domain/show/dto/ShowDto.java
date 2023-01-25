@@ -209,15 +209,4 @@ public class ShowDto {
         }
     }
 
-    @Getter
-    @Setter
-    public static class ShowMapsResponse{
-        private String title;
-        private String address;
-        private Double latitude;
-        private Double longitude;
-        private LocalDate date;
-        private String img;
-    }
-
 }

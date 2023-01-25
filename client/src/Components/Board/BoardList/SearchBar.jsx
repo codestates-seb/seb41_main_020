@@ -45,14 +45,14 @@ const SearchBarDiv = styled.div`
     background-color: blue;
   }
 `;
-const SearchBar = ({ urlCategory, urlStatus, urlPage, placeholder }) => {
+const SearchBar = ({ location, placeholder }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .get(
-        `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&search=${value}&page=${urlPage}&size=10
+        `http://indiego.kro.kr:80/${location}&search=${value}
         `
       )
       .then((res) => setBoardListData(res.data.data));

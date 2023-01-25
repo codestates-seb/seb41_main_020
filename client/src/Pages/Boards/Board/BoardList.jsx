@@ -22,7 +22,12 @@ import BoardDummy from "../../../DummyData/BoardDummy.js";
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
@@ -176,12 +181,12 @@ export default function BoardList() {
   const urlPage = searchParams.get("page");
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
-
-  console.log(`${urlPage} ${urlCategory} ${urlStatus}`);
+  const urlSize = searchParams.get("size");
+  const { pathname } = useLocation();
 
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=10`
+      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`
     );
     return response.data;
   };
@@ -204,9 +209,7 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-  console.log("*************************");
-  console.log(boardList);
-  console.log("*************************");
+
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -223,10 +226,13 @@ export default function BoardList() {
         {boardList.map((it) => (
           <BoardListItem key={it.id} {...it} />
         ))}
+        {console.log("*******************************")}
+        {console.log(boardList)}
+        {console.log("*******************************")}
         <WriteButtonDiv>
           <WriteButton
             onClick={() => {
-              navigate("/board/free/create");
+              navigate(`${pathname}/create`);
             }}
           >
             <img className="pencelImage" src={pen} alt="pen"></img>
@@ -234,15 +240,12 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`/board/free?category=${urlCategory}&?status=${urlStatus}&size=10`}
+          location={`${pathname}?category=${urlCategory}&?status=${urlStatus}&size=${urlSize}`}
           pageData={pageData}
         ></PageNation>
-        {console.log(pageData)}
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          urlCategory={urlCategory}
-          urlStatus={urlStatus}
-          urlPage={urlPage}
+          location={`articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
         ></SearchBar>
       </BoardWrapper>
     </PageWrapper>

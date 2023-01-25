@@ -9,7 +9,7 @@ import breakpoint from "../../../styles/breakpoint";
 //라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const BoardItemContent = styled.div`
   margin-left: 30px;
@@ -39,10 +39,16 @@ const BoardItemContent = styled.div`
     }
   }
   .contentDiv {
+    display: block;
     font-size: ${dtFontSize.small};
     font-weight: 500;
     text-align: left;
     color: ${sub.sub700};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 400px;
+    height: 20px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       margin-top: 10px;
@@ -74,6 +80,7 @@ const BoardItemCreateInfo = styled.div`
 `;
 
 const BoardListItem = (props) => {
+  const { pathname } = useLocation();
   return (
     <BoardItem key={props.id}>
       <div className="likeDiv">
@@ -88,10 +95,12 @@ const BoardListItem = (props) => {
         <img width={50} src={props.image} alt="heart"></img>
       </div>
       <BoardItemContent>
-        <Link to={`/board/free/${props.id}`} className="titleLink">
+        <Link to={`${pathname}/${props.id}`} className="titleLink">
           {props.title}
         </Link>
-        <div className="contentDiv">{props.content}</div>
+        <div className="contentDiv">
+          {props.content.replace(/(<([^>]+)>)/gi, "")}
+        </div>
         <BoardItemCreateInfo>
           <div className="authorDiv">{props.nickname}</div>
           <div className="createDateDiv">

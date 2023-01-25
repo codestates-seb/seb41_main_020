@@ -6,6 +6,7 @@ import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
 import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
@@ -111,6 +112,20 @@ public class ShowService {
         findVerifiedShows(shows);
         return shows;
     }
+
+    public List<ShowMapsResponse> findMapShows(Double x1, Double x2, Double y1, Double y2){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(x1, x2, y1, y2);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+    public List<ShowMapsResponse> findMapShows(String search, String filter){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(search, filter);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+
     //판매자용 공연 조회
     public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
 
@@ -119,8 +134,8 @@ public class ShowService {
         return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
     }
 
-    public Integer getEmptySeats(Long showId){
-        return (findShow(showId).getTotal() - reservationService.countReservation(showId));
+    public Integer getEmptySeats(Show show, Long showId){
+        return (show.getTotal() - reservationService.countReservation(showId));
     }
 
     public Integer getRevenue(Long showId){
@@ -139,7 +154,7 @@ public class ShowService {
                     show.getCoordinate(),
                     show.getStatus(),
                     Double.valueOf(scoreRepository.getValues(key)),
-                    show.getTotal()
+                    getEmptySeats(show, showId)
                     );
             //show.setScoreAverage(); // 변경감지
             return show1;
@@ -181,6 +196,12 @@ public class ShowService {
 
     private void findVerifiedShows(List<Show> shows) {
         if(shows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
+    }
+
+    private void findVerifiedMapShows(List<ShowMapsResponse> showMapsResponse) {
+        if(showMapsResponse == null){
             throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
         }
     }

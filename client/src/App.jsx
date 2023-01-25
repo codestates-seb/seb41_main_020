@@ -53,9 +53,9 @@ function App() {
           headers: {
             "Content-Type": "application/json",
             // eslint-disable-next-line prettier/prettier
-          "Authorization": `Bearer ${accessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
             // eslint-disable-next-line prettier/prettier
-          "Refresh": refreshToken,
+            "Refresh": refreshToken,
           },
         })
         .then((response) => {
