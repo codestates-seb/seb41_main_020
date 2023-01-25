@@ -50,7 +50,7 @@ public class ShowService {
         show.setMember(member);
         Show savedShow = showRepository.save(show);
 
-        String key = redisKey.getScoreAvergeKey(show.getId());
+        String key = redisKey.getScoreAverageKey(show.getId());
         scoreRepository.setValues(key,"0");
 
         return savedShow;
@@ -129,7 +129,7 @@ public class ShowService {
 
     public Show findShow(long showId){
         Show show = findVerifiedShow(showId);
-        String key = redisKey.getScoreAvergeKey(showId);
+        String key = redisKey.getScoreAverageKey(showId);
         if(scoreRepository.getValues(key).equals("false")){
             scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
         }else{
@@ -151,11 +151,11 @@ public class ShowService {
     @Transactional
     public Double setScoreAverage(long showId) {
 
-        String key = redisKey.getScoreAvergeKey(showId);
+        String key = redisKey.getScoreAverageKey(showId);
         Show show = findShow(showId);
         scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
 
-        return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
+        return Double.valueOf(scoreRepository.getValues(key));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
