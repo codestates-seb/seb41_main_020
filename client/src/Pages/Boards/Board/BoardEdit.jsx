@@ -5,7 +5,7 @@ import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import instance from "../../../api/core/default.js";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -99,6 +99,7 @@ const BoardEdit = () => {
   const [contentValue, setContentValue] = useState(boardStoreData.content);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const data = {
     title: titleValue,
@@ -120,7 +121,7 @@ const BoardEdit = () => {
   };
 
   const handleButtonOnSuccess = () => {
-    navigate(`/board/${id}`);
+    navigate(`${pathname}/${id}`);
   };
 
   const { mutate: editBoard } = useMutation({

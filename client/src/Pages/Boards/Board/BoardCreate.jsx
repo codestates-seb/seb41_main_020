@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import instance from "../../../api/core/default.js";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 export const PostWrapper = styled(ContentWrapper)`
@@ -99,6 +99,7 @@ const BoardCreate = () => {
   const [titleValue, setTitleValue] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation;
 
   const data = {
     title: titleValue,
@@ -117,7 +118,7 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = (response) => {
-    navigate(`/board?category=자유게시판&status=최신순&page=1&size=10`);
+    navigate(`${pathname}?category=자유게시판&status=최신순&page=1&size=10`);
   };
 
   const { mutate: createBoard } = useMutation({

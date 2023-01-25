@@ -17,7 +17,7 @@ import {
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
@@ -99,6 +99,7 @@ const Board = () => {
   const [answerListData, setAnswerListData] = useState([]);
   const { id } = useParams();
   const { setBoardStoreData } = useBoardStore();
+  const { pathname } = useLocation();
 
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
@@ -162,7 +163,7 @@ const Board = () => {
           <button
             className="edButton"
             onClick={() => {
-              navigate(`/board/${id}/edit`);
+              navigate(`${pathname}/edit`);
             }}
           >
             수정

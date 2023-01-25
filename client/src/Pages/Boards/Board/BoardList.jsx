@@ -22,7 +22,12 @@ import BoardDummy from "../../../DummyData/BoardDummy.js";
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
@@ -177,6 +182,7 @@ export default function BoardList() {
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
   const urlSize = searchParams.get("size");
+  const { pathname } = useLocation();
 
   const axiosBoardList = async () => {
     const response = await axios.get(
@@ -226,7 +232,7 @@ export default function BoardList() {
         <WriteButtonDiv>
           <WriteButton
             onClick={() => {
-              navigate("/board/create");
+              navigate(`${pathname}/create`);
             }}
           >
             <img className="pencelImage" src={pen} alt="pen"></img>
@@ -234,7 +240,7 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`/board?category=${urlCategory}&?status=${urlStatus}&size=${urlSize}`}
+          location={`${pathname}?category=${urlCategory}&?status=${urlStatus}&size=${urlSize}`}
           pageData={pageData}
         ></PageNation>
         <SearchBar
