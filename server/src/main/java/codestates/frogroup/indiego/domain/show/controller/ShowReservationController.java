@@ -72,8 +72,8 @@ public class ShowReservationController {
 
 
     @GetMapping
-    public ResponseEntity getShows(){
-        java.util.List<ShowReservation> showReservationList =showReservationRepository.findAll();
+    public ResponseEntity getShows(@LoginMemberId Long memberId){
+        List<ShowReservation> showReservationList =showReservationRepository.findByMember_Id(memberId);
         List<ShowReservationDto.Response> responses = mapper.showsReservationsToShowResvationResponses(showReservationList);
         return new ResponseEntity(
                 new SingleResponseDto<>(setExpireds(showReservationList, responses)),

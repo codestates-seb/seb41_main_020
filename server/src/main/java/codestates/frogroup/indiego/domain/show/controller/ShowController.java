@@ -147,7 +147,7 @@ public class ShowController {
         }
 
         return new ResponseEntity(
-                new MultiResponseDto<>(response, showPage), HttpStatus.OK);
+                new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
 
