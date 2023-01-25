@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import SearchBar from "../Components/Main/SearchBar.jsx";
+import KaKaoMap from "../Components/Search/KaKaoMap.jsx";
 
 import { primary, dtFontSize, sub } from "../styles/mixins";
 import breakpoint from "../styles/breakpoint.js";
@@ -10,6 +11,8 @@ import "../styles/MarkerOverlay.css";
 import { locationDummyArr } from "../DummyData/locationDummy";
 
 import styled from "styled-components";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const Container = styled.div`
   width: 100%;
@@ -59,9 +62,15 @@ const ContentHeaderContainer = styled.div`
 
 export default function Search() {
   const { kakao } = window;
-  const [locationPoint, setLocationPoint] = useState({});
-  const [isHover, setIsHover] = useState(true);
-  const [isFocused, setIsFocused] = useState(false);
+
+  const [data, setData] = useState([]);
+  const [fetchTrigger, setFetchTrigger] = useState(false);
+  const [XBoundary, setXBoundary] = useState();
+  const [YBoundary, setYBoundary] = useState();
+
+  const mapElement = useRef();
+  const clustererElement = useRef();
+  const markersArray = useRef([]);
 
   const markerImageSrc = marker;
   const markerImageSize = new kakao.maps.Size(64, 64);
@@ -72,6 +81,27 @@ export default function Search() {
     markerImageSize,
     markerImageOption
   );
+
+  const fetchMarkersInfo = () => {
+    setFetchTrigger(false);
+    const params = { XBoundary, YBoundary };
+    console.log(
+      `searchURI : ${process.env.REACT_APP_SERVER_URI}/shows/maps?x1=${params.XBoundary[0]}&x2=${params.XBoundary[1]}&y1=${params.YBoundary[0]}&y2=${params.YBoundary[1]}`
+    );
+    return axios.get(`${process.env.REACT_APP_SERVER_URI}/shows/maps`, params);
+  };
+
+  const fetchMarkersInfoOnSuccess = (res) => {
+    const data = res.data.data;
+    setData(data);
+  };
+
+  useQuery({
+    queryKey: ["fetchMarkersInfo", XBoundary, YBoundary],
+    queryFn: fetchMarkersInfo,
+    onSuccess: fetchMarkersInfoOnSuccess,
+    enabled: fetchTrigger,
+  });
 
   // 지도 초기 생성
   useEffect(() => {
@@ -84,87 +114,126 @@ export default function Search() {
     if (!mapContainer.hasChildNodes()) {
       // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
       const map = new kakao.maps.Map(mapContainer, mapOption);
+      mapElement.current = map;
 
-      // 클러스터 관련
+      map.setMaxLevel(9);
+
+      // 클러스터러 객체 생성
       const clusterer = new kakao.maps.MarkerClusterer({
         map: map,
         averageCenter: true,
         minLevel: 3,
       });
+      clustererElement.current = clusterer;
 
-      // 마커 동적 생성
-      const markers = locationDummyArr.map((locObj) => {
+      // 지도에 컨트롤 추가
+      const mapTypeControl = new kakao.maps.MapTypeControl();
+      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+      const zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+      // 맵 이벤트 핸들러 추가
+      kakao.maps.event.addListener(map, "zoom_changed", () => {
+        const bounds = map.getBounds();
+        const sePoint = bounds.getSouthWest();
+        const nePoint = bounds.getNorthEast();
+
+        const XBoundaryValue = [sePoint.getLat(), nePoint.getLat()];
+        const YBoundaryValue = [sePoint.getLng(), nePoint.getLng()];
+
+        setXBoundary(XBoundaryValue);
+        setYBoundary(YBoundaryValue);
+
+        setFetchTrigger(true);
+      });
+
+      kakao.maps.event.addListener(map, "dragend", () => {
+        const bounds = map.getBounds();
+        const sePoint = bounds.getSouthWest();
+        const nePoint = bounds.getNorthEast();
+
+        const XBoundaryValue = [sePoint.getLat(), nePoint.getLat()];
+        const YBoundaryValue = [sePoint.getLng(), nePoint.getLng()];
+
+        setXBoundary(XBoundaryValue);
+        setYBoundary(YBoundaryValue);
+
+        setFetchTrigger(true);
+      });
+    }
+  }, []);
+
+  // data fatching 후 marker 생성
+  useEffect(() => {
+    // 맵, 클러스터 인스턴스 불러오기
+    const map = mapElement.current;
+    const clusterer = clustererElement.current;
+
+    if (markersArray.current.length > 0) {
+      markersArray.current.forEach((marker) => {
+        marker.setMap(null);
+        clusterer.removeMarker(marker);
+      });
+    }
+
+    const markers =
+      data &&
+      data.map((locObj) => {
         // 마커 생성
-
         const marker = new kakao.maps.Marker({
           position: new kakao.maps.LatLng(locObj.latitude, locObj.longitude),
           clickable: true,
           image: markerImage,
         });
-
         // 지도에 마커 추가
         marker.setMap(map);
-
         // 클릭시 커스텀 오버레이 생성
         const popupWindow = new kakao.maps.CustomOverlay({
           position: marker.getPosition(),
         });
-
         // 마커 팝업 마크업 생성 및 이벤트 핸들러 할당
         const markerClickPopup = document.createElement("div");
         markerClickPopup.setAttribute("class", "marker_container");
-
         const markerBox = document.createElement("div");
         markerBox.setAttribute("class", "marker_box");
-
         const imgElement = document.createElement("img");
         Object.assign(imgElement, {
           width: 80,
           className: "poster",
           src: locObj.img,
         });
-
         const titleElement = document.createElement("p");
         titleElement.setAttribute("class", "marker_title");
         titleElement.textContent = locObj.title;
-
         const addressElement = document.createElement("p");
         addressElement.setAttribute("class", "marker_address");
         addressElement.textContent = locObj.address;
-
         const dateElement = document.createElement("p");
         dateElement.setAttribute("class", "marker_date");
         dateElement.textContent = locObj.date;
-
         const closeButtonElement = document.createElement("div");
         closeButtonElement.setAttribute("class", "close");
         closeButtonElement.textContent = "닫기";
         closeButtonElement.onclick = function () {
           popupWindow.setMap(null);
         };
-
         const svgElement = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "svg"
         );
         svgElement.setAttribute("class", "triangle");
         svgElement.setAttribute("viewBox", "0 0 300 512");
-
         const trianglePathElem = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "path"
         );
-
         trianglePathElem.setAttribute("class", "triangle_path");
-
         trianglePathElem.setAttributeNS(
           null,
           "d",
           "M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"
         );
-
         svgElement.appendChild(trianglePathElem);
-
         markerBox.append(
           imgElement,
           titleElement,
@@ -173,27 +242,21 @@ export default function Search() {
           closeButtonElement,
           svgElement
         );
-
         markerClickPopup.appendChild(markerBox);
-
         popupWindow.setContent(markerClickPopup);
-
         // 마커 호버 마크업
         const markerHoverPopup = `
-        <div class="hover_container">
-        <p class="hover_title">${locObj.title}</p>
-        <p class="hover_date">${locObj.date}</p>
-        </div>`;
-
+          <div class="hover_container">
+          <p class="hover_title">${locObj.title}</p>
+          <p class="hover_date">${locObj.date}</p>
+          </div>`;
         const hoverWindow = new kakao.maps.CustomOverlay({
           content: markerHoverPopup,
           position: marker.getPosition(),
         });
-
         closeButtonElement.addEventListener("onclick", () => {
           popupWindow.setMap(null);
         });
-
         // 카카오 맵 이벤트 리스너
         kakao.maps.event.addListener(
           marker,
@@ -210,11 +273,9 @@ export default function Search() {
             };
           })(locObj)
         );
-
         kakao.maps.event.addListener(marker, "mouseover", function () {
           hoverWindow.setMap(map);
         });
-
         kakao.maps.event.addListener(marker, "mouseout", function () {
           hoverWindow.setMap(null);
         });
@@ -222,21 +283,11 @@ export default function Search() {
         return marker;
       });
 
-      // 클러스터에 배열 형태로 된 마커들을 전달하면 클러스터 생성
-      clusterer.addMarkers(markers);
+    markersArray.current = markers;
 
-      // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
-      var mapTypeControl = new kakao.maps.MapTypeControl();
-
-      // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
-      // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
-      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-
-      // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-      var zoomControl = new kakao.maps.ZoomControl();
-      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-    }
-  });
+    // 클러스터에 배열 형태로 된 마커들을 전달하면 클러스터 생성
+    clusterer.addMarkers(markers);
+  }, [data]);
 
   return (
     <Container>

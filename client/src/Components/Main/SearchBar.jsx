@@ -166,8 +166,6 @@ export default function SearchBar({
     }
   });
 
-  console.log(searchURI);
-
   const searchOptionsContainerEventHandler = (e, props) => {
     if (props === "blur") {
       const next = e.relatedTarget;
