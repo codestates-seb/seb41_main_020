@@ -154,7 +154,7 @@ public class ShowService {
                     show.getCoordinate(),
                     show.getStatus(),
                     Double.valueOf(scoreRepository.getValues(key)),
-                    show.getTotal()
+                    getEmptySeats(showId)
                     );
             //show.setScoreAverage(); // 변경감지
             return show1;
