@@ -366,7 +366,7 @@ export default function Header() {
 
     return axios
       .get(`${process.env.REACT_APP_SERVER_URI}/members/logout`, { headers })
-      .then((response) => {
+      .finally((response) => {
         localStorage.clear();
       });
   };

@@ -38,13 +38,13 @@ const ContentContainer = styled.div`
 `;
 
 const ContentHeaderContainer = styled.div`
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid ${sub.sub200};
   display: flex;
   height: max-content;
   justify-content: space-between;
   min-height: 140px;
-  padding: 20px 40px;
+  padding: 40px;
   width: 80%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {

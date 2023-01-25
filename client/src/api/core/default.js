@@ -1,9 +1,5 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import useIsLoginStore from "../../store/useIsLoginStore";
-
-
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
@@ -18,7 +14,6 @@ instance.interceptors.request.use(
   async (config) => {
     if (localStorage.getItem("accessToken")) {
       config.headers["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
-      console.log(localStorage.getItem("accessToken"));
     }
     return config;
   },
