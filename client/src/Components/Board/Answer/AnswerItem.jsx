@@ -8,6 +8,8 @@ import {
 import breakpoint from "../../../styles/breakpoint.js";
 import heart from "../../../assets/heart.svg";
 import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import instance from "../../../api/core/default.js";
 
 const AnswerListUserDiv = styled.div`
   display: flex;
@@ -124,9 +126,57 @@ const AnswerListFunctionDiv = styled.div`
 const AnswerItem = (props) => {
   const [toggle, setToggle] = useState(false);
   const [editValue, setEditValue] = useState(props.comment);
+
   const handleEdit = () => {
     setToggle(!toggle);
   };
+
+  // 수정 코드
+  const handleComplete = async () => {
+    const data = { comment: editValue };
+    const response = await instance({
+      method: "patch",
+      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      data,
+    });
+    console.log(response.data.data);
+    return response.data.comment;
+  };
+
+  const handleCompleteOnSuccess = () => {
+    setToggle(!toggle);
+    props.refetch();
+  };
+
+  const { mutate: editAnswer } = useMutation({
+    mutationKey: ["handleComplete"],
+    mutationFn: handleComplete,
+    onSuccess: handleCompleteOnSuccess,
+    // onError: postButtonOnError,
+  });
+
+  // 삭제 코드
+  const handleDelete = async () => {
+    console.log(props.articleId);
+    console.log(props.id);
+    const response = await instance({
+      method: "delete",
+      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+    });
+    console.log(response);
+    // return response.data.comment;
+  };
+
+  const handleDeleteOnSuccess = () => {
+    props.refetch();
+  };
+
+  const { mutate: deleteAnswer } = useMutation({
+    mutationKey: ["handleDelete"],
+    mutationFn: handleDelete,
+    onSuccess: handleDeleteOnSuccess,
+    // onError: postButtonOnError,
+  });
 
   return (
     <AnswerListUserDiv>
@@ -136,7 +186,7 @@ const AnswerItem = (props) => {
       <AnswerListInfoDiv>
         <div className="answerListUserName">{props.nickname}</div>
         <div className="answerListCreateDate">
-          {new Date(props.createAt).toLocaleString()}
+          {new Date(props.createdAt).toLocaleString()}
         </div>
         <AnswerListContentDiv>
           {toggle ? (
@@ -161,7 +211,11 @@ const AnswerItem = (props) => {
 
           {toggle ? (
             <div className="edDiv">
-              <button type="button" className="edButton">
+              <button
+                type="button"
+                className="edButton"
+                onClick={() => editAnswer()}
+              >
                 완료
               </button>
               <button type="button" className="edButton" onClick={handleEdit}>
@@ -173,7 +227,11 @@ const AnswerItem = (props) => {
               <button type="button" className="edButton" onClick={handleEdit}>
                 수정
               </button>
-              <button type="button" className="edButton">
+              <button
+                type="button"
+                className="edButton"
+                onClick={() => deleteAnswer()}
+              >
                 삭제
               </button>
             </div>
