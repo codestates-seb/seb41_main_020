@@ -58,7 +58,7 @@ public class ShowReservationController {
 
     public boolean isExpired(LocalDate date){
         LocalDate now = LocalDate.now();
-        return now.isBefore(date);
+        return now.isAfter(date);
     }
 
 
