@@ -39,8 +39,14 @@ public class ShowCommentService {
         Optional<ShowReservation>  optionalShowReservation = showReservationService.findShowReservation(
                 show.getId(), member.getId()
         );
-        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOWRESERVATION_NOT_FOUND));
+        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_NOT_FOUND));
 
+        Optional<ShowComment> optionalShowComment = Optional.ofNullable(
+                showCommentRepository.findByShowIdAndMemberId(show.getId(), member.getId()));
+
+        if(optionalShowComment.isPresent()){
+            throw new BusinessLogicException(ExceptionCode.SHOW_COMMENT_EXIST);
+        }
         showComment.addShow(show);
         showComment.addMember(member);
 

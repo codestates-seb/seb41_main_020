@@ -11,4 +11,6 @@ public interface ShowCommentRepository extends JpaRepository<ShowComment,Long> {
 
     ShowComment findByMember_Id(Long memberId);
 
+    ShowComment findByShowIdAndMemberId(Long showId, Long memberId);
+
 }
