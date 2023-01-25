@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import useIsLoginStore from "../../store/useIsLoginStore";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
   headers: {
-    "Accept": "*/*",
-    "Content-Type": "application/json",
+    Accept: "*/*",
+    "Content-Type": "multipart/form-data",
   },
   withCredentials: true,
 });
@@ -13,7 +15,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async (config) => {
     if (localStorage.getItem("accessToken")) {
-      config.headers["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        "accessToken"
+      )}`;
+      console.log(localStorage.getItem("accessToken"));
     }
     return config;
   },
@@ -34,26 +39,31 @@ instance.interceptors.response.use(
 
       const headers = {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-        "Refresh": localStorage.getItem("refreshToken"),
-      }
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Refresh: localStorage.getItem("refreshToken"),
+      };
 
       try {
         const data = await axios({
           url: `${process.env.REACT_APP_SERVER_URI}/members/reissue`,
           method: "GET",
-          headers
+          headers,
         });
         if (data) {
-          localStorage.setItem("accessToken", data.headers.get("Authorization").split(" ")[1]);
-          originalRequest.headers.Authorization = `Bearer ${data.headers.get("Authorization").split(" ")[1]}`;
+          localStorage.setItem(
+            "accessToken",
+            data.headers.get("Authorization").split(" ")[1]
+          );
+          originalRequest.headers.Authorization = `Bearer ${
+            data.headers.get("Authorization").split(" ")[1]
+          }`;
           return await axios.request(originalRequest);
         }
       } catch (error) {
         axios({
           url: `${process.env.REACT_APP_SERVER_URI}/members/logout`,
           method: "GET",
-          headers
+          headers,
         });
       }
       return Promise.reject(error);

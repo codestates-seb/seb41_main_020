@@ -1,6 +1,8 @@
 package codestates.frogroup.indiego.domain.show.repository.querydsl;
 
+import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +21,7 @@ public interface ShowRepositoryCustom {
 
     List<ShowListResponseDto> findShowScoreOrCreatedAtDesc(String address, String sort);
 
+    List<ShowMapsResponse> findAllByShowMapsSearch(Double x1, Double x2, Double y1, Double y2);
+
+    List<ShowMapsResponse> findAllByShowMapsSearch(String search, String filter);
 }

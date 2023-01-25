@@ -145,46 +145,6 @@ const ContentInnerRightContainer = styled.div`
       }
     }
   }
-
-  > .social-signup-button-container {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    justify-content: center;
-    margin-top: 10px;
-    width: 350px;
-
-    > .naver-button {
-      all: unset;
-      cursor: pointer;
-      height: 40px;
-      width: 40px;
-      margin-right: 10px;
-
-      > img {
-        height: 40px;
-        width: 40px;
-      }
-    }
-
-    > .kakao-button {
-      all: unset;
-      cursor: pointer;
-      height: 40px;
-      width: 40px;
-
-      > img {
-        height: 40px;
-        width: 40px;
-      }
-    }
-  }
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    align-items: center;
-    margin: 30px 0 0 0;
-    width: 100%;
-  }
 `;
 
 const SignupContainer = styled.div`
@@ -401,7 +361,7 @@ export default function SignupPerformer() {
     };
 
     return axios.post(
-      `${process.env.REACT_APP_SERVER_URI}members/signup`,
+      `${process.env.REACT_APP_SERVER_URI}/members/signup`,
       data,
       headers
     );
@@ -576,14 +536,6 @@ export default function SignupPerformer() {
               <span>만으로도 indiego의 모든 서비스를</span>
             </div>
             <span>이용하실 수 있습니다</span>
-          </div>
-          <div className="social-signup-button-container">
-            <button className="naver-button">
-              <img alt="naver icon" src={naverIcon} />
-            </button>
-            <button className="kakao-button">
-              <img alt="kakao-icon" src={kakaoIcon} />
-            </button>
           </div>
         </ContentInnerRightContainer>
       </ContentContainer>

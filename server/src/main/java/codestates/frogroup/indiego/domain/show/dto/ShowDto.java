@@ -48,10 +48,6 @@ public class ShowDto {
         @NotNull
         private Double longitude;
 
-        //check
-        @NotNull
-        private String status;
-        //private double scoreAverage; // 평균별점
         @NotNull
         private Integer total; // 정원
     }

@@ -6,6 +6,7 @@ import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
 import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +43,18 @@ public class ShowService {
     private final ScoreRepository scoreRepository;
     private final RedisKey redisKey;
 
-
-
-
     @Transactional
     public Show createShow(Show show, long memberId) {
 
         Member member = memberService.findVerifiedMember(memberId);
 
         show.setMember(member);
+        Show savedShow = showRepository.save(show);
 
         String key = redisKey.getScoreAvergeKey(show.getId());
         scoreRepository.setValues(key,"0");
 
-        return showRepository.save(show);
+        return savedShow;
     }
 
     @Transactional
@@ -112,6 +112,20 @@ public class ShowService {
         findVerifiedShows(shows);
         return shows;
     }
+
+    public List<ShowMapsResponse> findMapShows(Double x1, Double x2, Double y1, Double y2){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(x1, x2, y1, y2);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+    public List<ShowMapsResponse> findMapShows(String search, String filter){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(search, filter);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+
     //판매자용 공연 조회
     public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
 
@@ -120,8 +134,8 @@ public class ShowService {
         return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
     }
 
-    public Integer getEmptySeats(Long showId){
-        return (findShow(showId).getTotal() - reservationService.countReservation(showId));
+    public Integer getEmptySeats(Show show, Long showId){
+        return (show.getTotal() - reservationService.countReservation(showId));
     }
 
     public Integer getRevenue(Long showId){
@@ -130,10 +144,27 @@ public class ShowService {
 
     public Show findShow(long showId){
         Show show = findVerifiedShow(showId);
+        String key = redisKey.getScoreAvergeKey(showId);
+        if(scoreRepository.getValues(key).equals("false")){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }else{
+            Show show1 = new Show(showId,
+                    show.getMember(),
+                    show.getShowBoard(),
+                    show.getCoordinate(),
+                    show.getStatus(),
+                    Double.valueOf(scoreRepository.getValues(key)),
+                    getEmptySeats(show, showId)
+                    );
+            //show.setScoreAverage(); // 변경감지
+            return show1;
+        }
+
         return show;
     }
 
-    private Double setScoreAverage(long showId) {
+    @Transactional
+    public Double setScoreAverage(long showId) {
 
         String key = redisKey.getScoreAvergeKey(showId);
         Show show = findShow(showId);
@@ -165,6 +196,12 @@ public class ShowService {
 
     private void findVerifiedShows(List<Show> shows) {
         if(shows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
+    }
+
+    private void findVerifiedMapShows(List<ShowMapsResponse> showMapsResponse) {
+        if(showMapsResponse == null){
             throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
         }
     }

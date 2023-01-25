@@ -119,6 +119,7 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
     }
+
     public void createRoles(Member member){
         List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
         if(roles == null){
@@ -143,7 +144,7 @@ public class MemberService {
 
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response){
         String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
-        validatedRefeshToken(secretRefreshToken);
+        validatedRefreshToken(secretRefreshToken);
         String accessToken = tokenProvider.resolveAccessToken(request);
         String refreshToken = aes128Config.decryptAes(secretRefreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
@@ -170,7 +171,7 @@ public class MemberService {
 
     public void logout(HttpServletRequest request){
         String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
-        validatedRefeshToken(secretRefreshToken);
+        validatedRefreshToken(secretRefreshToken);
         String refreshToken = aes128Config.decryptAes(secretRefreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
         if(redisDao.validateValue(redisAccessToken)){
@@ -179,7 +180,7 @@ public class MemberService {
         deleteValuesCheck(refreshToken);
     }
 
-    public void validatedRefeshToken(String refreshToken){
+    public void validatedRefreshToken(String refreshToken){
         if(refreshToken == null){
             throw new BusinessLogicException(ExceptionCode.HEADER_REFRESH_TOKEN_NOT_FOUND);
         }

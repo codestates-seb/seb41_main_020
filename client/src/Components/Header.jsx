@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
+import axios from "axios";
+
 import Overlay from "./Main/Popups/Overlay.jsx";
 
 import {
@@ -351,6 +353,24 @@ export default function Header() {
   const [isLogin, setIsLogin] = useState(true);
   useWindowSize(setNavOpen);
 
+  const logoutHandler = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const headers = {
+      "Content-Type": "application/json",
+      // eslint-disable-next-line prettier/prettier
+      "Authorization": `Bearer ${accessToken}`,
+      // eslint-disable-next-line prettier/prettier
+      "Refresh": refreshToken,
+    };
+
+    return axios
+      .get(`${process.env.REACT_APP_SERVER_URI}/members/logout`, { headers })
+      .finally((response) => {
+        localStorage.clear();
+      });
+  };
+
   return (
     <HeaderContainer>
       <HeaderSearchIcon>
@@ -374,7 +394,7 @@ export default function Header() {
         </Link>
         <Link
           className={location.pathname.includes("board") ? "current" : ""}
-          to="board/free?category=자유게시판&status=최신순&page=1&size=5"
+          to="board/free?category=자유게시판&status=최신순&page=1&size=10"
         >
           커뮤니티
         </Link>
@@ -392,7 +412,7 @@ export default function Header() {
         </Link>
       </HeaderLinkContainer>
       {isLogin ? (
-        <UserStatus>
+        <UserStatus onClick={logoutHandler}>
           <p className="welcome">환영합니다!</p>
           <div className="iconbox">
             <p className="username">unknown user 님!</p>

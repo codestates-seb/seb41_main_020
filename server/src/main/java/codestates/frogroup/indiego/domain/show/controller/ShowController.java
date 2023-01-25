@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
@@ -134,7 +135,7 @@ public class ShowController {
                         .expiredAt(shows.get(i).getShowBoard().getExpiredAt())
                     .build();
 
-            responseOfSeller.setEmptySeats(showService.getEmptySeats(shows.get(i).getId()));
+            responseOfSeller.setEmptySeats(showService.getEmptySeats(shows.get(i), shows.get(i).getId()));
             responseOfSeller.setRevenue(showService.getRevenue(shows.get(i).getId()));
 
             if(responseOfSeller.getEmptySeats().equals(0)){
@@ -147,7 +148,7 @@ public class ShowController {
         }
 
         return new ResponseEntity(
-                new MultiResponseDto<>(response, showPage), HttpStatus.OK);
+                new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
 
@@ -189,4 +190,23 @@ public class ShowController {
         return new ResponseEntity(new SingleResponseDto<>(showsResponses), HttpStatus.OK);
     }
 
+    @GetMapping("/maps/location")
+    public ResponseEntity getMapShows(@Positive @RequestParam("x1") Double x1,
+                                      @Positive @RequestParam("x2") Double x2,
+                                      @Positive @RequestParam("y1") Double y1,
+                                      @Positive @RequestParam("y2") Double y2,
+                                      @Positive @RequestParam(value = "level",required = false) Integer level){
+        List<ShowMapsResponse> mapShows = showService.findMapShows(x1, x2, y1, y2);
+
+        return new ResponseEntity(new SingleResponseDto<>(mapShows), HttpStatus.OK);
+    }
+
+    @GetMapping("/maps")
+    public ResponseEntity getMapShowsSearch(@RequestParam("search") String search,
+                                            @RequestParam("filter") String filter){
+        log.info("# getMapShowsSearch 로직 실행됨");
+        List<ShowMapsResponse> mapShows = showService.findMapShows(search,filter);
+
+        return new ResponseEntity(new SingleResponseDto<>(mapShows), HttpStatus.OK);
+    }
 }
