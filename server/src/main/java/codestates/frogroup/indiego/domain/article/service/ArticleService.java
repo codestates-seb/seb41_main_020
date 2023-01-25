@@ -103,6 +103,7 @@ public class ArticleService {
      * 게시글 단일 조회
      * TODO: 게시글 조회는 읽기만 하고 조회수를 증가시키는 방법은 없을까?
      */
+//    @Transactional // TODO: @Transactional 조금 더 알아보기
     public ArticleDto.Response findArticle(Long articleId) {
         Article findArticle = findVerifiedArticle(articleId);
 

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +27,7 @@ import static org.springframework.util.StringUtils.hasText;
 @Repository
 public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport implements ArticleRepositoryCustom {
 
-    private final String VIEW_COUNT_KEY = "article:%s:viewCount";
+    private final String VIEW_COUNT_KEY = "%s:article:viewCount";
     private final JPAQueryFactory queryFactory;
 
     @Autowired
@@ -51,6 +52,12 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
     @Override
     public void saveViewCountToRedis(Long articleId, Long viewCount) {
         redisTemplate.opsForValue().set(String.format(VIEW_COUNT_KEY, articleId), viewCount);
+    }
+
+    @Override
+    public Long getValues(String key) {
+        ValueOperations<String, Long> values = redisTemplate.opsForValue();
+        return values.get(key);
     }
 
     @Override
