@@ -49,7 +49,11 @@ public class ShowCommentService {
     }
 
     private void inputScoreAverage(ShowComment showComment, Show show) {
+        //null일 때
         String key = redisKey.getScoreAvergeKey(show.getId());
+        if(scoreRepository.getValues(key).equals("false")){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }
         Double scoreAverage = Double.parseDouble(scoreRepository.getValues(key));
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
