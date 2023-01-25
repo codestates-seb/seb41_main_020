@@ -134,7 +134,7 @@ public class ShowController {
                         .expiredAt(shows.get(i).getShowBoard().getExpiredAt())
                     .build();
 
-            responseOfSeller.setEmptySeats(showService.getEmptySeats(shows.get(i).getId()));
+            responseOfSeller.setEmptySeats(showService.getEmptySeats(shows.get(i), shows.get(i).getId()));
             responseOfSeller.setRevenue(showService.getRevenue(shows.get(i).getId()));
 
             if(responseOfSeller.getEmptySeats().equals(0)){

@@ -119,8 +119,8 @@ public class ShowService {
         return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
     }
 
-    public Integer getEmptySeats(Long showId){
-        return (findShow(showId).getTotal() - reservationService.countReservation(showId));
+    public Integer getEmptySeats(Show show, Long showId){
+        return (show.getTotal() - reservationService.countReservation(showId));
     }
 
     public Integer getRevenue(Long showId){
@@ -139,7 +139,7 @@ public class ShowService {
                     show.getCoordinate(),
                     show.getStatus(),
                     Double.valueOf(scoreRepository.getValues(key)),
-                    getEmptySeats(showId)
+                    getEmptySeats(show, showId)
                     );
             //show.setScoreAverage(); // 변경감지
             return show1;
