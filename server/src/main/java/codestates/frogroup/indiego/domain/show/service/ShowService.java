@@ -131,10 +131,18 @@ public class ShowService {
 
     public Show findShow(long showId){
         Show show = findVerifiedShow(showId);
+        String key = redisKey.getScoreAvergeKey(showId);
+        if(scoreRepository.getValues(key).equals(null)){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }
+
+        show.setScoreAverage(Double.valueOf(scoreRepository.getValues(key)));
+
         return show;
     }
 
-    private Double setScoreAverage(long showId) {
+    @Transactional
+    public Double setScoreAverage(long showId) {
 
         String key = redisKey.getScoreAvergeKey(showId);
         Show show = findShow(showId);
