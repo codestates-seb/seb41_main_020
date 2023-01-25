@@ -6,6 +6,7 @@ import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
 import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
@@ -111,6 +112,14 @@ public class ShowService {
         findVerifiedShows(shows);
         return shows;
     }
+
+    public List<ShowMapsResponse> findMapShows(Double x1, Double x2, Double y1, Double y2){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(x1, x2, y1, y2);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+
     //판매자용 공연 조회
     public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
 
@@ -181,6 +190,12 @@ public class ShowService {
 
     private void findVerifiedShows(List<Show> shows) {
         if(shows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
+    }
+
+    private void findVerifiedMapShows(List<ShowMapsResponse> showMapsResponse) {
+        if(showMapsResponse == null){
             throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
         }
     }
