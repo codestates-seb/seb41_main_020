@@ -15,6 +15,7 @@ import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,18 +97,18 @@ public class ArticleCommentService {
         ArticleComment findArticleComment = findVerifiedArticleComment(commentId);
 
         if (findArticleComment.getMember().getId().equals(memberId)) {
-
             articleCommentRepository.delete(findArticleComment);
+        } else {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
         }
 
-        throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
     }
 
     /**
      * 게시글 댓글 좋아요
      */
     @Transactional
-    public void articleCommentLike(Long articleId, Long commentId, Long memberId) {
+    public HttpStatus articleCommentLike(Long articleId, Long commentId, Long memberId) {
 
         findVerifiedArticle(articleId);
         ArticleComment findArticleComment = findVerifiedArticleComment(commentId);
@@ -115,18 +116,33 @@ public class ArticleCommentService {
 //        Member findMember = findVerifiedMember(memberId);
         Member findMember = memberService.findVerifiedMember(memberId);
 
-        ArticleCommentLike articleCommentLike = articleCommentLikeRepository.findByMemberId(findArticleComment.getId());
+        ArticleCommentLike articleCommentLike = articleCommentLikeRepository.findByMemberId(findMember.getId());
 
-        if (articleCommentLike == null) {
-            articleCommentLikeRepository.save(
-                    ArticleCommentLike.builder()
-                            .articleComment(findArticleComment)
-                            .member(findMember)
-                            .build());
-        } else {
-            articleCommentLikeRepository.delete(articleCommentLike);
-        }
+//        if (articleCommentLike == null) {
+//            return createArticleCommentLike(findArticleComment, findMember);
+//        } else {
+//            return deleteArticleCommentLike(articleCommentLike);
+//        }
 
+        return articleCommentLike == null ?
+                createArticleCommentLike(findArticleComment, findMember) : deleteArticleCommentLike(articleCommentLike);
+
+    }
+
+    private HttpStatus deleteArticleCommentLike(ArticleCommentLike articleCommentLike) {
+        articleCommentLikeRepository.delete(articleCommentLike);
+
+        return HttpStatus.NO_CONTENT;
+    }
+
+    private HttpStatus createArticleCommentLike(ArticleComment findArticleComment, Member findMember) {
+        articleCommentLikeRepository.save(
+                ArticleCommentLike.builder()
+                        .articleComment(findArticleComment)
+                        .member(findMember)
+                        .build());
+
+        return HttpStatus.CREATED;
     }
 
     private ArticleComment findVerifiedArticleComment(Long articleCommentId) {

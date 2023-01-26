@@ -12,6 +12,7 @@ import Login from "./Pages/Login.jsx";
 import Profile from "./Pages/Profile/Profile.jsx";
 import ProfilePerformer from "./Pages/Profile/ProfilePerformer.jsx";
 import ProfileEdit from "./Pages/Profile/ProfileEdit.jsx";
+import Members from "./Pages/Members.jsx";
 import BoardList from "./Pages/Boards/Board/BoardList.jsx";
 import Board from "./Pages/Boards/Board/Board.jsx";
 import BoardCreate from "./Pages/Boards/Board/BoardCreate.jsx";
@@ -21,6 +22,7 @@ import EmployBoardList from "./Pages/Boards/BoardType/EmployBoard.jsx";
 import RequestBoardList from "./Pages/Boards/BoardType/RequestBoardList.jsx";
 import AdvertiseBoardList from "./Pages/Boards/BoardType/AdvertiseBoardList.jsx";
 import ReviewBoardList from "./Pages/Boards/BoardType/ReviewBoardList.jsx";
+import Token from "./Pages/Token.jsx";
 
 import Header from "./Components/Header.jsx";
 import Footer from "./Components/Footer.jsx";
@@ -53,9 +55,9 @@ function App() {
           headers: {
             "Content-Type": "application/json",
             // eslint-disable-next-line prettier/prettier
-          "Authorization": `Bearer ${accessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
             // eslint-disable-next-line prettier/prettier
-          "Refresh": refreshToken,
+            "Refresh": refreshToken,
           },
         })
         .then((response) => {
@@ -79,6 +81,8 @@ function App() {
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/signup/performer" element={<SignupPerformer />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          {/* 토큰페이지 */}
+          <Route path="/token" element={<Token />}></Route>
           {/* 프로파일 */}
           <Route path="mypage/user/:id" element={<Profile />}></Route>
           <Route
@@ -86,6 +90,8 @@ function App() {
             element={<ProfilePerformer />}
           ></Route>
           <Route path="/mypage/:id/edit" element={<ProfileEdit />}></Route>
+          {/* 회원 조회 페이지 */}
+          <Route path="/members/:id" element={<Members />}></Route>
 
           {/* 티케팅게시판 */}
           <Route path="/tickets" element={<Tickets />}></Route>

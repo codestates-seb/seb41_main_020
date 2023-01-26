@@ -6,8 +6,10 @@ import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +43,7 @@ public class ShowService {
     private final ShowReservationService reservationService;
     private final ScoreRepository scoreRepository;
     private final RedisKey redisKey;
-
-
-
+    private final ShowMapper mapper;
 
     @Transactional
     public Show createShow(Show show, long memberId) {
@@ -50,11 +51,12 @@ public class ShowService {
         Member member = memberService.findVerifiedMember(memberId);
 
         show.setMember(member);
+        Show savedShow = showRepository.save(show);
 
-        String key = redisKey.getScoreAvergeKey(show.getId());
+        String key = redisKey.getScoreAverageKey(show.getId());
         scoreRepository.setValues(key,"0");
 
-        return showRepository.save(show);
+        return savedShow;
     }
 
     @Transactional
@@ -112,6 +114,20 @@ public class ShowService {
         findVerifiedShows(shows);
         return shows;
     }
+
+    public List<ShowMapsResponse> findMapShows(Double x1, Double x2, Double y1, Double y2){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(x1, x2, y1, y2);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+    public List<ShowMapsResponse> findMapShows(String search, String filter){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(search, filter);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+
     //판매자용 공연 조회
     public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
 
@@ -120,23 +136,29 @@ public class ShowService {
         return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
     }
 
-    public Integer getEmptySeats(Long showId){
-        return (findShow(showId).getTotal() - reservationService.countReservation(showId));
-    }
-
     public Integer getRevenue(Long showId){
-        return reservationService.countReservation(showId) * findShow(showId).getShowBoard().getPrice();
+        return reservationService.countReservation(showId) * showRepository.findById(showId).get().getShowBoard().getPrice();
     }
 
-    public Show findShow(long showId){
+    public ShowDto.Response findShow(long showId){
         Show show = findVerifiedShow(showId);
-        return show;
+        String key = redisKey.getScoreAverageKey(showId);
+        if(scoreRepository.getValues(key).equals("false")){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }
+
+        ShowDto.Response response = mapper.showToShowResponse(show);
+        response.setScoreAverage( Double.valueOf(scoreRepository.getValues(key)));
+        response.setEmptySeats(reservationService.getEmptySeats(show, showId));
+
+        return response;
     }
 
-    private Double setScoreAverage(long showId) {
+    @Transactional
+    public Double setScoreAverage(long showId) {
 
-        String key = redisKey.getScoreAvergeKey(showId);
-        Show show = findShow(showId);
+        String key = redisKey.getScoreAverageKey(showId);
+        Show show = showRepository.findById(showId).get();
         scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
 
         return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
@@ -150,7 +172,7 @@ public class ShowService {
         Page<ShowListResponseDto> allByShowSearch = showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
         for(int i =0; i<allByShowSearch.getContent().size(); i++){
             ShowListResponseDto responseDto = allByShowSearch.getContent().get(i);
-            responseDto.setScoreAverage(setScoreAverage(responseDto.getId()));
+            responseDto.setScoreAverage(responseDto.getId());
         }
 
 
@@ -165,6 +187,12 @@ public class ShowService {
 
     private void findVerifiedShows(List<Show> shows) {
         if(shows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
+    }
+
+    private void findVerifiedMapShows(List<ShowMapsResponse> showMapsResponse) {
+        if(showMapsResponse == null){
             throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
         }
     }

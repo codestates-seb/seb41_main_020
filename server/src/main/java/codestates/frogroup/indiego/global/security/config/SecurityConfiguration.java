@@ -59,10 +59,12 @@ public class SecurityConfiguration {
 						.antMatchers(HttpMethod.PATCH, "/members/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PUT, "/members/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.DELETE, "/members/**").hasAnyRole("USER","PERFORMER","ADMIN")
-						.antMatchers(HttpMethod.POST, "/shows/**").hasAnyRole("PERFORMER","ADMIN")
-						.antMatchers(HttpMethod.PATCH, "/shows/**").hasAnyRole("PERFORMER","ADMIN")
-						.antMatchers(HttpMethod.PUT, "/shows/**").hasAnyRole("PERFORMER","ADMIN")
-						.antMatchers(HttpMethod.DELETE, "/shows/**").hasAnyRole("PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.POST, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.POST, "/shows").hasAnyRole("PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.PATCH, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.PUT, "/shows/**").hasAnyRole("USER","PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.DELETE, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.DELETE, "/shows").hasAnyRole("PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.POST, "/articles/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PATCH, "/articles/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PUT, "/articles/**").hasAnyRole("USER","PERFORMER","ADMIN")
@@ -81,7 +83,7 @@ public class SecurityConfiguration {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(List.of("http://localhost:3000",
-				"https://localhost:3000",
+				"http://indiego-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com/",
 				"http://localhost", // 로컬환경 OAuth2 테스트용
 				"http://localhost:8080",
 //				"http://13.125.98.211:80",
@@ -90,7 +92,7 @@ public class SecurityConfiguration {
 		configuration.addExposedHeader("Authorization");
 		configuration.addExposedHeader("Refresh");
 		configuration.addAllowedHeader("*");
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);

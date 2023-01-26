@@ -370,7 +370,7 @@ export default function Header() {
       // eslint-disable-next-line prettier/prettier
       "Authorization": `Bearer ${accessToken}`,
       // eslint-disable-next-line prettier/prettier
-      "Refresh" : refreshToken,
+      "Refresh": refreshToken,
     };
 
     return axios
@@ -423,7 +423,7 @@ export default function Header() {
         </Link>
         <Link
           className={location.pathname.includes("board") ? "current" : ""}
-          to="board/free?category=자유게시판&status=최신순&page=1&size=5"
+          to="board/free?category=자유게시판&status=최신순&page=1&size=10"
         >
           커뮤니티
         </Link>

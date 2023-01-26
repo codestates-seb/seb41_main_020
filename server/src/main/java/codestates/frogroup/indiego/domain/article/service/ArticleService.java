@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -103,7 +106,9 @@ public class ArticleService {
      * 게시글 단일 조회
      * TODO: 게시글 조회는 읽기만 하고 조회수를 증가시키는 방법은 없을까?
      */
+//    @Transactional // TODO: @Transactional 조금 더 알아보기
     public ArticleDto.Response findArticle(Long articleId) {
+
         Article findArticle = findVerifiedArticle(articleId);
 
         Long viewCount = articleRepository.findViewCountFromRedis(articleId);
@@ -132,9 +137,10 @@ public class ArticleService {
         if (findMemberId.equals(memberId)) {
 
             articleRepository.delete(findVerifiedArticle(articleId));
+        } else {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
         }
 
-        throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
     }
 
     /**
@@ -147,7 +153,7 @@ public class ArticleService {
         // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = memberService.findVerifiedMember(memberId);
 
-        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
+        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findMember.getId());
 
         return findArticleLike == null ? createArticleLike(findArticle, findMember) : deleteArticleLike(findArticleLike);
     }
@@ -167,12 +173,16 @@ public class ArticleService {
      */
     private ArticleDto.Response getResponse(Article article) {
 
-        log.info("nickname = {}, image = {}", article.getMember().getProfile().getNickname(),
-                article.getMember().getProfile().getImage());
-
         ArticleDto.Response response = mapper.articleToArticleResponse(article);
         long likeCount = articleLikeRepository.countByArticleId(article.getId());
         response.setLikeCount(likeCount);
+
+        ArticleLike articleLike = articleLikeRepository.findByMemberId(article.getMember().getId());
+        if (articleLike == null) {
+            response.setLikeStatus(false);
+        } else {
+            response.setLikeStatus(true);
+        }
 
         return response;
     }

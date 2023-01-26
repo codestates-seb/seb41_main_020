@@ -39,8 +39,14 @@ public class ShowCommentService {
         Optional<ShowReservation>  optionalShowReservation = showReservationService.findShowReservation(
                 show.getId(), member.getId()
         );
-        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOWRESERVATION_NOT_FOUND));
+        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_NOT_FOUND));
 
+        Optional<ShowComment> optionalShowComment = Optional.ofNullable(
+                showCommentRepository.findByShowIdAndMemberId(show.getId(), member.getId()));
+
+        if(optionalShowComment.isPresent()){
+            throw new BusinessLogicException(ExceptionCode.SHOW_COMMENT_EXIST);
+        }
         showComment.addShow(show);
         showComment.addMember(member);
 
@@ -49,7 +55,11 @@ public class ShowCommentService {
     }
 
     private void inputScoreAverage(ShowComment showComment, Show show) {
-        String key = redisKey.getScoreAvergeKey(show.getId());
+        //null일 때
+        String key = redisKey.getScoreAverageKey(show.getId());
+        if(scoreRepository.getValues(key).equals("false")){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }
         Double scoreAverage = Double.parseDouble(scoreRepository.getValues(key));
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
@@ -87,7 +97,7 @@ public class ShowCommentService {
 
     private void modifyScoreAverage(ShowComment showComment, Show show) {
 
-        String key = redisKey.getScoreAvergeKey(show.getId());
+        String key = redisKey.getScoreAverageKey(show.getId());
         Double scoreAverage = show.getScoreAverage();
         scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
         scoreAverage += showComment.getScore();

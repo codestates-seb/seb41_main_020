@@ -34,10 +34,14 @@ public enum ExceptionCode {
 
     SHOW_COMMENT_NOT_FOUND(404, "Show Comment not found"),
     SHOW_COMMENT_IS_NOT_SAME(404, "Show Comment is not same the Comment of Show"),
+    SHOW_COMMENT_EXIST(403, "후기를 이미 작성하셨습니다."),
 
     BOOKMARK_NOT_FOUND(404, "북마크가 존재하지 않습니다."),
 
-    SHOWRESERVATION_NOT_FOUND(404, "후기를 작성할 수 있는 권한이 없습니다."),
+    SHOW_RESERVATION_NOT_FOUND(403, "후기를 작성할 수 있는 권한이 없습니다."),
+    SHOW_RESERVATION_CREATE_FAIL(400,"재고가 부족합니다."),
+
+
 
     // File Upload
     UPLOAD_FAILED(404, "File Upload Failed !"),

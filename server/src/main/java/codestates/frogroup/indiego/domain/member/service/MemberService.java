@@ -1,6 +1,7 @@
 package codestates.frogroup.indiego.domain.member.service;
 
 import codestates.frogroup.indiego.config.AES128Config;
+import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
@@ -48,6 +49,7 @@ public class MemberService {
         verifyExistsEmail(member.getEmail());
         makeSecretPassword(member);
         createRoles(member);
+        member.setCoordinate(new Coordinate(null,null));
 
         Member savedMember = memberRepository.save(member);
 
@@ -78,6 +80,13 @@ public class MemberService {
                 .ifPresent(image -> findMember.getProfile().setImage(image));
         Optional.ofNullable(member.getProfile().getIntroduction())
                 .ifPresent(introduction -> findMember.getProfile().setIntroduction(introduction));
+        boolean latCheck = Optional.ofNullable(member.getCoordinate().getLatitude()).isPresent();
+        boolean lonCheck = Optional.ofNullable(member.getCoordinate().getLongitude()).isPresent();
+        if(latCheck && lonCheck){
+            Coordinate coordinate = new Coordinate(member.getCoordinate().getLatitude(),
+                    member.getCoordinate().getLongitude());
+            findMember.setCoordinate(coordinate);
+        }
 
         return findMember;
     }
@@ -88,49 +97,9 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
-    public void verifiedMemberId(Long memberId, Long loginMemberId){
-        if(memberId.longValue() != loginMemberId.longValue()){
-            log.info("memberId = {}, loginMemberId = {}",memberId,loginMemberId);
-            throw new BusinessLogicException(ExceptionCode.MEMBER_IS_NOT_SAME);
-        }
-    }
-
-    public Member findVerifiedMember(Long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        return optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
-    public Member findVerifiedMember(String email){
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
-
-    private void verifyExistsEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent()){
-            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
-        }
-    }
-
-    public void makeSecretPassword(Member member){
-        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-        member.setPassword(encryptedPassword);
-    }
-    public void createRoles(Member member){
-        List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
-        if(roles == null){
-            throw new BusinessLogicException(ExceptionCode.MEMBER_ROLE_DOES_NOT_HAVE);
-        }
-        member.setRoles(roles);
-        createProfileImage(member);
-    }
-
     public ProfileImage createProfileImage(Member member){
         ProfileImage[] randomImageList = ProfileImage.values();
-        Long profileImageIndex = Long.valueOf((int) (Math.random()*10)+1 % randomImageList.length);
+        Long profileImageIndex = Long.valueOf((int) ((Math.random() * 10)) % 7 +1);
 
         List<ProfileImage> profileImageList = Arrays.stream(randomImageList)
                 .filter(image -> image.getIndex() == profileImageIndex)
@@ -143,7 +112,7 @@ public class MemberService {
 
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response){
         String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
-        validatedRefeshToken(secretRefreshToken);
+        validatedRefreshToken(secretRefreshToken);
         String accessToken = tokenProvider.resolveAccessToken(request);
         String refreshToken = aes128Config.decryptAes(secretRefreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
@@ -170,7 +139,7 @@ public class MemberService {
 
     public void logout(HttpServletRequest request){
         String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
-        validatedRefeshToken(secretRefreshToken);
+        validatedRefreshToken(secretRefreshToken);
         String refreshToken = aes128Config.decryptAes(secretRefreshToken);
         String redisAccessToken = redisDao.getValues(refreshToken);
         if(redisDao.validateValue(redisAccessToken)){
@@ -179,7 +148,26 @@ public class MemberService {
         deleteValuesCheck(refreshToken);
     }
 
-    public void validatedRefeshToken(String refreshToken){
+    public void verifiedMemberId(Long memberId, Long loginMemberId){
+        if(memberId.longValue() != loginMemberId.longValue()){
+            log.info("memberId = {}, loginMemberId = {}",memberId,loginMemberId);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_IS_NOT_SAME);
+        }
+    }
+
+    public Member findVerifiedMember(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        return optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    public Member findVerifiedMember(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        return optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    public void validatedRefreshToken(String refreshToken){
         if(refreshToken == null){
             throw new BusinessLogicException(ExceptionCode.HEADER_REFRESH_TOKEN_NOT_FOUND);
         }
@@ -190,6 +178,27 @@ public class MemberService {
         if(redisAccessToken != null){
             throw new BusinessLogicException(ExceptionCode.TOKEN_DELETE_FAIL);
         }
+    }
+
+    private void verifyExistsEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        }
+    }
+
+    private void createRoles(Member member){
+        List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
+        if(roles == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_ROLE_DOES_NOT_HAVE);
+        }
+        member.setRoles(roles);
+        createProfileImage(member);
+    }
+
+    private void makeSecretPassword(Member member){
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
     }
 
     /**
