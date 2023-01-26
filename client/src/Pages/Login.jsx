@@ -235,7 +235,7 @@ export default function Login() {
     );
   };
 
-  const postLoginOnSuccess = (response) => {
+  const postLoginOnSuccess = async (response) => {
     localStorage.setItem(
       "accessToken",
       response.headers.get("Authorization").split(" ")[1]

@@ -9,6 +9,8 @@ import useIsLoginStore from "../store/useIsLoginStore.js";
 import SearchPanel from "../Components/Search/SearchPanel.jsx";
 
 import styled from "styled-components";
+import instance from "../api/core/default";
+import { useQuery } from "@tanstack/react-query";
 
 const Container = styled.div`
   width: 100%;
@@ -122,11 +124,29 @@ export default function Search() {
 
   const [searchedData, setSearchedData] = useState();
 
-  useEffect(() => {
-    if (isLogin) {
-      setUserInfo(JSON.parse(localStorage.getItem("userInfoStorage")));
-    }
-  }, [isLogin]);
+  const fetchUserData = () => {
+    const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+    return instance.get(`/members/${userId}`);
+  };
+
+  const fetchUserDataOnSuccess = (res) => {
+    const data = res.data.data;
+    setUserInfo({
+      address: data.profile[0].address || "강남구",
+      location:
+        data.latitude && data.longitutde
+          ? [data.latitude, data.longitutde]
+          : [37.4965304, 127.024758],
+    });
+  };
+
+  useQuery({
+    queryKey: ["fetchUserDataInMap", isLogin],
+    queryFn: fetchUserData,
+    onSuccess: fetchUserDataOnSuccess,
+    enabled: isLogin,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <Container>

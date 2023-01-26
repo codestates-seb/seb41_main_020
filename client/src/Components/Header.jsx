@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 import Overlay from "./Main/Popups/Overlay.jsx";
 
@@ -21,6 +22,7 @@ import logo from "../assets/logo.svg";
 import breakpoint from "../styles/breakpoint";
 import user from "../assets/user.svg";
 import { useWindowSize } from "../utils/useWindowSize.js";
+import instance from "../api/core/default";
 
 import styled from "styled-components";
 import useIsLoginStore from "../store/useIsLoginStore.js";
@@ -357,6 +359,7 @@ export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const isLogin = useIsLoginStore((state) => state.isLogin);
+
   useWindowSize(setNavOpen);
 
   const logoutHandler = () => {
@@ -379,11 +382,23 @@ export default function Header() {
       });
   };
 
-  useEffect(() => {
-    if (isLogin) {
-      setUserInfo(JSON.parse(localStorage.getItem("userInfoStorage")));
-    }
-  }, [isLogin]);
+  const fetchUserInfo = () => {
+    const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+    return instance.get(`/members/${userId}`);
+  };
+
+  const fetchUserInfoOnSuccess = (res) => {
+    const data = res.data.data;
+    setUserInfo(data);
+  };
+
+  useQuery({
+    queryKey: ["fetchUserInfo", isLogin],
+    queryFn: fetchUserInfo,
+    enabled: isLogin,
+    onSuccess: fetchUserInfoOnSuccess,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <HeaderContainer>
@@ -433,7 +448,7 @@ export default function Header() {
             <div className="userInfo">
               <p className="welcome">환영합니다!</p>
               <p className="username">
-                {userInfo.nickname}
+                {userInfo.profile[0].nickname}
                 <span>님</span>
               </p>
             </div>
@@ -479,7 +494,7 @@ export default function Header() {
                     to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
                   >
                     <h2>
-                      {`${userInfo.nickname} 님,`}
+                      {`${userInfo.profile[0].nickname} 님,`}
                       <span>환영합니다!</span>
                     </h2>
                   </Link>

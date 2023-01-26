@@ -43,7 +43,8 @@ const MapSearchPanelContainer = styled.div`
 
   .close_button {
     padding: 5px;
-    border: none;
+    border: 1px solid white;
+    color: white;
     border-radius: 10px;
     background-color: ${primary.primary100};
     opacity: ${(props) => (props.isSearched ? 1 : 0)};
@@ -60,22 +61,36 @@ const SearchedDataListContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${primary.primary100}a2;
+  border-radius: 10px;
   overflow: scroll;
   width: 90%;
   height: 60%;
   opacity: ${(props) => (props.isSearched ? 1 : 0)};
-  transition: all 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out, opacity 0.6s ease-in-out;
+  position: relative;
+  box-shadow: 0 5px 5px ${primary.primary600};
 
   li {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-    margin-left: 5px;
+    align-items: center;
+    padding: 6px;
+    border: 1px solid white;
+    border-width: 0 0 1px 0;
+    opacity: ${(props) => (props.isSearched ? 1 : 0)};
+    transition: opacity 0.5s ease-in-out;
+
+    :hover {
+      cursor: pointer;
+      background-color: ${secondary.secondary600};
+    }
   }
 
   span {
-    width: 10px;
-    font-size: ${dtFontSize.xsmall};
+    width: 15px;
+    height: 100%;
+    text-align: center;
+    padding-top: 10px;
+    font-size: ${dtFontSize.small};
     font-weight: 400;
     margin-right: 10px;
     color: white;
@@ -83,29 +98,47 @@ const SearchedDataListContainer = styled.div`
 
   p {
     font-weight: 600;
-    color: ${primary.primary500};
-    font-size: ${dtFontSize.small};
     color: white;
+    font-size: ${dtFontSize.small};
+  }
+
+  .address,
+  .date {
+    font-size: ${dtFontSize.xsmall};
+    font-weight: 400;
+    color: #545454;
   }
 `;
 
-export default function KaKaoMap({
-  userInfo,
-  isLogin,
-  searchedData,
-  setSearchedData,
-}) {
+const NullInfo = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 18%;
+  opacity: ${(props) => (props.isOut ? 0 : 1)};
+  transition: all 0.1s ease-in-out;
+`;
+
+export default function KaKaoMap({ userInfo, searchedData, setSearchedData }) {
   const { kakao } = window;
+
+  const userXBoundary = [
+    userInfo && userInfo.location[0] - 0.0040515,
+    userInfo && userInfo.location[0] + 0.0040515,
+  ];
+  const userYBoundary = [
+    userInfo && userInfo.location[1] - 0.0073285,
+    userInfo && userInfo.location[1] + 0.0073285,
+  ];
 
   const [data, setData] = useState([]);
   const [fetchTrigger, setFetchTrigger] = useState(true);
-  const [XBoundary, setXBoundary] = useState();
-  const [YBoundary, setYBoundary] = useState();
-  const [searchPanelOpen, setSearchPanelOpen] = useState(false);
+  const [XBoundary, setXBoundary] = useState(userXBoundary);
+  const [YBoundary, setYBoundary] = useState(userYBoundary);
 
   const mapElement = useRef();
   const clustererElement = useRef();
   const markersArray = useRef([]);
+  const hoverWindowArray = useRef([]);
 
   const markerImageSrc = marker;
   const markerImageSize = new kakao.maps.Size(64, 64);
@@ -126,9 +159,6 @@ export default function KaKaoMap({
       y1: YBoundary[0],
       y2: YBoundary[1],
     };
-    console.log(
-      `searchURI : ${process.env.REACT_APP_SERVER_URI}/shows/maps?x1=${params.x1}&x2=${params.x2}&y1=${params.y1}&y2=${params.y2}`
-    );
     return axios.get(
       `${process.env.REACT_APP_SERVER_URI}/shows/maps/location`,
       { params }
@@ -177,9 +207,14 @@ export default function KaKaoMap({
       // 초기에 데이터가 존재하면 마커 추가
       if (data && data.length > 0) {
         data.map((locObj) => {
-          markersArray.current.push(
-            createMarker(locObj, map, markerImage, kakao)
+          const [marker, hoverWindow] = createMarker(
+            locObj,
+            map,
+            markerImage,
+            kakao
           );
+          markersArray.current.push(marker);
+          hoverWindowArray.current.push(hoverWindow);
         });
       }
 
@@ -191,6 +226,9 @@ export default function KaKaoMap({
 
       // 맵 이벤트 핸들러 추가
       kakao.maps.event.addListener(map, "zoom_changed", () => {
+        hoverWindowArray.current.forEach((hoverWIndow) => {
+          hoverWIndow.setMap(null);
+        });
         const bounds = map.getBounds();
         const sePoint = bounds.getSouthWest();
         const nePoint = bounds.getNorthEast();
@@ -237,7 +275,14 @@ export default function KaKaoMap({
       data &&
       data.map((locObj) => {
         // 마커 생성
-        return createMarker(locObj, map, markerImage, kakao);
+        const [marker, hoverWindow] = createMarker(
+          locObj,
+          map,
+          markerImage,
+          kakao
+        );
+        hoverWindowArray.current.push(hoverWindow);
+        return marker;
       });
 
     markersArray.current = markers;
@@ -248,7 +293,14 @@ export default function KaKaoMap({
 
   const searchedItemClickHandler = (data, mapElement, markerImage, kakao) => {
     const map = mapElement.current;
-    const marker = createMarker(data, mapElement.current, markerImage, kakao);
+    const [marker, hoverWindow] = createMarker(
+      data,
+      mapElement.current,
+      markerImage,
+      kakao
+    );
+    markersArray.current.push(marker);
+    hoverWindowArray.current.push(hoverWindow);
     map.setCenter(new kakao.maps.LatLng(data.latitude, data.longitude));
   };
 
@@ -257,7 +309,7 @@ export default function KaKaoMap({
       <MapSearchPanelContainer isSearched={!!searchedData}>
         <p className="search_title">검색 결과</p>
         <SearchedDataListContainer isSearched={!!searchedData}>
-          {searchedData &&
+          {searchedData && searchedData.length > 0 ? (
             searchedData.map((data, index) => {
               return (
                 <li
@@ -271,13 +323,20 @@ export default function KaKaoMap({
                     );
                   }}
                 >
-                  <p>
-                    <span>{index}.</span>
-                    {`${data.title}`}
-                  </p>
+                  <span>{index + 1}.</span>
+                  <div>
+                    <p className="title">{`${data.title}`}</p>
+                    <p className="address">{data.address}</p>
+                    <p className="date">{`${data.showAt} - ${data.expiredAt}`}</p>
+                  </div>
                 </li>
               );
-            })}
+            })
+          ) : (
+            <NullInfo className="null_info" isOut={!searchedData}>
+              검색 결과가 없습니다.
+            </NullInfo>
+          )}
         </SearchedDataListContainer>
         <button
           className="close_button"

@@ -24,6 +24,9 @@ const createMarker = (locObj, map, markerImage, kakao) => {
   markerClickPopup.setAttribute("class", "marker_container");
   const markerBox = document.createElement("div");
   markerBox.setAttribute("class", "marker_box");
+  markerBox.onclick = function () {
+    window.location.assign(`./tickets/${locObj.id}`);
+  };
   const imgElement = document.createElement("img");
   Object.assign(imgElement, {
     width: 80,
@@ -36,13 +39,17 @@ const createMarker = (locObj, map, markerImage, kakao) => {
   const addressElement = document.createElement("p");
   addressElement.setAttribute("class", "marker_address");
   addressElement.textContent = locObj.address;
-  const dateElement = document.createElement("p");
-  dateElement.setAttribute("class", "marker_date");
-  dateElement.textContent = locObj.date;
+  const showAtElement = document.createElement("p");
+  showAtElement.setAttribute("class", "marker_date");
+  showAtElement.textContent = locObj.showAt;
+  const expiredAtElement = document.createElement("p");
+  expiredAtElement.setAttribute("class", "marker_date");
+  expiredAtElement.textContent = locObj.expiredAt;
   const closeButtonElement = document.createElement("div");
   closeButtonElement.setAttribute("class", "close");
   closeButtonElement.textContent = "닫기";
-  closeButtonElement.onclick = function () {
+  closeButtonElement.onclick = function (e) {
+    e.stopPropagation();
     popupWindow.setMap(null);
   };
   const svgElement = document.createElementNS(
@@ -66,24 +73,23 @@ const createMarker = (locObj, map, markerImage, kakao) => {
     imgElement,
     titleElement,
     addressElement,
-    dateElement,
+    showAtElement,
+    expiredAtElement,
     closeButtonElement,
     svgElement
   );
   markerClickPopup.appendChild(markerBox);
   popupWindow.setContent(markerClickPopup);
+
   // 마커 호버 마크업
   const markerHoverPopup = `
     <div class="hover_container">
     <p class="hover_title">${locObj.title}</p>
-    <p class="hover_date">${locObj.date}</p>
+    <p class="hover_date">${locObj.address}</p>
     </div>`;
   const hoverWindow = new kakao.maps.CustomOverlay({
     content: markerHoverPopup,
     position: marker.getPosition(),
-  });
-  closeButtonElement.addEventListener("onclick", () => {
-    popupWindow.setMap(null);
   });
   // 카카오 맵 이벤트 리스너
   kakao.maps.event.addListener(
@@ -107,8 +113,11 @@ const createMarker = (locObj, map, markerImage, kakao) => {
   kakao.maps.event.addListener(marker, "mouseout", function () {
     hoverWindow.setMap(null);
   });
+  kakao.maps.event.addListener(marker, "zoom_changed", function () {
+    hoverWindow.setMap(null);
+  });
 
-  return marker;
+  return [marker, hoverWindow];
 };
 
 export default createMarker;
