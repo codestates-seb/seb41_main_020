@@ -129,27 +129,11 @@ public class ArticleController {
 
     @GetMapping("/{article-id}")
     public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response) {
+                                     HttpServletRequest request) {
 
-        HttpSession session = request.getSession();
-        Boolean isVisited = false;
+        ArticleDto.Response response = articleService.findArticle(articleId, request);
 
-        if (session.getAttribute("visited_article_" + articleId) != null) {
-            isVisited = (Boolean) session.getAttribute("visited_article_" + articleId);
-        }
-
-        ArticleDto.Response responseDto = articleService.findArticle(articleId);
-
-        // 조회한 게시글이 아닌 경우
-        if (!isVisited) {
-            Long viewCount = articleService.incrementViewCount(articleId);
-
-            session.setAttribute("visited_article_" + articleId, true);
-            responseDto.setView(viewCount);
-        }
-
-        return new ResponseEntity<>(new SingleResponseDto<>(responseDto), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
     /**
