@@ -44,7 +44,7 @@ public class AwsS3Service implements ImageUploadService {
 			throw new BusinessLogicException(ExceptionCode.UPLOAD_FAILED);
 		}
 
-		return amazonS3.getUrl(bucketName, storeFileName).toString();
+		return amazonS3.getUrl(bucketName + awsS3Path.getPath(), storeFileName).toString();
 	}
 
 	private static String createStoreFileName(String originalFilename) {
