@@ -175,6 +175,13 @@ public class ArticleService {
         long likeCount = articleLikeRepository.countByArticleId(article.getId());
         response.setLikeCount(likeCount);
 
+        ArticleLike articleLike = articleLikeRepository.findByMemberId(article.getMember().getId());
+        if (articleLike == null) {
+            response.setLikeStatus(false);
+        } else {
+            response.setLikeStatus(true);
+        }
+
         return response;
     }
 
