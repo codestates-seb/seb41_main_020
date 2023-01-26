@@ -126,10 +126,31 @@ const AnswerListFunctionDiv = styled.div`
 const AnswerItem = (props) => {
   const [toggle, setToggle] = useState(false);
   const [editValue, setEditValue] = useState(props.comment);
+  const [heartCountState, setHeartCountState] = useState("");
 
   const handleEdit = () => {
     setToggle(!toggle);
   };
+
+  // 하트 누르기 코드
+
+  const handleHeartCount = async () => {
+    return await instance({
+      method: "put",
+      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+    });
+  };
+
+  const handleHeartCountOnSuccess = () => {
+    props.refetch();
+  };
+
+  const { mutate: heartCount } = useMutation({
+    mutationKey: ["handleHeartCount"],
+    mutationFn: handleHeartCount,
+    onSuccess: handleHeartCountOnSuccess,
+    // onError: postButtonOnError,
+  });
 
   // 수정 코드
   const handleComplete = async () => {
@@ -203,7 +224,7 @@ const AnswerItem = (props) => {
         </AnswerListContentDiv>
         <AnswerListFunctionDiv>
           <div className="heartDiv">
-            <button className="heartButton">
+            <button className="heartButton" onClick={() => heartCount()}>
               <img className="heartImage" src={heart} alt="하트" />
             </button>
             <span className="heartCount">{props.likeCount}</span>
