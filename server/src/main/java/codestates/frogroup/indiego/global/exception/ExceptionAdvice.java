@@ -64,7 +64,7 @@ public class ExceptionAdvice {
     /*
     * 파일 업로드시 허용 용량을 초과하였을 경우 예외처리
     * */
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler
     protected ResponseEntity<ErrorResponse> handleException(MaxUploadSizeExceededException e) {
 
         final ErrorResponse response = ErrorResponse.of(ExceptionCode.UPLOAD_VOLUME_OVER);
