@@ -106,8 +106,7 @@ public class ShowController {
 
     @GetMapping("/{show-id}")
     public ResponseEntity getShow(@PathVariable("show-id") long showId){
-        Show findedShow = showService.findShow(showId);
-        ShowDto.Response response = mapper.showToShowResponse(findedShow);
+        ShowDto.Response response = showService.findShow(showId);
         return new ResponseEntity(
                 new SingleResponseDto<>(response),
                 HttpStatus.OK);

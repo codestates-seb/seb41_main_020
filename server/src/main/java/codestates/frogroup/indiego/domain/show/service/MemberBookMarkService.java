@@ -3,7 +3,9 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.entity.MemberBookMark;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
+import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.repository.MemberBookMarkRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
@@ -23,6 +25,7 @@ public class MemberBookMarkService {
     private final MemberService memberService;
     private final ShowService showService;
     private final MemberBookMarkRepository memberBookMarkRepository;
+    private final ShowMapper mapper;
     public HttpStatus manageBookMark(Long showId, long memberId){
 
         if( memberBookMarkRepository.findByShowIdAndMemberId(showId, memberId) != null){
@@ -33,11 +36,11 @@ public class MemberBookMarkService {
     }
 
     public HttpStatus createMemberBookMark(Long showId, Long memberId){
-        Show show = showService.findShow(showId);
+        ShowDto.Response response = showService.findShow(showId);
         Member member = memberService.findVerifiedMember(memberId);
         MemberBookMark memberBookMark = MemberBookMark.builder()
                 .member(member)
-                .show(show)
+                .show(mapper.showResponseToShow(response))
                 .build();
         memberBookMarkRepository.save(memberBookMark);
         return HttpStatus.CREATED;

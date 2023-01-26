@@ -35,6 +35,8 @@ public class MemberDto {
         private String address;
         private String image;
         private String introduction;
+        private Double latitude;
+        private Double longitude;
 
     }
 
@@ -45,13 +47,18 @@ public class MemberDto {
         private String email;
         private String role;
         private List<Profile> profile;
+        private Double latitude;
+        private Double longitude;
 
         @Builder
-        public GetResponse(Long id, String email, List<String> role, Profile profile){
+        public GetResponse(Long id, String email, List<String> role, Profile profile,
+                           Double latitude, Double longitude){
             this.id = id;
             this.email = email;
             this.role = role.get(0);
             this.profile = List.of(profile);
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
     }
 
@@ -79,6 +86,8 @@ public class MemberDto {
         private String address;
         private String image;
         private String introduction;
+        private Double latitude;
+        private Double longitude;
     }
 
     @Getter
