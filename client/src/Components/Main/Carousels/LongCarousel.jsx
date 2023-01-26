@@ -59,8 +59,8 @@ const CarouselContainer = styled.div`
 `;
 
 const PrevButton = styled.button`
-  width: 24px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
   border-radius: 100%;
   background-color: ${sub.sub400};
   border: 0;
@@ -80,8 +80,8 @@ const PrevButton = styled.button`
 `;
 
 const NextButton = styled.button`
-  width: 24px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
   border-radius: 100%;
   background-color: ${sub.sub400};
   border: 0;
@@ -163,7 +163,7 @@ export default function Carousel() {
     } else {
       if (data.length % 2) {
         if (
-          currentIdx + 1 < parseInt(data.length / 4) + 1 &&
+          currentIdx + 1 <= parseInt(data.length / 4) + 1 &&
           currentIdx + 1 >= 0
         ) {
           setCurrentIdx(currentIdx + 1);
@@ -171,7 +171,10 @@ export default function Carousel() {
           setCurrentIdx(0);
         }
       } else {
-        if (currentIdx + 1 < parseInt(data.length / 4) && currentIdx + 1 >= 0) {
+        if (
+          currentIdx + 1 <= parseInt(data.length / 4) &&
+          currentIdx + 1 >= 0
+        ) {
           setCurrentIdx(currentIdx + 1);
         } else {
           setCurrentIdx(0);

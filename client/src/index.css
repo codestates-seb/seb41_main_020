@@ -13,6 +13,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

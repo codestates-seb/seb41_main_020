@@ -4,7 +4,13 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 
 import List from "./List.jsx";
 import Calendar from "./Calendar.jsx";
-import { primary, sub, secondary, dtFontSize } from "../../../styles/mixins";
+import {
+  primary,
+  sub,
+  secondary,
+  dtFontSize,
+  mbFontSize,
+} from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint.js";
 
 import styled from "styled-components";
@@ -25,14 +31,16 @@ const PopupContainer = styled.div`
     text-align: center;
     color: ${sub.sub800};
     margin-top: 10px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
+    }
   }
 `;
 
 const CalendarContainer = styled.div`
   width: 40%;
   height: 100%;
-  min-width: 400px;
-  /* min-height: 500px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,6 +69,12 @@ const CloseButton = styled.button`
     color: white;
     border-color: ${primary.primary300};
   }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    padding: 5px;
+    width: 30%;
+    margin: 15px 10px;
+  }
 `;
 
 const PopupLowerContainer = styled.div`
@@ -79,7 +93,7 @@ const ContentsContainer = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
   }
 `;
 
@@ -105,14 +119,13 @@ const ConcertListContainer = styled.div`
     justify-content: space-evenly;
     height: 40%;
     width: 100%;
-    margin-top: 0;
+    margin: 0;
   }
 `;
 
 export default function DatePopup({ popupHandler }) {
   const [selectedDate, setSelectedDate] = useState("");
   const [dateInfo, setDateInfo] = useState();
-  console.log(dateInfo, "what?!");
 
   const closePopupHandler = () => {
     popupHandler(false);
@@ -129,7 +142,6 @@ export default function DatePopup({ popupHandler }) {
           />
         </CalendarContainer>
         <ConcertListContainer>
-          <div className="date_result">{`${selectedDate} : 15개`}</div>
           {dateInfo && <List searchBy="date" search={dateInfo} />}
         </ConcertListContainer>
       </ContentsContainer>
