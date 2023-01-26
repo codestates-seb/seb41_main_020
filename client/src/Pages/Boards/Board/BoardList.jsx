@@ -33,7 +33,7 @@ import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
 
 export const PageWrapper = styled.div`
-  background-color: black;
+  /* background-color: black; */
   display: flex;
   text-align: center;
 `;
@@ -184,11 +184,14 @@ export default function BoardList() {
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
   const urlSize = searchParams.get("size");
+
   const { pathname } = useLocation();
+
+  console.log(`${urlCategory} ${urlPage} ${urlStatus} ${urlSize} ${pathname}`);
 
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+      `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
     );
     return response.data;
   };
@@ -222,7 +225,9 @@ export default function BoardList() {
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>
         <div className="dropboxDiv">
-          <Dropdown></Dropdown>
+          <Dropdown
+            location={`${pathname}?category=${urlCategory}&size=${urlSize}&page=${urlPage}`}
+          ></Dropdown>
         </div>
         <div className="lineDiv"></div>
         {boardList.map((it) => (
@@ -242,12 +247,13 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`${pathname}?category=${urlCategory}&?status=${urlStatus}&size=${urlSize}`}
+          location={`${pathname}?category=${urlCategory}&status=${urlStatus}&size=${urlSize}`}
           pageData={pageData}
         ></PageNation>
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          location={`articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
+          location={`${pathname}?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
+          setPageData={setPageData}
         ></SearchBar>
       </BoardWrapper>
     </PageWrapper>
