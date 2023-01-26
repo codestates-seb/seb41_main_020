@@ -33,7 +33,7 @@ const CarouselContainer = styled.div`
 `;
 
 const PrevButton = styled.button`
-  width: 25px;
+  width: 22px;
   height: 22px;
   border-radius: 100%;
   background-color: ${sub.sub400};
@@ -53,7 +53,7 @@ const PrevButton = styled.button`
 `;
 
 const NextButton = styled.button`
-  width: 25px;
+  width: 22px;
   height: 22px;
   border-radius: 100%;
   background-color: ${sub.sub400};
@@ -75,7 +75,7 @@ const Rank = styled.h2`
   position: absolute;
   font-size: calc(60px + 2vw);
   top: 50%;
-  left: 8%;
+  left: 12%;
   color: ${primary.primary200};
   font-style: italic;
   pointer-events: none;
@@ -92,7 +92,7 @@ const Rank = styled.h2`
 
   @media screen and (max-width: 500px) {
     top: 70%;
-    left: 20%;
+    left: 27%;
     font-size: 40px;
   }
 `;

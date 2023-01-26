@@ -132,7 +132,6 @@ export default function Tickets() {
   const [data, setData] = useState([]);
 
   const fetchShowData = () => {
-    console.log("fetching...");
     const params = {};
 
     queryParams.forEach((queryArr) => {

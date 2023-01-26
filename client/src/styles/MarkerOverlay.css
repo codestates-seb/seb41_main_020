@@ -20,6 +20,20 @@
   left: -200px;
 }
 
+.marker_box:hover {
+ cursor: pointer;
+}
+
+.marker_box:hover .marker_title{
+  color : #487EEB;
+}
+.marker_box:hover .marker_address{
+  color : #487EEB;
+}
+.marker_box:hover .marker_date{
+  color : #487EEB;
+}
+
 .marker_title {
   font-size: 15px;
   font-weight: 600;
@@ -94,4 +108,14 @@
 .hover_date {
   font-weight: 400;
   font-size: 12px;
+}
+
+.searched_data_list_container {
+  display: flex;
+  position: absolute;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background-color: white;
+
 }
