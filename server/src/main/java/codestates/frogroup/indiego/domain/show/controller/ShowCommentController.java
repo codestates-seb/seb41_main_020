@@ -3,9 +3,11 @@ package codestates.frogroup.indiego.domain.show.controller;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowCommentDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import codestates.frogroup.indiego.domain.show.mapper.ShowCommentMapper;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.service.ShowCommentService;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
@@ -31,12 +33,14 @@ public class ShowCommentController {
     private final ShowCommentService showCommentService;
     private final ShowService showService;
     private final MemberService memberService;
+    private final ShowMapper showMapper;
 
     @PostMapping("/{show-id}/comments")
     public ResponseEntity postComment(@PathVariable("show-id") Long showId,
                                       @LoginMemberId Long memberId,
                                       @Valid @RequestBody ShowCommentDto.Post showPostDto){
-        Show show = showService.findShow(showId);
+        ShowDto.Response response = showService.findShow(showId);
+        Show show = showMapper.showResponseToShow(response);
         Member member = memberService.findVerifiedMember(memberId);
         ShowComment showComment = showCommentMapper.commentDtoToComment(showPostDto);
         ShowComment saveShowComment = showCommentService.createShowComment(showComment,show,member);
@@ -50,7 +54,8 @@ public class ShowCommentController {
                                        @PathVariable("comment-id") Long commentId,
                                        @LoginMemberId Long memberId,
                                        @Valid @RequestBody ShowCommentDto.Patch showPatchDto){
-        Show show = showService.findShow(showId);
+        ShowDto.Response response = showService.findShow(showId);
+        Show show = showMapper.showResponseToShow(response);
         Member member = memberService.findVerifiedMember(memberId);
         ShowComment findShowComment = showCommentService.findShowComment(commentId);
         ShowComment showComment = showCommentMapper.commentDtoToComment(showPatchDto);
@@ -63,7 +68,8 @@ public class ShowCommentController {
     public ResponseEntity deleteComment(@PathVariable("show-id") Long showId,
                                         @PathVariable("comment-id") Long commentId,
                                         @LoginMemberId Long memberId) {
-        Show show = showService.findShow(showId);
+        ShowDto.Response response = showService.findShow(showId);
+        Show show = showMapper.showResponseToShow(response);
         showCommentService.deleteShowComment(commentId,memberId,show);
 
         return new ResponseEntity<>(new SingleResponseDto<>("공연 후기가 삭제되었습니다"),HttpStatus.NO_CONTENT);

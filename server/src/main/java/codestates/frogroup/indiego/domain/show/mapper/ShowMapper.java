@@ -72,6 +72,7 @@ public interface ShowMapper {
     @Mapping(source = "showBoard.detailImage", target = "detailImage")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
     @Mapping(source = "showBoard.showTime", target = "showTime")
+    @Mapping(source = "member.profile.nickname", target = "nickname")
     ShowDto.Response showToShowResponse(Show show);
 
     @Mapping(source = "id", target = "id")
@@ -91,5 +92,23 @@ public interface ShowMapper {
     @Mapping(source = "showBoard.expiredAt", target = "expiredAt")
     @Mapping(source = "showBoard.showAt", target = "showAt")
     List<ShowDto.ShowsResponse> showsToShowsResponse(List<Show> shows);
+
+    @Mapping(source = "title", target = "showBoard.board.title")
+    @Mapping(source = "content", target = "showBoard.board.content")
+    @Mapping(source = "image", target = "showBoard.board.image")
+    @Mapping(source = "category", target = "showBoard.board.category")
+    @Mapping(source = "price", target = "showBoard.price")
+    @Mapping(source = "address", target = "showBoard.address")
+    @Mapping(source = "expiredAt", target = "showBoard.expiredAt")
+    @Mapping(source = "showAt", target = "showBoard.showAt")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "latitude", target = "coordinate.latitude")
+    @Mapping(source = "longitude", target = "coordinate.longitude")
+    @Mapping(source = "status", target = "status")
+    @Mapping(source = "detailImage", target = "showBoard.detailImage")
+    @Mapping(source = "detailAddress", target = "showBoard.detailAddress")
+    @Mapping(source = "showTime", target = "showBoard.showTime")
+    @Mapping(source = "nickname", target = "member.profile.nickname")
+    Show showResponseToShow(ShowDto.Response response);
 
 }

@@ -1,8 +1,10 @@
 package codestates.frogroup.indiego.domain.show.service;
 
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
+import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
+import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
 import codestates.frogroup.indiego.domain.show.repository.ShowReservationRepository;
@@ -66,6 +68,16 @@ public class ShowReservationService {
                         new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND));
         return findShow;
 
+    }
+
+    public ShowReservation getShowReservation(ShowReservationDto.Post post, Show show, Member member) {
+        ShowReservation showReservation = new ShowReservation();
+        showReservation.setDate(post.getDate());
+        showReservation.setMember(member);
+        showReservation.setShow(show);
+        showReservation.setTicketCount(post.getTicketCount());
+        ShowReservation created = createReservation(showReservation);
+        return created;
     }
 
 }
