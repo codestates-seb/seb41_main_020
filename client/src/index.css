@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+*::-webkit-scrollbar-track {
+ background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(63, 63, 63, 0.722);
+}
+
 a {
   text-decoration: none;
   color: inherit;
