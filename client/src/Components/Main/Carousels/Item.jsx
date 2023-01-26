@@ -41,6 +41,7 @@ const ImageContainer = styled.div`
   img {
     height: calc(100px + 2vw);
     max-height: 150px;
+    max-width: 100px;
   }
 
   @media screen and (max-width: ${breakpoint.mobile}) {

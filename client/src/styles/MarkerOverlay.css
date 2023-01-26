@@ -95,3 +95,13 @@
   font-weight: 400;
   font-size: 12px;
 }
+
+.searched_data_list_container {
+  display: flex;
+  position: absolute;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background-color: white;
+
+}
