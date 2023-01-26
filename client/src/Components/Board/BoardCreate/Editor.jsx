@@ -1,9 +1,11 @@
 import React, { useMemo, useRef } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import imageHandler from "../../../api/core/imageHandler";
 import instance from "../../../api/core/default";
+import ImageResize from "quill-image-resize";
+Quill.register("modules/ImageResize", ImageResize);
 
 const toolbarOptions = [
   ["image"],
@@ -96,6 +98,9 @@ const Editor = ({ placeholder, value, setValue }) => {
           // 이미지 처리는 mageHandler라는 함수로 처리할 것이다.
           image: imageHandler,
         },
+      },
+      ImageResize: {
+        parchment: Quill.import("parchment"),
       },
     };
   }, []);
