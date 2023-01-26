@@ -9,6 +9,7 @@ import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
@@ -42,6 +43,7 @@ public class ShowService {
     private final ShowReservationService reservationService;
     private final ScoreRepository scoreRepository;
     private final RedisKey redisKey;
+    private final ShowMapper mapper;
 
     @Transactional
     public Show createShow(Show show, long memberId) {
@@ -139,38 +141,31 @@ public class ShowService {
     }
 
     public Integer getRevenue(Long showId){
-        return reservationService.countReservation(showId) * findShow(showId).getShowBoard().getPrice();
+        return reservationService.countReservation(showId) * showRepository.findById(showId).get().getShowBoard().getPrice();
     }
 
-    public Show findShow(long showId){
+    public ShowDto.Response findShow(long showId){
         Show show = findVerifiedShow(showId);
         String key = redisKey.getScoreAverageKey(showId);
         if(scoreRepository.getValues(key).equals("false")){
             scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
-        }else{
-            Show show1 = new Show(showId,
-                    show.getMember(),
-                    show.getShowBoard(),
-                    show.getCoordinate(),
-                    show.getStatus(),
-                    Double.valueOf(scoreRepository.getValues(key)),
-                    getEmptySeats(show, showId)
-                    );
-            //show.setScoreAverage(); // 변경감지
-            return show1;
         }
 
-        return show;
+        ShowDto.Response response = mapper.showToShowResponse(show);
+        response.setScoreAverage( Double.valueOf(scoreRepository.getValues(key)));
+        response.setTotal(getEmptySeats(show, showId));
+
+        return response;
     }
 
     @Transactional
     public Double setScoreAverage(long showId) {
 
         String key = redisKey.getScoreAverageKey(showId);
-        Show show = findShow(showId);
+        Show show = showRepository.findById(showId).get();
         scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
 
-        return Double.valueOf(scoreRepository.getValues(key));
+        return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
