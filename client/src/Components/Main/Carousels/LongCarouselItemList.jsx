@@ -21,7 +21,7 @@ const ItemsContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: max-content;
+  width: 100%;
   height: 100%;
   padding-left: 10px;
   margin-left: ${(props) => props.currentIdx * -100}%;

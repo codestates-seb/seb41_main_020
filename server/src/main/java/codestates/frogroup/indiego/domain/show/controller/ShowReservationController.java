@@ -2,9 +2,11 @@ package codestates.frogroup.indiego.domain.show.controller;
 
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
+import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.mapper.ShowReservationMapper;
 import codestates.frogroup.indiego.domain.show.repository.ShowReservationRepository;
 import codestates.frogroup.indiego.domain.show.service.ShowReservationService;
@@ -31,34 +33,34 @@ public class ShowReservationController {
     private final ShowReservationService showReservationService;
     private final ShowService showService;
     private final MemberService memberService;
+    private final ShowMapper showMapper;
 
 
     @PostMapping("/{show-id}")
     public ResponseEntity postReservation(@Valid @RequestBody ShowReservationDto.Post post,
                                           @PathVariable("show-id") Long showId,
                                           @LoginMemberId Long memberId){
-        Show show = showService.findShow(showId);
+        ShowDto.Response response = showService.findShow(showId);
+        Show show = showMapper.showResponseToShow(response);
         Member member = memberService.findVerifiedMember(memberId);
 
         //ToDo 리팩토링
-        ShowReservation showReservation = new ShowReservation();
-        showReservation.setDate(post.getDate());
-        showReservation.setMember(member);
-        showReservation.setShow(show);
-        showReservation.setTicketCount(post.getTicketCount());
-        ShowReservation created = showReservationService.createReservation(showReservation);
+        ShowReservation created = showReservationService.getShowReservation(post, show, member);
 
-        ShowReservationDto.Response response = mapper.showReservationToShowReservationResponse(created);
-        response.setExpired(isExpired(post.getDate()));
+        ShowReservationDto.Response reservationResponse = mapper.showReservationToShowReservationResponse(created);
+        reservationResponse.setExpired(isExpired(post.getDate()));
+        reservationResponse.setNickname(response.getNickname());
         return new ResponseEntity<>(
-                response
+                reservationResponse
                 , HttpStatus.CREATED
         );
     }
 
+
+
     public boolean isExpired(LocalDate date){
         LocalDate now = LocalDate.now();
-        return now.isBefore(date);
+        return now.isAfter(date);
     }
 
 
@@ -72,8 +74,8 @@ public class ShowReservationController {
 
 
     @GetMapping
-    public ResponseEntity getShows(){
-        java.util.List<ShowReservation> showReservationList =showReservationRepository.findAll();
+    public ResponseEntity getShows(@LoginMemberId Long memberId){
+        List<ShowReservation> showReservationList =showReservationRepository.findByMember_Id(memberId);
         List<ShowReservationDto.Response> responses = mapper.showsReservationsToShowResvationResponses(showReservationList);
         return new ResponseEntity(
                 new SingleResponseDto<>(setExpireds(showReservationList, responses)),

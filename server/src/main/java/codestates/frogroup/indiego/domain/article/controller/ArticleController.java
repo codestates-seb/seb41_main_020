@@ -92,7 +92,7 @@ public class ArticleController {
     @GetMapping("/{article-id}")
     public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId) {
 
-        articleService.updateView(articleId);
+//        articleService.updateView(articleId);
         ArticleDto.Response response = articleService.findArticle(articleId);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);

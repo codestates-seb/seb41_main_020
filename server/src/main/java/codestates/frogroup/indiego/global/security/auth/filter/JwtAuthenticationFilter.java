@@ -7,6 +7,7 @@ import codestates.frogroup.indiego.global.security.auth.dto.LoginDto;
 import codestates.frogroup.indiego.global.security.auth.dto.TokenDto;
 import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
+import codestates.frogroup.indiego.config.AES128Config;
 import codestates.frogroup.indiego.global.security.auth.utils.Responder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -29,12 +30,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
     private final RedisDao redisDao;
+    private final AES128Config aes128Config;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, MemberService memberService, TokenProvider tokenProvider, RedisDao redisDao) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
+                                   MemberService memberService,
+                                   TokenProvider tokenProvider,
+                                   RedisDao redisDao,
+                                   AES128Config aes128Config) {
         this.authenticationManager = authenticationManager;
         this.memberService = memberService;
         this.tokenProvider = tokenProvider;
         this.redisDao = redisDao;
+        this.aes128Config = aes128Config;
     }
 
     /*
@@ -46,24 +53,31 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // ServletInputSteam을 LoginDto 클래스 객체로 역직렬화 (즉, JSON 객체꺼냄)
-        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",loginDto.getEmail(),loginDto.getPassword());
+        // ServletInputSteam을 LoginDto 클래스 객체로 역직렬화 (즉, JSON 객체꺼냄)
+        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
+                loginDto.getEmail(),loginDto.getPassword());
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult) throws ServletException, IOException {
 
         AuthMember authMember = (AuthMember) authResult.getPrincipal();
         TokenDto tokenDto = tokenProvider.generateTokenDto(authMember);
         String accessToken = tokenDto.getAccessToken(); // accessToken 만들기
         String refreshToken = tokenDto.getRefreshToken(); // refreshToken 만들기
+        String secretRefreshToken = aes128Config.encryptAes(refreshToken); // refreshToken 암호화
 
         tokenProvider.accessTokenSetHeader(accessToken,response); // AccessToken Header response 생성
-        //tokenProvider.refreshTokenSetHeader(refreshToken,response); // RefreshToken Header response 생성
-        tokenProvider.refreshTokenSetCookie(refreshToken,response); // RefreshToken Cookie로 설정
+        tokenProvider.refreshTokenSetHeader(secretRefreshToken,response); // RefreshToken Header response 생성
+        // tokenProvider.refreshTokenSetCookie(refreshToken,response); // RefreshToken Cookie로 설정
         Member findMember = memberService.findVerifiedMember(authMember.getId());
 
         Responder.loginSuccessResponse(response,findMember); // login 완료시 Response 응답 만들기

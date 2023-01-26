@@ -1,5 +1,7 @@
 package codestates.frogroup.indiego.domain.member.service;
 
+import codestates.frogroup.indiego.config.AES128Config;
+import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
@@ -41,11 +43,13 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final RedisDao redisDao;
     private final ApplicationEventPublisher publisher;
+    private final AES128Config aes128Config;
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
         makeSecretPassword(member);
         createRoles(member);
+        member.setCoordinate(new Coordinate(null,null));
 
         Member savedMember = memberRepository.save(member);
 
@@ -76,6 +80,13 @@ public class MemberService {
                 .ifPresent(image -> findMember.getProfile().setImage(image));
         Optional.ofNullable(member.getProfile().getIntroduction())
                 .ifPresent(introduction -> findMember.getProfile().setIntroduction(introduction));
+        boolean latCheck = Optional.ofNullable(member.getCoordinate().getLatitude()).isPresent();
+        boolean lonCheck = Optional.ofNullable(member.getCoordinate().getLongitude()).isPresent();
+        if(latCheck && lonCheck){
+            Coordinate coordinate = new Coordinate(member.getCoordinate().getLatitude(),
+                    member.getCoordinate().getLongitude());
+            findMember.setCoordinate(coordinate);
+        }
 
         return findMember;
     }
@@ -84,6 +95,57 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         memberRepository.delete(findMember);
+    }
+
+    public ProfileImage createProfileImage(Member member){
+        ProfileImage[] randomImageList = ProfileImage.values();
+        Long profileImageIndex = Long.valueOf((int) ((Math.random() * 10)) % 7 +1);
+
+        List<ProfileImage> profileImageList = Arrays.stream(randomImageList)
+                .filter(image -> image.getIndex() == profileImageIndex)
+                .collect(Collectors.toList());
+
+        ProfileImage profileImage = profileImageList.get(0);
+        member.getProfile().setImage(profileImage.getUrl());
+        return profileImage;
+    }
+
+    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response){
+        String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
+        validatedRefreshToken(secretRefreshToken);
+        String accessToken = tokenProvider.resolveAccessToken(request);
+        String refreshToken = aes128Config.decryptAes(secretRefreshToken);
+        String redisAccessToken = redisDao.getValues(refreshToken);
+
+        // Refresh Token이 Redis에 존재할 경우 Access Token 생성
+        if(redisDao.validateValue(redisAccessToken) && accessToken.equals(redisAccessToken)){
+            log.info("# RefreshToken을 통한 AccessToken 재발급 시작");
+            Claims claims = tokenProvider.parseClaims(refreshToken); // Refresh Token 복호화
+            String email = claims.get("sub", String.class); // Refresh Token에서 email정보 가져오기
+            Member member = findVerifiedMember(email); // DB에서 사용자 정보 찾기
+            AuthMember authMember = AuthMember.of(member.getId(), member.getEmail(), member.getRoles());
+            TokenDto tokenDto = tokenProvider.generateTokenDto(authMember); // Token 만들기
+            int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
+            redisDao.setValues(refreshToken, tokenDto.getAccessToken(),
+                    Duration.ofMinutes(refreshTokenExpirationMinutes));
+            tokenProvider.accessTokenSetHeader(tokenDto.getAccessToken(),response);
+
+        } else if(!redisDao.validateValue(redisAccessToken)){
+            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
+        } else {
+            throw new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_SAME);
+        }
+    }
+
+    public void logout(HttpServletRequest request){
+        String secretRefreshToken = tokenProvider.resolveRefreshToken(request);
+        validatedRefreshToken(secretRefreshToken);
+        String refreshToken = aes128Config.decryptAes(secretRefreshToken);
+        String redisAccessToken = redisDao.getValues(refreshToken);
+        if(redisDao.validateValue(redisAccessToken)){
+            redisDao.deleteValues(refreshToken);
+        }
+        deleteValuesCheck(refreshToken);
     }
 
     public void verifiedMemberId(Long memberId, Long loginMemberId){
@@ -96,7 +158,7 @@ public class MemberService {
     public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     public Member findVerifiedMember(String email){
@@ -105,77 +167,9 @@ public class MemberService {
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-
-    private void verifyExistsEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent()){
-            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
-        }
-    }
-
-    public void makeSecretPassword(Member member){
-        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-        member.setPassword(encryptedPassword);
-    }
-    public void createRoles(Member member){
-        List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
-        if(roles == null){
-            throw new BusinessLogicException(ExceptionCode.MEMBER_ROLE_DOES_NOT_HAVE);
-        }
-        member.setRoles(roles);
-        createProfileImage(member);
-    }
-
-    public ProfileImage createProfileImage(Member member){
-        ProfileImage[] randomImageList = ProfileImage.values();
-        Long profileImageIndex = Long.valueOf((int) (Math.random()*10)+1 % randomImageList.length);
-
-        List<ProfileImage> profileImageList = Arrays.stream(randomImageList)
-                .filter(image -> image.getIndex() == profileImageIndex)
-                .collect(Collectors.toList());
-
-        ProfileImage profileImage = profileImageList.get(0);
-        member.getProfile().setImage(profileImage.getUrl());
-        return profileImage;
-    }
-
-    public void reissueAccessToken(String refreshToken, HttpServletRequest request, HttpServletResponse response){
-
-        validatedRefeshToken(refreshToken);
-        String accessToken = tokenProvider.resolveToken(request);
-        String redisAccessToken = redisDao.getValues(refreshToken);
-
-        // Refresh Token이 Redis에 존재할 경우 Access Token 생성
-        if(redisDao.validateValue(redisAccessToken) && accessToken.equals(redisAccessToken)){
-            log.info("# RefreshToken을 통한 AccessToken 재발급 시작");
-            Claims claims = tokenProvider.parseClaims(refreshToken); // Refresh Token 복호화
-            String email = claims.get("sub", String.class); // Refresh Token에서 email정보 가져오기
-            Member member = findVerifiedMember(email); // DB에서 사용자 정보 찾기
-            AuthMember authMember = AuthMember.of(member.getId(), member.getEmail(), member.getRoles());
-            TokenDto tokenDto = tokenProvider.generateTokenDto(authMember); // Token 만들기
-            int refreshTokenExpirationMinutes = tokenProvider.getRefreshTokenExpirationMinutes();
-            redisDao.setValues(refreshToken, tokenDto.getAccessToken(), Duration.ofMinutes(refreshTokenExpirationMinutes));
-            tokenProvider.accessTokenSetHeader(tokenDto.getAccessToken(),response);
-
-        } else if(!redisDao.validateValue(redisAccessToken)){
-            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
-        } else {
-            throw new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_SAME);
-        }
-    }
-
-    public void logout(String refreshToken){
-        validatedRefeshToken(refreshToken);
-        String redisAccessToken = redisDao.getValues(refreshToken);
-        if(redisDao.validateValue(redisAccessToken)){
-            redisDao.deleteValues(refreshToken);
-        }
-        deleteValuesCheck(refreshToken);
-    }
-
-    public void validatedRefeshToken(String refreshToken){
+    public void validatedRefreshToken(String refreshToken){
         if(refreshToken == null){
-            throw new BusinessLogicException(ExceptionCode.COOKIE_REFRESH_TOKEN_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.HEADER_REFRESH_TOKEN_NOT_FOUND);
         }
     }
 
@@ -184,6 +178,27 @@ public class MemberService {
         if(redisAccessToken != null){
             throw new BusinessLogicException(ExceptionCode.TOKEN_DELETE_FAIL);
         }
+    }
+
+    private void verifyExistsEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        }
+    }
+
+    private void createRoles(Member member){
+        List<String> roles = authorityUtils.createRoles(member.getRoles().get(0));
+        if(roles == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_ROLE_DOES_NOT_HAVE);
+        }
+        member.setRoles(roles);
+        createProfileImage(member);
+    }
+
+    private void makeSecretPassword(Member member){
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
     }
 
     /**

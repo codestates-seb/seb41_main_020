@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -103,12 +106,25 @@ public class ArticleService {
      * 게시글 단일 조회
      * TODO: 게시글 조회는 읽기만 하고 조회수를 증가시키는 방법은 없을까?
      */
+//    @Transactional // TODO: @Transactional 조금 더 알아보기
     public ArticleDto.Response findArticle(Long articleId) {
-        Article findArticle = findVerifiedArticle(articleId);
-//        updateView(articleId);
-//        findArticle.updateView();
 
-        return getResponse(findArticle);
+        Article findArticle = findVerifiedArticle(articleId);
+
+        Long viewCount = articleRepository.findViewCountFromRedis(articleId);
+        log.info("viewCount1={}", viewCount);
+        if (viewCount == null) {
+            viewCount = articleRepository.findView(articleId);
+            log.info("viewCount2={}", viewCount);
+            articleRepository.saveViewCountToRedis(articleId, viewCount);
+        }
+
+        viewCount = articleRepository.incrementViewCount(articleId);
+        log.info("viewCount3={}", viewCount);
+        ArticleDto.Response response = getResponse(findArticle);
+        response.setView(viewCount);
+
+        return response;
     }
 
     /**
@@ -121,9 +137,10 @@ public class ArticleService {
         if (findMemberId.equals(memberId)) {
 
             articleRepository.delete(findVerifiedArticle(articleId));
+        } else {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
         }
 
-        throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
     }
 
     /**
@@ -136,7 +153,7 @@ public class ArticleService {
         // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = memberService.findVerifiedMember(memberId);
 
-        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
+        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findMember.getId());
 
         return findArticleLike == null ? createArticleLike(findArticle, findMember) : deleteArticleLike(findArticleLike);
     }
@@ -156,31 +173,18 @@ public class ArticleService {
      */
     private ArticleDto.Response getResponse(Article article) {
 
-        log.info("nickname = {}, image = {}", article.getMember().getProfile().getNickname(),
-                article.getMember().getProfile().getImage());
-
         ArticleDto.Response response = mapper.articleToArticleResponse(article);
         long likeCount = articleLikeRepository.countByArticleId(article.getId());
         response.setLikeCount(likeCount);
 
-//        List<ArticleLike> articleLikes = articleLikeRepository.findAllByArticleId(article.getId());
-//
-//        if (articleLikes.isEmpty()) {
-//            response.setLikeCount(0);
-//        } else {
-//            response.setLikeCount(articleLikes.size());
-//        }
+        ArticleLike articleLike = articleLikeRepository.findByMemberId(article.getMember().getId());
+        if (articleLike == null) {
+            response.setLikeStatus(false);
+        } else {
+            response.setLikeStatus(true);
+        }
 
         return response;
-    }
-
-    /**
-     * 조회수 증가
-     */
-    @Transactional
-    public void updateView(Long articleId) {
-        findVerifiedArticle(articleId).updateView();
-//        return articleRepository.updateView(articleId);
     }
 
     /**
@@ -190,25 +194,6 @@ public class ArticleService {
 
         return articleRepository.findById(articleId).orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
-    }
-
-    /**
-     * 게시글 수정 메서드
-     */
-    private static void changeArticle(Article article, Article findArticle) {
-
-        Optional.ofNullable(article.getBoard().getTitle())
-                .ifPresent(title -> findArticle.getBoard().setTitle(title));
-
-        Optional.ofNullable(article.getBoard().getContent())
-                .ifPresent(content -> findArticle.getBoard().setContent(content));
-
-        Optional.ofNullable(article.getBoard().getImage())
-                .ifPresent(image -> findArticle.getBoard().setImage(image));
-
-        Optional.ofNullable(article.getBoard().getCategory())
-                .ifPresent(category -> findArticle.getBoard().setCategory(category));
-
     }
 
     /**
@@ -232,6 +217,33 @@ public class ArticleService {
         articleLikeRepository.delete(findArticleLike);
 
         return HttpStatus.NO_CONTENT;
+    }
+
+    /**
+     * 조회수 증가
+     */
+    @Transactional
+    public void updateView(Long articleId) {
+        findVerifiedArticle(articleId).updateView();
+    }
+
+    /**
+     * 게시글 수정 메서드
+     */
+    private static void changeArticle(Article article, Article findArticle) {
+
+        Optional.ofNullable(article.getBoard().getTitle())
+                .ifPresent(title -> findArticle.getBoard().setTitle(title));
+
+        Optional.ofNullable(article.getBoard().getContent())
+                .ifPresent(content -> findArticle.getBoard().setContent(content));
+
+        Optional.ofNullable(article.getBoard().getImage())
+                .ifPresent(image -> findArticle.getBoard().setImage(image));
+
+        Optional.ofNullable(article.getBoard().getCategory())
+                .ifPresent(category -> findArticle.getBoard().setCategory(category));
+
     }
 
 }

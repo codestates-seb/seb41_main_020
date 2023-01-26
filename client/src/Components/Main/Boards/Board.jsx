@@ -4,14 +4,19 @@ import React from "react";
 import { primary, sub, dtFontSize } from "../../../styles/mixins";
 
 import styled from "styled-components";
+import breakpoint from "../../../styles/breakpoint";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocale from "dayjs/plugin/updateLocale";
+import { Link } from "react-router-dom";
 
 const BoardContainer = styled.div`
   width: 100%;
   height: 80px;
   background-color: ${sub.sub100};
   display: flex;
-  border: ${(props) => (props.isLast ? "none" : `1px solid ${sub.sub300}`)};
-  border-width: 0 0 1px 0;
+  border: 1px solid ${sub.sub300};
+  border-width: ${(props) => (props.isLast ? "0 0 0 0" : `0 0 1px 0`)};
 `;
 
 const VoteContainer = styled.div`
@@ -19,7 +24,7 @@ const VoteContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px 30px;
+  width: 20%;
 
   path {
     fill: ${primary.primary300};
@@ -27,15 +32,23 @@ const VoteContainer = styled.div`
 
   p {
     color: ${primary.primary500};
-    font-size: ${dtFontSize.xsmall};
+    font-size: calc(6px + 0.5vw);
     font-weight: 500;
     margin-top: 5px;
+  }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    svg {
+      width: 15px;
+    }
   }
 `;
 
 const ImageContainer = styled.div`
   padding: 10px;
   margin-right: 20px;
+  max-width: 80px;
+
   img {
     width: 100%;
     height: 100%;
@@ -49,20 +62,39 @@ const PostDetailContainer = styled.div`
   justify-content: space-between;
 
   .title {
-    font-size: ${dtFontSize.small};
+    font-size: calc(8px + 0.5vw);
     font-weight: 600;
   }
 
   .content {
-    font-size: ${dtFontSize.xsmall};
+    font-size: calc(6px + 0.5vw);
   }
 
   .info {
-    font-size: ${dtFontSize.xsmall};
+    font-size: calc(4px + 0.5vw);
   }
 `;
 
 export default function Board({ data, isLast }) {
+  dayjs.extend(relativeTime).extend(updateLocale);
+  dayjs.updateLocale("en", {
+    relativeTime: {
+      past: "%s 전",
+      s: "초",
+      m: "1분",
+      mm: "분",
+      h: "1시간",
+      hh: "%d 시간",
+      d: "1일",
+      dd: "%d 일",
+      M: "1달",
+      MM: "%d 달",
+      y: "1년",
+      yy: "%d 년",
+    },
+  });
+  const createdAt = dayjs(data.createdAt).fromNow();
+
   return (
     <BoardContainer isLast={isLast}>
       <VoteContainer>
@@ -82,7 +114,7 @@ export default function Board({ data, isLast }) {
       <PostDetailContainer>
         <p className="title">{data.title}</p>
         <p className="content">{data.content}</p>
-        <p className="info">{data.createdAt}</p>
+        <p className="info">{createdAt}</p>
       </PostDetailContainer>
     </BoardContainer>
   );

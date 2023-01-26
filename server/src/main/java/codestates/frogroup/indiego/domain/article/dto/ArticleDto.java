@@ -63,6 +63,8 @@ public class ArticleDto {
 
         private long likeCount;
 
+        private Boolean likeStatus;
+
         private LocalDateTime createdAt;
 
         private LocalDateTime modifiedAt;

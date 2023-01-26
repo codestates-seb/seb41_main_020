@@ -30,6 +30,13 @@ public class RedisDao {
 
     public String getValues(String key) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        if(values.get(key) == null) return "false";
+        return (String) values.get(key);
+    }
+
+    public String getValues(Object key) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        if(values.get(key) == null) return "false";
         return (String) values.get(key);
     }
 

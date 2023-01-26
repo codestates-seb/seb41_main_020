@@ -318,7 +318,7 @@ export default function Login() {
   const data = { email: email, password: password };
   const navigate = useNavigate();
 
-  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const { isLogin, setUserInfo } = useIsLoginStore((state) => state);
 
   const handleKakaoOauthLogin = () => {
     location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/kakao`;
@@ -364,7 +364,7 @@ export default function Login() {
     );
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
     setIsLogin(true);
-    navigate("/");
+    window.location.replace("./");
   };
 
   const postLoginOnError = (err) => {

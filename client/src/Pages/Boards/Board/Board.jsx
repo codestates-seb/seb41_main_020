@@ -4,6 +4,7 @@ import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import heart from "../../../assets/heart.svg";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
+import instance from "../../../api/core/default.js";
 
 //로컬 모듈
 import {
@@ -16,9 +17,9 @@ import {
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
 
 const BoardInfoWrapper = styled(ContentWrapper)`
@@ -50,10 +51,11 @@ const BoardInfoWrapper = styled(ContentWrapper)`
 `;
 
 const QuillViewDiv = styled.div`
-  display: flex;
   margin-top: 20px;
   margin-bottom: 60px;
   height: max-content;
+  text-align: left;
+  padding-left: 10px;
 `;
 
 const HeartItem = styled(BoardItem)`
@@ -96,6 +98,33 @@ const Board = () => {
   const [boardData, setBoardData] = useState({});
   const [answerListData, setAnswerListData] = useState([]);
   const { id } = useParams();
+  const { setBoardStoreData } = useBoardStore();
+  const { pathname } = useLocation();
+
+  // const handleHeartButton = () => {
+  //   instance({
+  //     method: "put",
+  //     url: `http://indiego.kro.kr:80/articles/${id}`,
+  //   });
+  //   console.log(123);
+  // };
+
+  const handleHeartCount = async () => {
+    return await instance({
+      method: "put",
+      url: `http://indiego.kro.kr:80/articles/${id}`,
+    });
+  };
+
+  const handleHeartCountOnSuccess = () => {
+    refetch();
+  };
+  const { mutate: heartCount } = useMutation({
+    mutationKey: ["handleHeartCount"],
+    mutationFn: handleHeartCount,
+    onSuccess: handleHeartCountOnSuccess,
+    // onError: postButtonOnError,
+  });
 
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
@@ -103,12 +132,16 @@ const Board = () => {
   };
 
   const axiosBoardSuccess = (response) => {
+    console.log("&&&&&&&&&&&&&&&&&");
+    console.log(response);
+    console.log("&&&&&&&&&&&&&&&&&");
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
+    setBoardStoreData(response.data);
   };
 
-  const { isLoading, isError, error } = useQuery({
-    queryKey: ["axiosBoard"],
+  const { isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["axiosBoard", answerListData],
     queryFn: axiosBoard,
     onSuccess: axiosBoardSuccess,
   });
@@ -134,10 +167,12 @@ const Board = () => {
         </div>
 
         <div className="lineDiv"></div>
-        <QuillViewDiv>{boardData.content}</QuillViewDiv>
+        <QuillViewDiv
+          dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
+        ></QuillViewDiv>
         <HeartItem>
           <div className="likeDiv">
-            <button className="heartButton">
+            <button className="heartButton" onClick={() => heartCount()}>
               <img width={45} src={heart} alt="heart"></img>
             </button>
             <div className="heartCount">{boardData.likeCount}</div>
@@ -147,17 +182,20 @@ const Board = () => {
           <button
             className="edButton"
             onClick={() => {
-              navigate("/board/1/edit");
+              navigate(`${pathname}/edit`);
             }}
           >
             수정
           </button>
           <button className="edButton">삭제</button>
         </EditDeleteDiv>
+        {/* 댓글 리스트로 이동 */}
         <AnswerList
           boardData={boardData}
           answerListData={answerListData}
+          setAnswerListData={setAnswerListData}
           id={id}
+          refetch={refetch}
         />
       </BoardInfoWrapper>
     </PageWrapper>

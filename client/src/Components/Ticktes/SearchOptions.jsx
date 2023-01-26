@@ -226,30 +226,52 @@ const SearchBarExtended = styled(SearchBar)`
   }
 `;
 
+const DateResetButton = styled.button`
+  border: none;
+  border-radius: 20px;
+  background-color: ${primary.primary300};
+  color: white;
+  padding: 7px;
+  margin: 0 7px;
+  font-weight: 600;
+
+  :hover {
+    background-color: ${secondary.secondary400};
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin: 10px 0;
+  }
+`;
+
 export default function SearchOptions() {
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("전체");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
+  const [dateSelectActive, setDateSelectActive] = useState(false);
 
   const [searchParams] = useSearchParams();
   const queryParams = [...searchParams.entries()];
 
   const additionalParams = [
-    ["start", `${startDate.toISOString().split("T")[0]}`],
-    ["end", `${endDate.toISOString().split("T")[0]}`],
+    dateSelectActive && ["start", `${startDate.toISOString().split("T")[0]}`],
+    dateSelectActive && ["end", `${endDate.toISOString().split("T")[0]}`],
     location && ["address", location],
     ["category", category],
   ];
 
   useEffect(() => {
     if (endDate < startDate) {
-      window.alert("시작 날짜보다 이전 날짜를 선택할 수 없습니다.");
+      window.alert(
+        "올바른 날짜 형식이 아닙니다. 시작 날짜와 끝 날짜를 확인해주세요."
+      );
       setStartDate(new Date());
       setEndDate(new Date());
     }
-  }, [endDate]);
+  }, [endDate, startDate]);
 
   const locationPopupClickHandler = (e) => {
     setLocation(e.target.attributes.value.value);
@@ -261,6 +283,12 @@ export default function SearchOptions() {
 
   const radioButtonOnChangeHandler = (e) => {
     setCategory(e.target.value);
+  };
+
+  const dateResetOnClickHandler = () => {
+    setDateSelectActive(false);
+    setStartDate(new Date());
+    setEndDate(new Date());
   };
 
   return (
@@ -294,6 +322,9 @@ export default function SearchOptions() {
             </LocationPopupContainer>
           </Overlay>
         )}
+        <DateResetButton onClick={dateResetOnClickHandler}>
+          날짜 초기화
+        </DateResetButton>
         <SelectDateContainer>
           <DatePickerContainer>
             {/* calander 아이콘 */}
@@ -311,6 +342,10 @@ export default function SearchOptions() {
               }}
               dateFormat="yyyy-MM-dd"
               locale={ko}
+              value={dateSelectActive ? startDate : "시작날짜 선택"}
+              onCalendarOpen={() => {
+                setDateSelectActive(true);
+              }}
             />
           </DatePickerContainer>
           <svg className="dash" width={10} viewBox="0 0 448 512">
@@ -334,6 +369,10 @@ export default function SearchOptions() {
                 setEndDate(endDate);
               }}
               dateFormat="yyyy-MM-dd"
+              value={dateSelectActive ? startDate : "끝 날짜 선택"}
+              onCalendarOpen={() => {
+                setDateSelectActive(true);
+              }}
               locale={ko}
             />
           </DatePickerContainer>

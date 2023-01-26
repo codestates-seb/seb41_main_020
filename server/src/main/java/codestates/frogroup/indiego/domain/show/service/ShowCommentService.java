@@ -7,10 +7,12 @@ import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
+import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowCommentRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.redis.RedisDao;
+import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,14 +32,21 @@ public class ShowCommentService {
 
     private final ShowCommentRepository showCommentRepository;
     private final MemberService memberService;
-    private final RedisDao redisDao;
+    private final ScoreRepository scoreRepository;
     private final ShowReservationService showReservationService;
+    private final RedisKey redisKey;
     public ShowComment createShowComment(ShowComment showComment, Show show, Member member){
         Optional<ShowReservation>  optionalShowReservation = showReservationService.findShowReservation(
                 show.getId(), member.getId()
         );
-        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOWRESERVATION_NOT_FOUND));
+        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_NOT_FOUND));
 
+        Optional<ShowComment> optionalShowComment = Optional.ofNullable(
+                showCommentRepository.findByShowIdAndMemberId(show.getId(), member.getId()));
+
+        if(optionalShowComment.isPresent()){
+            throw new BusinessLogicException(ExceptionCode.SHOW_COMMENT_EXIST);
+        }
         showComment.addShow(show);
         showComment.addMember(member);
 
@@ -46,12 +55,15 @@ public class ShowCommentService {
     }
 
     private void inputScoreAverage(ShowComment showComment, Show show) {
-        String showId = String.valueOf(show.getId());
-        String key = showId +"@scoreAverage";
-        Double scoreAverage = Double.parseDouble(redisDao.getValues(key));
+        //null일 때
+        String key = redisKey.getScoreAverageKey(show.getId());
+        if(scoreRepository.getValues(key).equals("false")){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }
+        Double scoreAverage = Double.parseDouble(scoreRepository.getValues(key));
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        redisDao.setValues(key, s);
+        scoreRepository.setValues(key, s);
     }
 
     public Page<ShowComment> findShowComment(Long showId, int page, int size ){
@@ -84,14 +96,14 @@ public class ShowCommentService {
     }
 
     private void modifyScoreAverage(ShowComment showComment, Show show) {
-        String showId = String.valueOf(show.getId());
-        String key = showId +"@scoreAverage";
+
+        String key = redisKey.getScoreAverageKey(show.getId());
         Double scoreAverage = show.getScoreAverage();
         scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
         scoreAverage += showComment.getScore();
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
-        redisDao.setValues(key, s);
+        scoreRepository.setValues(key, s);
         show.setScoreAverage(Double.valueOf(s));
 
     }

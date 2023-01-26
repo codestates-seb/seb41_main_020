@@ -3,14 +3,19 @@ package codestates.frogroup.indiego.domain.show.service;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
+import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
+import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.Show.ShowStatus;
+import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
+import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.redis.RedisDao;
+import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -32,28 +38,25 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ShowService {
     private final ShowRepository showRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CustomBeanUtils<Show> utils;
     private final ShowReservationService reservationService;
-    private final RedisDao redisDao;
-
-
-
+    private final ScoreRepository scoreRepository;
+    private final RedisKey redisKey;
+    private final ShowMapper mapper;
 
     @Transactional
     public Show createShow(Show show, long memberId) {
 
-        // ToDo security 적용 시 수정 -> getCurrentMember
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         show.setMember(member);
+        Show savedShow = showRepository.save(show);
 
-        String id = String.valueOf(memberId);
-        String key = id +"@scoreAverage";
-        redisDao.setValues(key,"0");
+        String key = redisKey.getScoreAverageKey(show.getId());
+        scoreRepository.setValues(key,"0");
 
-        return showRepository.save(show);
+        return savedShow;
     }
 
     @Transactional
@@ -61,8 +64,7 @@ public class ShowService {
         Show findShow = findVerifiedShow(show.getId());
 
         // ToDo security 적용 시 수정 -> getCurrentMember
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findVerifiedMember(memberId);
 
         Show updatedShow = utils.copyNonNullProperties(show, findShow);
 
@@ -112,6 +114,20 @@ public class ShowService {
         findVerifiedShows(shows);
         return shows;
     }
+
+    public List<ShowMapsResponse> findMapShows(Double x1, Double x2, Double y1, Double y2){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(x1, x2, y1, y2);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+    public List<ShowMapsResponse> findMapShows(String search, String filter){
+        List<ShowMapsResponse> showMapsResponse = showRepository.findAllByShowMapsSearch(search, filter);
+        findVerifiedMapShows(showMapsResponse);
+        return showMapsResponse;
+    }
+
+
     //판매자용 공연 조회
     public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
 
@@ -120,36 +136,32 @@ public class ShowService {
         return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
     }
 
-    public Integer getEmptySeats(Long showId){
-        return (findShow(showId).getTotal() - reservationService.countReservation(showId));
-    }
-
     public Integer getRevenue(Long showId){
-        return reservationService.countReservation(showId) * findShow(showId).getShowBoard().getPrice();
+        return reservationService.countReservation(showId) * showRepository.findById(showId).get().getShowBoard().getPrice();
     }
 
-    public Show findShow(long showId){
-
+    public ShowDto.Response findShow(long showId){
         Show show = findVerifiedShow(showId);
-        //setScoreAverage(showId, show);
-        return show;
+        String key = redisKey.getScoreAverageKey(showId);
+        if(scoreRepository.getValues(key).equals("false")){
+            scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
+        }
+
+        ShowDto.Response response = mapper.showToShowResponse(show);
+        response.setScoreAverage( Double.valueOf(scoreRepository.getValues(key)));
+        response.setEmptySeats(reservationService.getEmptySeats(show, showId));
+
+        return response;
     }
 
-//    private void setScoreAverage(long showId, Show show) {
-//
-//        String id = String.valueOf(showId);
-//        String key = id + "@scoreAverage";
-//        redisDao.setValues(key,String.valueOf(show.getScoreAverage()));
-//        //show.setScoreAverage(Double.valueOf(redisDao.getValues(key)));
-//    }
+    @Transactional
+    public Double setScoreAverage(long showId) {
 
-    private Double setScoreAverage(long showId) {
-        String id = String.valueOf(showId);
-        String key = id + "@scoreAverage";
-        Show show = findShow(showId);
-        redisDao.setValues(key, String.valueOf(show.getScoreAverage()));
+        String key = redisKey.getScoreAverageKey(showId);
+        Show show = showRepository.findById(showId).get();
+        scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
 
-        return Double.valueOf(Double.valueOf(redisDao.getValues(key)));
+        return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
     }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
@@ -160,7 +172,7 @@ public class ShowService {
         Page<ShowListResponseDto> allByShowSearch = showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
         for(int i =0; i<allByShowSearch.getContent().size(); i++){
             ShowListResponseDto responseDto = allByShowSearch.getContent().get(i);
-            responseDto.setScoreAverage(setScoreAverage(responseDto.getId()));
+            responseDto.setScoreAverage(responseDto.getId());
         }
 
 
@@ -175,6 +187,12 @@ public class ShowService {
 
     private void findVerifiedShows(List<Show> shows) {
         if(shows == null){
+            throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
+        }
+    }
+
+    private void findVerifiedMapShows(List<ShowMapsResponse> showMapsResponse) {
+        if(showMapsResponse == null){
             throw new BusinessLogicException(ExceptionCode.SHOW_NOT_FOUND);
         }
     }

@@ -48,10 +48,6 @@ public class ShowDto {
         @NotNull
         private Double longitude;
 
-        //check
-        @NotNull
-        private String status;
-        //private double scoreAverage; // 평균별점
         @NotNull
         private Integer total; // 정원
     }
@@ -115,7 +111,9 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+        private Integer emptySeats;
         private boolean isBookmarked;
+        private String nickname;
     }
 
     @Getter
