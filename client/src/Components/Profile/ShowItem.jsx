@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 //페이지, 리액트 컴포넌트, 정적 파일
 import { PillButton } from "../../Pages/Tickets/TicketsDetail.jsx";
 import NaverMapIcon from "../../assets/naverMapIcon.jpg";
@@ -71,10 +74,16 @@ const ItemContentContainer = styled.div`
         display: flex;
         flex-direction: column;
 
-        > span {
+        > a {
           color: ${sub.sub800};
+          cursor: pointer;
           font-weight: 600;
           font-size: ${dtFontSize.medium};
+
+          &:hover {
+            color: ${primary.primary300};
+            cursor: pointer;
+          }
 
           @media screen and (max-width: ${breakpoint.mobile}) {
             font-size: ${mbFontSize.medium};
@@ -185,6 +194,10 @@ export default function ShowItem({ reservationData }) {
     deleteReservationData();
   };
 
+  const handleMoveToShowPage = () => {
+    navigate(`/tickets/${reservationData && reservationData.id}`);
+  };
+
   return (
     <ShowItemContainer>
       <ItemContentContainer>
@@ -196,10 +209,10 @@ export default function ShowItem({ reservationData }) {
           />
           <div className="show-info-container">
             <div className="title-and-provider-container">
-              <span>
+              <a onClick={handleMoveToShowPage}>
                 {reservationData && reservationData.title} /{" "}
                 {reservationData && reservationData.nickname}
-              </span>
+              </a>
               <span>
                 {" "}
                 티켓: {reservationData && reservationData.ticketCount}매
