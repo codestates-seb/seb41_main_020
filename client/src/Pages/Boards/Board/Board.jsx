@@ -100,29 +100,15 @@ const Board = () => {
   const { id } = useParams();
   const { setBoardStoreData } = useBoardStore();
   const { pathname } = useLocation();
-  const [view, setView] = useState("");
 
-  // 게시글 삭제 요청
-  const handleDelete = async () => {
-    return await instance({
-      method: "delete",
-      url: `http://indiego.kro.kr:80/articles/${id}`,
-    });
-  };
+  // const handleHeartButton = () => {
+  //   instance({
+  //     method: "put",
+  //     url: `http://indiego.kro.kr:80/articles/${id}`,
+  //   });
+  //   console.log(123);
+  // };
 
-  const handleDeleteOnSuccess = (response) => {
-    alert("삭제되었습니다");
-    navigate("/board/free?category=자유게시판&page=1");
-  };
-
-  const { mutate: deleteBoard } = useMutation({
-    mutationKey: ["handleDelete"],
-    mutationFn: handleDelete,
-    onSuccess: handleDeleteOnSuccess,
-    // onError: postButtonOnError,
-  });
-
-  // 하트 누르기 요청
   const handleHeartCount = async () => {
     return await instance({
       method: "put",
@@ -130,9 +116,8 @@ const Board = () => {
     });
   };
 
-  const handleHeartCountOnSuccess = (response) => {
+  const handleHeartCountOnSuccess = () => {
     refetch();
-    console.log(response);
   };
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
@@ -141,7 +126,6 @@ const Board = () => {
     // onError: postButtonOnError,
   });
 
-  // Board 내용 가져오기
   const axiosBoard = async () => {
     const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
     return response.data;
@@ -154,7 +138,6 @@ const Board = () => {
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
-    setView(response.data.view);
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
@@ -204,9 +187,7 @@ const Board = () => {
           >
             수정
           </button>
-          <button className="edButton" onClick={deleteBoard}>
-            삭제
-          </button>
+          <button className="edButton">삭제</button>
         </EditDeleteDiv>
         {/* 댓글 리스트로 이동 */}
         <AnswerList

@@ -1,19 +1,24 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import useIsLoginStore from "../../store/useIsLoginStore";
 
-const imageHandler = axios.create({
+const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
   headers: {
-    "Accept": "*/*",
+    Accept: "*/*",
     "Content-Type": "multipart/form-data",
   },
   withCredentials: true,
 });
 
-imageHandler.interceptors.request.use(
+instance.interceptors.request.use(
   async (config) => {
     if (localStorage.getItem("accessToken")) {
-      config.headers["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        "accessToken"
+      )}`;
+      console.log(localStorage.getItem("accessToken"));
     }
     return config;
   },
@@ -22,7 +27,7 @@ imageHandler.interceptors.request.use(
   }
 );
 
-imageHandler.interceptors.response.use(
+instance.interceptors.response.use(
   function (response) {
     return response;
   },
@@ -33,27 +38,32 @@ imageHandler.interceptors.response.use(
       const originalRequest = config;
 
       const headers = {
-        "Content-Type": "multipart/form-data",
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-        "Refresh": localStorage.getItem("refreshToken"),
-      }
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Refresh: localStorage.getItem("refreshToken"),
+      };
 
       try {
         const data = await axios({
           url: `${process.env.REACT_APP_SERVER_URI}/members/reissue`,
           method: "GET",
-          headers
+          headers,
         });
         if (data) {
-          localStorage.setItem("accessToken", data.headers.get("Authorization").split(" ")[1]);
-          originalRequest.headers.Authorization = `Bearer ${data.headers.get("Authorization").split(" ")[1]}`;
+          localStorage.setItem(
+            "accessToken",
+            data.headers.get("Authorization").split(" ")[1]
+          );
+          originalRequest.headers.Authorization = `Bearer ${
+            data.headers.get("Authorization").split(" ")[1]
+          }`;
           return await axios.request(originalRequest);
         }
       } catch (error) {
         axios({
           url: `${process.env.REACT_APP_SERVER_URI}/members/logout`,
           method: "GET",
-          headers
+          headers,
         });
       }
       return Promise.reject(error);
@@ -62,4 +72,4 @@ imageHandler.interceptors.response.use(
   }
 );
 
-export default imageHandler;
+export default instance;

@@ -5,6 +5,7 @@ import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
+
 import React, { useState } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
@@ -134,11 +135,6 @@ const BoardCreate = () => {
         <div className="titleInfo">
           게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
         </div>
-        <img
-          referrerPolicy="no-referrer"
-          src="https://indiego-fileupload.s3.ap-northeast-2.amazonaws.com/3f219da6-d805-4d07-891c-e381e5b891e3.png"
-          alt="이미지"
-        ></img>
         <PostBoard>
           <div className="postDiv">분류</div>
           <ClassificationDiv>
@@ -164,7 +160,6 @@ const BoardCreate = () => {
               setValue={setContentValue}
               placeholder={"내용을 입력해주세요."}
             ></Editor>
-            {console.log(contentValue)}
           </ContentInputDiv>
           <PostButton type="button" onClick={() => createBoard()}>
             글 올리기

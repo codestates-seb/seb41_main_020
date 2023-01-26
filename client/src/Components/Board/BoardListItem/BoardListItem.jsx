@@ -81,7 +81,6 @@ const BoardItemCreateInfo = styled.div`
 
 const BoardListItem = (props) => {
   const { pathname } = useLocation();
-  console.log("props : ", props);
   return (
     <BoardItem key={props.id}>
       <div className="likeDiv">
@@ -93,15 +92,7 @@ const BoardListItem = (props) => {
         <div className="heartCount">{props.likeCount}</div>
       </div>
       <div className="imageDiv">
-        <img
-          className="postImage"
-          src={
-            props.image === ""
-              ? "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
-              : props.image
-          }
-          alt="postImage"
-        ></img>
+        <img width={50} src={props.image} alt="heart"></img>
       </div>
       <BoardItemContent>
         <Link to={`${pathname}/${props.id}`} className="titleLink">

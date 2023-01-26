@@ -26,7 +26,6 @@ import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicke
 import { useMutation } from "@tanstack/react-query";
 import instance from "../../api/core/default.js";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const TicketsCreateContentWrapper = styled(PostWrapper)`
   @media screen and (max-width: ${breakpoint.mobile}) {
@@ -76,42 +75,6 @@ const TicketsCreateInputDiv = styled(TitleInputDiv)`
     resize: none;
     padding-top: 10px;
     padding-left: 10px;
-  }
-`;
-const ImageDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 50px;
-
-  .imageImg {
-    width: 400px;
-    height: 400px;
-    margin-bottom: 20px;
-  }
-
-  label {
-    width: 150px;
-    height: 30px;
-    border-radius: 20px;
-    background-color: ${primary.primary200};
-    color: ${sub.sub100};
-    border: none;
-    font-size: ${dtFontSize.medium};
-    text-align: center;
-    cursor: pointer;
-    padding-top: 5.5px;
-  }
-
-  input[type="file"] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
   }
 `;
 
@@ -241,11 +204,6 @@ export default function TicketsCreate() {
   const [longitude, setLongitude] = useState(""); // 경도 // 사용
   const navigate = useNavigate();
 
-  // 이미지 정보
-  const [imageUrl, setImageUrl] = useState(
-    "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
-  );
-
   // 티켓 post에 보낼 데이터
   const data = {
     title: ticketName,
@@ -321,30 +279,6 @@ export default function TicketsCreate() {
     navigate("/tickets");
   };
 
-  const onLoadFile = async (e) => {
-    const file = e.target.files;
-    const formData = new FormData();
-    console.log(file[0]);
-    formData.append("file", file[0]); // formData는 키-밸류 구조
-    try {
-      const result = await axios.post(
-        "http://indiego.kro.kr:80/shows/uploads",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      console.log("result : ", result);
-      console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
-      setImageUrl(result.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <PageWrapper>
       <TicketsCreateContentWrapper>
@@ -370,18 +304,6 @@ export default function TicketsCreate() {
           </TicketsCreateInputDiv>
 
           <div className="postDiv">공연 포스터</div>
-          <ImageDiv>
-            <img className="imageImg" src={imageUrl} alt="공연 포스터" />
-            <label htmlFor="ex_file">공연 포스터 업로드</label>
-            <input
-              className="imgInput"
-              type="file"
-              id="ex_file"
-              accept="img/*"
-              onChange={onLoadFile}
-            />
-          </ImageDiv>
-
           <div className="postDiv">공연 장소</div>
           <ChoiceButtonDiv>
             <div className="place">{place}</div>
