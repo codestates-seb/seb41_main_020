@@ -29,7 +29,8 @@ const ListItemContainer = styled.div`
     font-weight: 700;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: 2vw;
+      font-size: 13px;
+      margin-top: 0;
     }
   }
 
@@ -40,7 +41,7 @@ const ListItemContainer = styled.div`
     margin-bottom: 5px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: 2vw;
+      font-size: 10px;
     }
   }
 `;

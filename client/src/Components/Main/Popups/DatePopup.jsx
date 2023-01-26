@@ -33,7 +33,8 @@ const PopupContainer = styled.div`
     margin-top: 10px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: ${mbFontSize.small};
+      font-size: ${mbFontSize.large};
+      margin-bottom: 10px;
     }
   }
 `;
@@ -48,8 +49,7 @@ const CalendarContainer = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
-    min-height: 100px;
-    padding-top: 30px;
+    min-height: 300px;
   }
 `;
 
@@ -72,7 +72,7 @@ const CloseButton = styled.button`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     padding: 5px;
-    width: 30%;
+    width: 10%;
     margin: 15px 10px;
   }
 `;

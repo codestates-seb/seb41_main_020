@@ -13,6 +13,7 @@ import { dtFontSize, mbFontSize, primary } from "../../../styles/mixins.js";
 const Container = styled.div`
   display: flex;
   width: 100%;
+  max-width: 500px;
   height: 100%;
   flex-direction: column;
 
@@ -40,13 +41,13 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
+    height: 80%;
   }
 `;
 
 const ListContainer = styled.div`
   width: 100%;
   height: 100%;
-  margin: 0 5%;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
@@ -54,7 +55,7 @@ const ListContainer = styled.div`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 80%;
-    height: 100%;
+    height: 150px;
   }
 
   .null_data_info_container {
@@ -64,6 +65,10 @@ const ListContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      height: 150px;
+    }
   }
 
   .null_data_info {
@@ -82,6 +87,10 @@ const ListContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      height: 150px;
+    }
   }
 `;
 
