@@ -74,8 +74,8 @@ public class ArticleCommentController {
                                              @LoginMemberId Long memberId) {
 
 
-        articleCommentService.articleCommentLike(articleId, commentId, memberId);
+        HttpStatus response = articleCommentService.articleCommentLike(articleId, commentId, memberId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(response);
     }
 }
