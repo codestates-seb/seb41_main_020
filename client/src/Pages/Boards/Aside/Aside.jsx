@@ -70,7 +70,7 @@ const Aside = () => {
         <br />
         <Link
           className={pathname === "/board/request" ? "thisLinkNav" : "linkNav"}
-          to="/board/request"
+          to="/board/request?category=요청게시판&page=1"
         >
           요청게시판
         </Link>
@@ -79,14 +79,14 @@ const Aside = () => {
           className={
             pathname === "/board/advertise" ? "thisLinkNav" : "linkNav"
           }
-          to="/board/advertise"
+          to="/board/advertise/category=홍보게시판&page=1"
         >
           홍보게시판
         </Link>
         <br />
         <Link
           className={pathname === "/board/review" ? "thisLinkNav" : "linkNav"}
-          to="/board/review"
+          to="/board/review/category=후기게시판&page=1"
         >
           후기게시판
         </Link>
