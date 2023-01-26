@@ -17,7 +17,7 @@ public class JobSchedulerConfig {
     private final JobLauncher jobLauncher;
     private final Job job;
 
-    @Scheduled(cron = "0 39 18 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void executeJob() throws Exception {
         JobParameters params = new JobParametersBuilder()
                 .addString("job", String.valueOf(System.currentTimeMillis()))
