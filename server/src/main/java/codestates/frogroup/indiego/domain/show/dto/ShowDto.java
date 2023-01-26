@@ -4,9 +4,7 @@ import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.domain.show.entity.ShowBoard;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import net.bytebuddy.asm.Advice;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -77,9 +75,6 @@ public class ShowDto {
         private Double latitude;
         private Double longitude;
 
-        //check
-        private String status;
-        private Double scoreAverage; // 평균별점
         private Integer total; // 정원
 
     }
@@ -165,6 +160,7 @@ public class ShowDto {
         private String image;
         private String expiredAt;
         private String showAt;
+        private String detailAddress;
 
         @Builder
         ShowsResponse(Long id, ShowBoard showBoard, Member member){
