@@ -136,10 +136,6 @@ public class ShowService {
         return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
     }
 
-    public Integer getEmptySeats(Show show, Long showId){
-        return (show.getTotal() - reservationService.countReservation(showId));
-    }
-
     public Integer getRevenue(Long showId){
         return reservationService.countReservation(showId) * showRepository.findById(showId).get().getShowBoard().getPrice();
     }
@@ -153,7 +149,7 @@ public class ShowService {
 
         ShowDto.Response response = mapper.showToShowResponse(show);
         response.setScoreAverage( Double.valueOf(scoreRepository.getValues(key)));
-        response.setTotal(getEmptySeats(show, showId));
+        response.setEmptySeats(reservationService.getEmptySeats(show, showId));
 
         return response;
     }
@@ -176,7 +172,7 @@ public class ShowService {
         Page<ShowListResponseDto> allByShowSearch = showRepository.findAllByShowSearch(search, category, address, filter, start, end, pageable);
         for(int i =0; i<allByShowSearch.getContent().size(); i++){
             ShowListResponseDto responseDto = allByShowSearch.getContent().get(i);
-            responseDto.setScoreAverage(setScoreAverage(responseDto.getId()));
+            responseDto.setScoreAverage(responseDto.getId());
         }
 
 
