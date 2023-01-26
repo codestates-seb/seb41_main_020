@@ -148,7 +148,7 @@ public class ArticleService {
         // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = memberService.findVerifiedMember(memberId);
 
-        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findArticle.getId());
+        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findMember.getId());
 
         return findArticleLike == null ? createArticleLike(findArticle, findMember) : deleteArticleLike(findArticleLike);
     }

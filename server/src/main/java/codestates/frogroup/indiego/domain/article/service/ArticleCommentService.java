@@ -115,7 +115,7 @@ public class ArticleCommentService {
 //        Member findMember = findVerifiedMember(memberId);
         Member findMember = memberService.findVerifiedMember(memberId);
 
-        ArticleCommentLike articleCommentLike = articleCommentLikeRepository.findByMemberId(findArticleComment.getId());
+        ArticleCommentLike articleCommentLike = articleCommentLikeRepository.findByMemberId(findMember.getId());
 
         if (articleCommentLike == null) {
             articleCommentLikeRepository.save(
