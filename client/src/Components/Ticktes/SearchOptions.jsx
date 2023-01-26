@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "../Main/Button.jsx";
 import Overlay from "../../Components/Main/Popups/Overlay.jsx";
@@ -274,7 +274,8 @@ export default function SearchOptions() {
   }, [endDate, startDate]);
 
   const locationPopupClickHandler = (e) => {
-    setLocation(e.target.attributes.value.value);
+    const address = JSON.parse(e.target.attributes.value.value).address;
+    setLocation(address);
   };
 
   const locationButtonClickHandler = () => {
