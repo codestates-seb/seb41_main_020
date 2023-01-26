@@ -23,6 +23,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -43,6 +44,9 @@ dependencies {
 	//querydsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	//iamport
+	implementation 'com.github.iamport:iamport-rest-client-java:0.2.22'
 
 	// security, jwt, oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-security'
