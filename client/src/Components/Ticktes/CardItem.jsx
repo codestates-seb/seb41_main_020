@@ -85,26 +85,6 @@ const DetailContainer = styled.div`
   }
 `;
 
-// const BookmarkContainer = styled.div`
-//   display: flex;
-//   position: absolute;
-
-//   svg {
-//     width: 15px;
-//     height: 15px;
-
-//     path {
-//       fill: ${sub.sub500};
-//     }
-
-//     :hover {
-//       path {
-//         fill: ${misc.orange};
-//       }
-//     }
-//   }
-// `;
-
 export default function CardItem({ data }) {
   return (
     <CardItemContainer>
