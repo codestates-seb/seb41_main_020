@@ -131,7 +131,6 @@ export const BoardItem = styled.div`
     text-align: center;
     justify-content: center;
     width: 120px;
-    padding: 3px 0;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       display: none;
