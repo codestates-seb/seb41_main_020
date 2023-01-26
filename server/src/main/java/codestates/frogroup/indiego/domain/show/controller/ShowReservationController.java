@@ -77,6 +77,10 @@ public class ShowReservationController {
     public ResponseEntity getShows(@LoginMemberId Long memberId){
         List<ShowReservation> showReservationList =showReservationRepository.findByMember_Id(memberId);
         List<ShowReservationDto.Response> responses = mapper.showsReservationsToShowResvationResponses(showReservationList);
+        for(int i=0; i< responses.size(); i++){
+            responses.get(i).setAddress(showReservationList.get(i).getShow().getShowBoard().getDetailAddress());
+            responses.get(i).setImage(showReservationList.get(i).getShow().getShowBoard().getBoard().getImage());
+        }
         return new ResponseEntity(
                 new SingleResponseDto<>(setExpireds(showReservationList, responses)),
                 HttpStatus.OK);
