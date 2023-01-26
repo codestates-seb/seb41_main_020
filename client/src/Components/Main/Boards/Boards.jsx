@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 
 import Board from "./Board.jsx";
+import Spinner from "../../Spinner.jsx";
 
 import { primary, dtFontSize } from "../../../styles/mixins";
 
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "../../Spinner.jsx";
+import { Link } from "react-router-dom";
 
 const BoardsContainer = styled.div`
   width: 100%;
@@ -26,30 +27,37 @@ const BoardsContainer = styled.div`
 `;
 
 const BoardList = styled.ul`
-  width: 90%;
+  width: 100%;
   padding: 0;
   height: 300px;
-  background-color: aquamarine;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   border-radius: 10px;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    :hover {
+      color: ${primary.primary500};
+    }
+  }
 `;
 
-export default function Boards({ category, children }) {
+export default function Boards({ category, children, path }) {
   const [data, setData] = useState([]);
 
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchBoardData = () => {
-    return axios.get(`${serverURI}/articles`, {
+    return axios.get(`${serverURI}/articles/populars`, {
       params: { category },
     });
   };
 
   const fetchBoardDataOnSuccess = (response) => {
     const data = response.data.data;
-    console.log(data);
     setData(data);
   };
 
@@ -67,11 +75,25 @@ export default function Boards({ category, children }) {
           <Spinner />
         ) : (
           data &&
-          data.map((data, index) => {
-            if (index === data.length - 1) {
-              return <Board isLast={true} key={data.id} />;
+          data.map((data, index, datas) => {
+            if (index === datas.length - 1) {
+              return (
+                <Link
+                  to={`board${path ? `/${path}` : ""}/${data.id}`}
+                  key={data.id}
+                >
+                  <Board data={data} isLast={true} />
+                </Link>
+              );
             }
-            return <Board data={data} key={data.id} />;
+            return (
+              <Link
+                to={`board${path ? `/${path}` : ""}/${data.id}`}
+                key={data.id}
+              >
+                <Board data={data} />
+              </Link>
+            );
           })
         )}
         {/* <Board></Board>

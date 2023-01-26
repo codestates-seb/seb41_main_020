@@ -1,8 +1,12 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 import Overlay from "./Main/Popups/Overlay.jsx";
 
@@ -12,13 +16,16 @@ import {
   secondary,
   mbFontSize,
   sub,
+  misc,
 } from "../styles/mixins";
 import logo from "../assets/logo.svg";
 import breakpoint from "../styles/breakpoint";
 import user from "../assets/user.svg";
 import { useWindowSize } from "../utils/useWindowSize.js";
+import instance from "../api/core/default";
 
 import styled from "styled-components";
+import useIsLoginStore from "../store/useIsLoginStore.js";
 
 const HeaderContainer = styled.div`
   position: sticky;
@@ -40,6 +47,7 @@ const LogoContainer = styled.div`
   height: max-content;
 
   img {
+    width: 140px;
     margin-left: 19%;
   }
 
@@ -155,52 +163,53 @@ const LogoutStatusContainer = styled.div`
 
 const UserStatus = styled.div`
   display: flex;
-  flex-direction: column;
+  align-items: center;
   margin-right: 4.5%;
-  min-width: 180px;
-  max-width: 200px;
-  width: 16%;
-  padding: 10px 0;
-  padding-left: 20px;
+  width: max-content;
   height: max-content;
-  color: white;
-  background-color: ${primary.primary500};
-  border-radius: 20px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     display: none;
   }
 
-  div {
+  .userInfo {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    color: white;
+    background-color: ${primary.primary500};
+    min-width: 150px;
+    max-width: 200px;
+    padding: 10px 0;
+    height: max-content;
+    align-items: center;
   }
 
   .welcome {
-    font-size: ${dtFontSize.medium};
-
-    @media screen and (max-width: 1200px) {
-      font-size: ${dtFontSize.small};
-    }
-  }
-
-  .username {
-    font-size: ${dtFontSize.small};
+    font-size: ${dtFontSize.xsmall};
+    margin-right: 10px;
 
     @media screen and (max-width: 1200px) {
       font-size: ${dtFontSize.xsmall};
     }
   }
 
-  .iconbox {
-    margin-right: 10px;
+  .username {
+    font-size: ${dtFontSize.small};
+    font-weight: 600;
 
-    .usericon {
-      margin-right: 5px;
+    @media screen and (max-width: 1200px) {
+      font-size: ${dtFontSize.xsmall};
     }
+  }
 
-    path:hover {
-      fill: ${primary.primary100};
+  .logout {
+    margin-left: 15px;
+    font-weight: 600;
+    color: ${primary.primary500};
+    font-size: ${dtFontSize.xsmall};
+
+    :hover {
+      color: ${misc.red};
       cursor: pointer;
     }
   }
@@ -272,22 +281,25 @@ const NavbarContainer = styled.div`
 
 const NavbarProfileBox = styled.div`
   width: 100%;
-  height: 30%;
-  min-height: 200px;
+  height: 15%;
+  min-height: 180px;
   background-color: ${primary.primary300};
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  .usericon {
-    margin: 0 0 10px 20px;
+  span {
+    margin-left: 10px;
   }
 
-  .username {
+  .userInfo {
     display: flex;
     margin-left: 20px;
+    height: 100%;
     color: white;
-    font-size: ${mbFontSize.large};
+    font-size: ${mbFontSize.medium};
+    flex-direction: column;
+    justify-content: space-evenly;
 
     span {
       font-size: ${mbFontSize.medium};
@@ -295,25 +307,20 @@ const NavbarProfileBox = styled.div`
     }
   }
 
-  .logout_icon {
+  .logout {
     width: max-content;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin-left: 20px;
 
-    svg {
-      width: 20px;
-      height: 20px;
-    }
+    font-size: ${dtFontSize.small};
+    font-weight: 600;
 
     :hover {
+      color: ${primary.primary500};
       cursor: pointer;
-
-      path {
-        fill: ${primary.primary500};
-      }
     }
+  }
+
+  h2 {
+    margin-top: 50px;
   }
 `;
 
@@ -350,7 +357,9 @@ const NavbarLinkerContainer = styled.div`
 export default function Header() {
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
+  const isLogin = useIsLoginStore((state) => state.isLogin);
+
   useWindowSize(setNavOpen);
 
   const logoutHandler = () => {
@@ -368,8 +377,28 @@ export default function Header() {
       .get(`${process.env.REACT_APP_SERVER_URI}/members/logout`, { headers })
       .finally((response) => {
         localStorage.clear();
+        window.alert("로그아웃 되었습니다!");
+        window.location.reload();
       });
   };
+
+  const fetchUserInfo = () => {
+    const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+    return instance.get(`/members/${userId}`);
+  };
+
+  const fetchUserInfoOnSuccess = (res) => {
+    const data = res.data.data;
+    setUserInfo(data);
+  };
+
+  useQuery({
+    queryKey: ["fetchUserInfo", isLogin],
+    queryFn: fetchUserInfo,
+    enabled: isLogin,
+    onSuccess: fetchUserInfoOnSuccess,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <HeaderContainer>
@@ -404,47 +433,29 @@ export default function Header() {
         >
           공연찾기
         </Link>
-        <Link
-          className={location.pathname.includes("user") ? "current" : ""}
-          to="user/:id"
-        >
-          마이페이지
-        </Link>
+        {userInfo && (
+          <Link
+            className={location.pathname.includes("user") ? "current" : ""}
+            to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
+          >
+            마이페이지
+          </Link>
+        )}
       </HeaderLinkContainer>
-      {isLogin ? (
-        <UserStatus onClick={logoutHandler}>
-          <p className="welcome">환영합니다!</p>
-          <div className="iconbox">
-            <p className="username">unknown user 님!</p>
-            {/* user icon */}
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                width="15"
-                height="15"
-                className="usericon"
-              >
-                <path
-                  fill="white"
-                  d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
-                />
-              </svg>
-              {/* logout icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                width="15"
-                height="15"
-                className="logouticon"
-              >
-                <path
-                  fill="white"
-                  d="M160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96C43 32 0 75 0 128V384c0 53 43 96 96 96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32h64zM504.5 273.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H192c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32H320v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z"
-                />
-              </svg>
+      {userInfo ? (
+        <UserStatus>
+          <Link to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}>
+            <div className="userInfo">
+              <p className="welcome">환영합니다!</p>
+              <p className="username">
+                {userInfo.profile[0].nickname}
+                <span>님</span>
+              </p>
             </div>
-          </div>
+          </Link>
+          <p className="logout" onClick={logoutHandler}>
+            로그아웃
+          </p>
         </UserStatus>
       ) : (
         <LogoutStatusContainer>
@@ -478,26 +489,17 @@ export default function Header() {
           <NavbarContainer>
             {isLogin && (
               <NavbarProfileBox>
-                <div className="usericon">
-                  <img width={50} src={user} alt="user" />
-                </div>
-                <div className="username">
-                  <h2>
-                    User 님 <span>환영합니다!</span>
-                  </h2>
-                  <div className="logout_icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      width="15"
-                      height="15"
-                      className="logouticon"
-                    >
-                      <path
-                        fill="white"
-                        d="M160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96C43 32 0 75 0 128V384c0 53 43 96 96 96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32h64zM504.5 273.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H192c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32H320v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z"
-                      />
-                    </svg>
+                <div className="userInfo">
+                  <Link
+                    to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
+                  >
+                    <h2>
+                      {`${userInfo.profile[0].nickname} 님,`}
+                      <span>환영합니다!</span>
+                    </h2>
+                  </Link>
+                  <div className="logout" onClick={logoutHandler}>
+                    로그아웃
                   </div>
                 </div>
               </NavbarProfileBox>
@@ -531,6 +533,16 @@ export default function Header() {
               >
                 공연찾기
               </Link>
+              {userInfo && (
+                <Link
+                  className={
+                    location.pathname.includes("user") ? "current" : ""
+                  }
+                  to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
+                >
+                  마이페이지
+                </Link>
+              )}
             </NavbarLinkerContainer>
           </NavbarContainer>
         </Overlay>

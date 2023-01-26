@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 const BannerContianer = styled.div`
   width: 100%;
-  height: calc(width * 0.3);
+  height: max-content;
   background-color: gray;
   display: flex;
   flex-direction: column;

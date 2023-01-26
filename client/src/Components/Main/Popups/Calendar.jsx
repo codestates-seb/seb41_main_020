@@ -3,7 +3,14 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import React, { useState, useEffect, useRef } from "react";
 
-import { dtFontSize, primary, sub, misc } from "../../../styles/mixins";
+import {
+  dtFontSize,
+  primary,
+  sub,
+  misc,
+  mbFontSize,
+} from "../../../styles/mixins";
+import breakpoint from "../../../styles/breakpoint";
 
 import styled from "styled-components";
 import dayjs from "dayjs";
@@ -15,6 +22,8 @@ const Container = styled.div`
   width: 100%;
   height: 80%;
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const DateController = styled.div`
@@ -30,9 +39,8 @@ const DateController = styled.div`
     color: ${sub.sub800};
     font-weight: 600;
 
-    :hover {
-      color: ${primary.primary300};
-      cursor: pointer;
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
     }
   }
 
@@ -40,6 +48,11 @@ const DateController = styled.div`
     width: 15px;
     height: 15px;
     margin: 10px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 8px;
+    }
+
     path {
       fill: ${sub.sub800};
 
@@ -58,12 +71,22 @@ const DateController = styled.div`
 const CalendarGrid = styled.div`
   display: grid;
   width: 90%;
+  min-width: 300px;
   margin: 0 5%;
   height: 100%;
   grid-template-columns: repeat(7, 14.265%);
   grid-template-rows: 1fr 0.2fr repeat(6, 13%);
   border: 1px solid ${sub.sub300};
   border-radius: 20px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    font-size: ${mbFontSize.small};
+    height: 90%;
+    min-width: 0;
+    max-width: 350px;
+
+    grid-template-rows: 1fr 10% repeat(6, 13%);
+  }
 
   .item:nth-child(1) {
     grid-column-start: 1;
@@ -80,6 +103,11 @@ const CalendarGrid = styled.div`
     background-color: ${primary.primary300};
     border: 1px solid white;
     border-width: 0 1px 0 0;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      padding: 5px;
+      font-size: ${mbFontSize.xsmall};
+    }
   }
 
   .days.last {
@@ -101,6 +129,10 @@ const CalendarGrid = styled.div`
       font-size: 20px;
       font-weight: 800;
       color: ${misc.orange};
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        top: 40px;
+      }
     }
   }
 
@@ -110,6 +142,11 @@ const CalendarGrid = styled.div`
     height: 30px;
     padding: 5px;
     font-size: ${dtFontSize.small};
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.xsmall};
+      padding-top: 7px;
+    }
 
     :hover {
       background-color: ${primary.primary300};
@@ -175,7 +212,7 @@ export default function Calendar({ setSelectedDate, setDateInfo }) {
     setHasShow(data);
   };
 
-  const { isLoading, refetch: refetchHasShowArr } = useQuery({
+  const { refetch: refetchHasShowArr } = useQuery({
     queryKey: ["fetchHasShowArr", selectedYear, selectedMonth],
     queryFn: fetchHasShowArr,
     onSuccess: fetchHasShowArrOnSuccess,
@@ -264,7 +301,6 @@ export default function Calendar({ setSelectedDate, setDateInfo }) {
       month: selectedMonth,
       day: selected,
     });
-    console.log("setting date");
   };
 
   const monthSelectorOnClickHandler = (num) => {

@@ -28,6 +28,10 @@ const ItemGrid = styled.div`
   .null_info {
     position: absolute;
     left: 40%;
+
+    @media screen and (max-width: 500px) {
+      left: 30%;
+    }
   }
 `;
 
