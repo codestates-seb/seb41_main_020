@@ -6,11 +6,11 @@ on:
     paths:
       - server/**
       - .github/**
-  pull_request:
-    branches: [ "release" ]
-    paths:
-      - server/**
-      - .github/**
+#   pull_request:
+#     branches: [ "release" ]
+#     paths:
+#       - server/**
+#       - .github/**
 
 permissions:
   contents: read
