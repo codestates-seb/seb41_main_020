@@ -20,4 +20,6 @@ public interface ArticleRepositoryCustom {
     Long findViewCountFromRedis(Long articleId);
 
     void saveViewCountToRedis(Long articleId, Long viewCount);
+
+    Long getValues(String key);
 }

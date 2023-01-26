@@ -56,7 +56,7 @@ public class ShowCommentService {
 
     private void inputScoreAverage(ShowComment showComment, Show show) {
         //null일 때
-        String key = redisKey.getScoreAvergeKey(show.getId());
+        String key = redisKey.getScoreAverageKey(show.getId());
         if(scoreRepository.getValues(key).equals("false")){
             scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
         }
@@ -97,7 +97,7 @@ public class ShowCommentService {
 
     private void modifyScoreAverage(ShowComment showComment, Show show) {
 
-        String key = redisKey.getScoreAvergeKey(show.getId());
+        String key = redisKey.getScoreAverageKey(show.getId());
         Double scoreAverage = show.getScoreAverage();
         scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
         scoreAverage += showComment.getScore();
