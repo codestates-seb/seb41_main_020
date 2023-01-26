@@ -62,7 +62,7 @@ const SearchedDataListContainer = styled.div`
   flex-direction: column;
   background-color: ${primary.primary100}a2;
   border-radius: 10px;
-  overflow: scroll;
+  overflow-y: scroll;
   width: 90%;
   height: 60%;
   opacity: ${(props) => (props.isSearched ? 1 : 0)};

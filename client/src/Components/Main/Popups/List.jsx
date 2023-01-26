@@ -50,7 +50,7 @@ const ListContainer = styled.div`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: scroll;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 80%;

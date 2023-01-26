@@ -96,11 +96,6 @@ export default function Boards({ category, children, path }) {
             );
           })
         )}
-        {/* <Board></Board>
-        <Board></Board>
-        <Board></Board>
-        <Board></Board>
-        <Board isLast={true}></Board> */}
       </BoardList>
     </BoardsContainer>
   );
