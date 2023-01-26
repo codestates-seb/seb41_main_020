@@ -17,12 +17,13 @@ import {
 import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import instance from "../../api/core/default";
+import useProfileDataStore from "../../store/useProfileDataStore";
 
 const Container = styled.div`
   align-items: center;
@@ -138,6 +139,7 @@ const ProfileInfoContainer = styled.div`
       display: flex;
       flex-direction: column;
       margin: 0 0 4% 7%;
+      width: max-content;
 
       @media screen and (max-width: ${breakpoint.mobile}) {
         margin-left: 4%;
@@ -147,6 +149,7 @@ const ProfileInfoContainer = styled.div`
         color: ${primary.primary500};
         font-size: ${dtFontSize.xlarge};
         font-weight: 600;
+        width: max-content;
 
         @media screen and (max-width: ${breakpoint.mobile}) {
           font-size: ${mbFontSize.large};
@@ -261,9 +264,16 @@ const LocationandAboutContainer = styled.div`
 export default function Profile() {
   const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
-  const [data, setData] = useState();
+  const { profileData, setProfileData } = useProfileDataStore((state) => state);
   const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+
+  useEffect(() => {
+    if (profileData && profileData.role === "PERFORMER") {
+      window.alert("잘못된 접근입니다.");
+      navigate("/");
+    }
+  }, [profileData]);
 
   const fetchData = () => {
     return instance({
@@ -273,7 +283,7 @@ export default function Profile() {
   };
 
   const fetchDataOnSuccess = (response) => {
-    setData(response.data.data && response.data.data);
+    setProfileData(response.data.data && response.data.data);
   };
 
   const fetchDataOnError = (err) => {
@@ -284,13 +294,17 @@ export default function Profile() {
   };
 
   const { isLoading } = useQuery({
-    queryKey: ["fetchData"],
+    queryKey: ["fetchUserProfileData"],
     queryFn: fetchData,
     keepPreviousData: true,
     onSuccess: fetchDataOnSuccess,
     onError: fetchDataOnError,
     retry: false,
   });
+
+  const handleMoveToEditPage = () => {
+    navigate(`/mypage/${userId}/edit`);
+  };
 
   return (
     <Container>
@@ -304,32 +318,42 @@ export default function Profile() {
         <ContentInnerContainer>
           <ProfileInfoContainer>
             <div>
-              <img alt="dummy profile" src={data && data.profile[0].image} />
+              <img
+                alt="dummy profile"
+                src={profileData && profileData.profile[0].image}
+              />
               <div>
                 <span className="user-nickname">
-                  {data && data.profile[0].nickname}
+                  {profileData && profileData.profile[0].nickname}
                 </span>
-                <span className="user-email">{data && data.email}</span>
+                <span className="user-email">
+                  {profileData && profileData.email}
+                </span>
               </div>
             </div>
             <div className="button-container">
-              <button className="profile-edit-button">프로필 수정하기</button>
+              <button
+                className="profile-edit-button"
+                onClick={handleMoveToEditPage}
+              >
+                프로필 수정하기
+              </button>
             </div>
           </ProfileInfoContainer>
           <LocationandAboutContainer>
             <div>
               <span className="sub-title">활동 지역</span>
               <span className="sub-location-info">
-                {data && data.profile[0].address
-                  ? data && data.profile[0].address
+                {profileData && profileData.profile[0].address
+                  ? profileData && profileData.profile[0].address
                   : "없음"}
               </span>
             </div>
             <div>
               <span className="sub-title">소개</span>
               <span className="sub-info">
-                {data && data.profile[0].introduction
-                  ? data && data.profile[0].introduction
+                {profileData && profileData.profile[0].introduction
+                  ? profileData && profileData.profile[0].introduction
                   : "없음"}
               </span>
             </div>
