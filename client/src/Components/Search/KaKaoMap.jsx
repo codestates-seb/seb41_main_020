@@ -1,5 +1,7 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect, useRef } from "react";
 
 import marker from "../../assets/marker.svg";
@@ -9,7 +11,6 @@ import { dtFontSize, primary, secondary, sub } from "../../styles/mixins";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { create } from "json-server";
 
 const Container = styled.div`
   display: flex;
@@ -174,13 +175,13 @@ export default function KaKaoMap({
       clustererElement.current = clusterer;
 
       // 초기에 데이터가 존재하면 마커 추가
-      // if (data && data.length > 0) {
-      //   data.map((locObj) => {
-      //     markersArray.current.push(
-      //       createMarker(locObj, map, markerImage, kakao)
-      //     );
-      //   });
-      // }
+      if (data && data.length > 0) {
+        data.map((locObj) => {
+          markersArray.current.push(
+            createMarker(locObj, map, markerImage, kakao)
+          );
+        });
+      }
 
       // 지도에 컨트롤 추가
       const mapTypeControl = new kakao.maps.MapTypeControl();
