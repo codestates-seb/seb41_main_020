@@ -119,12 +119,17 @@ public class ArticleService {
             articleRepository.saveViewCountToRedis(articleId, viewCount);
         }
 
-        viewCount = articleRepository.incrementViewCount(articleId);
-        log.info("viewCount3={}", viewCount);
+        // redis의 조회수 증가
+//        viewCount = articleRepository.incrementViewCount(articleId);
+//        log.info("viewCount3={}", viewCount);
         ArticleDto.Response response = getResponse(findArticle);
         response.setView(viewCount);
 
         return response;
+    }
+
+    public Long incrementViewCount(Long articleId) {
+        return articleRepository.incrementViewCount(articleId);
     }
 
     /**
