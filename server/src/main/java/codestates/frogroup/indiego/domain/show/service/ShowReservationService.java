@@ -31,7 +31,10 @@ public class ShowReservationService {
     @Transactional
     public ShowReservation createReservation(ShowReservation reservation) {
         Show show = reservation.getShow();
-        show.setTotal(getEmptySeats(show, show.getId()));
+        int numEmptySeats = getEmptySeats(show, show.getId());
+        if(reservation.getTicketCount() > numEmptySeats){
+            throw new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_CREATE_FAIL);
+        }
         return showReservationRepository.save(reservation);
     }
 
