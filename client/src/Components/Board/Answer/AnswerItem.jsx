@@ -141,7 +141,9 @@ const AnswerItem = (props) => {
     });
   };
 
-  const handleHeartCountOnSuccess = (resposne) => {};
+  const handleHeartCountOnSuccess = () => {
+    props.refetch();
+  };
 
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
