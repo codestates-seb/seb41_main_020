@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 //페이지, 리액트 컴포넌트, 정적 파일
 import { PillButton } from "../../Pages/Tickets/TicketsDetail.jsx";
 import NaverMapIcon from "../../assets/naverMapIcon.jpg";
@@ -16,6 +19,7 @@ import {
 
 //라이브러리 및 라이브러리 메소드
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 const ShowItemContainer = styled.li`
@@ -47,7 +51,7 @@ const ItemContentContainer = styled.div`
   > div {
     display: flex;
 
-    > .poster-image-area {
+    > .poster-image {
       background-color: ${primary.primary300};
       height: 100px;
       width: 75px;
@@ -68,10 +72,16 @@ const ItemContentContainer = styled.div`
         display: flex;
         flex-direction: column;
 
-        > span {
+        > a {
           color: ${sub.sub800};
+          cursor: pointer;
           font-weight: 600;
           font-size: ${dtFontSize.medium};
+
+          &:hover {
+            color: ${primary.primary300};
+            cursor: pointer;
+          }
 
           @media screen and (max-width: ${breakpoint.mobile}) {
             font-size: ${mbFontSize.medium};
@@ -168,26 +178,45 @@ const ItemContentContainer = styled.div`
   }
 `;
 
-export default function ShowItem() {
+export default function ShowItem({ reservationData }) {
+  const navigate = useNavigate();
+
+  const handleMoveToShowPage = () => {
+    navigate(`/tickets/${reservationData && reservationData.id}`);
+  };
+
   return (
     <ShowItemContainer>
       <ItemContentContainer>
         <div>
-          <div className="poster-image-area" />
+          <img
+            alt="poster"
+            className="poster-image"
+            src={reservationData && reservationData.image}
+          />
           <div className="show-info-container">
             <div className="title-and-provider-container">
-              <span>Rock Night Party</span>
-              <span>우리 동네 락밴드</span>
+              <a onClick={handleMoveToShowPage}>
+                {reservationData && reservationData.title} /{" "}
+                {reservationData && reservationData.nickname}
+              </a>
             </div>
             <div className="period-and-location-container">
-              <span className="period">공연기간: 2023.01.16~2023.01.30</span>
+              <span className="period">
+                공연기간: {reservationData && reservationData.showAt}~
+                {reservationData && reservationData.expiredAt}
+              </span>
               <span className="location">서울특별시 종로구 종로운동장</span>
             </div>
           </div>
         </div>
         <div className="empty-seat-and-profit-container">
-          <span className="empty-seat">잔여 좌석: 35 / 70</span>
-          <span className="profit">현재 수익: 123,456 원</span>
+          <span className="empty-seat">
+            남은 티켓: {reservationData && reservationData.emptySeats}매
+          </span>
+          <span className="profit">
+            현재 수익: {reservationData && reservationData.revenue}원
+          </span>
         </div>
       </ItemContentContainer>
     </ShowItemContainer>

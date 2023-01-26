@@ -11,9 +11,11 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import instance from "../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import { React, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components/macro";
 
 const ContentInnerContainer = styled.div`
@@ -81,15 +83,66 @@ const ShowListContainer = styled.div`
 `;
 
 export default function AllShowList() {
+  const [data, setData] = useState();
+  const [isExpiredDataExist, setIsExpiredDataExist] = useState(true);
+  const [isNotExpiredDataExist, setIsNotExpiredDataExist] = useState(true);
+
+  const fetchData = () => {
+    return instance({
+      method: "get",
+      url: "/shows/seller",
+    });
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    setData(response.data.data && response.data.data);
+  };
+
+  const fetchDataOnError = (err) => {
+    console.log(err);
+    // window.alert("다시 로그인해주세요.");
+    // setIsLogin(false);
+    // localStorage.clear();
+    // navigate("/");
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchData"],
+    queryFn: fetchData,
+    keepPreviousData: true,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
+
+  const notExpiredData = data && data.filter((data) => data.expired === false);
+  const expiredData = data && data.filter((data) => data.expired === true);
+
+  useEffect(() => {
+    if (notExpiredData && notExpiredData.length <= 0) {
+      setIsNotExpiredDataExist(false);
+    }
+
+    if (expiredData && expiredData.length <= 0) {
+      setIsExpiredDataExist(false);
+    }
+  }, [data]);
+
   return (
     <ContentInnerContainer>
       <div className="performance-list-title">현재 공연 목록</div>
       <ShowListContainer>
-        <ShowListPerformer />
+        <ShowListPerformer
+          allReservationData={notExpiredData}
+          dataExist={isNotExpiredDataExist}
+        />
       </ShowListContainer>
       <div className="expired-list-title">지난 공연 목록</div>
       <ShowListContainer>
-        <ShowListPerformer />
+        <ShowListPerformer
+          allReservationData={expiredData}
+          dataExist={isExpiredDataExist}
+        />
       </ShowListContainer>
     </ContentInnerContainer>
   );

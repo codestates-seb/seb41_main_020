@@ -293,7 +293,6 @@ export default function Profile() {
   const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const { profileData, setProfileData } = useProfileDataStore((state) => state);
-  const [data, setData] = useState();
   const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
@@ -323,7 +322,7 @@ export default function Profile() {
   };
 
   const { isLoading } = useQuery({
-    queryKey: ["fetchData"],
+    queryKey: ["fetchPerformerProfileData"],
     queryFn: fetchData,
     keepPreviousData: true,
     onSuccess: fetchDataOnSuccess,
@@ -377,7 +376,6 @@ export default function Profile() {
             <div>
               <span className="sub-title">활동 지역</span>
               <span className="sub-location-info">
-                {" "}
                 {profileData && profileData.profile[0].address
                   ? profileData && profileData.profile[0].address
                   : "없음"}
