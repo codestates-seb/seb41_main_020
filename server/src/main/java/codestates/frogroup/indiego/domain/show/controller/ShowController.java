@@ -14,13 +14,12 @@ import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Service;
-import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,8 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -38,7 +37,6 @@ import java.util.*;
 @Valid
 @RequiredArgsConstructor
 public class ShowController {
-
     private final ShowService showService;
     private final MemberService memberService;
     private final ShowMapper mapper;
@@ -77,7 +75,7 @@ public class ShowController {
         show.setId(showId);
         Show updatedShow = showService.updateShow(show, memberId);
         ShowDto.Response response = mapper.showToShowResponse(updatedShow);
-
+        response.setEmptySeats(showReservationService.getEmptySeats(show, showId));
         return new ResponseEntity<>(
                 response, HttpStatus.OK
         );
@@ -151,6 +149,7 @@ public class ShowController {
         return new ResponseEntity(
                 new SingleResponseDto<>(response), HttpStatus.OK);
     }
+
 
 
 
