@@ -29,7 +29,7 @@ instance.interceptors.response.use(
   async function (error) {
     const { config, response } = error;
 
-    if (response.status === 400 && response.status.message==="Token Expired") {
+    if (response.status === 400 && response.data.message==="Token Expired") {
       const originalRequest = config;
 
       const headers = {

@@ -14,11 +14,11 @@
 }
 
 *::-webkit-scrollbar-track {
- background-color: transparent;
+ background-color: transparent !important;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(63, 63, 63, 0.722);
+  background-color: rgba(63, 63, 63, 0.722) !important;
 }
 
 a {

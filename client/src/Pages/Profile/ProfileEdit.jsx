@@ -271,7 +271,6 @@ const EditProfileImageButton = styled.button`
 `;
 
 export default function ProfileEdit() {
-  const [isPerformer, setIsPerFormer] = useState(true);
   const [fontColor, setfontColor] = useState("");
   const [buttonColor, setButtonColor] = useState("");
   const [buttonHoverColor, setButtonHoverColor] = useState("");
@@ -291,11 +290,11 @@ export default function ProfileEdit() {
     useSelectedProfileLocationStore((selectedLocation) => selectedLocation);
 
   const handleProfilEditPageColor = () => {
-    if (isPerformer) {
+    if (profileData && profileData.role === "PERFORMER") {
       setfontColor(secondary.secondary600);
       setButtonColor(secondary.secondary500);
       setButtonHoverColor(primary.primary200);
-    } else {
+    } else if (profileData && profileData.role === "USER") {
       setfontColor(primary.primary500);
       setButtonColor(primary.primary300);
       setButtonHoverColor(secondary.secondary500);
@@ -303,15 +302,9 @@ export default function ProfileEdit() {
   };
 
   useEffect(() => {
-    if (profileData.role === "USER") {
-      setIsPerFormer(false);
-      handleProfilEditPageColor();
-    }
-  }, []);
-
-  useEffect(() => {
     setNickname(profileData && profileData.profile[0].nickname);
     setIntroduction(profileData && profileData.profile[0].introduction);
+    handleProfilEditPageColor();
   }, []);
 
   useEffect(() => {
@@ -344,8 +337,18 @@ export default function ProfileEdit() {
     history.go(-1);
   };
 
-  const patchDataOnError = () => {
-    window.alert("일시적인 오류가 발생했습니다.");
+  const patchDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Token Expired"
+    ) {
+      window.alert("다시 로그인해주세요.");
+      localStorage.clear();
+      setIsLogin(false);
+      navigate("/");
+    } else if (error.response.status === 500) {
+      window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    }
   };
 
   const { mutate: patchProfile } = useMutation({
