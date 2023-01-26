@@ -33,6 +33,7 @@ import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
 
 export const PageWrapper = styled.div`
+  background-color: black;
   display: flex;
   text-align: center;
 `;

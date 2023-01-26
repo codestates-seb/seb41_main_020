@@ -6,7 +6,7 @@ import {
   mbFontSize,
 } from "../../../styles/mixins.js";
 import breakpoint from "../../../styles/breakpoint.js";
-import heart from "../../../assets/heart.svg";
+import blueHeart from "../../../assets/blueHeart.gif";
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import instance from "../../../api/core/default.js";
@@ -160,7 +160,6 @@ const AnswerItem = (props) => {
       url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
       data,
     });
-    console.log(response.data.data);
     return response.data.comment;
   };
 
@@ -178,14 +177,10 @@ const AnswerItem = (props) => {
 
   // 삭제 코드
   const handleDelete = async () => {
-    console.log(props.articleId);
-    console.log(props.id);
-    const response = await instance({
+    return await instance({
       method: "delete",
       url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
     });
-    console.log(response);
-    // return response.data.comment;
   };
 
   const handleDeleteOnSuccess = () => {
@@ -225,7 +220,7 @@ const AnswerItem = (props) => {
         <AnswerListFunctionDiv>
           <div className="heartDiv">
             <button className="heartButton" onClick={() => heartCount()}>
-              <img className="heartImage" src={heart} alt="하트" />
+              <img className="heartImage" src={blueHeart} alt="하트" />
             </button>
             <span className="heartCount">{props.likeCount}</span>
           </div>

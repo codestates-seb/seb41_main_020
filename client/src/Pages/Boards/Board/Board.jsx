@@ -2,9 +2,10 @@
 import breakpoint from "../../../styles/breakpoint.js";
 import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
-import heart from "../../../assets/heart.svg";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
 import instance from "../../../api/core/default.js";
+import yellowHeart from "../../../assets/yellowHeart.gif";
+import blueHeart from "../../../assets/blueHeart.gif";
 
 //로컬 모듈
 import {
@@ -132,7 +133,6 @@ const Board = () => {
 
   const handleHeartCountOnSuccess = (response) => {
     refetch();
-    console.log(response);
   };
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
@@ -190,7 +190,11 @@ const Board = () => {
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton" onClick={() => heartCount()}>
-              <img width={45} src={heart} alt="heart"></img>
+              <img
+                width={48}
+                src={boardData.likeStatus ? yellowHeart : blueHeart}
+                alt="heart"
+              ></img>
             </button>
             <div className="heartCount">{boardData.likeCount}</div>
           </div>

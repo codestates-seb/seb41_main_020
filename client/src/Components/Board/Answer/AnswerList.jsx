@@ -88,9 +88,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
     });
   };
 
-  const handleButtonOnSuccess = (response) => {
-    console.log(response);
-    console.log(answerListData);
+  const handleButtonOnSuccess = () => {
     refetch();
   };
 

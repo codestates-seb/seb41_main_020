@@ -134,11 +134,6 @@ const BoardCreate = () => {
         <div className="titleInfo">
           게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
         </div>
-        <img
-          referrerPolicy="no-referrer"
-          src="https://indiego-fileupload.s3.ap-northeast-2.amazonaws.com/3f219da6-d805-4d07-891c-e381e5b891e3.png"
-          alt="이미지"
-        ></img>
         <PostBoard>
           <div className="postDiv">분류</div>
           <ClassificationDiv>
