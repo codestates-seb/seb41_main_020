@@ -31,21 +31,24 @@ public class ShowReservationService {
     @Transactional
     public ShowReservation createReservation(ShowReservation reservation) {
         Show show = reservation.getShow();
+        checkShowStatus(show);
         int numEmptySeats = getEmptySeats(show, show.getId());
         if(reservation.getTicketCount() > numEmptySeats){
             throw new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_CREATE_FAIL);
+        }else if(reservation.getTicketCount() == numEmptySeats){
+            show.setStatus(Show.ShowStatus.SOLD_OUT);
         }
         return showReservationRepository.save(reservation);
     }
 
-    public Integer getEmptySeats(Show show, Long showId){
-        return (show.getTotal() - countReservation(showId));
-    }
 
     @Transactional
     public void deleteShow(Long id) {
-
         ShowReservation reservation = findVerifiedReservation(id);
+        Show show = reservation.getShow();
+        if(show.getStatus() == Show.ShowStatus.SOLD_OUT){
+            show.setStatus(Show.ShowStatus.SALE);
+        }
         showReservationRepository.delete(reservation);
 
     }
@@ -53,15 +56,7 @@ public class ShowReservationService {
     public Optional<ShowReservation> findShowReservation(Long showId, Long memberId){
         return showReservationRepository.findByShowIdAndMemberId(showId, memberId);
     }
-
-    public Integer countReservation(Long showId){
-        List<ShowReservation> reservations = showReservationRepository.findByShowId(showId);
-        Integer cnt = 0;
-        for(int i=0; i<reservations.size(); i++){
-            cnt += reservations.get(i).getTicketCount();
-        }
-        return cnt;
-    }
+    
 
     private ShowReservation findVerifiedReservation(Long id) {
         Optional<ShowReservation> optionalShow = showReservationRepository.findById(id);
@@ -81,6 +76,25 @@ public class ShowReservationService {
         showReservation.setTicketCount(post.getTicketCount());
         ShowReservation created = createReservation(showReservation);
         return created;
+    }
+
+    public Integer getEmptySeats(Show show, Long showId){
+        return (show.getTotal() - countReservation(showId));
+    }
+
+    public Integer countReservation(Long showId){
+        List<ShowReservation> reservations = showReservationRepository.findByShowId(showId);
+        Integer cnt = 0;
+        for(int i=0; i<reservations.size(); i++){
+            cnt += reservations.get(i).getTicketCount();
+        }
+        return cnt;
+    }
+
+    private static void checkShowStatus(Show show) {
+        if(show.getStatus() != Show.ShowStatus.SALE){
+            throw new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_CREATE_FAIL);
+        }
     }
 
 }

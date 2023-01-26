@@ -24,6 +24,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Slf4j
 @Configuration
 @EnableBatchProcessing
@@ -86,6 +88,10 @@ public class BatchConfig {
             String key = redisKey.getScoreAverageKey(showId);
             show.setScoreAverage(Double.parseDouble(scoreRepository.getValues(key)));
             scoreRepository.deleteValues(key);
+
+            if(show.getShowBoard().getExpiredAt().isBefore(LocalDate.now())){
+                show.setStatus(Show.ShowStatus.EXPIRED);
+            }
         }
     }
 
