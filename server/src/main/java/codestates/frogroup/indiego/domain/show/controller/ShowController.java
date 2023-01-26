@@ -7,6 +7,7 @@ import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowMapsResponse;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
+import codestates.frogroup.indiego.domain.show.service.ShowReservationService;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
@@ -42,6 +43,7 @@ public class ShowController {
     private final MemberService memberService;
     private final ShowMapper mapper;
     private final AwsS3Service awsS3Service;
+    private final ShowReservationService showReservationService;
 
 
     @PostMapping
@@ -134,7 +136,7 @@ public class ShowController {
                         .expiredAt(shows.get(i).getShowBoard().getExpiredAt())
                     .build();
 
-            responseOfSeller.setEmptySeats(showService.getEmptySeats(shows.get(i), shows.get(i).getId()));
+            responseOfSeller.setEmptySeats(showReservationService.getEmptySeats(shows.get(i), shows.get(i).getId()));
             responseOfSeller.setRevenue(showService.getRevenue(shows.get(i).getId()));
 
             if(responseOfSeller.getEmptySeats().equals(0)){

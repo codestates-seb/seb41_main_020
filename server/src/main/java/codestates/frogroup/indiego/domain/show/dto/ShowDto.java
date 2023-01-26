@@ -111,6 +111,7 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+        private Integer emptySeats;
         private boolean isBookmarked;
         private String nickname;
     }
