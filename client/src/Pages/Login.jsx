@@ -42,20 +42,16 @@ const ContentContainer = styled.div`
   flex-direction: column;
   width: max-content;
   position: relative;
-
   > .logo {
     margin-bottom: 20px;
     width: 220px;
-
     @media screen and (max-width: ${breakpoint.mobile}) {
       width: 153px;
     }
   }
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
   }
-
   > .social-signup-button-container {
     display: flex;
     align-items: center;
@@ -64,26 +60,22 @@ const ContentContainer = styled.div`
     position: absolute;
     width: 350px;
     bottom: -50px;
-
     > .google-button {
       all: unset;
       cursor: pointer;
       height: 40px;
       width: 40px;
       margin-right: 20px;
-
       > img {
         height: 40px;
         width: 40px;
       }
     }
-
     > .kakao-button {
       all: unset;
       cursor: pointer;
       height: 40px;
       width: 40px;
-
       > img {
         height: 40px;
         width: 40px;
@@ -95,7 +87,6 @@ const ContentContainer = styled.div`
 const SelectLoginTypeTab = styled.div`
   align-items: center;
   display: flex;
-
   > .type-user-tab-menu {
     all: unset;
     align-items: center;
@@ -113,14 +104,12 @@ const SelectLoginTypeTab = styled.div`
     justify-content: center;
     padding: 10px;
     width: 225px;
-
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.medium};
       height: 35px;
       width: 160px;
     }
   }
-
   > .type-performer-tab-menu {
     all: unset;
     align-items: center;
@@ -138,7 +127,6 @@ const SelectLoginTypeTab = styled.div`
     justify-content: center;
     padding: 10px;
     width: 225px;
-
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.medium};
       height: 35px;
@@ -159,34 +147,28 @@ const LoginContainer = styled.div`
   justify-content: space-between;
   padding: 20px;
   width: 450px;
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 320px;
     height: 280px;
     padding: 15px;
   }
-
   > .input-container {
     display: flex;
     flex-direction: column;
-
     > label {
       color: white;
       font-size: ${dtFontSize.medium};
       font-weight: 600;
       margin-bottom: 10px;
-
       @media screen and (max-width: ${breakpoint.mobile}) {
         font-size: ${mbFontSize.medium};
       }
     }
-
     > div {
       display: flex;
       height: max-content;
       width: max-content;
       position: relative;
-
       > .login-input {
         border: none;
         border-radius: 5px;
@@ -195,14 +177,12 @@ const LoginContainer = styled.div`
         width: 350px;
         height: 40px;
         padding: 0 10px;
-
         @media screen and (max-width: ${breakpoint.mobile}) {
           font-size: ${mbFontSize.small};
           width: 250px;
           height: 35px;
         }
       }
-
       > button {
         all: unset;
         cursor: pointer;
@@ -210,25 +190,21 @@ const LoginContainer = styled.div`
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
-
         > svg {
           color: ${sub.sub300};
         }
       }
     }
-
     > .keep-login-container {
       align-items: center;
       display: flex;
       margin-top: 20px;
     }
   }
-
   > .error-message {
     color: ${misc.red};
     font-size: ${dtFontSize.medium};
     font-weight: 600;
-
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.medium};
     }
@@ -240,7 +216,6 @@ const InputLabel = styled.span`
   font-size: ${dtFontSize.medium};
   font-weight: 600;
   margin-bottom: 10px;
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: ${mbFontSize.medium};
   }
@@ -257,13 +232,11 @@ const LoginButton = styled.button`
   text-align: center;
   width: 350px;
   height: 50px;
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: ${mbFontSize.medium};
     width: 250px;
     height: 40px;
   }
-
   &:hover {
     background-color: ${(props) => props.hoverColor};
   }
@@ -277,12 +250,10 @@ const KeepLoginCheckbox = styled.input`
   border-radius: 2px;
   margin-right: 5px;
   padding: 0;
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 16px;
     height: 16px;
   }
-
   &:checked {
     border-color: transparent;
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
@@ -297,7 +268,6 @@ const KeepLoginCheckboxLabel = styled.span`
   color: ${(props) => props.fontColor};
   font-size: ${dtFontSize.medium};
   font-weight: 600;
-
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: ${mbFontSize.medium};
   }

@@ -32,5 +32,6 @@ public class ShowReservationDto {
         private String address;
         private Integer ticketCount;
         private boolean isExpired;
+        private String image;
     }
 }

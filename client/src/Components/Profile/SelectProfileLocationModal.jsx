@@ -122,15 +122,12 @@ export default function SelectProfileLocationModal() {
     (state) => state
   );
 
-  const { location, setLocation } = useSelectedProfileLocationStore(
-    (selectedLocation) => selectedLocation
-  );
+  const { address, latitude, longitude, setLocation } =
+    useSelectedProfileLocationStore((selectedLocation) => selectedLocation);
 
   const locationClickHandler = (e) => {
     setLocation(e.target.attributes.value.value);
   };
-
-  console.log(location);
 
   return (
     <>
@@ -141,7 +138,7 @@ export default function SelectProfileLocationModal() {
             <div className="modal-inner-container">
               <SeoulMap clickHandler={locationClickHandler} />
               <div className="selected-location-container">
-                <span className="location">지역 선택: {location}</span>
+                <span className="location">지역 선택: {address}</span>
                 <button className="complete-button" onClick={setOpenModal}>
                   선택 완료
                 </button>

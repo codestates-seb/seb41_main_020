@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PillButton } from "../Tickets/TicketsDetail";
 import useSelectProfileLocationModalStore from "../../store/useSelectProfileLocationModalStore";
 import useSelectedProfileLocationStore from "../../store/useSelectedProfileLocationStore.js";
+import useProfileDataStore from "../../store/useProfileDataStore";
 import SelectProfileLocationModal from "../../Components/Profile/SelectProfileLocationModal";
 
 //로컬 모듈
@@ -17,10 +18,14 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import instance from "../../api/core/default";
+import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
 import { React, useEffect, useState } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components/macro";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 const Container = styled.div`
   align-items: center;
@@ -266,27 +271,30 @@ const EditProfileImageButton = styled.button`
 `;
 
 export default function ProfileEdit() {
-  const [isPerformer, setIsPerFormer] = useState(true);
   const [fontColor, setfontColor] = useState("");
   const [buttonColor, setButtonColor] = useState("");
   const [buttonHoverColor, setButtonHoverColor] = useState("");
-  const [nickname, setNickname] = useState();
+  const [nickname, setNickname] = useState("");
   const [nicknameValid, setNicknameValid] = useState(false);
   const [nicknameInputOnFocus, setNicknameInputOnFocus] = useState(false);
+  const [introduction, setIntroduction] = useState("");
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const { profileData, setProfileData } = useProfileDataStore((state) => state);
+  const navigate = useNavigate();
+  const params = useParams();
 
   const { openModal, setOpenModal } = useSelectProfileLocationModalStore(
     (state) => state
   );
-  const { location, setLocation } = useSelectedProfileLocationStore(
-    (selectedLocation) => selectedLocation
-  );
+  const { address, latitude, longitude, setLocation } =
+    useSelectedProfileLocationStore((selectedLocation) => selectedLocation);
 
   const handleProfilEditPageColor = () => {
-    if (isPerformer) {
+    if (profileData && profileData.role === "PERFORMER") {
       setfontColor(secondary.secondary600);
       setButtonColor(secondary.secondary500);
       setButtonHoverColor(primary.primary200);
-    } else {
+    } else if (profileData && profileData.role === "USER") {
       setfontColor(primary.primary500);
       setButtonColor(primary.primary300);
       setButtonHoverColor(secondary.secondary500);
@@ -294,6 +302,8 @@ export default function ProfileEdit() {
   };
 
   useEffect(() => {
+    setNickname(profileData && profileData.profile[0].nickname);
+    setIntroduction(profileData && profileData.profile[0].introduction);
     handleProfilEditPageColor();
   }, []);
 
@@ -305,7 +315,51 @@ export default function ProfileEdit() {
     }
   }, [nickname]);
 
-  console.log(openModal);
+  const data = {
+    nickname: nickname,
+    address: address,
+    image: `${profileData && profileData.profile[0].image}`,
+    introduction: introduction,
+    latitude: latitude,
+    longitude: longitude,
+  };
+
+  const patchData = () => {
+    return instance({
+      method: "patch",
+      url: `/members/${params.id}`,
+      data: data,
+    });
+  };
+
+  const patchDataOnsuccess = () => {
+    window.alert("회원 정보 수정이 완료되었습니다.");
+    history.go(-1);
+  };
+
+  const patchDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Token Expired"
+    ) {
+      window.alert("다시 로그인해주세요.");
+      localStorage.clear();
+      setIsLogin(false);
+      navigate("/");
+    } else if (error.response.status === 500) {
+      window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    }
+  };
+
+  const { mutate: patchProfile } = useMutation({
+    mutationFn: patchData,
+    onSuccess: patchDataOnsuccess,
+    onError: patchDataOnError,
+  });
+
+  const handlePatchData = () => {
+    patchProfile();
+  };
 
   return (
     <Container>
@@ -332,7 +386,10 @@ export default function ProfileEdit() {
               >
                 <FontAwesomeIcon icon={faPlus} color="white" />
               </EditProfileImageButton>
-              <img alt="profile img" src={dummyProfileImage} />
+              <img
+                alt="profile img"
+                src={profileData && profileData.profile[0].image}
+              />
             </div>
             <p>
               이미지 파일의 형식은 jpg, jpeg, png로 권장합니다 <br /> 파일의
@@ -371,7 +428,7 @@ export default function ProfileEdit() {
               우리 동네
             </EditContainerSubTitle>
             <div>
-              <input className="location-input" value={location} />
+              <input className="location-input" value={address} />
               <PillButton
                 color={buttonColor}
                 hoverColor={buttonHoverColor}
@@ -385,10 +442,20 @@ export default function ProfileEdit() {
             <EditContainerSubTitle fontColor={fontColor}>
               소개
             </EditContainerSubTitle>
-            <textarea className="about-input" />
+            <textarea
+              className="about-input"
+              value={introduction || ""}
+              onChange={(e) => {
+                setIntroduction(e.target.value);
+              }}
+            />
           </div>
           <div className="complete-button-container">
-            <PillButton color={buttonColor} hoverColor={buttonHoverColor}>
+            <PillButton
+              color={buttonColor}
+              hoverColor={buttonHoverColor}
+              onClick={handlePatchData}
+            >
               수정 완료
             </PillButton>
           </div>
