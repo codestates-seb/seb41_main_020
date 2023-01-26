@@ -4,6 +4,7 @@ import React from "react";
 import { dtFontSize, mbFontSize, primary, sub } from "../../../styles/mixins";
 
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const ItemContainer = styled.div`
   display: flex;
@@ -150,16 +151,18 @@ const ConcertDetailsContainer = styled.div`
 `;
 export default function LongCarouselItem({ data }) {
   return (
-    <ItemContainer>
-      <ImageContainer>
-        <img src={data.image} alt="poster" />
-      </ImageContainer>
-      <ConcertDetailsContainer>
-        <h2 className="title">{data.title}</h2>
-        <h3 className="artist">{data.nickname}</h3>
-        <h4 className="date">{`${data.showAt} - ${data.expiredAt}`}</h4>
-        <h4 className="location">{data.detailAddress}</h4>
-      </ConcertDetailsContainer>
-    </ItemContainer>
+    <Link to={`tickets/${data.id}`}>
+      <ItemContainer>
+        <ImageContainer>
+          <img src={data.image} alt="poster" />
+        </ImageContainer>
+        <ConcertDetailsContainer>
+          <h2 className="title">{data.title}</h2>
+          <h3 className="artist">{data.nickname}</h3>
+          <h4 className="date">{`${data.showAt} - ${data.expiredAt}`}</h4>
+          <h4 className="location">{data.detailAddress}</h4>
+        </ConcertDetailsContainer>
+      </ItemContainer>
+    </Link>
   );
 }

@@ -242,7 +242,9 @@ export default function Home() {
         <BoardsContainer>
           <h1 className="title">커뮤니티 인기 게시글</h1>
           <BoardsGrid>
-            <Boards category="자유게시판">자유게시판</Boards>
+            <Boards path="free" category="자유게시판">
+              자유게시판
+            </Boards>
             <Boards path="employ" category="구인게시판">
               구인게시판
             </Boards>

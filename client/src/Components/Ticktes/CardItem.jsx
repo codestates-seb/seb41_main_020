@@ -108,7 +108,7 @@ const DetailContainer = styled.div`
 export default function CardItem({ data }) {
   return (
     <CardItemContainer>
-      <Link to="/tickets/:id">
+      <Link to={`/tickets/${data.id}`}>
         <ImageContainer>
           <img src={data.image} alt="poster" />
         </ImageContainer>
