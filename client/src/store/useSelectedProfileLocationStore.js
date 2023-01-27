@@ -1,8 +1,15 @@
 import { create } from "zustand";
 
 const useSelectedProfileLocationStore = create((set) => ({
-  location: "없음",
-  setLocation: (clickedLocation) => set(() => ({ location: clickedLocation })),
+  address: "없음",
+  latitude: "",
+  longitude: "",
+  setLocation: (clickedLocation) =>
+    set(() => ({
+      address: JSON.parse(clickedLocation).address,
+      latitude: JSON.parse(clickedLocation).latitude,
+      longitude: JSON.parse(clickedLocation).longitude,
+    })),
 }));
 
 export default useSelectedProfileLocationStore;

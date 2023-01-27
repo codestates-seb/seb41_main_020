@@ -2,6 +2,7 @@
 import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
 import performerBadge from "../../assets/performerBadge.jpg";
 import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
+import useProfileDataStore from "../../store/useProfileDataStore";
 import WithdrawModal from "../../Components/Profile/WithdrawModal";
 
 //로컬 모듈
@@ -14,12 +15,15 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import instance from "../../api/core/default";
+import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import { React, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
-import ShowList from "../../Components/Profile/ShowList.jsx";
 import AllShowListPerformer from "../../Components/Profile/AllShowListPerformer.jsx";
+import { useQuery } from "@tanstack/react-query";
 
 const Container = styled.div`
   align-items: center;
@@ -287,6 +291,49 @@ const LocationandAboutContainer = styled.div`
 
 export default function Profile() {
   const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const { profileData, setProfileData } = useProfileDataStore((state) => state);
+  const [data, setData] = useState();
+  const navigate = useNavigate();
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+
+  useEffect(() => {
+    if (profileData && profileData.role === "USER") {
+      window.alert("잘못된 접근입니다.");
+      navigate("/");
+    }
+  }, [profileData]);
+
+  const fetchData = () => {
+    return instance({
+      method: "get",
+      url: `/members/${userId}/mypage`,
+    });
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    setProfileData(response.data.data && response.data.data);
+  };
+
+  const fetchDataOnError = (err) => {
+    window.alert("다시 로그인해주세요.");
+    setIsLogin(false);
+    localStorage.clear();
+    navigate("/");
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchData"],
+    queryFn: fetchData,
+    keepPreviousData: true,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
+
+  const handleMoveToEditPage = () => {
+    navigate(`/mypage/${userId}/edit`);
+  };
 
   return (
     <Container>
@@ -300,33 +347,48 @@ export default function Profile() {
         <ContentInnerContainer>
           <ProfileInfoContainer>
             <div>
-              <img alt="dummy profile" src={dummyProfileImage} />
+              <img
+                alt="dummy profile"
+                src={profileData && profileData.profile[0].image}
+              />
               <div>
-                <span className="performer-nickname">김아무개</span>
+                <span className="performer-nickname">
+                  {profileData && profileData.profile[0].nickname}
+                </span>
                 <div>
                   <span className="user-type">퍼포머 회원</span>
                   <img alt="performer badge" src={performerBadge} />
                 </div>
-                <span className="performer-email">amugae1234@gmail.com</span>
+                <span className="performer-email">
+                  {profileData && profileData.email}
+                </span>
               </div>
             </div>
             <div className="button-container">
-              <button className="profile-edit-button">프로필 수정하기</button>
+              <button
+                className="profile-edit-button"
+                onClick={handleMoveToEditPage}
+              >
+                프로필 수정하기
+              </button>
             </div>
           </ProfileInfoContainer>
           <LocationandAboutContainer>
             <div>
               <span className="sub-title">활동 지역</span>
-              <span className="sub-location-info">종로구</span>
+              <span className="sub-location-info">
+                {" "}
+                {profileData && profileData.profile[0].address
+                  ? profileData && profileData.profile[0].address
+                  : "없음"}
+              </span>
             </div>
             <div>
               <span className="sub-title">소개</span>
               <span className="sub-info">
-                국무총리 또는 행정각부의 장은 소관사무에 관하여 법률이나
-                대통령령의 위임 또는 직권으로 총리령 또는 부령을 발할 수 있다.
-                대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과
-                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수
-                있다.
+                {profileData && profileData.profile[0].introduction
+                  ? profileData && profileData.profile[0].introduction
+                  : "없음"}
               </span>
             </div>
           </LocationandAboutContainer>

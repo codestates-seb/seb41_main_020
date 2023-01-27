@@ -36,13 +36,16 @@ const ShowListInnerContainer = styled.ul`
   }
 `;
 
-export default function ShowList() {
+export default function ShowList({ allReservationData }) {
   return (
     <ShowListInnerContainer>
-      <ShowItem />
-      <ShowItem />
-      <ShowItem />
-      <ShowItem />
+      {allReservationData &&
+        allReservationData.map((allReservationData) => (
+          <ShowItem
+            reservationData={allReservationData}
+            key={allReservationData.id}
+          />
+        ))}
     </ShowListInnerContainer>
   );
 }

@@ -143,7 +143,7 @@ const ItemContentContainer = styled.div`
   }
 `;
 
-export default function ShowItem() {
+export default function ShowItem({ reservationData }) {
   return (
     <ShowItemContainer>
       <ItemContentContainer>
@@ -151,11 +151,13 @@ export default function ShowItem() {
           <div className="poster-image-area" />
           <div className="show-info-container">
             <div className="title-and-provider-container">
-              <span>Rock Night Party</span>
-              <span>우리 동네 락밴드</span>
+              <span>{reservationData && reservationData.title}</span>
+              <span>{reservationData && reservationData.nickname}</span>
             </div>
             <div className="period-and-location-container">
-              <span className="period">예약일시: 2023.01.16</span>
+              <span className="period">
+                예약일시: {reservationData && reservationData.date}
+              </span>
               <span className="location">서울특별시 종로구 종로운동장</span>
             </div>
           </div>

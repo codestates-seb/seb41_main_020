@@ -41,13 +41,12 @@ const queryClient = new QueryClient();
 
 function App() {
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
 
   // console.log(setUserInfo);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
-
     if (refreshToken) {
       setIsLogin(true);
       axios

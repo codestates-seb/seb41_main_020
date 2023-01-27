@@ -12,10 +12,14 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import instance from "../../api/core/default.js";
+import useIsLoginStore from "../../store/useIsLoginStore.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const ContentInnerContainer = styled.div`
   align-items: center;
@@ -82,15 +86,52 @@ const ShowListContainer = styled.div`
 `;
 
 export default function AllShowList() {
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const [data, setData] = useState();
+  const navigate = useNavigate();
+
+  const fetchData = () => {
+    return instance({
+      method: "get",
+      url: "/shows/reservations",
+    });
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    setData(response.data.data && response.data.data);
+  };
+
+  const fetchDataOnError = (err) => {
+    console.log(err);
+    // window.alert("다시 로그인해주세요.");
+    // setIsLogin(false);
+    // localStorage.clear();
+    // navigate("/");
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchData"],
+    queryFn: fetchData,
+    keepPreviousData: true,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
+
+  const notExpiredData = data && data.filter((data) => data.expired === false);
+  const expiredData = data && data.filter((data) => data.expired === true);
+
+  console.log(notExpiredData);
+
   return (
     <ContentInnerContainer>
       <div className="reservation-list-title">나의 예약 목록</div>
       <ShowListContainer>
-        <ShowList />
+        <ShowList allReservationData={notExpiredData} />
       </ShowListContainer>
       <div className="expired-list-title">지난 예약 목록</div>
       <ShowListContainer>
-        <ShowList />
+        <ShowList allReservationData={expiredData} />
       </ShowListContainer>
     </ContentInnerContainer>
   );
