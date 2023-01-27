@@ -39,7 +39,7 @@ public class ShowDto {
         private LocalDate showAt; // 공연날짜
         @NotNull
         private String showTime;
-        private String detailImage;
+        private String detailDescription;
         //showboard end
         @NotNull
         private Double latitude;
@@ -48,6 +48,8 @@ public class ShowDto {
 
         @NotNull
         private Integer total; // 정원
+        @NotNull
+        private String introduction;
     }
 
 
@@ -70,12 +72,14 @@ public class ShowDto {
         private LocalDate expiredAt; // 만료날짜
         private LocalDate showAt; // 공연날짜
         private String showTime;
-        private String detailImage;
+        private String detailDescription;
         //showboard end
         private Double latitude;
         private Double longitude;
 
         private Integer total; // 정원
+
+        private String introduction;
 
     }
 
@@ -84,6 +88,7 @@ public class ShowDto {
     @AllArgsConstructor
     public static class Response{
         private Long id;
+        private Long sellerId;
         //ShowBoard
         //Board
         private String title;
@@ -97,7 +102,7 @@ public class ShowDto {
         private LocalDate expiredAt; // 만료날짜
         private LocalDate showAt; // 공연날짜
         private String showTime;
-        private String detailImage;
+        private String detailDescription;
         //showboard end
         private Double latitude;
         private Double longitude;
@@ -106,9 +111,11 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+
         private Integer emptySeats;
         private boolean isBookmarked;
         private String nickname;
+        private String introduction;
     }
 
     @Getter
@@ -129,7 +136,7 @@ public class ShowDto {
         private LocalDate expiredAt; // 만료날짜
         private LocalDate showAt; // 공연날짜
         private String showTime;
-        private String detailImage;
+        private String detailDescription;
         //showboard end
         private Double latitude;
         private Double longitude;
@@ -138,6 +145,7 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
+        private String introduction;
 
     }
 
@@ -184,6 +192,7 @@ public class ShowDto {
         private String nickname;
         private LocalDate showAt;
         private LocalDate expiredAt;
+        private String address;
         private String detailAddress;
         private String image;
         @Setter
@@ -196,12 +205,13 @@ public class ShowDto {
         @QueryProjection
         @Builder
         public showListToShowListResponseOfSeller(Long id, String title, String nickname,
-                                                  LocalDate showAt, LocalDate expiredAt, String detailAddress, String image) {
+                                                  LocalDate showAt, LocalDate expiredAt, String address, String detailAddress, String image) {
             this.id = id;
             this.title = title;
             this.nickname = nickname;
             this.showAt = showAt;
             this.expiredAt = expiredAt;
+            this.address = address;
             this.detailAddress = detailAddress;
             this.image = image;
         }
