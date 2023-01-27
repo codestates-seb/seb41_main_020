@@ -146,19 +146,10 @@ public class ShowService {
         ShowDto.Response response = mapper.showToShowResponse(show);
         response.setScoreAverage( Double.valueOf(scoreRepository.getValues(key)));
         response.setEmptySeats(reservationService.getEmptySeats(show, showId));
-
+        response.setSellerId(show.getMember().getId());
         return response;
     }
 
-    @Transactional
-    public Double setScoreAverage(long showId) {
-
-        String key = redisKey.getScoreAverageKey(showId);
-        Show show = showRepository.findById(showId).get();
-        scoreRepository.setValues(key, String.valueOf(show.getScoreAverage()));
-
-        return Double.valueOf(Double.valueOf(scoreRepository.getValues(key)));
-    }
 
     public Page<ShowListResponseDto> findShows(String search, String category, String address, String filter,
                                                String start, String end, Pageable pageable){

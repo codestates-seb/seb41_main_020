@@ -88,6 +88,7 @@ public class ShowDto {
     @AllArgsConstructor
     public static class Response{
         private Long id;
+        private Long sellerId;
         //ShowBoard
         //Board
         private String title;
@@ -191,6 +192,7 @@ public class ShowDto {
         private String nickname;
         private LocalDate showAt;
         private LocalDate expiredAt;
+        private String address;
         private String detailAddress;
         private String image;
         @Setter
@@ -203,12 +205,13 @@ public class ShowDto {
         @QueryProjection
         @Builder
         public showListToShowListResponseOfSeller(Long id, String title, String nickname,
-                                                  LocalDate showAt, LocalDate expiredAt, String detailAddress, String image) {
+                                                  LocalDate showAt, LocalDate expiredAt, String address, String detailAddress, String image) {
             this.id = id;
             this.title = title;
             this.nickname = nickname;
             this.showAt = showAt;
             this.expiredAt = expiredAt;
+            this.address = address;
             this.detailAddress = detailAddress;
             this.image = image;
         }

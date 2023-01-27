@@ -131,6 +131,7 @@ public class ShowController {
                         .detailAddress(shows.get(i).getShowBoard().getDetailAddress())
                         .showAt(shows.get(i).getShowBoard().getShowAt())
                         .expiredAt(shows.get(i).getShowBoard().getExpiredAt())
+                            .address(shows.get(i).getShowBoard().getAddress())
                     .build();
 
             responseOfSeller.setEmptySeats(showReservationService.getEmptySeats(shows.get(i), shows.get(i).getId()));
