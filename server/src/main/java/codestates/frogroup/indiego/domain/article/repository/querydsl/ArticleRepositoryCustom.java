@@ -22,4 +22,6 @@ public interface ArticleRepositoryCustom {
     void saveViewCountToRedis(Long articleId, Long viewCount);
 
     Long getValues(String key);
+
+    void deleteValues(String key);
 }

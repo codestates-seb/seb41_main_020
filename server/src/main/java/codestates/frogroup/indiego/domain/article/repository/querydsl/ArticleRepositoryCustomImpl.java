@@ -60,6 +60,10 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         return values.get(key);
     }
 
+    public void deleteValues(String key) {
+        redisTemplate.delete(key);
+    }
+
     @Override
     public Page<ArticleListResponseDto> findAllBasic(String status, Pageable pageable) {
 
