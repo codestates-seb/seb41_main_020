@@ -17,6 +17,7 @@ public interface ArticleCommentMapper {
     ArticleComment articleCommentPatchToArticleComment(ArticleCommentDto.Patch requestBody);
 
     @Mapping(source = "article.id", target = "articleId")
+    @Mapping(source = "member.id", target = "memberId")
     @Mapping(source = "member.profile.image", target = "image")
     @Mapping(source = "member.profile.nickname", target = "nickname")
     @Mapping(target = "likeCount",
