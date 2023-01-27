@@ -206,7 +206,9 @@ export default function ShowItem({ reservationData }) {
                 공연기간: {reservationData && reservationData.showAt}~
                 {reservationData && reservationData.expiredAt}
               </span>
-              <span className="location">서울특별시 종로구 종로운동장</span>
+              <span className="location">
+                {reservationData && reservationData.detailAddress}
+              </span>
             </div>
           </div>
         </div>
