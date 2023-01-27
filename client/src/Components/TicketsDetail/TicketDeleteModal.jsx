@@ -14,7 +14,6 @@ import {
   mbFontSize,
 } from "../../styles/mixins";
 import instance from "../../api/core/default";
-import useProfileDataStore from "../../store/useProfileDataStore.js";
 
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
@@ -99,16 +98,15 @@ const ModalButton = styled.button`
   }
 `;
 
-export default function WithdrawModal() {
+export default function TicketDeleteModal() {
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
   const { openModal, setOpenModal } = useOpenModalStore((state) => state);
-  const { profileData, setProfileData } = useProfileDataStore((state) => state);
-  const userId = profileData.id;
   const navigate = useNavigate();
 
-  const handleWithdraw = () => {
+  const handleTicketDelete = () => {
     return instance({
       method: "delete",
-      url: `/members/${userId}`,
+      url: `/shows/${userId}`,
     }).then((response) => {
       setOpenModal(false);
       localStorage.clear();
@@ -126,7 +124,7 @@ export default function WithdrawModal() {
             <div className="modal-inner-container">
               <span>정말로 탈퇴하시겠습니까?</span>
               <div className="button-container">
-                <ModalButton color={misc.red} onClick={handleWithdraw}>
+                <ModalButton color={misc.red} onClick={handleTicketDelete}>
                   예
                 </ModalButton>
                 <ModalButton color={sub.sub400} onClick={setOpenModal}>

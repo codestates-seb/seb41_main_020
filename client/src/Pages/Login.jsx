@@ -290,6 +290,10 @@ export default function Login() {
 
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
 
+  const handleGoogleOauthLogin = () => {
+    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/google`;
+  };
+
   const handleKakaoOauthLogin = () => {
     location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/kakao`;
   };
@@ -470,7 +474,7 @@ export default function Login() {
         </LoginContainer>
         {isLoginTypeUser ? (
           <div className="social-signup-button-container">
-            <button className="google-button">
+            <button className="google-button" onClick={handleGoogleOauthLogin}>
               <img alt="google icon" src={googleIcon} />
             </button>
             <button className="kakao-button" onClick={handleKakaoOauthLogin}>

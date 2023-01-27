@@ -22,6 +22,7 @@ import instance from "../../api/core/default";
 import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
+import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components/macro";
@@ -138,8 +139,8 @@ const EditContainer = styled.div`
     flex-direction: column;
 
     > .profile-image-container {
-      position: relative;
       display: flex;
+      flex-direction: column;
       width: max-content;
 
       > img {
@@ -150,6 +151,10 @@ const EditContainer = styled.div`
           height: 80px;
           width: 80px;
         }
+      }
+
+      > .imgInput {
+        margin-top: 15px;
       }
     }
 
@@ -274,6 +279,7 @@ export default function ProfileEdit() {
   const [fontColor, setfontColor] = useState("");
   const [buttonColor, setButtonColor] = useState("");
   const [buttonHoverColor, setButtonHoverColor] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [nickname, setNickname] = useState("");
   const [nicknameValid, setNicknameValid] = useState(false);
   const [nicknameInputOnFocus, setNicknameInputOnFocus] = useState(false);
@@ -302,6 +308,7 @@ export default function ProfileEdit() {
   };
 
   useEffect(() => {
+    setImageUrl(profileData && profileData.profile[0].image);
     setNickname(profileData && profileData.profile[0].nickname);
     setIntroduction(profileData && profileData.profile[0].introduction);
     handleProfilEditPageColor();
@@ -318,7 +325,7 @@ export default function ProfileEdit() {
   const data = {
     nickname: nickname,
     address: address,
-    image: `${profileData && profileData.profile[0].image}`,
+    image: imageUrl,
     introduction: introduction,
     latitude: latitude,
     longitude: longitude,
@@ -361,6 +368,30 @@ export default function ProfileEdit() {
     patchProfile();
   };
 
+  const onLoadFile = async (e) => {
+    const file = e.target.files;
+    const formData = new FormData();
+    console.log(file[0]);
+    formData.append("file", file[0]); // formData는 키-밸류 구조
+    try {
+      const result = await axios.post(
+        "http://indiego.kro.kr:80/shows/uploads",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      console.log("result : ", result);
+      console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
+      setImageUrl(result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
       <SelectProfileLocationModal />
@@ -380,15 +411,13 @@ export default function ProfileEdit() {
               나의 프로필 사진
             </EditContainerSubTitle>
             <div className="profile-image-container">
-              <EditProfileImageButton
-                buttonColor={buttonColor}
-                buttonHoverColor={buttonHoverColor}
-              >
-                <FontAwesomeIcon icon={faPlus} color="white" />
-              </EditProfileImageButton>
-              <img
-                alt="profile img"
-                src={profileData && profileData.profile[0].image}
+              <img alt="profile img" src={imageUrl} />
+              <input
+                className="imgInput"
+                type="file"
+                id="ex_file"
+                accept="img/*"
+                onChange={onLoadFile}
               />
             </div>
             <p>
