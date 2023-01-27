@@ -85,6 +85,7 @@ public class ShowReservationController {
             responses.get(i).setAddress(showReservationList.get(i).getShow().getShowBoard().getAddress());
             responses.get(i).setLongitude(showReservationList.get(i).getShow().getCoordinate().getLongitude());
             responses.get(i).setLatitude(showReservationList.get(i).getShow().getCoordinate().getLatitude());
+            responses.get(i).setShowId(showReservationList.get(i).getShow().getId());
         }
         return new ResponseEntity(
                 new SingleResponseDto<>(setExpireds(showReservationList, responses)),

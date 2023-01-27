@@ -36,5 +36,6 @@ public class ShowReservationDto {
         private String image;
         private Double latitude;
         private Double longitude;
+        private Long showId;
     }
 }
