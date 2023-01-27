@@ -1,7 +1,7 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
 import performerBadge from "../../assets/performerBadge.jpg";
-import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
+import useOpenModalStore from "../../store/useOpenModalStore.js";
 import useProfileDataStore from "../../store/useProfileDataStore";
 import WithdrawModal from "../../Components/Profile/WithdrawModal";
 
@@ -19,8 +19,8 @@ import instance from "../../api/core/default";
 import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { React, useState, useEffect, useLayoutEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 import AllShowListPerformer from "../../Components/Profile/AllShowListPerformer.jsx";
 import { useQuery } from "@tanstack/react-query";
@@ -150,6 +150,7 @@ const ProfileInfoContainer = styled.div`
         font-size: ${dtFontSize.xlarge};
         font-weight: 600;
         margin-bottom: 5px;
+        width: max-content;
 
         @media screen and (max-width: ${breakpoint.mobile}) {
           font-size: ${mbFontSize.large};
@@ -290,23 +291,24 @@ const LocationandAboutContainer = styled.div`
 `;
 
 export default function Profile() {
-  const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
-  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const { openModal, setOpenModal } = useOpenModalStore((state) => state);
+  // const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const { profileData, setProfileData } = useProfileDataStore((state) => state);
   const navigate = useNavigate();
-  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+  const params = useParams();
+  const isLogin = !!localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (profileData && profileData.role === "USER") {
+    if (!isLogin) {
       window.alert("잘못된 접근입니다.");
-      navigate("/");
+      history.go(-1);
     }
-  }, [profileData]);
+  }, [isLogin]);
 
   const fetchData = () => {
     return instance({
       method: "get",
-      url: `/members/${userId}/mypage`,
+      url: `/members/${params.id}/mypage`,
     });
   };
 
@@ -314,11 +316,14 @@ export default function Profile() {
     setProfileData(response.data.data && response.data.data);
   };
 
-  const fetchDataOnError = (err) => {
-    window.alert("다시 로그인해주세요.");
-    setIsLogin(false);
-    localStorage.clear();
-    navigate("/");
+  const fetchDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Member is not the same"
+    ) {
+      window.alert("잘못된 접근입니다.");
+      navigate("/");
+    }
   };
 
   const { isLoading } = useQuery({
@@ -331,7 +336,7 @@ export default function Profile() {
   });
 
   const handleMoveToEditPage = () => {
-    navigate(`/mypage/${userId}/edit`);
+    navigate(`/mypage/${params.id}/edit`);
   };
 
   return (

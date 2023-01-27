@@ -358,7 +358,10 @@ export default function Header() {
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const isLogin = useIsLoginStore((state) => state.isLogin);
+  // const isLogin = useIsLoginStore((state) => state.isLogin);
+  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+
+  console.log(isLogin);
 
   useWindowSize(setNavOpen);
 

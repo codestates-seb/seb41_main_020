@@ -5,6 +5,7 @@
 import { PillButton } from "../../Pages/Tickets/TicketsDetail.jsx";
 import NaverMapIcon from "../../assets/naverMapIcon.jpg";
 import KakaoMapIcon from "../../assets/kakaoMapIcon.jpg";
+import KakaoMapButton from "../TicketsDetail/KakaoMapButton.jsx";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -121,36 +122,12 @@ const ItemContentContainer = styled.div`
   > .button-container {
     align-items: flex-end;
     display: flex;
+    width: 105px;
+    justify-content: space-between;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       flex-direction: column;
-    }
-
-    > .map-button {
-      all: unset;
-      cursor: pointer;
-      display: inline;
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-
-      @media screen and (max-width: ${breakpoint.mobile}) {
-        width: 27px;
-        height: 27px;
-        margin-bottom: 5px;
-        margin-right: 0;
-      }
-
-      > img {
-        border-radius: 100%;
-        width: 30px;
-        height: 30px;
-
-        @media screen and (max-width: ${breakpoint.mobile}) {
-          width: 27px;
-          height: 27px;
-        }
-      }
+      height: 60px;
     }
   }
 `;
@@ -195,7 +172,7 @@ export default function ShowItem({ reservationData }) {
   };
 
   const handleMoveToShowPage = () => {
-    navigate(`/tickets/${reservationData && reservationData.id}`);
+    navigate(`/tickets/${reservationData && reservationData.showId}`);
   };
 
   return (
@@ -222,14 +199,19 @@ export default function ShowItem({ reservationData }) {
               <span className="period">
                 공연일시: {reservationData && reservationData.date}
               </span>
-              <span className="location">서울특별시 종로구 종로운동장</span>
+              <span className="location">
+                {reservationData && reservationData.address}{" "}
+                {reservationData && reservationData.detailAddress}
+              </span>
             </div>
           </div>
         </div>
         <div className="button-container">
-          <button className="map-button">
-            <img alt="kakao map icon" src={KakaoMapIcon} />
-          </button>
+          <KakaoMapButton
+            detailAddress={reservationData && reservationData.detailAddress}
+            latitude={reservationData && reservationData.latitude}
+            longitude={reservationData && reservationData.longitude}
+          />
           <PillButton
             color={misc.red}
             hoverColor={misc.lightred}

@@ -1,6 +1,6 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import logo from "../../assets/logo.svg";
-import naverIcon from "../../assets/naverIcon.jpg";
+import googleIcon from "../../assets/googleIcon.jpg";
 import kakaoIcon from "../../assets/kakaoIcon.jpg";
 import { faEye } from "@fortawesome/free-solid-svg-icons/faEye";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons/faEyeSlash";
@@ -421,8 +421,8 @@ export default function Signup() {
     location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/kakao`;
   };
 
-  const handleNaverOauthLogin = () => {
-    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/naver`;
+  const handleGoogleOauthLogin = () => {
+    location.href = `${process.env.REACT_APP_SERVER_URI}/oauth2/authorization/google`;
   };
 
   return (
@@ -569,8 +569,8 @@ export default function Signup() {
             </button>
           </div>
           <div className="social-signup-button-container">
-            <button className="naver-button" onClick={handleNaverOauthLogin}>
-              <img alt="naver icon" src={naverIcon} />
+            <button className="naver-button" onClick={handleGoogleOauthLogin}>
+              <img alt="naver icon" src={googleIcon} />
             </button>
             <button className="kakao-button" onClick={handleKakaoOauthLogin}>
               <img alt="kakao-icon" src={kakaoIcon} />

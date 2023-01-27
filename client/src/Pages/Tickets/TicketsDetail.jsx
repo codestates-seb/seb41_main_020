@@ -1,6 +1,7 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import TicketsDetailTap from "../../Components/TicketsDetail/TicketsDetailTapMenu.jsx";
 import KakaoMapButton from "../../Components/TicketsDetail/KakaoMapButton.jsx";
+import TicketDeleteModal from "../../Components/TicketsDetail/TicketDeleteModal.jsx";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -12,9 +13,14 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import useTicketDataStore from "../../store/useTicketDataStore";
+import useOpenModalStore from "../../store/useOpenModalStore.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
 const Container = styled.div`
@@ -158,10 +164,9 @@ const TopLeftContainer = styled.div`
   }
 `;
 
-const PosterImageArea = styled.div`
+const PosterImage = styled.img`
   width: 300px;
   height: 400px;
-  background-color: ${primary.primary300};
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 240px;
@@ -321,7 +326,16 @@ const TopRightContainer = styled.div`
   }
 `;
 
+const ImpossibleButton = styled(PillButton)`
+  pointer-events: none;
+`;
+
 export default function TicketsDetail() {
+  const { ticketData, setTicketData } = useTicketDataStore((state) => state);
+  const { openModal, setOpenModal } = useOpenModalStore((state) => state);
+  const [isReservationPossible, setIsReservationPossible] = useState(true);
+  const ticketId = useParams().id;
+  const navigate = useNavigate();
   const dummyLocation = {
     title: "연우 소극장",
     address: "서울 종로구 창경궁로35길 21",
@@ -329,22 +343,64 @@ export default function TicketsDetail() {
     longitude: 127.00176624935142,
   };
 
+  useEffect(() => {
+    if (ticketData.emptySeats <= 0) {
+      setIsReservationPossible(false);
+    }
+  }, [ticketData]);
+
+  console.log(isReservationPossible);
+
+  const fetchData = () => {
+    return axios.get(`${process.env.REACT_APP_SERVER_URI}/shows/${ticketId}`);
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    setTicketData(response.data.data && response.data.data);
+  };
+
+  const fetchDataOnError = (error) => {
+    window.alert("존재하지 않는 공연입니다.");
+    navigate("/");
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchData"],
+    queryFn: fetchData,
+    keepPreviousData: false,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
+
+  const handleMoveToEditPage = () => {
+    navigate(`/tickets/${ticketId}/edit`);
+  };
+
   return (
     <>
+      <TicketDeleteModal ticketId={ticketId} />
       <Container>
         <ContentHeaderContainer>
           <HeaderTitleContainer>
             <h1>공연 상세페이지</h1>
-            <h2>서울 / 종로구 / Rock Night Party</h2>
+            <h2>
+              {ticketData.title} / {ticketData.nickname}
+            </h2>
           </HeaderTitleContainer>
           <HeaderButtonContainer>
             <PillButton
               color={primary.primary300}
               hoverColor={secondary.secondary500}
+              onClick={handleMoveToEditPage}
             >
               수정하기
             </PillButton>
-            <PillButton color={misc.red} hoverColor={misc.lightred}>
+            <PillButton
+              color={misc.red}
+              hoverColor={misc.lightred}
+              onClick={setOpenModal}
+            >
               삭제하기
             </PillButton>
           </HeaderButtonContainer>
@@ -352,50 +408,50 @@ export default function TicketsDetail() {
         <ContentContainer>
           <ContentTopContainer>
             <TopLeftContainer>
-              <PosterImageArea />
-              <h3>Rock Night Party</h3>
-              <Price>₩ 45,000</Price>
-              <EmptySeat>잔여 좌석: 70 / 70</EmptySeat>
-              <PillButton
-                color={primary.primary300}
-                hoverColor={secondary.secondary500}
-              >
-                예매 가능
-              </PillButton>
+              <PosterImage alt="poster" src={ticketData.image} />
+              <h3>{ticketData.title}</h3>
+              <Price>₩ {ticketData.price}</Price>
+              <EmptySeat>
+                잔여 좌석: {ticketData.emptySeats} / {ticketData.total}
+              </EmptySeat>
+              {isReservationPossible ? (
+                <PillButton
+                  color={primary.primary300}
+                  hoverColor={secondary.secondary500}
+                >
+                  예매 가능
+                </PillButton>
+              ) : (
+                <ImpossibleButton color={misc.red}>예매 불가</ImpossibleButton>
+              )}
             </TopLeftContainer>
             <TopRightContainer>
               <div>
-                <h3>Rock Night Party</h3>
-                <h4>우리동네락밴드</h4>
+                <h3>{ticketData.title}</h3>
+                <h4>{ticketData.nickname}</h4>
                 <span className="title-description">
-                  서울 / 종로구 / Rock Night Party
+                  {ticketData.address} / {ticketData.detailAddress}
                 </span>
               </div>
               <div>
                 <span className="sub-title">공연 소개</span>
-                <span className="description">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur.!!!!
-                </span>
+                <span className="description">{ticketData.content}</span>
               </div>
               <div>
-                <span className="sub-title">기간</span>
+                <span className="sub-title">공연 기간 / 공연 시간</span>
                 <span className="description">
-                  2023.01.01 ~ 2023.01.08 PM 6:00
+                  {ticketData.showAt} ~ {ticketData.expiredAt} /{" "}
+                  {ticketData.showTime}시
                 </span>
               </div>
               <div className="location-container">
                 <div>
                   <span className="location-title">위치</span>
                   <span className="location-description">
-                    서울특별시 종로구 132-38 (종로운동장)
+                    {ticketData.address} / {ticketData.detailAddress}
                   </span>
                 </div>
-                <KakaoMapButton location={dummyLocation} />
+                {/* <KakaoMapButton location={dummyLocation} /> */}
               </div>
             </TopRightContainer>
           </ContentTopContainer>
