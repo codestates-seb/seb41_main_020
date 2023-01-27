@@ -29,7 +29,7 @@ const DropdownContainer = styled.div`
   color: white;
   position: absolute;
   left: 0;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
   &.open {
     top: 30px; // 위치

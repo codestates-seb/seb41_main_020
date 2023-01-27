@@ -5,7 +5,7 @@ import search from "../../../assets/search.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useBoardListStore from "../../../store/useBoardListStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SearchBarDiv = styled.div`
   display: flex;
@@ -50,6 +50,7 @@ const SearchBar = ({ location, placeholder, setPageData }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
   const navigate = useNavigate();
+  const [searchParamse, setSearchParamase] = useSearchParams();
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -64,6 +65,8 @@ const SearchBar = ({ location, placeholder, setPageData }) => {
     );
     setBoardListData(response.data.data);
     setPageData(response.data.pageInfo);
+    searchParamse.append("search", value);
+    setSearchParamase(searchParamse);
 
     window.scrollTo(0, 0);
   };

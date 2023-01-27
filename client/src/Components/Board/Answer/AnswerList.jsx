@@ -77,7 +77,7 @@ const AnswerListWrapper = styled.div`
   }
 `;
 
-const AnswerList = ({ boardData, answerListData, refetch, id }) => {
+const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
   const [answerData, setAnswerData] = useState("");
   const handleButton = async () => {
     const data = { comment: answerData };
@@ -127,7 +127,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
         <ul>
           {answerListData.map((it) => (
             <li key={it.id}>
-              <AnswerItem {...it} refetch={refetch} />
+              <AnswerItem {...it} refetch={refetch} userId={userId} />
             </li>
           ))}
         </ul>

@@ -5,12 +5,13 @@ import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import instance from "../../../api/core/default.js";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import useImageStore from "../../../store/useImageStore.js";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -99,11 +100,13 @@ const BoardCreate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation;
+  const arrayRef = useRef([""]);
 
   const data = {
     title: titleValue,
     content: contentValue,
-    image: "",
+    image:
+      arrayRef.current.length === 1 ? arrayRef.current[0] : arrayRef.current[1],
     category: categoryValue,
   };
 
@@ -117,6 +120,7 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = (response) => {
+    // setImageStoreData(imageUrl);
     navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
   };
 
@@ -158,6 +162,7 @@ const BoardCreate = () => {
               value={contentValue}
               setValue={setContentValue}
               placeholder={"내용을 입력해주세요."}
+              arrayRef={arrayRef.current}
             ></Editor>
             {console.log(contentValue)}
           </ContentInputDiv>

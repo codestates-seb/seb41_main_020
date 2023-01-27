@@ -7,6 +7,7 @@ import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 import BoardListItem from "../../../Components/Board/BoardListItem/BoardListItem";
+import useImageStore from "../../../store/useImageStore.js";
 
 //로컬 모듈
 import {
@@ -45,7 +46,7 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   width: 60%;
   padding-left: 10px;
-  height: 1400px;
+  height: max-content;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 95%;
@@ -134,6 +135,10 @@ export const BoardItem = styled.div`
     width: 120px;
     padding: 3px 0;
 
+    img {
+      width: 100px;
+    }
+
     @media screen and (max-width: ${breakpoint.mobile}) {
       display: none;
     }
@@ -180,10 +185,14 @@ export default function BoardList() {
   const { boardList, setBoardListData } = useBoardListStore();
   const [pageData, setPageData] = useState([]);
   const [searchParams] = useSearchParams();
+  const { imageStoreData } = useImageStore();
   const urlPage = searchParams.get("page");
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
   const urlSize = searchParams.get("size");
+
+  const queryParams = [...searchParams.entries()];
+  console.log(queryParams);
 
   const { pathname } = useLocation();
 
@@ -255,6 +264,7 @@ export default function BoardList() {
           location={`${pathname}?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
           setPageData={setPageData}
         ></SearchBar>
+        {console.log("imageStoreData : ", imageStoreData)}
       </BoardWrapper>
     </PageWrapper>
   );

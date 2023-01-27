@@ -238,7 +238,7 @@ const AnswerItem = (props) => {
                 취소
               </button>
             </div>
-          ) : (
+          ) : props.memberId === props.userId ? (
             <div className="edDiv">
               <button type="button" className="edButton" onClick={handleEdit}>
                 수정
@@ -251,6 +251,8 @@ const AnswerItem = (props) => {
                 삭제
               </button>
             </div>
+          ) : (
+            <></>
           )}
         </AnswerListFunctionDiv>
       </AnswerListInfoDiv>

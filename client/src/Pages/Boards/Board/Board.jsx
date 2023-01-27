@@ -57,6 +57,10 @@ const QuillViewDiv = styled.div`
   height: max-content;
   text-align: left;
   padding-left: 10px;
+
+  > * img {
+    max-width: 1000px;
+  }
 `;
 
 const HeartItem = styled(BoardItem)`
@@ -101,7 +105,7 @@ const Board = () => {
   const { id } = useParams();
   const { setBoardStoreData } = useBoardStore();
   const { pathname } = useLocation();
-  const [view, setView] = useState("");
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   // 게시글 삭제 요청
   const handleDelete = async () => {
@@ -154,7 +158,6 @@ const Board = () => {
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
-    setView(response.data.view);
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
@@ -191,7 +194,7 @@ const Board = () => {
           <div className="likeDiv">
             <button className="heartButton" onClick={() => heartCount()}>
               <img
-                width={48}
+                width={35}
                 src={boardData.likeStatus ? yellowHeart : blueHeart}
                 alt="heart"
               ></img>
@@ -199,19 +202,25 @@ const Board = () => {
             <div className="heartCount">{boardData.likeCount}</div>
           </div>
         </HeartItem>
-        <EditDeleteDiv>
-          <button
-            className="edButton"
-            onClick={() => {
-              navigate(`${pathname}/edit`);
-            }}
-          >
-            수정
-          </button>
-          <button className="edButton" onClick={deleteBoard}>
-            삭제
-          </button>
-        </EditDeleteDiv>
+
+        {boardData.memberId === userId ? (
+          <EditDeleteDiv>
+            <button
+              className="edButton"
+              onClick={() => {
+                navigate(`${pathname}/edit`);
+              }}
+            >
+              수정
+            </button>
+            <button className="edButton" onClick={deleteBoard}>
+              삭제
+            </button>
+          </EditDeleteDiv>
+        ) : (
+          <></>
+        )}
+
         {/* 댓글 리스트로 이동 */}
         <AnswerList
           boardData={boardData}
@@ -219,6 +228,7 @@ const Board = () => {
           setAnswerListData={setAnswerListData}
           id={id}
           refetch={refetch}
+          userId={userId}
         />
       </BoardInfoWrapper>
     </PageWrapper>

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
@@ -37,7 +37,7 @@ export const formats = [
   "width",
 ];
 
-const Editor = ({ placeholder, value, setValue }) => {
+const Editor = ({ placeholder, value, setValue, arrayRef }) => {
   const quillRef = useRef();
 
   // 이미지 처리를 하는 핸들러
@@ -70,8 +70,6 @@ const Editor = ({ placeholder, value, setValue }) => {
             },
           }
         );
-
-        console.log(result);
         console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
         const IMG_URL = result.data.data;
 
@@ -81,9 +79,7 @@ const Editor = ({ placeholder, value, setValue }) => {
         // 가져온 위치에 이미지를 삽입한다
         editor.insertEmbed(range.index, "image", IMG_URL);
 
-        console.log("IMG_URL : ", IMG_URL);
-        console.log("editor : ", editor);
-        console.log("range : ", range);
+        arrayRef.push(IMG_URL);
       } catch (error) {
         console.log(error);
       }
