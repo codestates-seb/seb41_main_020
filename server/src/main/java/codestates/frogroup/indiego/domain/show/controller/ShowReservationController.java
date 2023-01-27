@@ -73,13 +73,18 @@ public class ShowReservationController {
     }
 
 
+    //USER 예약 조회
     @GetMapping
     public ResponseEntity getShows(@LoginMemberId Long memberId){
         List<ShowReservation> showReservationList =showReservationRepository.findByMember_Id(memberId);
         List<ShowReservationDto.Response> responses = mapper.showsReservationsToShowResvationResponses(showReservationList);
+        //ToDo mapper에서 처리하도록
         for(int i=0; i< responses.size(); i++){
-            responses.get(i).setAddress(showReservationList.get(i).getShow().getShowBoard().getDetailAddress());
+            responses.get(i).setDetailAddress(showReservationList.get(i).getShow().getShowBoard().getDetailAddress());
             responses.get(i).setImage(showReservationList.get(i).getShow().getShowBoard().getBoard().getImage());
+            responses.get(i).setAddress(showReservationList.get(i).getShow().getShowBoard().getAddress());
+            responses.get(i).setLongitude(showReservationList.get(i).getShow().getCoordinate().getLongitude());
+            responses.get(i).setLatitude(showReservationList.get(i).getShow().getCoordinate().getLatitude());
         }
         return new ResponseEntity(
                 new SingleResponseDto<>(setExpireds(showReservationList, responses)),
