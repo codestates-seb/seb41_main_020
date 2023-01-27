@@ -105,7 +105,9 @@ const Board = () => {
   const { id } = useParams();
   const { setBoardStoreData } = useBoardStore();
   const { pathname } = useLocation();
-  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+  const userId =
+    localStorage.getItem("userInfoStorage") &&
+    JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   // 게시글 삭제 요청
   const handleDelete = async () => {

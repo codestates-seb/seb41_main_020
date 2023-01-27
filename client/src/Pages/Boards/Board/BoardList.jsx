@@ -7,7 +7,6 @@ import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 import BoardListItem from "../../../Components/Board/BoardListItem/BoardListItem";
-import useImageStore from "../../../store/useImageStore.js";
 
 //로컬 모듈
 import {
@@ -21,7 +20,7 @@ import breakpoint from "../../../styles/breakpoint";
 import BoardDummy from "../../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   useNavigate,
@@ -185,7 +184,6 @@ export default function BoardList() {
   const { boardList, setBoardListData } = useBoardListStore();
   const [pageData, setPageData] = useState([]);
   const [searchParams] = useSearchParams();
-  const { imageStoreData } = useImageStore();
   const urlPage = searchParams.get("page");
   const urlCategory = searchParams.get("category");
   const urlStatus = searchParams.get("status");
@@ -196,8 +194,11 @@ export default function BoardList() {
 
   const { pathname } = useLocation();
 
+  const userId = localStorage.getItem("userInfoStorage");
+
   console.log(`${urlCategory} ${urlPage} ${urlStatus} ${urlSize} ${pathname}`);
 
+  // 게시글 리스트 불러오기
   const axiosBoardList = async () => {
     const response = await axios.get(
       `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
@@ -224,6 +225,35 @@ export default function BoardList() {
     return <div>Error : {error.message}</div>;
   }
 
+  // 게시글 정보 불러오기(하트 개수 표시를 위함)
+  // const axiosBoard = async () => {
+  //   const response = await axios.get(
+  //     `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+  //   );
+  //   return response.data;
+  // };
+  // const axiosBoardListOnSuccess = (response) => {
+  //   setBoardListData(response.data);
+  //   setPageData(response.pageInfo);
+  //   window.scrollTo(0, 0);
+  // };
+
+  // const { isLoading, isError, error } = useQuery({
+  //   queryKey: ["axiosBoardList", urlPage],
+  //   queryFn: axiosBoardList,
+  //   onSuccess: axiosBoardListOnSuccess,
+  // });
+
+  const handleWriteButton = () => {
+    console.log(userId);
+    if (userId === null) {
+      navigate("/login");
+      alert("로그인 후 이용할 수 있습니다");
+      return;
+    }
+    navigate(`${pathname}/create`);
+  };
+
   return (
     <PageWrapper>
       <Aside></Aside>
@@ -246,11 +276,7 @@ export default function BoardList() {
         {console.log(boardList)}
         {console.log("*******************************")}
         <WriteButtonDiv>
-          <WriteButton
-            onClick={() => {
-              navigate(`${pathname}/create`);
-            }}
-          >
+          <WriteButton onClick={handleWriteButton}>
             <img className="pencelImage" src={pen} alt="pen"></img>
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
@@ -264,7 +290,6 @@ export default function BoardList() {
           location={`${pathname}?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
           setPageData={setPageData}
         ></SearchBar>
-        {console.log("imageStoreData : ", imageStoreData)}
       </BoardWrapper>
     </PageWrapper>
   );

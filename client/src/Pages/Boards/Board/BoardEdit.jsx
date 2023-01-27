@@ -7,7 +7,7 @@ import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import instance from "../../../api/core/default.js";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import { useMutation } from "@tanstack/react-query";
@@ -100,12 +100,34 @@ const BoardEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const titleRef = useRef();
+  const arrayRef = useRef([""]);
 
   const data = {
     title: titleValue,
     content: contentValue,
-    // image: "",
+    image:
+      arrayRef.current.length === 1 ? arrayRef.current[0] : arrayRef.current[1],
     category: categoryValue,
+  };
+
+  const handleEdit = () => {
+    if (categoryValue === "") {
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (titleValue.length < 1) {
+      titleRef.current.focus();
+      console.log(contentValue);
+      return;
+    }
+
+    if (contentValue === "<p><br></p>") {
+      window.scrollTo(0, 300);
+      return;
+    }
+
+    editBoard();
   };
 
   const handleButton = async () => {
@@ -121,14 +143,20 @@ const BoardEdit = () => {
   };
 
   const handleButtonOnSuccess = () => {
-    navigate(`${pathname}/${id}`);
+    const newPathName = pathname.split("/");
+    navigate(`/${newPathName[1]}/${newPathName[2]}/${newPathName[3]}`);
+  };
+
+  const handleButtonOnError = () => {
+    alert("로그인 후 이용하세요");
+    navigate("/login");
   };
 
   const { mutate: editBoard } = useMutation({
     mutationKey: ["handleButton"],
     mutationFn: handleButton,
     onSuccess: handleButtonOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleButtonOnError,
   });
 
   return (
@@ -147,6 +175,7 @@ const BoardEdit = () => {
           <div className="postDiv">제목</div>
           <TitleInputDiv>
             <input
+              ref={titleRef}
               className="titleInput"
               value={titleValue}
               onChange={(e) => setTitleValue(e.target.value)}
@@ -159,9 +188,10 @@ const BoardEdit = () => {
               value={contentValue}
               setValue={setContentValue}
               placeholder={"내용을 입력해주세요."}
+              arrayRef={arrayRef.current}
             ></Editor>
           </ContentInputDiv>
-          <PostButton type="button" onClick={() => editBoard()}>
+          <PostButton type="button" onClick={handleEdit}>
             수정하기
           </PostButton>
         </PostBoard>

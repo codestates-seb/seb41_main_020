@@ -11,7 +11,6 @@ import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown
 import instance from "../../../api/core/default.js";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import useImageStore from "../../../store/useImageStore.js";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -101,6 +100,26 @@ const BoardCreate = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation;
   const arrayRef = useRef([""]);
+  const titleRef = useRef();
+
+  const handlePost = () => {
+    if (categoryValue === "") {
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (titleValue.length < 1) {
+      titleRef.current.focus();
+      console.log(321);
+      return;
+    }
+
+    if (contentValue.length < 1) {
+      window.scrollTo(0, 300);
+      return;
+    }
+
+    createBoard();
+  };
 
   const data = {
     title: titleValue,
@@ -119,16 +138,25 @@ const BoardCreate = () => {
     return response.data.data;
   };
 
-  const handleButtonOnSuccess = (response) => {
-    // setImageStoreData(imageUrl);
+  const handleButtonOnSuccess = () => {
     navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
+  };
+
+  const handleButtonOnError = (response) => {
+    // if (response.response.status === 401) {
+    //   alert("로그인 후 이용하세요");
+    //   navigate("/login");
+    //   return;
+    // }
+    alert("로그인 후 이용하세요");
+    navigate("/login");
   };
 
   const { mutate: createBoard } = useMutation({
     mutationKey: ["handleButton"],
     mutationFn: handleButton,
     onSuccess: handleButtonOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleButtonOnError,
   });
   return (
     <PageWrapper>
@@ -148,6 +176,7 @@ const BoardCreate = () => {
           <div className="postDiv">제목</div>
           <TitleInputDiv>
             <input
+              ref={titleRef}
               className="titleInput"
               placeholder="게시글의 제목을 작성해주세요."
               value={titleValue}
@@ -166,7 +195,7 @@ const BoardCreate = () => {
             ></Editor>
             {console.log(contentValue)}
           </ContentInputDiv>
-          <PostButton type="button" onClick={() => createBoard()}>
+          <PostButton type="button" onClick={handlePost}>
             글 올리기
           </PostButton>
         </PostBoard>
