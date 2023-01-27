@@ -117,16 +117,21 @@ const Board = () => {
     });
   };
 
-  const handleDeleteOnSuccess = (response) => {
+  const handleDeleteOnSuccess = () => {
     alert("삭제되었습니다");
     navigate("/board/free?category=자유게시판&page=1");
+  };
+
+  const handleDeleteOnError = () => {
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
   };
 
   const { mutate: deleteBoard } = useMutation({
     mutationKey: ["handleDelete"],
     mutationFn: handleDelete,
     onSuccess: handleDeleteOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleDeleteOnError,
   });
 
   // 하트 누르기 요청

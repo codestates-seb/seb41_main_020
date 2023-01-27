@@ -10,6 +10,7 @@ import blueHeart from "../../../assets/blueHeart.gif";
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import instance from "../../../api/core/default.js";
+import { useNavigate } from "react-router-dom";
 
 const AnswerListUserDiv = styled.div`
   display: flex;
@@ -127,13 +128,13 @@ const AnswerItem = (props) => {
   const [toggle, setToggle] = useState(false);
   const [editValue, setEditValue] = useState(props.comment);
   const [heartCountState, setHeartCountState] = useState("");
+  const navigate = useNavigate();
 
   const handleEdit = () => {
     setToggle(!toggle);
   };
 
   // 하트 누르기 코드
-
   const handleHeartCount = async () => {
     return await instance({
       method: "put",
@@ -145,14 +146,34 @@ const AnswerItem = (props) => {
     props.refetch();
   };
 
+  const handleHeartCountOnError = (response) => {
+    if (response.response.status === 401) {
+      alert("로그인 후 이용하세요");
+      navigate("/login");
+      return;
+    }
+
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
+    return;
+  };
+
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
     mutationFn: handleHeartCount,
     onSuccess: handleHeartCountOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleHeartCountOnError,
   });
 
-  // 수정 코드
+  // 수정 완료 코드
+  const handleEditComplete = () => {
+    if (editValue.length < 1) {
+      alert("1글자 이상을 적어야 합니다");
+      return;
+    }
+    editAnswer();
+  };
+
   const handleComplete = async () => {
     const data = { comment: editValue };
     const response = await instance({
@@ -168,11 +189,16 @@ const AnswerItem = (props) => {
     props.refetch();
   };
 
+  const handleCompleteOnError = () => {
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
+  };
+
   const { mutate: editAnswer } = useMutation({
     mutationKey: ["handleComplete"],
     mutationFn: handleComplete,
     onSuccess: handleCompleteOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleCompleteOnError,
   });
 
   // 삭제 코드
@@ -187,11 +213,16 @@ const AnswerItem = (props) => {
     props.refetch();
   };
 
+  const handleDeleteOnError = () => {
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
+  };
+
   const { mutate: deleteAnswer } = useMutation({
     mutationKey: ["handleDelete"],
     mutationFn: handleDelete,
     onSuccess: handleDeleteOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleDeleteOnError,
   });
 
   return (
@@ -230,7 +261,7 @@ const AnswerItem = (props) => {
               <button
                 type="button"
                 className="edButton"
-                onClick={() => editAnswer()}
+                onClick={handleEditComplete}
               >
                 완료
               </button>

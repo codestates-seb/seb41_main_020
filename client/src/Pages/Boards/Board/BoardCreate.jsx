@@ -142,7 +142,7 @@ const BoardCreate = () => {
     navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
   };
 
-  const handleButtonOnError = (response) => {
+  const handleButtonOnError = () => {
     // if (response.response.status === 401) {
     //   alert("로그인 후 이용하세요");
     //   navigate("/login");
