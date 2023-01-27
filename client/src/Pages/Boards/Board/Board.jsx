@@ -142,14 +142,19 @@ const Board = () => {
     });
   };
 
-  const handleHeartCountOnSuccess = (response) => {
+  const handleHeartCountOnSuccess = () => {
     refetch();
+  };
+
+  const handleHeartCountOnError = () => {
+    alert("로그인 후 이용하세요");
+    navigate("/login");
   };
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
     mutationFn: handleHeartCount,
     onSuccess: handleHeartCountOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleHeartCountOnError,
   });
 
   // Board 내용 가져오기
