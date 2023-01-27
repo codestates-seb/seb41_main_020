@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -93,48 +92,48 @@ public class ArticleController {
     /**
      * 게시글 단일 조회
      */
-//    @GetMapping("/{article-id}")
-//    public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId,
-//                                     HttpServletRequest request,
-//                                     HttpServletResponse response) {
-//
-//        // 쿠키 가져오기
-//        Cookie[] cookies = request.getCookies();
-//        Boolean isVisited = false;
-//
-//        // 이미 조회한 게시글인 경우
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("visited_article_" + articleId) && cookie.getValue().equals("true")) {
-//                    isVisited = true;
-//                    break;
-//                }
-//            }
-//        }
-//
-//        ArticleDto.Response responseDto = articleService.findArticle(articleId);
-//
-//        // 조회한 게시글이 아닌 경우
-//        if (!isVisited) {
-//            Long viewCount = articleService.incrementViewCount(articleId);
-//
-//            Cookie newCookie = new Cookie("visited_article_" + articleId, "true");
-//            newCookie.setMaxAge(60 * 60 * 24); // 하루
-//            response.addCookie(newCookie);
-//            responseDto.setView(viewCount);
-//        }
-//
-//        return new ResponseEntity<>(new SingleResponseDto<>(responseDto), HttpStatus.OK);
-//    }
-
     @GetMapping("/{article-id}")
     public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId,
-                                     HttpServletRequest request) {
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) {
 
-        ArticleDto.Response response = articleService.findArticle(articleId, request);
+        // 쿠키 가져오기
+        Cookie[] cookies = request.getCookies();
+        Boolean isVisited = false;
 
-        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+        // 이미 조회한 게시글인 경우
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("visited_article_" + articleId) && cookie.getValue().equals("true")) {
+                    isVisited = true;
+                    break;
+                }
+            }
+        }
+
+        ArticleDto.Response responseDto = articleService.findArticle(articleId);
+
+        // 조회한 게시글이 아닌 경우
+        if (!isVisited) {
+            Long viewCount = articleService.incrementViewCount(articleId);
+
+            Cookie newCookie = new Cookie("visited_article_" + articleId, "true");
+            newCookie.setMaxAge(60 * 60 * 24); // 하루
+            response.addCookie(newCookie);
+            responseDto.setView(viewCount);
+        }
+
+        return new ResponseEntity<>(new SingleResponseDto<>(responseDto), HttpStatus.OK);
     }
+
+//    @GetMapping("/{article-id}")
+//    public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId,
+//                                     HttpServletRequest request) {
+//
+//        ArticleDto.Response response = articleService.findArticle(articleId, request);
+//
+//        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+//    }
 
     /**
      * 게시글 삭제
