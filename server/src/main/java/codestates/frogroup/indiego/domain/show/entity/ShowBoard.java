@@ -37,6 +37,6 @@ public class ShowBoard {
     private String showTime;
 
     @Column
-    private String detailImage;
+    private String detailDescription;
 
 }

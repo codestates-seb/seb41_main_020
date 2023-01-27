@@ -16,7 +16,7 @@ import instance from "../../api/core/default.js";
 import useIsLoginStore from "../../store/useIsLoginStore.js";
 
 //라이브러리 및 라이브러리 메소드
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -88,6 +88,8 @@ const ShowListContainer = styled.div`
 export default function AllShowList() {
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const [data, setData] = useState();
+  const [isExpiredDataExist, setIsExpiredDataExist] = useState(true);
+  const [isNotExpiredDataExist, setIsNotExpiredDataExist] = useState(true);
   const navigate = useNavigate();
 
   const fetchData = () => {
@@ -121,17 +123,31 @@ export default function AllShowList() {
   const notExpiredData = data && data.filter((data) => data.expired === false);
   const expiredData = data && data.filter((data) => data.expired === true);
 
-  console.log(notExpiredData);
+  useEffect(() => {
+    if (notExpiredData && notExpiredData.length <= 0) {
+      setIsNotExpiredDataExist(false);
+    }
+
+    if (expiredData && expiredData.length <= 0) {
+      setIsExpiredDataExist(false);
+    }
+  }, [data]);
 
   return (
     <ContentInnerContainer>
-      <div className="reservation-list-title">나의 예약 목록</div>
+      <div className="reservation-list-title">내가 예매한 공연</div>
       <ShowListContainer>
-        <ShowList allReservationData={notExpiredData} />
+        <ShowList
+          allReservationData={notExpiredData}
+          dataExist={isNotExpiredDataExist}
+        />
       </ShowListContainer>
-      <div className="expired-list-title">지난 예약 목록</div>
+      <div className="expired-list-title">지난 공연 목록</div>
       <ShowListContainer>
-        <ShowList allReservationData={expiredData} />
+        <ShowList
+          allReservationData={expiredData}
+          dataExist={isExpiredDataExist}
+        />
       </ShowListContainer>
     </ContentInnerContainer>
   );

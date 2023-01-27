@@ -14,27 +14,27 @@ const ButtonComponent = styled.button`
   all: unset;
   cursor: pointer;
   display: inline;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
-    width: 30px;
-    height: 30px;
+    width: 27px;
+    height: 27px;
   }
 
   > img {
     border-radius: 100%;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      width: 30px;
-      height: 30px;
+      width: 27px;
+      height: 27px;
     }
   }
 `;
 
-export default function KakaoMapButton({ location }) {
+export default function KakaoMapButton({ detailAddress, latitude, longitude }) {
   const [locationId, setLocationId] = useState("");
 
   const headers = {
@@ -44,7 +44,7 @@ export default function KakaoMapButton({ location }) {
 
   axios
     .get(
-      `https://dapi.kakao.com/v2/local/search/keyword.json?y=${location.latitude}&x=${location.longitude}&query=${location.title}&page=1&size=1`,
+      `https://dapi.kakao.com/v2/local/search/keyword.json?y=${latitude}&x=${longitude}&query=${detailAddress}&page=1&size=1`,
       { headers }
     )
     .then((response) => {

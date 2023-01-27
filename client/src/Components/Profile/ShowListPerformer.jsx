@@ -13,7 +13,7 @@ import {
 } from "../../styles/mixins";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import { React, useState, useEffect } from "react";
 import styled from "styled-components/macro";
 
 const ShowListInnerContainer = styled.ul`
@@ -21,28 +21,36 @@ const ShowListInnerContainer = styled.ul`
   align-items: center;
   display: flex;
   height: 450px;
+  position: relative;
   width: 100%;
   justify-content: space-between;
   flex-direction: column;
   overflow-y: scroll;
+  overflow-x: hidden;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     height: 340px;
     width: 100%;
   }
 
-  ::-webkit-scrollbar {
-    display: none;
+  > span {
+    position: absolute;
+    top: 50%;
   }
 `;
 
-export default function ShowList() {
+export default function ShowList({ allReservationData, dataExist }) {
+  console.log(allReservationData);
   return (
     <ShowListInnerContainer>
-      <ShowItemPerformer />
-      <ShowItemPerformer />
-      <ShowItemPerformer />
-      <ShowItemPerformer />
+      {dataExist ? "" : <span>공연 목록이 없습니다</span>}
+      {allReservationData &&
+        allReservationData.map((allReservationData) => (
+          <ShowItemPerformer
+            reservationData={allReservationData}
+            key={allReservationData.id}
+          />
+        ))}
     </ShowListInnerContainer>
   );
 }
