@@ -25,6 +25,7 @@ public interface ArticleMapper {
     @Mapping(source = "category", target = "board.category")
     Article articlePatchToArticle(ArticleDto.Patch requestBody);
 
+    @Mapping(source = "member.id", target = "memberId")
     @Mapping(source = "board.title", target = "title")
     @Mapping(source = "board.content", target = "content")
     @Mapping(source = "board.image", target = "image")
