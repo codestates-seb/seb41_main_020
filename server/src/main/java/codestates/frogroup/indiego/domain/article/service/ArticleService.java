@@ -25,8 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -107,40 +105,65 @@ public class ArticleService {
      * 게시글 단일 조회
      * TODO: 게시글 조회는 읽기만 하고 조회수를 증가시키는 방법은 없을까?
      */
-//    @Transactional // TODO: @Transactional 조금 더 알아보기
-    public ArticleDto.Response findArticle(Long articleId, HttpServletRequest request) {
+    //    @Transactional // TODO: @Transactional 조금 더 알아보기
+    public ArticleDto.Response findArticle(Long articleId) {
 
         Article findArticle = findVerifiedArticle(articleId);
 
         Long viewCount = articleRepository.findViewCountFromRedis(articleId);
         log.info("viewCount1={}", viewCount);
-
         if (viewCount == null) {
             viewCount = articleRepository.findView(articleId);
             log.info("viewCount2={}", viewCount);
             articleRepository.saveViewCountToRedis(articleId, viewCount);
         }
 
-        HttpSession session = request.getSession();
+        // redis의 조회수 증가
+//        viewCount = articleRepository.incrementViewCount(articleId);
+//        log.info("viewCount3={}", viewCount);
         ArticleDto.Response response = getResponse(findArticle);
-
-        // 조회한 적이 없는 경우
-        if (session.getAttribute("articleId:" + articleId) == null) {
-            viewCount = articleRepository.incrementViewCount(articleId);
-            response.setView(viewCount);
-
-            session.setAttribute("articleId:" + articleId, true);
-
-            return response;
-        }
-
-        // 조회한 적이 있는 경우
-        viewCount = articleRepository.findViewCountFromRedis(articleId);
         response.setView(viewCount);
 
         return response;
     }
 
+    public Long incrementViewCount(Long articleId) {
+        return articleRepository.incrementViewCount(articleId);
+    }
+
+//    @Transactional // TODO: @Transactional 조금 더 알아보기
+//    public ArticleDto.Response findArticle(Long articleId, HttpServletRequest request) {
+//
+//        Article findArticle = findVerifiedArticle(articleId);
+//
+//        Long viewCount = articleRepository.findViewCountFromRedis(articleId);
+//        log.info("viewCount1={}", viewCount);
+//
+//        if (viewCount == null) {
+//            viewCount = articleRepository.findView(articleId);
+//            log.info("viewCount2={}", viewCount);
+//            articleRepository.saveViewCountToRedis(articleId, viewCount);
+//        }
+//
+//        HttpSession session = request.getSession();
+//        ArticleDto.Response response = getResponse(findArticle);
+//
+//        // 조회한 적이 없는 경우
+//        if (session.getAttribute("articleId:" + articleId) == null) {
+//            viewCount = articleRepository.incrementViewCount(articleId);
+//            response.setView(viewCount);
+//
+//            session.setAttribute("articleId:" + articleId, true);
+//
+//            return response;
+//        }
+//
+//        // 조회한 적이 있는 경우
+//        viewCount = articleRepository.findViewCountFromRedis(articleId);
+//        response.setView(viewCount);
+//
+//        return response;
+//    }
 
     /**
      * 게시글 삭제

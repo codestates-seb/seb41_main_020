@@ -1,6 +1,6 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import dummyProfileImage from "../../assets/dummyProfileImage.jpg";
-import useWithdrawModalStore from "../../store/useWithdrawModalStore.js";
+import useOpenModalStore from "../../store/useOpenModalStore.js";
 import WithdrawModal from "../../Components/Profile/WithdrawModal";
 import AllShowList from "../../Components/Profile/AllShowList.jsx";
 import Spinner from "../../Components/Spinner";
@@ -17,7 +17,7 @@ import {
 import useIsLoginStore from "../../store/useIsLoginStore";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useLayoutEffect } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -262,23 +262,24 @@ const LocationandAboutContainer = styled.div`
 `;
 
 export default function Profile() {
-  const { openModal, setOpenModal } = useWithdrawModalStore((state) => state);
-  const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  const { openModal, setOpenModal } = useOpenModalStore((state) => state);
+  // const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const { profileData, setProfileData } = useProfileDataStore((state) => state);
   const navigate = useNavigate();
-  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+  const params = useParams();
+  const isLogin = !!localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (profileData && profileData.role === "PERFORMER") {
+    if (!isLogin) {
       window.alert("잘못된 접근입니다.");
-      navigate("/");
+      history.go(-1);
     }
-  }, [profileData]);
+  }, [isLogin]);
 
   const fetchData = () => {
     return instance({
       method: "get",
-      url: `/members/${userId}/mypage`,
+      url: `/members/${params.id}/mypage`,
     });
   };
 
@@ -286,11 +287,14 @@ export default function Profile() {
     setProfileData(response.data.data && response.data.data);
   };
 
-  const fetchDataOnError = (err) => {
-    window.alert("다시 로그인해주세요.");
-    setIsLogin(false);
-    localStorage.clear();
-    navigate("/");
+  const fetchDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Member is not the same"
+    ) {
+      window.alert("잘못된 접근입니다.");
+      navigate("/");
+    }
   };
 
   const { isLoading } = useQuery({
@@ -303,7 +307,7 @@ export default function Profile() {
   });
 
   const handleMoveToEditPage = () => {
-    navigate(`/mypage/${userId}/edit`);
+    navigate(`/mypage/${params.id}/edit`);
   };
 
   return (

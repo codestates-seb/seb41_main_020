@@ -49,6 +49,8 @@ public class ArticleDto {
 
         private Long id;
 
+        private Long memberId;
+
         private String nickname;
 
         private String title;
