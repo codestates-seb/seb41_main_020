@@ -2,7 +2,6 @@ package codestates.frogroup.indiego.domain.show.service;
 
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowDto;
 import codestates.frogroup.indiego.domain.show.dto.ShowListResponseDto;
@@ -14,7 +13,6 @@ import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
-import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +23,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.*;
+import java.util.Optional;
+
 
 //테스트해보고 페이지네이션 마저 작성
 @Slf4j
@@ -60,15 +58,13 @@ public class ShowService {
     }
 
     @Transactional
-    public Show updateShow(Show show, long memberId) {
-        Show findShow = findVerifiedShow(show.getId());
-
+    public Show updateShow(ShowDto.Patch patchShow, long memberId, long showId) {
+        Show findShow = findVerifiedShow(showId);
+        Show patch = mapper.showPatchDtoToShow(patchShow);
         // ToDo security 적용 시 수정 -> getCurrentMember
         Member member = memberService.findVerifiedMember(memberId);
 
-        Show updatedShow = utils.copyNonNullProperties(show, findShow);
-
-        return updatedShow;
+        return utils.copyNonNullProperties(patch, findShow);
     }
 
     @Transactional

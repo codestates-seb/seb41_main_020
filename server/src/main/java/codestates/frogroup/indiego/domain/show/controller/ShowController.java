@@ -71,11 +71,10 @@ public class ShowController {
     public ResponseEntity patchShow(@PathVariable("show-id") long showId,
                                     @Valid @RequestBody ShowDto.Patch showPatchDto,
                                     @LoginMemberId Long memberId){
-        Show show = mapper.showPatchDtoToShow(showPatchDto);
-        show.setId(showId);
-        Show updatedShow = showService.updateShow(show, memberId);
+
+        Show updatedShow = showService.updateShow(showPatchDto, memberId, showId);
         ShowDto.Response response = mapper.showToShowResponse(updatedShow);
-        response.setEmptySeats(showReservationService.getEmptySeats(show, showId));
+        response.setEmptySeats(showReservationService.getEmptySeats(updatedShow, showId));
         return new ResponseEntity<>(
                 response, HttpStatus.OK
         );
