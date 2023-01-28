@@ -131,7 +131,7 @@ public class ArticleController {
             newCookie.setMaxAge(60 * 60 * 24); // 하루
             newCookie.setPath("/");
             newCookie.setDomain("indiego.site");
-            newCookie.setHttpOnly(true);
+//            newCookie.setHttpOnly(true);
             response.addCookie(newCookie);
             responseDto.setView(viewCount);
         }
