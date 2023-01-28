@@ -179,7 +179,7 @@ const BoardsGrid = styled.div`
 export default function Home() {
   const [LocationPopupOpen, setLocationPopupOpen] = useState(false);
   const [DatePopupOpen, setDatePopupOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
+  const [userInfo, setUserInfo] = useState();
   const isLogin = !!localStorage.getItem("accessToken");
 
   const locationPopupOnClickHandler = () => {
@@ -192,13 +192,11 @@ export default function Home() {
 
   const fetchUserInfoAtHome = () => {
     const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
-    console.log(userId);
     return instance.get(`/members/${userId}`);
   };
 
   const fetchUserInfoAtHomeOnSuccess = (res) => {
     const data = res.data.data;
-    console.log(data);
     setUserInfo(data);
   };
 
@@ -235,25 +233,27 @@ export default function Home() {
           <CarouselDisplayBox>
             <CarouselDisplay>
               <div className="carousel_box">
-                <h1>월간 예매율 순위</h1>
+                <h1>우리 동네 인기 공연</h1>
                 <Carousel
                   width={"70%"}
                   minWidth={"320px"}
                   maxWidth={"480px"}
                   height={"100%"}
                   status="별점순"
+                  address={"강남구" || userInfo.profile[0].address}
                   carouselItemList={CarouselItemList}
                   isRankMode={true}
                 ></Carousel>
               </div>
               <div className="carousel_box">
-                <h1>새로 추가된 공연</h1>
+                <h1>우리 동네 새로운 공연</h1>
                 <Carousel
                   width={"70%"}
                   minWidth={"320px"}
                   maxWidth={"480px"}
                   height={"100%"}
                   status="최신순"
+                  address={"강남구" || userInfo.profile[0].address}
                   carouselItemList={CarouselItemList}
                 ></Carousel>
               </div>
@@ -261,7 +261,7 @@ export default function Home() {
           </CarouselDisplayBox>
         </CarouselContainer>
         <LongCarouselContainer>
-          <LongCarousel />
+          <LongCarousel userInfo={userInfo} />
         </LongCarouselContainer>
         <BoardsContainer>
           <h1 className="title">커뮤니티 인기 게시글</h1>

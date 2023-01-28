@@ -308,6 +308,25 @@ export default function KaKaoMap({ userInfo, searchedData, setSearchedData }) {
     map.setCenter(new kakao.maps.LatLng(data.latitude, data.longitude));
   };
 
+  useEffect(() => {
+    console.log("in useEffect", userInfo);
+    const userXBoundary = [
+      userInfo.location[0] - 0.0040515,
+      userInfo.location[0] + 0.0040515,
+    ];
+    const userYBoundary = [
+      userInfo.location[1] - 0.0073285,
+      userInfo.location[1] + 0.0073285,
+    ];
+
+    setXBoundary(userXBoundary);
+    setYBoundary(userYBoundary);
+    setFetchTrigger(true);
+    mapElement.current.setCenter(
+      new kakao.maps.LatLng(userInfo.location[0], userInfo.location[1])
+    );
+  }, [userInfo]);
+
   return (
     <Container>
       <MapSearchPanelContainer isSearched={!!searchedData}>

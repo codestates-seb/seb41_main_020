@@ -14,6 +14,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../Spinner";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -99,10 +100,9 @@ const NextButton = styled.button`
   }
 `;
 
-export default function Carousel() {
-  const [currentIdx, setCurrentIdx] = useState(0);
+export default function LocationShowsList({ userInfo }) {
   const [data, setData] = useState([]);
-
+  const isLogin = !!localStorage.getItem("accessToken");
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchShowDataByLocation = () => {
@@ -123,92 +123,32 @@ export default function Carousel() {
     keepPreviousData: true,
   });
 
-  const pageButtonClickHandler = (num) => {
-    const viewport = window.innerWidth;
-
-    if (viewport > 900) {
-      if (
-        currentIdx + num < parseInt(data.length / 3) &&
-        currentIdx + num >= 0
-      ) {
-        setCurrentIdx(currentIdx + num);
-      }
-    } else {
-      if (data.length % 2) {
-        if (
-          currentIdx + num < parseInt(data.length / 4) + 1 &&
-          currentIdx + num >= 0
-        ) {
-          setCurrentIdx(currentIdx + num);
-        }
-      } else {
-        if (
-          currentIdx + num < parseInt(data.length / 4) &&
-          currentIdx + num >= 0
-        ) {
-          setCurrentIdx(currentIdx + num);
-        }
-      }
-    }
-  };
-
-  // useInterval(() => {
-  //   const viewPort = window.innerWidth;
-  //   if (viewPort > 900) {
-  //     if (currentIdx + 1 < parseInt(data.length / 3)) {
-  //       setCurrentIdx(currentIdx + 1);
-  //     } else {
-  //       setCurrentIdx(0);
-  //     }
-  //   } else {
-  //     if (data.length % 2) {
-  //       if (
-  //         currentIdx + 1 <= parseInt(data.length / 4) + 1 &&
-  //         currentIdx + 1 >= 0
-  //       ) {
-  //         setCurrentIdx(currentIdx + 1);
-  //       } else {
-  //         setCurrentIdx(0);
-  //       }
-  //     } else {
-  //       if (
-  //         currentIdx + 1 <= parseInt(data.length / 4) &&
-  //         currentIdx + 1 >= 0
-  //       ) {
-  //         setCurrentIdx(currentIdx + 1);
-  //       } else {
-  //         setCurrentIdx(0);
-  //       }
-  //     }
-  //   }
-  // }, 3000);
+  console.log(userInfo);
 
   return (
     <Container>
       <CarouselHeader>
-        <h1>내 지역 공연 현황</h1>
-        <Button className="my_location">나의 위치: 종로구</Button>
+        <h1>우리 동네 공연 현황</h1>
+        {isLogin && userInfo ? (
+          userInfo.profile[0].address ? (
+            <Link to={`mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}>
+              <Button className="my_location">
+                {`내 지역: ${userInfo.profile[0].address}`}
+              </Button>
+            </Link>
+          ) : (
+            <Link to={`mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}>
+              <Button className="my_location">위치 설정하러 가기</Button>
+            </Link>
+          )
+        ) : (
+          <Link to="/signup">
+            <Button className="my_location">회원가입 하기</Button>
+          </Link>
+        )}
       </CarouselHeader>
       <CarouselContainer>
-        {/* <PrevButton
-          onClick={() => {
-            pageButtonClickHandler(-1);
-          }}
-        >
-          <img src={Arrow} alt="prev" />
-        </PrevButton> */}
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          data && <LongCarouselItemList data={data} currentIdx={currentIdx} />
-        )}
-        {/* <NextButton
-          onClick={() => {
-            pageButtonClickHandler(1);
-          }}
-        >
-          <img src={Arrow} alt="next" />
-        </NextButton> */}
+        {isLoading ? <Spinner /> : data && <LongCarouselItemList data={data} />}
       </CarouselContainer>
     </Container>
   );

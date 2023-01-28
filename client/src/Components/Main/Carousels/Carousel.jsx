@@ -13,6 +13,7 @@ import { useInterval } from "../../../utils/useInterval";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { add } from "date-fns";
 
 const CarouselContainer = styled.div`
   width: ${(props) => props.width};
@@ -105,6 +106,7 @@ export default function Carousel({
   minWidth,
   maxWidth,
   status,
+  address,
 }) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [data, setData] = useState([]);
@@ -113,13 +115,14 @@ export default function Carousel({
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchShowData = () => {
-    return axios.get(`${serverURI}/shows`, {
-      params: { status },
+    return axios.get(`${serverURI}/shows/sorts`, {
+      params: { status, address },
     });
   };
 
   const fetchShowDataOnSuccess = (response) => {
     const data = response.data.data;
+    console.log(data);
     setData(data);
   };
 
