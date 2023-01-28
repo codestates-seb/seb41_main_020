@@ -190,11 +190,9 @@ public class ArticleService {
     @Transactional
     public HttpStatus articleLike(Long articleId, Long memberId) {
         Article findArticle = findVerifiedArticle(articleId);
-
-        // TODO: 리팩토링 memberService에서 사용하자
         Member findMember = memberService.findVerifiedMember(memberId);
 
-        ArticleLike findArticleLike = articleLikeRepository.findByMemberId(findMember.getId());
+        ArticleLike findArticleLike = articleLikeRepository.findByMemberIdAndArticleId(memberId, articleId);
 
         return findArticleLike == null ? createArticleLike(findArticle, findMember) : deleteArticleLike(findArticleLike);
     }
@@ -218,7 +216,7 @@ public class ArticleService {
 //        long likeCount = articleLikeRepository.countByArticleId(article.getId());
 //        response.setLikeCount(likeCount);
 
-        ArticleLike articleLike = articleLikeRepository.findByMemberId(article.getMember().getId());
+        ArticleLike articleLike = articleLikeRepository.findByMemberIdAndArticleId(article.getMember().getId(), article.getId());
         if (articleLike == null) {
             response.setLikeStatus(false);
         } else {

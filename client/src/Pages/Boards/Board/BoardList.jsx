@@ -32,6 +32,7 @@ import {
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
+import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 export const PageWrapper = styled.div`
   /* background-color: black; */

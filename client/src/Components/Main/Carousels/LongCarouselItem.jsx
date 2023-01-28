@@ -4,6 +4,7 @@ import React from "react";
 import { dtFontSize, mbFontSize, primary, sub } from "../../../styles/mixins";
 
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const ItemContainer = styled.div`
   display: flex;
@@ -11,14 +12,14 @@ const ItemContainer = styled.div`
   width: 250px;
   max-width: 250px;
   height: 50%;
-  margin-right: 30px;
-  padding: 0 calc(3px + 1vw);
+  margin-right: 29px;
+  padding: 5px calc(3px + 1vw);
   background-color: ${sub.sub300};
   border-radius: 10px;
 
   @media screen and (max-width: 1100px) {
     width: calc(20vw + 38px);
-    margin-right: calc(10px + 2.3vw);
+    margin-right: calc(16px + 2.3vw);
   }
 
   @media screen and (max-width: 900px) {
@@ -63,8 +64,8 @@ const ImageContainer = styled.div`
   border-radius: 10px;
 
   img {
-    height: calc(60px + 2vw);
-    max-height: 100px;
+    width: 70px;
+    height: 85px;
     border-radius: 10px;
   }
 
@@ -80,7 +81,6 @@ const ConcertDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-right: 10px;
 
   &:hover {
     color: ${primary.primary400};
@@ -150,16 +150,18 @@ const ConcertDetailsContainer = styled.div`
 `;
 export default function LongCarouselItem({ data }) {
   return (
-    <ItemContainer>
-      <ImageContainer>
-        <img src={data.image} alt="poster" />
-      </ImageContainer>
-      <ConcertDetailsContainer>
-        <h2 className="title">{data.title}</h2>
-        <h3 className="artist">{data.nickname}</h3>
-        <h4 className="date">{`${data.showAt} - ${data.expiredAt}`}</h4>
-        <h4 className="location">{data.detailAddress}</h4>
-      </ConcertDetailsContainer>
-    </ItemContainer>
+    <Link to={`tickets/${data.id}`}>
+      <ItemContainer>
+        <ImageContainer>
+          <img src={data.image} alt="poster" />
+        </ImageContainer>
+        <ConcertDetailsContainer>
+          <h2 className="title">{data.title}</h2>
+          <h3 className="artist">{data.nickname}</h3>
+          <h4 className="date">{`${data.showAt} - ${data.expiredAt}`}</h4>
+          <h4 className="location">{data.detailAddress}</h4>
+        </ConcertDetailsContainer>
+      </ItemContainer>
+    </Link>
   );
 }

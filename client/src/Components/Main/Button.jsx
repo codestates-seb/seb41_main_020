@@ -23,7 +23,9 @@ const StyledButton = styled.button`
 
 export default function Button({ children, clickEvent, className, ref }) {
   const buttonClickHandler = (e) => {
-    clickEvent();
+    if (typeof clickEvent === "function") {
+      clickEvent();
+    }
   };
 
   return (

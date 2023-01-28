@@ -9,7 +9,7 @@ public interface ArticleLikeRepository extends JpaRepository<ArticleLike, Long> 
 
     List<ArticleLike> findAllByArticleId(Long articleId);
 
-    ArticleLike findByMemberId(Long memberId);
+    ArticleLike findByMemberIdAndArticleId(Long memberId, Long articleId);
 
     long countByArticleId(long articleId);
 }

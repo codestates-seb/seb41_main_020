@@ -33,25 +33,41 @@
 .marker_box:hover .marker_date{
   color : #487EEB;
 }
+.marker_box:hover .marker_artist{
+  color : #487EEB;
+}
 
 .marker_title {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow-x: hidden;
+  -webkit-box-orient: vertical;
+
 } 
 
-.marker_address{
+.marker_address, .marker_artist {
   font-size: 9px;
   font-weight: 500;
   margin-bottom: 10px;
   overflow-anchor: initial;
   white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow-x: hidden;
+  -webkit-box-orient: vertical;
 }
 
 .marker_date {
   font-size: 10px;
   font-weight: 600;
   margin-bottom: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow-x: hidden;
+  -webkit-box-orient: vertical;
 }
 
 .triangle {

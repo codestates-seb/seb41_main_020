@@ -14,6 +14,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../Spinner";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -99,16 +101,21 @@ const NextButton = styled.button`
   }
 `;
 
-export default function Carousel() {
-  const [currentIdx, setCurrentIdx] = useState(0);
+export default function LocationShowsList({ userInfo }) {
   const [data, setData] = useState([]);
-
+  const isLogin = !!localStorage.getItem("accessToken");
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchShowDataByLocation = () => {
-    return axios.get(`${serverURI}/shows/location`, {
-      params: { address: "종로구" },
-    });
+    if (userInfo && userInfo?.profile[0].address) {
+      return axios.get(`${serverURI}/shows/location`, {
+        params: { address: userInfo?.profile[0].address },
+      });
+    } else {
+      return axios.get(`${serverURI}/shows/location`, {
+        params: { address: "강남구" },
+      });
+    }
   };
 
   const fetchShowDataByLocationOnSuccess = (response) => {
@@ -116,99 +123,47 @@ export default function Carousel() {
     setData(data);
   };
 
-  const { isLoading } = useQuery({
+  const { isLoading, refetch } = useQuery({
     queryKey: ["fetchShowDataByLocation"],
     queryFn: fetchShowDataByLocation,
     onSuccess: fetchShowDataByLocationOnSuccess,
     keepPreviousData: true,
   });
 
-  const pageButtonClickHandler = (num) => {
-    const viewport = window.innerWidth;
-
-    if (viewport > 900) {
-      if (
-        currentIdx + num < parseInt(data.length / 3) &&
-        currentIdx + num >= 0
-      ) {
-        setCurrentIdx(currentIdx + num);
-      }
-    } else {
-      if (data.length % 2) {
-        if (
-          currentIdx + num < parseInt(data.length / 4) + 1 &&
-          currentIdx + num >= 0
-        ) {
-          setCurrentIdx(currentIdx + num);
-        }
-      } else {
-        if (
-          currentIdx + num < parseInt(data.length / 4) &&
-          currentIdx + num >= 0
-        ) {
-          setCurrentIdx(currentIdx + num);
-        }
-      }
-    }
-  };
-
-  useInterval(() => {
-    const viewPort = window.innerWidth;
-    if (viewPort > 900) {
-      if (currentIdx + 1 < parseInt(data.length / 3)) {
-        setCurrentIdx(currentIdx + 1);
-      } else {
-        setCurrentIdx(0);
-      }
-    } else {
-      if (data.length % 2) {
-        if (
-          currentIdx + 1 <= parseInt(data.length / 4) + 1 &&
-          currentIdx + 1 >= 0
-        ) {
-          setCurrentIdx(currentIdx + 1);
-        } else {
-          setCurrentIdx(0);
-        }
-      } else {
-        if (
-          currentIdx + 1 <= parseInt(data.length / 4) &&
-          currentIdx + 1 >= 0
-        ) {
-          setCurrentIdx(currentIdx + 1);
-        } else {
-          setCurrentIdx(0);
-        }
-      }
-    }
-  }, 3000);
+  useEffect(() => {
+    refetch();
+  }, [userInfo]);
 
   return (
     <Container>
       <CarouselHeader>
-        <h1>내 지역 공연 현황</h1>
-        <Button className="my_location">나의 위치: 종로구</Button>
+        <h1>우리 동네 공연 현황</h1>
+        {isLogin && userInfo ? (
+          userInfo.profile[0].address ? (
+            <Link to={`mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}>
+              <Button className="my_location">
+                {`내 지역: ${userInfo.profile[0].address}`}
+              </Button>
+            </Link>
+          ) : (
+            <Link to={`mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}>
+              <Button className="my_location">위치 설정하러 가기</Button>
+            </Link>
+          )
+        ) : (
+          <Link to="/signup">
+            <Button className="my_location">회원가입 하기</Button>
+          </Link>
+        )}
       </CarouselHeader>
       <CarouselContainer>
-        <PrevButton
-          onClick={() => {
-            pageButtonClickHandler(-1);
-          }}
-        >
-          <img src={Arrow} alt="prev" />
-        </PrevButton>
         {isLoading ? (
           <Spinner />
+        ) : data.length > 0 ? (
+          <LongCarouselItemList data={data} />
         ) : (
-          data && <LongCarouselItemList data={data} currentIdx={currentIdx} />
+          <p> 현재 내 지역에 공연이 존재하지 않습니다.</p>
         )}
-        <NextButton
-          onClick={() => {
-            pageButtonClickHandler(1);
-          }}
-        >
-          <img src={Arrow} alt="next" />
-        </NextButton>
       </CarouselContainer>
     </Container>
   );
