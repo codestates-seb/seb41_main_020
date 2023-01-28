@@ -192,7 +192,7 @@ export const SpinnerExtended = styled(Spinner)`
   }
 `;
 
-export default function AdvertiseBoardList() {
+export default function EmployBoardList() {
   const navigate = useNavigate();
   const { boardList, setBoardListData } = useBoardListStore();
   const [pageData, setPageData] = useState([]);
@@ -288,8 +288,10 @@ export default function AdvertiseBoardList() {
       <Aside />
       <MobileAside />
       <BoardWrapper>
-        <div className="title">홍보게시판</div>
-        <div className="titleInfo">공연을 홍보할 수 있는 게시판 입니다.</div>
+        <div className="title">구인게시판</div>
+        <div className="titleInfo">
+          함께 공연을 할 사람을 구인하는 게시판 입니다.
+        </div>
         <div className="dropboxDiv">
           <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>
         </div>

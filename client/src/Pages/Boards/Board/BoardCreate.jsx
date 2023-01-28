@@ -96,11 +96,14 @@ const BoardCreate = () => {
   const [contentValue, setContentValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
   const [titleValue, setTitleValue] = useState("");
-  const { id } = useParams();
   const navigate = useNavigate();
-  const { pathname } = useLocation;
   const arrayRef = useRef([""]);
   const titleRef = useRef();
+  const { pathname } = useLocation();
+
+  // 기존 경로에서 /create를 빼는 작업
+  const newPathName = pathname.split("/");
+  const PathNameURI = `${newPathName[1]}/${newPathName[2]}`;
 
   const handlePost = () => {
     if (categoryValue === "") {
@@ -139,15 +142,12 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = () => {
-    navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
+    navigate(
+      `/${PathNameURI}?category=${categoryValue}&status=최신순&page=1&size=10`
+    );
   };
 
   const handleButtonOnError = () => {
-    // if (response.response.status === 401) {
-    //   alert("로그인 후 이용하세요");
-    //   navigate("/login");
-    //   return;
-    // }
     alert("로그인 후 이용하세요");
     navigate("/login");
   };

@@ -62,13 +62,9 @@ const AnswerCreateButton = styled(OKButton)`
 const AnswerListWrapper = styled.div`
   border: 2px solid ${primary.primary500};
   border-radius: 20px;
-  padding: 20px;
+  padding: 0 20px;
   width: 100%;
-  height: 800px;
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  height: max-content;
   > ul {
     padding-left: 0px;
     list-style: none;
@@ -100,6 +96,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
   };
 
   const handleButtonOnSuccess = () => {
+    setAnswerData("");
     refetch();
   };
 
@@ -146,15 +143,19 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
           작성하기
         </AnswerCreateButton>
       </AnswerCreateButtonDiv>
-      <AnswerListWrapper>
-        <ul>
-          {answerListData.map((it) => (
-            <li key={it.id}>
-              <AnswerItem {...it} refetch={refetch} userId={userId} />
-            </li>
-          ))}
-        </ul>
-      </AnswerListWrapper>
+      {boardData.articleCommentCount === 0 ? (
+        <></>
+      ) : (
+        <AnswerListWrapper>
+          <ul>
+            {answerListData.map((it) => (
+              <li key={it.id}>
+                <AnswerItem {...it} refetch={refetch} userId={userId} />
+              </li>
+            ))}
+          </ul>
+        </AnswerListWrapper>
+      )}
     </AnswerWrapper>
   );
 };

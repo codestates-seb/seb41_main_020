@@ -81,8 +81,9 @@ public class ShowController {
     }
 
     @DeleteMapping("/{show-id}")
-    public ResponseEntity deleteShow(@PathVariable("show-id") long showId){
-        showService.deleteShow(showId);
+    public ResponseEntity deleteShow(@PathVariable("show-id") long showId,
+                                     @LoginMemberId Long memberId){
+        showService.deleteShow(showId, memberId);
         return new ResponseEntity<>(
                 HttpStatus.NO_CONTENT
         );

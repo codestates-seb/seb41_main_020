@@ -1,6 +1,11 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import breakpoint from "../../../styles/breakpoint.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
+import {
+  PageWrapper,
+  ContentWrapper,
+  BoardItem,
+  SpinnerExtended,
+} from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
 import instance from "../../../api/core/default.js";
@@ -60,6 +65,10 @@ const QuillViewDiv = styled.div`
 
   > * img {
     max-width: 1000px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      max-width: 400px;
+    }
   }
 `;
 
@@ -180,10 +189,6 @@ const Board = () => {
     onSuccess: axiosBoardSuccess,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
@@ -195,15 +200,19 @@ const Board = () => {
         <div className="titleDiv">
           <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
           <div className="titleInfo">
-            {new Date(boardData.createdAt).toLocaleString()} || 조회수 :{" "}
-            {boardData.view}
+            {new Date(boardData.createdAt).toLocaleString()}
           </div>
         </div>
 
         <div className="lineDiv"></div>
-        <QuillViewDiv
-          dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
-        ></QuillViewDiv>
+        {isLoading ? (
+          <SpinnerExtended />
+        ) : (
+          <QuillViewDiv
+            dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
+          ></QuillViewDiv>
+        )}
+
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton" onClick={() => heartCount()}>
