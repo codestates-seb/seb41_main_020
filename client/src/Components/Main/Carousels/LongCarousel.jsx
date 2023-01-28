@@ -15,6 +15,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../Spinner";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -106,9 +107,15 @@ export default function LocationShowsList({ userInfo }) {
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchShowDataByLocation = () => {
-    return axios.get(`${serverURI}/shows/location`, {
-      params: { address: "종로구" },
-    });
+    if (userInfo && userInfo?.profile[0].address) {
+      return axios.get(`${serverURI}/shows/location`, {
+        params: { address: userInfo?.profile[0].address },
+      });
+    } else {
+      return axios.get(`${serverURI}/shows/location`, {
+        params: { address: "강남구" },
+      });
+    }
   };
 
   const fetchShowDataByLocationOnSuccess = (response) => {
@@ -116,14 +123,16 @@ export default function LocationShowsList({ userInfo }) {
     setData(data);
   };
 
-  const { isLoading } = useQuery({
+  const { isLoading, refetch } = useQuery({
     queryKey: ["fetchShowDataByLocation"],
     queryFn: fetchShowDataByLocation,
     onSuccess: fetchShowDataByLocationOnSuccess,
     keepPreviousData: true,
   });
 
-  console.log(userInfo);
+  useEffect(() => {
+    refetch();
+  }, [userInfo]);
 
   return (
     <Container>
@@ -148,7 +157,13 @@ export default function LocationShowsList({ userInfo }) {
         )}
       </CarouselHeader>
       <CarouselContainer>
-        {isLoading ? <Spinner /> : data && <LongCarouselItemList data={data} />}
+        {isLoading ? (
+          <Spinner />
+        ) : data.length > 0 ? (
+          <LongCarouselItemList data={data} />
+        ) : (
+          <p> 현재 내 지역에 공연이 존재하지 않습니다.</p>
+        )}
       </CarouselContainer>
     </Container>
   );

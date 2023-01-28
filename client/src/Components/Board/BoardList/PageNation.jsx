@@ -66,11 +66,11 @@ const PageNation = ({ pageData, location, className }) => {
   const navigate = useNavigate();
 
   const handlePreviousPage = () => {
-    navigate(`${location}&page=${pageData.page - 1}`);
+    navigate(`${location}page=${pageData.page - 1}`);
   };
 
   const handleNextPage = () => {
-    navigate(`${location}&page=${pageData.page + 1}`);
+    navigate(`${location}page=${pageData.page + 1}`);
   };
 
   const PageLengthData = [...Array(pageData.totalPages)].map((it, idx) => {
@@ -108,7 +108,7 @@ const PageNation = ({ pageData, location, className }) => {
       <ul>
         {FilterData.map((it, idx) => (
           <li key={idx} className={it.nowNum ? "on" : ""}>
-            <Link to={`${location}&page=${it.num}`}>{it.num}</Link>
+            <Link to={`${location}page=${it.num}`}>{it.num}</Link>
           </li>
         ))}
       </ul>

@@ -131,22 +131,7 @@ export default function Tickets() {
   const [data, setData] = useState([]);
   const [pageInfo, setPageInfo] = useState([]);
   const location = useLocation();
-
-  // console.log(queryParams);
-
-  let searchURI = location.pathname + "?";
-  queryParams.forEach((paramArr, index, arr) => {
-    const queryKey = paramArr[0];
-    const queryVal = paramArr[1];
-
-    if (queryKey !== "page") {
-      if (index === arr.length - 2) {
-        searchURI += queryKey + "=" + queryVal;
-      } else {
-        searchURI += queryKey + "=" + queryVal + "&";
-      }
-    }
-  });
+  const [searchURI, setSearchURI] = useState(location.pathname + "?");
 
   const fetchShowData = () => {
     const params = {};
@@ -176,6 +161,16 @@ export default function Tickets() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    let newSearchURI = location.pathname + "?";
+    queryParams.forEach((paramArr) => {
+      const queryKey = paramArr[0];
+      const queryVal = paramArr[1];
+
+      if (queryKey !== "page") {
+        newSearchURI += queryKey + "=" + queryVal + "&";
+      }
+    });
+    setSearchURI(newSearchURI);
     refetch();
   }, [searchParams]);
 
@@ -189,10 +184,14 @@ export default function Tickets() {
       </ContentHeaderContainer>
       <ContentContainer>
         <SearchBarContainer>
-          <SearchOptions />
+          <SearchOptions searchURI={searchURI} setSearchURI={setSearchURI} />
         </SearchBarContainer>
         {isLoading ? (
-          <SpinnerExtended refetch={refetch} />
+          <SpinnerExtended
+            searchURI={searchURI}
+            setSearchURI={setSearchURI}
+            refetch={refetch}
+          />
         ) : (
           <ItemListContainer>
             <ItemList data={data} />

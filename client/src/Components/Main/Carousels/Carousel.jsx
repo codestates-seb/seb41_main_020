@@ -85,16 +85,22 @@ const Rank = styled.h2`
     font-size: 80px;
   }
 
+  @media screen and (max-width: 900px) {
+    font-size: 60px;
+    top: 60%;
+    left: 18%;
+  }
+
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: 60px;
-    top: 50%;
+    top: 60%;
     left: calc(5% + 8vw);
   }
 
   @media screen and (max-width: 500px) {
-    top: 70%;
-    left: 27%;
-    font-size: 40px;
+    top: 65%;
+    left: 22%;
+    font-size: 50px;
   }
 `;
 
@@ -122,7 +128,7 @@ export default function Carousel({
 
   const fetchShowDataOnSuccess = (response) => {
     const data = response.data.data;
-    console.log(data);
+
     setData(data);
   };
 

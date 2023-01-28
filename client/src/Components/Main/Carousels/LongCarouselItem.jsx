@@ -81,7 +81,6 @@ const ConcertDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-right: 10px;
 
   &:hover {
     color: ${primary.primary400};

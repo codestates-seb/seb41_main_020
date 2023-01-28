@@ -416,7 +416,12 @@ export default function Header() {
       </LogoContainer>
       <HeaderLinkContainer>
         <Link
-          className={location.pathname.includes("tickets") ? "current" : ""}
+          className={
+            location.pathname.includes("tickets") &&
+            !location.pathname.includes("create")
+              ? "current"
+              : ""
+          }
           to="tickets"
         >
           티켓팅
@@ -433,22 +438,32 @@ export default function Header() {
         >
           공연찾기
         </Link>
-        {userInfo && (
+        {isLogin && (
           <Link
             className={location.pathname.includes("user") ? "current" : ""}
-            to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
+            to={`/mypage/${userInfo?.role.toLowerCase()}/${userInfo?.id}`}
           >
             마이페이지
           </Link>
         )}
+        {isLogin && userInfo?.role === "PERFORMER" && (
+          <Link
+            className={
+              location.pathname.includes("tickets/create") ? "current" : ""
+            }
+            to={"/tickets/create"}
+          >
+            공연작성하기
+          </Link>
+        )}
       </HeaderLinkContainer>
-      {userInfo ? (
+      {isLogin ? (
         <UserStatus>
-          <Link to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}>
+          <Link to={`/mypage/${userInfo?.role.toLowerCase()}/${userInfo?.id}`}>
             <div className="userInfo">
               <p className="welcome">환영합니다!</p>
               <p className="username">
-                {userInfo.profile[0].nickname}
+                {userInfo?.profile[0].nickname}
                 <span>님</span>
               </p>
             </div>
@@ -491,10 +506,12 @@ export default function Header() {
               <NavbarProfileBox>
                 <div className="userInfo">
                   <Link
-                    to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
+                    to={`/mypage/${userInfo?.role.toLowerCase()}/${
+                      userInfo.id
+                    }`}
                   >
                     <h2>
-                      {`${userInfo.profile[0].nickname} 님,`}
+                      {`${userInfo?.profile[0].nickname} 님,`}
                       <span>환영합니다!</span>
                     </h2>
                   </Link>
@@ -538,7 +555,7 @@ export default function Header() {
                   className={
                     location.pathname.includes("user") ? "current" : ""
                   }
-                  to={`/mypage/${userInfo.role.toLowerCase()}/${userInfo.id}`}
+                  to={`/mypage/${userInfo?.role.toLowerCase()}/${userInfo?.id}`}
                 >
                   마이페이지
                 </Link>

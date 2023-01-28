@@ -79,7 +79,7 @@ const CarouselDisplay = styled.div`
       color: ${primary.primary500};
       font-size: ${dtFontSize.large};
       margin-bottom: 10px;
-      width: 73%;
+      width: 65%;
       height: max-content;
       text-align: start;
     }
@@ -144,7 +144,7 @@ const BoardsContainer = styled.div`
   margin-top: 50px;
 
   h1.title {
-    width: 80%;
+    width: 75%;
     color: ${primary.primary500};
     font-size: ${dtFontSize.large};
     margin-bottom: 5px;
