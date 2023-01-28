@@ -100,6 +100,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
   };
 
   const handleButtonOnSuccess = () => {
+    setAnswerData("");
     refetch();
   };
 

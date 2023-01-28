@@ -203,6 +203,11 @@ const AnswerItem = (props) => {
     onError: handleCompleteOnError,
   });
 
+  const handleCancel = () => {
+    setEditValue(props.comment);
+    handleEdit();
+  };
+
   // 삭제 코드
   const handleDelete = async () => {
     return await instance({
@@ -267,7 +272,7 @@ const AnswerItem = (props) => {
               >
                 완료
               </button>
-              <button type="button" className="edButton" onClick={handleEdit}>
+              <button type="button" className="edButton" onClick={handleCancel}>
                 취소
               </button>
             </div>
