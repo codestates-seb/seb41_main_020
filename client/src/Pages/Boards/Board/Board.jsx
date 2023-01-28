@@ -67,7 +67,7 @@ const QuillViewDiv = styled.div`
     max-width: 1000px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      max-width: 400px;
+      max-width: 350px;
     }
   }
 `;
@@ -168,9 +168,10 @@ const Board = () => {
 
   // Board 내용 가져오기
   const axiosBoard = async () => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles/${id}`
-    );
+    const response = await instance({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
+    });
     return response.data;
   };
 

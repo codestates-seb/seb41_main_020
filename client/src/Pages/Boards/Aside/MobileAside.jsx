@@ -7,7 +7,7 @@ import { primary, mbFontSize, sub } from "../../../styles/mixins";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const MobileAsideDiv = styled.div`
-  z-index: 15;
+  z-index: 30;
   position: fixed;
   width: 100%;
   height: 80px;
