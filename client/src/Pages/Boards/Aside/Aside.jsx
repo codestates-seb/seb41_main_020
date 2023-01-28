@@ -63,14 +63,14 @@ const Aside = () => {
         <br />
         <Link
           className={pathname === "/board/employ" ? "thisLinkNav" : "linkNav"}
-          to="/board/employ?category=구인게시판&page=1"
+          to="/board/employ?category=구인게시판&status=최신순&page=1&size=10"
         >
           구인게시판
         </Link>
         <br />
         <Link
           className={pathname === "/board/request" ? "thisLinkNav" : "linkNav"}
-          to="/board/request?category=요청게시판&page=1"
+          to="/board/request?category=요청게시판&status=최신순&page=1&size=10"
         >
           요청게시판
         </Link>
@@ -79,14 +79,14 @@ const Aside = () => {
           className={
             pathname === "/board/advertise" ? "thisLinkNav" : "linkNav"
           }
-          to="/board/advertise?category=홍보게시판&page=1"
+          to="/board/advertise?category=홍보게시판&status=최신순&page=1&size=10"
         >
           홍보게시판
         </Link>
         <br />
         <Link
           className={pathname === "/board/review" ? "thisLinkNav" : "linkNav"}
-          to="/board/review?category=후기게시판&page=1"
+          to="/board/review?category=후기게시판&status=최신순&page=1&size=10"
         >
           후기게시판
         </Link>

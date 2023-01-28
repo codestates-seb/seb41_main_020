@@ -18,7 +18,7 @@ import Board from "./Pages/Boards/Board/Board.jsx";
 import BoardCreate from "./Pages/Boards/Board/BoardCreate.jsx";
 import BoardEdit from "./Pages/Boards/Board/BoardEdit.jsx";
 import NotFound from "./Pages/NotFound.jsx";
-import EmployBoardList from "./Pages/Boards/BoardType/EmployBoard.jsx";
+import EmployBoardList from "./Pages/Boards/BoardType/EmployBoardList.jsx";
 import RequestBoardList from "./Pages/Boards/BoardType/RequestBoardList.jsx";
 import AdvertiseBoardList from "./Pages/Boards/BoardType/AdvertiseBoardList.jsx";
 import ReviewBoardList from "./Pages/Boards/BoardType/ReviewBoardList.jsx";
@@ -108,7 +108,7 @@ function App() {
           <Route path="/board/free/:id" element={<Board />}></Route>
           <Route path="/board/free/:id/edit" element={<BoardEdit />}></Route>
           {/* 구인게시판 */}
-          <Route path="/board/employ" element={<BoardList />}></Route>
+          <Route path="/board/employ" element={<EmployBoardList />}></Route>
           <Route path="/board/employ/create" element={<BoardCreate />}></Route>
           <Route path="/board/employ/:id" element={<Board />}></Route>
           <Route path="/board/employ/:id/edit" element={<BoardEdit />}></Route>
