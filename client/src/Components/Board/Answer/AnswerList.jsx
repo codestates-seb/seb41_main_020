@@ -94,7 +94,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
     const data = { comment: answerData };
     return await instance({
       method: "post",
-      url: `http://indiego.kro.kr:80/articles/${id}/comments`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}/comments`,
       data,
     });
   };

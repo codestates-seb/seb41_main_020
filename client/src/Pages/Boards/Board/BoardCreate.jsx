@@ -132,7 +132,7 @@ const BoardCreate = () => {
   const handleButton = async () => {
     const response = await instance({
       method: "post",
-      url: `http://indiego.kro.kr:80/articles`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles`,
       data,
     });
     return response.data.data;

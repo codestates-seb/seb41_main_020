@@ -61,7 +61,7 @@ const Editor = ({ placeholder, value, setValue, arrayRef }) => {
       // 백엔드에 이미지를 보낸다.
       try {
         const result = await axios.post(
-          "http://indiego.kro.kr:80/shows/uploads",
+          `${process.env.REACT_APP_SERVER_URI}/shows/uploads`,
           formData,
           {
             headers: {

@@ -73,7 +73,7 @@ const Dropdown = ({ location }) => {
     console.log(location);
 
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?${location}&status=${props}`
+      `${process.env.REACT_APP_SERVER_URI}/articles?${location}&status=${props}`
     );
     setBoardListData(response.data.data);
     navigate(`${location}&status=${props}`);

@@ -113,7 +113,7 @@ const Board = () => {
   const handleDelete = async () => {
     return await instance({
       method: "delete",
-      url: `http://indiego.kro.kr:80/articles/${id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
     });
   };
 
@@ -138,7 +138,7 @@ const Board = () => {
   const handleHeartCount = async () => {
     return await instance({
       method: "put",
-      url: `http://indiego.kro.kr:80/articles/${id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
     });
   };
 
@@ -159,7 +159,9 @@ const Board = () => {
 
   // Board 내용 가져오기
   const axiosBoard = async () => {
-    const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URI}/articles/${id}`
+    );
     return response.data;
   };
 

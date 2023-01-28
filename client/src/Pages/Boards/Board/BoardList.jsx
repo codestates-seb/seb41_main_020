@@ -201,7 +201,7 @@ export default function BoardList() {
   // 게시글 리스트 불러오기
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+      `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
     );
     return response.data;
   };

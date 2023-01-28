@@ -138,7 +138,7 @@ const AnswerItem = (props) => {
   const handleHeartCount = async () => {
     return await instance({
       method: "put",
-      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${props.articleId}/comments/${props.id}`,
     });
   };
 
@@ -153,8 +153,10 @@ const AnswerItem = (props) => {
       return;
     }
 
-    alert("로그인 시간이 만료되었습니다");
-    navigate("/login");
+    // alert("로그인 시간이 만료되었습니다");
+    // navigate("/login");
+    console.log(props);
+    console.log(response.response);
     return;
   };
 
@@ -178,7 +180,7 @@ const AnswerItem = (props) => {
     const data = { comment: editValue };
     const response = await instance({
       method: "patch",
-      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${props.articleId}/comments/${props.id}`,
       data,
     });
     return response.data.comment;
@@ -205,7 +207,7 @@ const AnswerItem = (props) => {
   const handleDelete = async () => {
     return await instance({
       method: "delete",
-      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${props.articleId}/comments/${props.id}`,
     });
   };
 

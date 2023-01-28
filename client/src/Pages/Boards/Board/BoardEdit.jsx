@@ -133,7 +133,7 @@ const BoardEdit = () => {
   const handleButton = async () => {
     const response = await instance({
       method: "patch",
-      url: `http://indiego.kro.kr:80/articles/${id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
       data,
     });
     console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");

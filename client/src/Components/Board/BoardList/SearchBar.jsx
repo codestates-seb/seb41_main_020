@@ -60,7 +60,7 @@ const SearchBar = ({ location, placeholder, setPageData }) => {
 
   const handlePage = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?${location}&search=${value}
+      `${process.env.REACT_APP_SERVER_URI}/articles?${location}&search=${value}
       `
     );
     setBoardListData(response.data.data);
