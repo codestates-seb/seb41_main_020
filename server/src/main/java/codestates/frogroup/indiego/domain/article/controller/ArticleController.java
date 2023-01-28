@@ -8,7 +8,6 @@ import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
-import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +35,6 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleMapper mapper;
-    private final TokenProvider tokenProvider;
 
     /**
      * 게시글 작성
@@ -92,15 +89,6 @@ public class ArticleController {
         return new ResponseEntity<>(new PagelessMultiResponseDto<>(responses), HttpStatus.OK);
     }
 
-    @GetMapping("/testapi")
-    public ResponseEntity ggg(HttpServletResponse response) throws IOException {
-
-
-        tokenProvider.refreshTokenSetCookie("test", response);
-        response.sendRedirect("http://indiego.site");
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
-
     /**
      * 게시글 단일 조회
      */
@@ -111,23 +99,13 @@ public class ArticleController {
 
         // 쿠키 가져오기
         Cookie[] cookies = request.getCookies();
-
-        for (Cookie cookie : cookies) {
-            log.info("cookie.name={]",cookie.getName());
-            log.info("cookie.value={]",cookie.getValue());
-            log.info("cookie.getPath={]",cookie.getPath());
-        }
-
         Boolean isVisited = false;
-
-        log.info("isVisited={}", isVisited);
 
         // 이미 조회한 게시글인 경우
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("visited_article_" + articleId) && cookie.getValue().equals("true")) {
                     isVisited = true;
-                    log.info("isVisited={}", isVisited);
                     break;
                 }
             }
@@ -143,7 +121,7 @@ public class ArticleController {
             newCookie.setMaxAge(60 * 60 * 24); // 하루
             newCookie.setPath("/");
             newCookie.setDomain("indiego.site");
-//            newCookie.setHttpOnly(true);
+            newCookie.setHttpOnly(true);
             response.addCookie(newCookie);
             responseDto.setView(viewCount);
         }
