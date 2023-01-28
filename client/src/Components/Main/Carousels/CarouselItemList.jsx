@@ -8,10 +8,9 @@ import breakpoint from "../../../styles/breakpoint.js";
 
 const RendererContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 250px;
   height: 100%;
   overflow: hidden;
-  min-width: 150px;
   max-width: 250px;
 `;
 
@@ -19,9 +18,9 @@ const ItemsContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 250px;
   height: 100%;
-  margin-left: ${(props) => props.currentIdx * -100}%;
+  margin-left: ${(props) => props.currentIdx * -250}px;
   transition: ${(props) => (props.isLast ? "unset" : "all 0.5s ease-in-out")};
 
   @media screen and (max-width: ${breakpoint.mobile}) {

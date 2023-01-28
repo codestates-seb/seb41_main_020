@@ -31,6 +31,7 @@ import {
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
+import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 export const PageWrapper = styled.div`
   /* background-color: black; */
@@ -201,7 +202,8 @@ export default function BoardList() {
   // 게시글 리스트 불러오기
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+      `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`,
+      { withCredentials: true }
     );
     return response.data;
   };

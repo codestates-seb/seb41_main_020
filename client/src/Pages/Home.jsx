@@ -11,10 +11,13 @@ import LocationPopup from "../Components/Main/Popups/LocationPopup.jsx";
 import LongCarousel from "../Components/Main/Carousels/LongCarousel.jsx";
 import DatePopup from "../Components/Main/Popups/DatePopup.jsx";
 
-import styled from "styled-components";
 import { dtFontSize, primary } from "../styles/mixins.js";
 import breakpoint from "../styles/breakpoint.js";
-import { dummyArr } from "../DummyData/mainDummy.js";
+import instance from "../api/core/default.js";
+
+import styled from "styled-components";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const MainContainer = styled.div`
   display: flex;
@@ -76,7 +79,7 @@ const CarouselDisplay = styled.div`
       color: ${primary.primary500};
       font-size: ${dtFontSize.large};
       margin-bottom: 10px;
-      width: 73%;
+      width: 65%;
       height: max-content;
       text-align: start;
     }
@@ -141,7 +144,7 @@ const BoardsContainer = styled.div`
   margin-top: 50px;
 
   h1.title {
-    width: 80%;
+    width: 75%;
     color: ${primary.primary500};
     font-size: ${dtFontSize.large};
     margin-bottom: 5px;
@@ -176,6 +179,8 @@ const BoardsGrid = styled.div`
 export default function Home() {
   const [LocationPopupOpen, setLocationPopupOpen] = useState(false);
   const [DatePopupOpen, setDatePopupOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState();
+  const isLogin = !!localStorage.getItem("accessToken");
 
   const locationPopupOnClickHandler = () => {
     setLocationPopupOpen(true);
@@ -184,6 +189,23 @@ export default function Home() {
   const datePopupOnClickHanlder = () => {
     setDatePopupOpen(true);
   };
+
+  const fetchUserInfoAtHome = () => {
+    const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+    return instance.get(`/members/${userId}`);
+  };
+
+  const fetchUserInfoAtHomeOnSuccess = (res) => {
+    const data = res.data.data;
+    setUserInfo(data);
+  };
+
+  useQuery({
+    queryKey: ["fetchUserInfoAtHome", isLogin],
+    queryFn: fetchUserInfoAtHome,
+    onSuccess: fetchUserInfoAtHomeOnSuccess,
+    enabled: isLogin,
+  });
 
   return (
     <>
@@ -211,25 +233,27 @@ export default function Home() {
           <CarouselDisplayBox>
             <CarouselDisplay>
               <div className="carousel_box">
-                <h1>월간 예매율 순위</h1>
+                <h1>우리 동네 인기 공연</h1>
                 <Carousel
                   width={"70%"}
-                  minWidth={"300px"}
+                  minWidth={"320px"}
                   maxWidth={"480px"}
                   height={"100%"}
-                  sort="hot"
+                  status="별점순"
+                  address={"강남구" || userInfo.profile[0].address}
                   carouselItemList={CarouselItemList}
                   isRankMode={true}
                 ></Carousel>
               </div>
               <div className="carousel_box">
-                <h1>새로 추가된 공연</h1>
+                <h1>우리 동네 새로운 공연</h1>
                 <Carousel
                   width={"70%"}
-                  minWidth={"300px"}
+                  minWidth={"320px"}
                   maxWidth={"480px"}
                   height={"100%"}
-                  sort="new"
+                  status="최신순"
+                  address={"강남구" || userInfo.profile[0].address}
                   carouselItemList={CarouselItemList}
                 ></Carousel>
               </div>
@@ -237,12 +261,14 @@ export default function Home() {
           </CarouselDisplayBox>
         </CarouselContainer>
         <LongCarouselContainer>
-          <LongCarousel />
+          <LongCarousel userInfo={userInfo} />
         </LongCarouselContainer>
         <BoardsContainer>
           <h1 className="title">커뮤니티 인기 게시글</h1>
           <BoardsGrid>
-            <Boards category="자유게시판">자유게시판</Boards>
+            <Boards path="free" category="자유게시판">
+              자유게시판
+            </Boards>
             <Boards path="employ" category="구인게시판">
               구인게시판
             </Boards>

@@ -9,6 +9,7 @@ import {
   sub,
   misc,
   mbFontSize,
+  secondary,
 } from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint";
 
@@ -20,10 +21,15 @@ import Spinner from "../../Spinner";
 
 const Container = styled.div`
   width: 100%;
+  max-width: 500px;
   height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    height: 300px;
+  }
 `;
 
 const DateController = styled.div`
@@ -36,7 +42,7 @@ const DateController = styled.div`
   border-width: 0 0 1px 0;
 
   p {
-    color: ${sub.sub800};
+    color: white;
     font-weight: 600;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
@@ -54,38 +60,39 @@ const DateController = styled.div`
     }
 
     path {
-      fill: ${sub.sub800};
-
-      :hover {
-        fill: ${primary.primary300};
-      }
+      fill: white;
     }
 
     :hover {
-      fill: ${primary.primary300};
       cursor: pointer;
+
+      path {
+        fill: ${primary.primary500};
+      }
     }
   }
 `;
 
+const CalendarFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
 const CalendarGrid = styled.div`
   display: grid;
-  width: 90%;
+  width: 100%;
   min-width: 300px;
-  margin: 0 5%;
-  height: 100%;
+  height: 25%;
   grid-template-columns: repeat(7, 14.265%);
-  grid-template-rows: 1fr 0.2fr repeat(6, 13%);
-  border: 1px solid ${sub.sub300};
-  border-radius: 20px;
+  grid-template-rows: 1fr 0.2fr;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: ${mbFontSize.small};
-    height: 90%;
     min-width: 0;
     max-width: 350px;
-
-    grid-template-rows: 1fr 10% repeat(6, 13%);
   }
 
   .item:nth-child(1) {
@@ -93,6 +100,11 @@ const CalendarGrid = styled.div`
     grid-column-end: 8;
     grid-row-start: 1;
     grid-row-end: 1;
+
+    background-color: ${primary.primary200};
+    border: 2px solid white;
+    border-width: 0 0 1px 0;
+    border-radius: 18px 18px 0 0;
   }
 
   .days {
@@ -114,6 +126,23 @@ const CalendarGrid = styled.div`
     border: 1px solid ${primary.primary300};
     border-width: 0 1px 0 0;
   }
+`;
+
+const DateGrid = styled.div`
+  width: 100%;
+  min-width: 300px;
+  height: 75%;
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(7, 14.285%);
+  grid-template-rows: repeat(6, 1fr);
+  border: 2px solid ${primary.primary100};
+  border-radius: 0 0 20px 20px;
+  border-width: 0 1.5px 1.5px 1.5px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    max-width: 350px;
+  }
 
   .date_container {
     width: 100%;
@@ -131,7 +160,7 @@ const CalendarGrid = styled.div`
       color: ${misc.orange};
 
       @media screen and (max-width: ${breakpoint.mobile}) {
-        top: 40px;
+        top: 10px;
       }
     }
   }
@@ -146,6 +175,14 @@ const CalendarGrid = styled.div`
     @media screen and (max-width: ${breakpoint.mobile}) {
       font-size: ${mbFontSize.xsmall};
       padding-top: 7px;
+
+      :hover ~ .dot {
+        color: white;
+      }
+
+      :focus-within ~ .dot {
+        color: white;
+      }
     }
 
     :hover {
@@ -164,16 +201,25 @@ const CalendarGrid = styled.div`
 
   .date.previous {
     color: ${sub.sub300};
+    pointer-events: none;
 
     :hover {
       color: white;
     }
   }
 
+  .date.selected.weekend {
+    color: white;
+  }
+
   .date.weekend {
     color: ${misc.red};
 
     :hover {
+      color: white;
+    }
+
+    :focus-within {
       color: white;
     }
   }
@@ -283,13 +329,31 @@ export default function Calendar({ setSelectedDate, setDateInfo }) {
 
   // 월과 년도가 변경되면 hasShow를 다시 불러오며, 관련 상태를 업데이트 해주는 함수
   useEffect(() => {
-    setSelectedDate(`${selectedYear}년 ${selectedMonth}월 ${selectedDay}일`);
-    setDateInfo({
-      year: selectedYear,
-      month: selectedMonth,
-      day: selectedDay,
-    });
-    refetchHasShowArr();
+    const currentMonthDays = dayjs()
+      .set("year", selectedYear)
+      .set("month", selectedMonth - 1)
+      .daysInMonth();
+
+    if (selectedDay > currentMonthDays) {
+      setSelectedDay(currentMonthDays);
+      setSelectedDate(
+        `${selectedYear}년 ${selectedMonth}월 ${currentMonthDays}일`
+      );
+      setDateInfo({
+        year: selectedYear,
+        month: selectedMonth,
+        day: currentMonthDays,
+      });
+      refetchHasShowArr();
+    } else {
+      setSelectedDate(`${selectedYear}년 ${selectedMonth}월 ${selectedDay}일`);
+      setDateInfo({
+        year: selectedYear,
+        month: selectedMonth,
+        day: selectedDay,
+      });
+      refetchHasShowArr();
+    }
   }, [selectedMonth, selectedYear]);
 
   const dateOnClickHandler = (e) => {
@@ -317,55 +381,62 @@ export default function Calendar({ setSelectedDate, setDateInfo }) {
 
   return (
     <Container>
-      <CalendarGrid>
-        <DateController className="item">
-          <svg
-            onClick={() => {
-              monthSelectorOnClickHandler(-1);
-            }}
-            viewBox="0 0 384 512"
-          >
-            <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
-          </svg>
-          <p>{`${selectedYear}년 ${selectedMonth}월`}</p>
-          <svg
-            onClick={() => {
-              monthSelectorOnClickHandler(1);
-            }}
-            viewBox="0 0 384 512"
-          >
-            <path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
-          </svg>
-        </DateController>
-        <p className="item days">일</p>
-        <p className="item days">월</p>
-        <p className="item days">화</p>
-        <p className="item days">수</p>
-        <p className="item days">목</p>
-        <p className="item days">금</p>
-        <p className="item days last">토</p>
+      <CalendarFlex>
+        <CalendarGrid>
+          <DateController className="item">
+            <svg
+              onClick={() => {
+                monthSelectorOnClickHandler(-1);
+              }}
+              viewBox="0 0 384 512"
+            >
+              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
+            </svg>
+            <p>{`${selectedYear}년 ${selectedMonth}월`}</p>
+            <svg
+              onClick={() => {
+                monthSelectorOnClickHandler(1);
+              }}
+              viewBox="0 0 384 512"
+            >
+              <path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+            </svg>
+          </DateController>
+          <p className="item days">일</p>
+          <p className="item days">월</p>
+          <p className="item days">화</p>
+          <p className="item days">수</p>
+          <p className="item days">목</p>
+          <p className="item days">금</p>
+          <p className="item days last">토</p>
+        </CalendarGrid>
         {!hasShow ? (
           <SpinnerExtended />
         ) : (
-          daysArr.map((day, index) => {
-            return (
-              <div className="date_container" key={index}>
-                <p
-                  tabIndex={0}
-                  className={`${selectedDay === day ? "selected" : ""} date 
-                ${day.previous ? "previous" : ""} 
-                ${day.weekend ? "weekend" : ""}
-              `}
-                  onClick={dateOnClickHandler}
-                >
-                  {day.day}
-                </p>
-                {day.hasShow && <p className="dot">.</p>}
-              </div>
-            );
-          })
+          <DateGrid>
+            {daysArr.map((day, index) => {
+              console.log(selectedDay, day.day);
+              return (
+                <div className="date_container" key={index}>
+                  <p
+                    tabIndex={0}
+                    className={`${
+                      selectedDay === day.day && !day.previous ? "selected" : ""
+                    } date 
+                  ${day.previous ? "previous" : ""} 
+                  ${day.weekend ? "weekend" : ""}
+                  `}
+                    onClick={dateOnClickHandler}
+                  >
+                    {day.day}
+                  </p>
+                  {day.hasShow && <p className="dot">.</p>}
+                </div>
+              );
+            })}
+          </DateGrid>
         )}
-      </CalendarGrid>
+      </CalendarFlex>
     </Container>
   );
 }

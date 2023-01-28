@@ -1,30 +1,18 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
-import SearchBar from "../../Components/Main/SearchBar.jsx";
-import Button from "../../Components/Main/Button.jsx";
 import ItemList from "../../Components/Ticktes/ItemList.jsx";
-import SeoulMap from "../../Components/Main/Popups/SeoulMap.jsx";
-import Overlay from "../../Components/Main/Popups/Overlay.jsx";
 import SearchOptions from "../../Components/Ticktes/SearchOptions.jsx";
+import PageNation from "../../Components/Board/BoardList/PageNation.jsx";
 
 import breakpoint from "../../styles/breakpoint";
-import {
-  primary,
-  sub,
-  dtFontSize,
-  mbFontSize,
-  secondary,
-} from "../../styles/mixins";
-import { dummyArr } from "../../DummyData/mainDummy.js";
+import { primary, sub, dtFontSize, mbFontSize } from "../../styles/mixins";
 import "../../styles/ReactDatePicker.css";
 
 import styled from "styled-components";
-import DatePicker from "react-datepicker";
-import { ko } from "date-fns/esm/locale";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../Components/Spinner.jsx";
@@ -126,10 +114,24 @@ const SpinnerExtended = styled(Spinner)`
   }
 `;
 
+const PaginationExtended = styled(PageNation)`
+  margin-top: 50px;
+
+  .movePageButton {
+    :hover {
+      cursor: pointer;
+      background-color: ${primary.primary300};
+    }
+  }
+`;
+
 export default function Tickets() {
   const [searchParams] = useSearchParams();
   const queryParams = [...searchParams.entries()];
   const [data, setData] = useState([]);
+  const [pageInfo, setPageInfo] = useState([]);
+  const location = useLocation();
+  const [searchURI, setSearchURI] = useState(location.pathname + "?");
 
   const fetchShowData = () => {
     const params = {};
@@ -144,8 +146,9 @@ export default function Tickets() {
   };
 
   const fetchShowDataOnSuccess = (response) => {
-    const data = response.data.data;
-    setData(data);
+    const data = response.data;
+    setData(data.data);
+    setPageInfo(data.pageInfo);
   };
 
   const { isLoading, refetch } = useQuery({
@@ -153,9 +156,21 @@ export default function Tickets() {
     queryFn: fetchShowData,
     onSuccess: fetchShowDataOnSuccess,
     retry: false,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    let newSearchURI = location.pathname + "?";
+    queryParams.forEach((paramArr) => {
+      const queryKey = paramArr[0];
+      const queryVal = paramArr[1];
+
+      if (queryKey !== "page") {
+        newSearchURI += queryKey + "=" + queryVal + "&";
+      }
+    });
+    setSearchURI(newSearchURI);
     refetch();
   }, [searchParams]);
 
@@ -169,16 +184,23 @@ export default function Tickets() {
       </ContentHeaderContainer>
       <ContentContainer>
         <SearchBarContainer>
-          <SearchOptions />
+          <SearchOptions searchURI={searchURI} setSearchURI={setSearchURI} />
         </SearchBarContainer>
         {isLoading ? (
-          <SpinnerExtended refetch={refetch} />
+          <SpinnerExtended
+            searchURI={searchURI}
+            setSearchURI={setSearchURI}
+            refetch={refetch}
+          />
         ) : (
           <ItemListContainer>
             <ItemList data={data} />
           </ItemListContainer>
         )}
       </ContentContainer>
+      {pageInfo.totalPages > 0 && (
+        <PaginationExtended location={searchURI} pageData={pageInfo} />
+      )}
     </Container>
   );
 }
