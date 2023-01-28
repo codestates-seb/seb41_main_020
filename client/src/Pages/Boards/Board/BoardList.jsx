@@ -212,32 +212,46 @@ export default function BoardList() {
 
   console.log("queryParams11 : ", queryParams);
 
-  // 검색에 보낼 URI
-  var searchURI = "";
+  // 게시판 별 URI
+  const { pathname } = useLocation();
+
+  // 드롭다운에 보낼 URI
+  var DropdownURI = "";
   for (let queryArr of queryParams) {
-    if (queryArr[0] === "search") {
-      searchURI += `${queryArr[0]}=${queryArr[1]}`;
+    if (queryArr[0] === "status") {
       continue;
     }
+    DropdownURI += `${queryArr[0]}=${queryArr[1]}&`;
+  }
+
+  // SearchBar에 보낼 URI
+  var SearchBarUri = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "search") {
+      continue;
+    }
+    SearchBarUri += `${queryArr[0]}=${queryArr[1]}&`;
+  }
+  console.log("SearchBarUri : ", SearchBarUri);
+
+  // 페이지네이션에 보낼 URI
+  var PageNationURI = "";
+  for (let queryArr of queryParams) {
+    // if (queryArr[0] === "search") {
+    //   PageNationURI += `${queryArr[0]}=${queryArr[1]}`;
+    //   continue;
+    // }
     if (queryArr[0] === "page") {
       continue;
     }
-    searchURI += `${queryArr[0]}=${queryArr[1]}&`;
+    PageNationURI += `${queryArr[0]}=${queryArr[1]}&`;
   }
 
-  console.log("last searchURi : ", searchURI);
-
-  const { pathname } = useLocation();
-
+  // 로그인 ID 정보
   const userId = localStorage.getItem("userInfoStorage");
-
-  console.log(`${urlCategory} ${urlPage} ${urlStatus} ${urlSize} ${pathname}`);
 
   // 게시글 리스트 불러오기
   const axiosBoardList = async () => {
-    // const response = await axios.get(
-    //   `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
-    // );
     const response = await axios.get(
       `${process.env.REACT_APP_SERVER_URI}/articles`,
       { params }
@@ -279,9 +293,7 @@ export default function BoardList() {
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>
         <div className="dropboxDiv">
-          <Dropdown
-            location={`${pathname}?category=${urlCategory}&size=${urlSize}&page=${urlPage}`}
-          ></Dropdown>
+          <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>
         </div>
         <div className="lineDiv"></div>
         {isLoading ? (
@@ -300,12 +312,12 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`${pathname}?${searchURI}`}
+          location={`${pathname}?${PageNationURI}`}
           pageData={pageData}
         ></PageNation>
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          location={`${pathname}?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
+          location={`${pathname}?${SearchBarUri}`}
           setPageData={setPageData}
         ></SearchBar>
       </BoardWrapper>
