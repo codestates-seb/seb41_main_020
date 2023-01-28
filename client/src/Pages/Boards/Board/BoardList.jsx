@@ -203,7 +203,29 @@ export default function BoardList() {
   const urlSize = searchParams.get("size");
 
   const queryParams = [...searchParams.entries()];
-  console.log(queryParams);
+  const params = {};
+  queryParams.forEach((queryArr) => {
+    params[queryArr[0]] = queryArr[1];
+    console.log("queryArr : ", queryArr);
+    console.log("queryParams22 : ", params);
+  });
+
+  console.log("queryParams11 : ", queryParams);
+
+  // 검색에 보낼 URI
+  var searchURI = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "search") {
+      searchURI += `${queryArr[0]}=${queryArr[1]}`;
+      continue;
+    }
+    if (queryArr[0] === "page") {
+      continue;
+    }
+    searchURI += `${queryArr[0]}=${queryArr[1]}&`;
+  }
+
+  console.log("last searchURi : ", searchURI);
 
   const { pathname } = useLocation();
 
@@ -213,8 +235,12 @@ export default function BoardList() {
 
   // 게시글 리스트 불러오기
   const axiosBoardList = async () => {
+    // const response = await axios.get(
+    //   `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+    // );
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+      `${process.env.REACT_APP_SERVER_URI}/articles`,
+      { params }
     );
     return response.data;
   };
@@ -233,25 +259,6 @@ export default function BoardList() {
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-
-  // 게시글 정보 불러오기(하트 개수 표시를 위함)
-  // const axiosBoard = async () => {
-  //   const response = await axios.get(
-  //     `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
-  //   );
-  //   return response.data;
-  // };
-  // const axiosBoardListOnSuccess = (response) => {
-  //   setBoardListData(response.data);
-  //   setPageData(response.pageInfo);
-  //   window.scrollTo(0, 0);
-  // };
-
-  // const { isLoading, isError, error } = useQuery({
-  //   queryKey: ["axiosBoardList", urlPage],
-  //   queryFn: axiosBoardList,
-  //   onSuccess: axiosBoardListOnSuccess,
-  // });
 
   const handleWriteButton = () => {
     if (userId === null) {
@@ -293,7 +300,7 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`${pathname}?category=${urlCategory}&status=${urlStatus}&size=${urlSize}`}
+          location={`${pathname}?${searchURI}`}
           pageData={pageData}
         ></PageNation>
         <SearchBar
