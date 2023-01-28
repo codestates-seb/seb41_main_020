@@ -84,6 +84,7 @@ public class SecurityConfiguration {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(List.of("http://localhost:3000",
 				"http://indiego.site.s3-website.ap-northeast-2.amazonaws.com",
+				"http://indiego.site",
 				"http://localhost", // 로컬환경 OAuth2 테스트용
 				"http://localhost:8080",
 //				"http://13.125.98.211:80",

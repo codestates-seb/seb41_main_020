@@ -215,8 +215,8 @@ public class ArticleService {
     private ArticleDto.Response getResponse(Article article) {
 
         ArticleDto.Response response = mapper.articleToArticleResponse(article);
-        long likeCount = articleLikeRepository.countByArticleId(article.getId());
-        response.setLikeCount(likeCount);
+//        long likeCount = articleLikeRepository.countByArticleId(article.getId());
+//        response.setLikeCount(likeCount);
 
         ArticleLike articleLike = articleLikeRepository.findByMemberId(article.getMember().getId());
         if (articleLike == null) {
@@ -248,6 +248,9 @@ public class ArticleService {
                         .member(findMember)
                         .build());
 
+        findArticle.setLikeCount(articleLikeRepository.countByArticleId(findArticle.getId()));
+        articleRepository.save(findArticle);
+
         return HttpStatus.CREATED;
     }
 
@@ -255,7 +258,11 @@ public class ArticleService {
      * 좋아요 취소
      */
     private HttpStatus deleteArticleLike(ArticleLike findArticleLike) {
+        Article article = findArticleLike.getArticle();
         articleLikeRepository.delete(findArticleLike);
+
+        article.setLikeCount(articleLikeRepository.countByArticleId(article.getId()));
+        articleRepository.save(article);
 
         return HttpStatus.NO_CONTENT;
     }
