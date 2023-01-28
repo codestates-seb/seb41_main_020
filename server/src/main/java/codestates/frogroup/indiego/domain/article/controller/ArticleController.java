@@ -119,9 +119,6 @@ public class ArticleController {
 
             Cookie newCookie = new Cookie("visited_article_" + articleId, "true");
             newCookie.setMaxAge(60 * 60 * 24); // 하루
-            newCookie.setPath("/");
-            newCookie.setDomain("http://indiego.site");
-            newCookie.setHttpOnly(true);
             response.addCookie(newCookie);
             responseDto.setView(viewCount);
         }
