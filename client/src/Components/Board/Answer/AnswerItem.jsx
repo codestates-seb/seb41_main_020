@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const AnswerListUserDiv = styled.div`
   display: flex;
   justify-content: left;
-  margin-bottom: 35px;
+  margin-top: 22px;
   border-bottom: 1px solid ${sub.sub200};
 `;
 

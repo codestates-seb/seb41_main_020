@@ -286,7 +286,6 @@ export default function TicketsCreate() {
     latitude: latitude,
     longitude: longitude,
     total: sit,
-    introduction: "룰루랄라",
   };
 
   // 티켓 글 올리기
