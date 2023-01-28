@@ -14,6 +14,7 @@ import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Service;
+import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,6 +41,7 @@ public class ArticleService {
     private final MemberService memberService;
     private final AwsS3Service awsS3Service;
     private final CustomBeanUtils<Article> beanUtils;
+    private final RedisKey redisKey;
 
     /**
      * 게시글 작성
@@ -106,7 +105,7 @@ public class ArticleService {
      * 게시글 단일 조회
      * TODO: 게시글 조회는 읽기만 하고 조회수를 증가시키는 방법은 없을까?
      */
-//    @Transactional // TODO: @Transactional 조금 더 알아보기
+    //    @Transactional // TODO: @Transactional 조금 더 알아보기
     public ArticleDto.Response findArticle(Long articleId) {
 
         Article findArticle = findVerifiedArticle(articleId);
@@ -132,6 +131,40 @@ public class ArticleService {
         return articleRepository.incrementViewCount(articleId);
     }
 
+//    @Transactional // TODO: @Transactional 조금 더 알아보기
+//    public ArticleDto.Response findArticle(Long articleId, HttpServletRequest request) {
+//
+//        Article findArticle = findVerifiedArticle(articleId);
+//
+//        Long viewCount = articleRepository.findViewCountFromRedis(articleId);
+//        log.info("viewCount1={}", viewCount);
+//
+//        if (viewCount == null) {
+//            viewCount = articleRepository.findView(articleId);
+//            log.info("viewCount2={}", viewCount);
+//            articleRepository.saveViewCountToRedis(articleId, viewCount);
+//        }
+//
+//        HttpSession session = request.getSession();
+//        ArticleDto.Response response = getResponse(findArticle);
+//
+//        // 조회한 적이 없는 경우
+//        if (session.getAttribute("articleId:" + articleId) == null) {
+//            viewCount = articleRepository.incrementViewCount(articleId);
+//            response.setView(viewCount);
+//
+//            session.setAttribute("articleId:" + articleId, true);
+//
+//            return response;
+//        }
+//
+//        // 조회한 적이 있는 경우
+//        viewCount = articleRepository.findViewCountFromRedis(articleId);
+//        response.setView(viewCount);
+//
+//        return response;
+//    }
+
     /**
      * 게시글 삭제
      */
@@ -140,8 +173,11 @@ public class ArticleService {
         Long findMemberId = findVerifiedArticle(articleId).getMember().getId();
 
         if (findMemberId.equals(memberId)) {
-
             articleRepository.delete(findVerifiedArticle(articleId));
+
+            String redisKey = this.redisKey.getArticleViewKey(articleId);
+            articleRepository.deleteValues(redisKey);
+
         } else {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
         }
@@ -179,8 +215,8 @@ public class ArticleService {
     private ArticleDto.Response getResponse(Article article) {
 
         ArticleDto.Response response = mapper.articleToArticleResponse(article);
-        long likeCount = articleLikeRepository.countByArticleId(article.getId());
-        response.setLikeCount(likeCount);
+//        long likeCount = articleLikeRepository.countByArticleId(article.getId());
+//        response.setLikeCount(likeCount);
 
         ArticleLike articleLike = articleLikeRepository.findByMemberId(article.getMember().getId());
         if (articleLike == null) {
@@ -212,6 +248,9 @@ public class ArticleService {
                         .member(findMember)
                         .build());
 
+        findArticle.setLikeCount(articleLikeRepository.countByArticleId(findArticle.getId()));
+        articleRepository.save(findArticle);
+
         return HttpStatus.CREATED;
     }
 
@@ -219,7 +258,11 @@ public class ArticleService {
      * 좋아요 취소
      */
     private HttpStatus deleteArticleLike(ArticleLike findArticleLike) {
+        Article article = findArticleLike.getArticle();
         articleLikeRepository.delete(findArticleLike);
+
+        article.setLikeCount(articleLikeRepository.countByArticleId(article.getId()));
+        articleRepository.save(article);
 
         return HttpStatus.NO_CONTENT;
     }

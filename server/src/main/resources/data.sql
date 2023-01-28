@@ -1,21 +1,21 @@
 insert into member(email, password, nickname, address, image, introduction, created_at, modified_at)
 values ('test1@naver.com', '1234', '테스트 밴드1', '강서구', 'https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png',
-        '테스트 밴드입니다!', now(), now());
+       '테스트 밴드입니다!', now(), now());
 insert into member(email, password, nickname, address, image, introduction, created_at, modified_at)
 values ('test2@naver.com', '1234', '테스트 극단1', '강서구', 'https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png',
-        '테스트 밴드입니다!', now(), now());
+       '테스트 밴드입니다!', now(), now());
 insert into member(email, password, nickname, address, image, introduction, created_at, modified_at)
 values ('test3@naver.com', '1234', '테스트 밴드2', '종로구', 'https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png',
-        '테스트 밴드입니다!', now(), now());
+       '테스트 밴드입니다!', now(), now());
 insert into member(email, password, nickname, address, image, introduction, created_at, modified_at)
 values ('test4@naver.com', '1234', '테스트 극단2', '종로구', 'https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png',
-        '테스트 밴드입니다!', now(), now());
+       '테스트 밴드입니다!', now(), now());
 insert into member(email, password, nickname, address, image, introduction, created_at, modified_at)
 values ('test5@naver.com', '1234', '테스트 밴드3', '강남구', 'https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png',
-        '테스트 밴드입니다!', now(), now());
+       '테스트 밴드입니다!', now(), now());
 insert into member(email, password, nickname, address, image, introduction, created_at, modified_at)
 values ('test6@naver.com', '1234', '테스트 극단3', '강남구', 'https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png',
-        '테스트 밴드입니다!', now(), now());
+       '테스트 밴드입니다!', now(), now());
 
 insert into article(member_id, title, content, image, category, view, like_count, article_comment_count, created_at, modified_at)
 values (1, '강서구 공연 뭐있음?', '화곡역 근처였음 좋겠음', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '자유게시판', 1234, 120, 3, now(), now());
@@ -2479,8 +2479,9 @@ insert into article_comment(member_id, article_id, comment, like_count, created_
 values (4, 90, '몰라~', 8, now(), now());
 
 -- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
+
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (1, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2488,8 +2489,8 @@ values (1, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (1, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.37, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.550833, 126.849650, 'SALE', 4.37, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (2, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2497,8 +2498,8 @@ values (2, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (2, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.55779089, 126.83513707, 'SALE', 2.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (3, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2506,8 +2507,8 @@ values (3, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (3, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.55889955, 126.80403102, 'SALE', 4.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (4, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2515,8 +2516,8 @@ values (4, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (4, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 3.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.54694797, 126.84755135, 'SALE', 3.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (5, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2524,8 +2525,8 @@ values (5, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (5, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.54791491, 126.84351265, 'SALE', 2.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (6, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2535,8 +2536,8 @@ values (6, 3, 2.0, '재미 없었음!!', now(), now());
 
 
 -- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (7, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2544,8 +2545,8 @@ values (7, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (7, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.37, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.58111322, 126.97857035, 'SALE', 4.37, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (8, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2553,8 +2554,8 @@ values (8, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (8, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (9, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2562,8 +2563,8 @@ values (9, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (9, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.57919097, 126.98031513, 'SALE', 4.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (10, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2571,8 +2572,8 @@ values (10, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (10, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 3.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.57958558, 126.97702431, 'SALE', 3.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (11, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2580,8 +2581,8 @@ values (11, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (11, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.57672424, 126.98340964, 'SALE', 2.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (12, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2591,8 +2592,8 @@ values (12, 3, 2.0, '재미 없었음!!', now(), now());
 
 
 -- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (13, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2600,8 +2601,8 @@ values (13, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (13, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.37, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.49358632, 127.05160445, 'SALE', 4.37, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (14, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2609,8 +2610,8 @@ values (14, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (14, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.48711677, 127.06057979, 'SALE', 2.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (15, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2618,8 +2619,8 @@ values (15, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (15, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.49981329, 127.04349942, 'SALE', 4.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (16, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2627,8 +2628,8 @@ values (16, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (16, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 3.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.50553218, 127.05690207, 'SALE', 3.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (17, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
@@ -2636,846 +2637,8 @@ values (17, 2, 3.0, '그냥 볼만 함', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (17, 3, 2.0, '재미 없었음!!', now(), now());
 
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (18, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54322255, 126.84603504, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (1, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.550833, 126.849650, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (2, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (1, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.55779089, 126.83513707, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (3, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.55889955, 126.80403102, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (4, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54694797, 126.84755135, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (5, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (2, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강서구', '강서구 초록마을로 28', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.54791491, 126.84351265, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (6, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (7, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.58111322, 126.97857035, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (8, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (3, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.5814696, 126.9849519, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (9, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.57919097, 126.98031513, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (10, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.57958558, 126.97702431, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (11, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (4, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '종로구', '북촌 한옥마을', '2023-01-31', '2023-01-28', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.57672424, 126.98340964, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (12, 3, 2.0, '재미 없었음!!', now(), now());
-
-
--- 공연
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-29', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.4965304, 127.024758, 'SALE', 4.00, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (13, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-30', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.49358632, 127.05160445, 'SALE', 4.37, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (14, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (5, '밴드공연합니다', '밴드공연 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '음악', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-24', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.48711677, 127.06057979, 'SALE', 2.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (15, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-25', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.49981329, 127.04349942, 'SALE', 4.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (16, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-26', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.50553218, 127.05690207, 'SALE', 3.65, 50, now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 1, 4.0, '재미있었어요~!', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 2, 3.0, '그냥 볼만 함', now(), now());
-insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
-values (17, 3, 2.0, '재미 없었음!!', now(), now());
-
-insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_image, latitude, longitude, status, score_average, total, created_at, modified_at)
-values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', 37.49711121, 127.05713757, 'SALE', 2.65, 50, now(), now());
+insert into shows(member_id, title, content, image, category, price, address, detail_address, expired_at, show_at, show_time, detail_description, introduction, latitude, longitude, status, score_average, total, created_at, modified_at)
+values (6, '연극합니다', '무대연극 하지롱', 'https://en.pimg.jp/052/411/926/1/52411926.jpg', '연극', 5000, '강남구', '코드스테이츠 본사', '2023-01-31', '2023-01-27', '18:00', '공연 상세 설명입니다.', '공연 소개입니다.', 37.49711121, 127.05713757, 'SALE', 2.65, 50, now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)
 values (18, 1, 4.0, '재미있었어요~!', now(), now());
 insert into show_comment(show_id, member_id, score, comment, created_at, modified_at)

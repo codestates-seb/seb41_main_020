@@ -360,10 +360,6 @@ export default function Header() {
   const [userInfo, setUserInfo] = useState(null);
   const isLogin = !!localStorage.getItem("accessToken");
 
-  useEffect(() => {
-    console.log(isLogin);
-  }, [isLogin]);
-
   useWindowSize(setNavOpen);
 
   const logoutHandler = () => {

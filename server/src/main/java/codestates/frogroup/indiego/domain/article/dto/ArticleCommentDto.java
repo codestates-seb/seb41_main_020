@@ -36,6 +36,8 @@ public class ArticleCommentDto {
 
         private Long id;
 
+        private Long memberId;
+
         private Long articleId;
 
         private String nickname;

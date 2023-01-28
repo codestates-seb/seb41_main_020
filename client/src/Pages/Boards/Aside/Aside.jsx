@@ -56,7 +56,7 @@ const Aside = () => {
       <SideList>
         <Link
           className={pathname === "/board/free" ? "thisLinkNav" : "linkNav"}
-          to="/board/free?category=자유게시판&page=1"
+          to="/board/free?category=자유게시판&status=최신순&page=1&size=10"
         >
           자유게시판
         </Link>
@@ -79,14 +79,14 @@ const Aside = () => {
           className={
             pathname === "/board/advertise" ? "thisLinkNav" : "linkNav"
           }
-          to="/board/advertise/category=홍보게시판&page=1"
+          to="/board/advertise?category=홍보게시판&page=1"
         >
           홍보게시판
         </Link>
         <br />
         <Link
           className={pathname === "/board/review" ? "thisLinkNav" : "linkNav"}
-          to="/board/review/category=후기게시판&page=1"
+          to="/board/review?category=후기게시판&page=1"
         >
           후기게시판
         </Link>

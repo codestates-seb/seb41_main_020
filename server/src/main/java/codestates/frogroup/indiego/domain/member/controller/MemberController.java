@@ -58,7 +58,7 @@ public class MemberController {
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(getResponse), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(getResponse), HttpStatus.OK);
     }
 
     @GetMapping("/{member-id}/mypage")
@@ -69,7 +69,7 @@ public class MemberController {
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         MemberDto.GetResponse getResponse = memberMapper.memberToGetResponse(verifiedMember);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(getResponse), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(getResponse), HttpStatus.OK);
     }
 
     @PatchMapping("/{member-id}")
@@ -82,7 +82,7 @@ public class MemberController {
         Member updateMember = memberService.updateMember(member,memberId);
         MemberDto.PatchResponse patchResponse = memberMapper.memberToPatchResponse(updateMember);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(patchResponse), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(patchResponse), HttpStatus.OK);
     }
 
     @DeleteMapping("/{member-id}")
@@ -90,7 +90,7 @@ public class MemberController {
                                        @LoginMemberId Long loginMemberId){
         memberService.verifiedMemberId(memberId, loginMemberId);
         memberService.deleteMember(memberId);
-        return new ResponseEntity<>(new SingleResponseDto<>("회원탈퇴가 완료되었습니다"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>("회원탈퇴가 완료되었습니다"), HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/reissue")
@@ -106,7 +106,7 @@ public class MemberController {
     public ResponseEntity logout(HttpServletRequest request){
         // @CookieValue(value = "refreshToken", required = false) String refreshToken // 쿠키사용
         memberService.logout(request);
-        return new ResponseEntity<>(new SingleResponseDto<>("로그아웃에 성공하였습니다."), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>("로그아웃에 성공하였습니다."), HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/token")

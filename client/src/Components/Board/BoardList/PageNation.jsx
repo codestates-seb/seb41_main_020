@@ -83,9 +83,14 @@ const PageNation = ({ pageData, location, className }) => {
   // 페이지가 무조건 3개씩 보이게 만든다
   const FilterData = PageLengthData.filter((it) => {
     if (pageData.page === 1) {
-      return it.num < pageData.page + 3;
+      return it.num < pageData.page + 4;
+    } else if (pageData.page === pageData.totalPages - 1) {
+      return it.num > pageData.page - 3 && it.num < pageData.page + 2;
+    } else if (pageData.page === pageData.totalPages) {
+      return it.num > pageData.page - 4;
     }
-    return it.num > pageData.page - 2 && it.num < pageData.page + 2;
+
+    return it.num > pageData.page - 2 && it.num < pageData.page + 3;
   });
 
   // console.log("-----------------------------");

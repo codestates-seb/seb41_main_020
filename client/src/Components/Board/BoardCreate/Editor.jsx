@@ -1,9 +1,11 @@
-import React, { useMemo, useRef } from "react";
-import ReactQuill from "react-quill";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import imageHandler from "../../../api/core/imageHandler";
 import instance from "../../../api/core/default";
+import ImageResize from "quill-image-resize";
+Quill.register("modules/ImageResize", ImageResize);
 
 const toolbarOptions = [
   ["image"],
@@ -35,7 +37,7 @@ export const formats = [
   "width",
 ];
 
-const Editor = ({ placeholder, value, setValue }) => {
+const Editor = ({ placeholder, value, setValue, arrayRef }) => {
   const quillRef = useRef();
 
   // 이미지 처리를 하는 핸들러
@@ -68,8 +70,6 @@ const Editor = ({ placeholder, value, setValue }) => {
             },
           }
         );
-
-        console.log(result);
         console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
         const IMG_URL = result.data.data;
 
@@ -79,9 +79,7 @@ const Editor = ({ placeholder, value, setValue }) => {
         // 가져온 위치에 이미지를 삽입한다
         editor.insertEmbed(range.index, "image", IMG_URL);
 
-        console.log("IMG_URL : ", IMG_URL);
-        console.log("editor : ", editor);
-        console.log("range : ", range);
+        arrayRef.push(IMG_URL);
       } catch (error) {
         console.log(error);
       }
@@ -96,6 +94,9 @@ const Editor = ({ placeholder, value, setValue }) => {
           // 이미지 처리는 mageHandler라는 함수로 처리할 것이다.
           image: imageHandler,
         },
+      },
+      ImageResize: {
+        parchment: Quill.import("parchment"),
       },
     };
   }, []);
