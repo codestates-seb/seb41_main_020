@@ -10,10 +10,9 @@ import breakpoint from "../../../styles/breakpoint";
 const ItemContainer = styled.div`
   display: flex;
   justify-content: center;
-  width: 80%;
+  width: 250px;
   height: 100%;
   box-sizing: content-box;
-  margin: 10%;
 
   a {
     text-decoration: none;
@@ -25,8 +24,7 @@ const ItemContainer = styled.div`
   }
 
   @media screen and (max-width: ${breakpoint.mobile}) {
-    width: 75%;
-    margin-right: 40px;
+    width: 250px;
   }
 `;
 
@@ -36,16 +34,10 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 15px;
 
   img {
-    height: calc(100px + 2vw);
-    max-height: 150px;
-    max-width: 100px;
-  }
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-left: 50px;
+    width: 100px;
+    height: 150px;
   }
 `;
 
@@ -74,8 +66,12 @@ const ConcertDetailsContainer = styled.div`
   }
 
   h2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
     font-size: calc(10px + 0.5vw);
     text-align: center;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 
     @media screen and (min-width: 1400px) {
       font-size: ${dtFontSize.small};
@@ -83,6 +79,10 @@ const ConcertDetailsContainer = styled.div`
   }
 
   h3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
     font-size: calc(7px + 0.5vw);
     margin-top: 10px;
     text-align: center;

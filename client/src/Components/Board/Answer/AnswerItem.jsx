@@ -6,15 +6,16 @@ import {
   mbFontSize,
 } from "../../../styles/mixins.js";
 import breakpoint from "../../../styles/breakpoint.js";
-import heart from "../../../assets/heart.svg";
+import blueHeart from "../../../assets/blueHeart.gif";
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import instance from "../../../api/core/default.js";
+import { useNavigate } from "react-router-dom";
 
 const AnswerListUserDiv = styled.div`
   display: flex;
   justify-content: left;
-  margin-bottom: 35px;
+  margin-top: 22px;
   border-bottom: 1px solid ${sub.sub200};
 `;
 
@@ -127,17 +128,17 @@ const AnswerItem = (props) => {
   const [toggle, setToggle] = useState(false);
   const [editValue, setEditValue] = useState(props.comment);
   const [heartCountState, setHeartCountState] = useState("");
+  const navigate = useNavigate();
 
   const handleEdit = () => {
     setToggle(!toggle);
   };
 
   // 하트 누르기 코드
-
   const handleHeartCount = async () => {
     return await instance({
       method: "put",
-      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${props.articleId}/comments/${props.id}`,
     });
   };
 
@@ -145,22 +146,43 @@ const AnswerItem = (props) => {
     props.refetch();
   };
 
+  const handleHeartCountOnError = (response) => {
+    if (response.response.status === 401) {
+      alert("로그인 후 이용하세요");
+      navigate("/login");
+      return;
+    }
+
+    // alert("로그인 시간이 만료되었습니다");
+    // navigate("/login");
+    console.log(props);
+    console.log(response.response);
+    return;
+  };
+
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
     mutationFn: handleHeartCount,
     onSuccess: handleHeartCountOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleHeartCountOnError,
   });
 
-  // 수정 코드
+  // 수정 완료 코드
+  const handleEditComplete = () => {
+    if (editValue.length < 1) {
+      alert("1글자 이상을 적어야 합니다");
+      return;
+    }
+    editAnswer();
+  };
+
   const handleComplete = async () => {
     const data = { comment: editValue };
     const response = await instance({
       method: "patch",
-      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${props.articleId}/comments/${props.id}`,
       data,
     });
-    console.log(response.data.data);
     return response.data.comment;
   };
 
@@ -169,34 +191,45 @@ const AnswerItem = (props) => {
     props.refetch();
   };
 
+  const handleCompleteOnError = () => {
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
+  };
+
   const { mutate: editAnswer } = useMutation({
     mutationKey: ["handleComplete"],
     mutationFn: handleComplete,
     onSuccess: handleCompleteOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleCompleteOnError,
   });
+
+  const handleCancel = () => {
+    setEditValue(props.comment);
+    handleEdit();
+  };
 
   // 삭제 코드
   const handleDelete = async () => {
-    console.log(props.articleId);
-    console.log(props.id);
-    const response = await instance({
+    return await instance({
       method: "delete",
-      url: `http://indiego.kro.kr:80/articles/${props.articleId}/comments/${props.id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${props.articleId}/comments/${props.id}`,
     });
-    console.log(response);
-    // return response.data.comment;
   };
 
   const handleDeleteOnSuccess = () => {
     props.refetch();
   };
 
+  const handleDeleteOnError = () => {
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
+  };
+
   const { mutate: deleteAnswer } = useMutation({
     mutationKey: ["handleDelete"],
     mutationFn: handleDelete,
     onSuccess: handleDeleteOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleDeleteOnError,
   });
 
   return (
@@ -225,7 +258,7 @@ const AnswerItem = (props) => {
         <AnswerListFunctionDiv>
           <div className="heartDiv">
             <button className="heartButton" onClick={() => heartCount()}>
-              <img className="heartImage" src={heart} alt="하트" />
+              <img className="heartImage" src={blueHeart} alt="하트" />
             </button>
             <span className="heartCount">{props.likeCount}</span>
           </div>
@@ -235,15 +268,15 @@ const AnswerItem = (props) => {
               <button
                 type="button"
                 className="edButton"
-                onClick={() => editAnswer()}
+                onClick={handleEditComplete}
               >
                 완료
               </button>
-              <button type="button" className="edButton" onClick={handleEdit}>
+              <button type="button" className="edButton" onClick={handleCancel}>
                 취소
               </button>
             </div>
-          ) : (
+          ) : props.memberId === props.userId ? (
             <div className="edDiv">
               <button type="button" className="edButton" onClick={handleEdit}>
                 수정
@@ -256,6 +289,8 @@ const AnswerItem = (props) => {
                 삭제
               </button>
             </div>
+          ) : (
+            <></>
           )}
         </AnswerListFunctionDiv>
       </AnswerListInfoDiv>

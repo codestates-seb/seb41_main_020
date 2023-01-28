@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "../Main/Button.jsx";
 import Overlay from "../../Components/Main/Popups/Overlay.jsx";
@@ -10,7 +10,7 @@ import SearchBar from "../Main/SearchBar.jsx";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 
 import { primary, secondary, dtFontSize, sub } from "../../styles/mixins";
 import breakpoint from "../../styles/breakpoint";
@@ -245,13 +245,14 @@ const DateResetButton = styled.button`
   }
 `;
 
-export default function SearchOptions() {
+export default function SearchOptions({ searchURI, setSearchURI }) {
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("전체");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
   const [dateSelectActive, setDateSelectActive] = useState(false);
+  const currentURL = useLocation();
 
   const [searchParams] = useSearchParams();
   const queryParams = [...searchParams.entries()];
@@ -273,8 +274,32 @@ export default function SearchOptions() {
     }
   }, [endDate, startDate]);
 
+  useEffect(() => {
+    let newSearchURI = currentURL.pathname + "?";
+    let newQueryParams = [];
+    console.log(queryParams, "qp");
+    if (queryParams.length > 0) {
+      newQueryParams = newQueryParams.concat(queryParams.slice(0, 2));
+    }
+    additionalParams.forEach((param) => {
+      if (param) {
+        newQueryParams.push(param);
+      }
+    });
+    console.log(newQueryParams);
+    newQueryParams.forEach((param) => {
+      if (param) {
+        const queryKey = param[0];
+        const queryVal = param[1];
+        newSearchURI += queryKey + "=" + queryVal + "&";
+      }
+    });
+    setSearchURI(newSearchURI);
+  }, [location, category, startDate, endDate]);
+
   const locationPopupClickHandler = (e) => {
-    setLocation(e.target.attributes.value.value);
+    const address = JSON.parse(e.target.attributes.value.value).address;
+    setLocation(address);
   };
 
   const locationButtonClickHandler = () => {

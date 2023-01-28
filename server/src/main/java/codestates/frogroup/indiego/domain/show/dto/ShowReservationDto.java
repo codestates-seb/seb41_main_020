@@ -30,7 +30,12 @@ public class ShowReservationDto {
         private String nickname;
         private LocalDate date;
         private String address;
+        private String detailAddress;
         private Integer ticketCount;
         private boolean isExpired;
+        private String image;
+        private Double latitude;
+        private Double longitude;
+        private Long showId;
     }
 }

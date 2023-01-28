@@ -44,7 +44,6 @@ public class Show extends BaseTime {
     @Column(nullable = false)
     private int total; // 정원
 
-
     public enum ShowStatus {
         SALE("판매중"),
         SOLD_OUT("매진"),

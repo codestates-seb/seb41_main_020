@@ -62,15 +62,15 @@ const PageNationDiv = styled.div`
 `;
 
 // props로 page를 뺀 현재의 주소와 axios.get으로 가져온 res.pageData를 가져와야 합니다
-const PageNation = ({ pageData, location }) => {
+const PageNation = ({ pageData, location, className }) => {
   const navigate = useNavigate();
 
   const handlePreviousPage = () => {
-    navigate(`${location}&page=${pageData.page - 1}`);
+    navigate(`${location}page=${pageData.page - 1}`);
   };
 
   const handleNextPage = () => {
-    navigate(`${location}&page=${pageData.page + 1}`);
+    navigate(`${location}page=${pageData.page + 1}`);
   };
 
   const PageLengthData = [...Array(pageData.totalPages)].map((it, idx) => {
@@ -80,19 +80,26 @@ const PageNation = ({ pageData, location }) => {
     });
   });
 
-  // 페이지가 무조건 3개씩 보이게 만든다
+  // 페이지가 무조건 5개씩 보이게 만든다
   const FilterData = PageLengthData.filter((it) => {
     if (pageData.page === 1) {
-      return it.num < pageData.page + 3;
+      return it.num < pageData.page + 5;
+    } else if (pageData.page === 2) {
+      return it.num < pageData.page + 4;
+    } else if (pageData.page === pageData.totalPages - 1) {
+      return it.num > pageData.page - 4 && it.num < pageData.page + 2;
+    } else if (pageData.page === pageData.totalPages) {
+      return it.num > pageData.page - 5;
     }
-    return it.num > pageData.page - 2 && it.num < pageData.page + 2;
+
+    return it.num > pageData.page - 3 && it.num < pageData.page + 3;
   });
 
-  console.log("-----------------------------");
-  console.log(FilterData);
-  console.log("-----------------------------");
+  // console.log("-----------------------------");
+  // console.log(FilterData);
+  // console.log("-----------------------------");
   return (
-    <PageNationDiv>
+    <PageNationDiv className={className}>
       <button
         className="movePageButton"
         onClick={handlePreviousPage}
@@ -103,7 +110,7 @@ const PageNation = ({ pageData, location }) => {
       <ul>
         {FilterData.map((it, idx) => (
           <li key={idx} className={it.nowNum ? "on" : ""}>
-            <Link to={`${location}&page=${it.num}`}>{it.num}</Link>
+            <Link to={`${location}page=${it.num}`}>{it.num}</Link>
           </li>
         ))}
       </ul>

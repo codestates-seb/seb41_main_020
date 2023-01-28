@@ -4,6 +4,7 @@ import axios from "axios";
 import useBoardListStore from "../../../store/useBoardListStore";
 
 import { sub, dtFontSize, primary } from "../../../styles/mixins";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const DropdownDiv = styled.div`
   display: inline-flex;
@@ -28,7 +29,7 @@ const DropdownContainer = styled.div`
   color: white;
   position: absolute;
   left: 0;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
   &.open {
     top: 30px; // 위치
@@ -57,18 +58,25 @@ const DropdownContainer = styled.div`
   }
 `;
 
-const Dropdown = () => {
+const Dropdown = ({ location }) => {
   const [toggle, setToggle] = useState(false);
   const [value, setValue] = useState("최신순");
   const { setBoardListData } = useBoardListStore();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlStatus = searchParams.get("status");
 
-  const handleDropdown = (props) => {
-    setValue(props);
+  const navigate = useNavigate();
+
+  const handleDropdown = async (props) => {
     setToggle(!toggle);
+    console.log(location);
 
-    axios
-      .get(`http://indiego.kro.kr:80/articles?status=${props}`)
-      .then((res) => setBoardListData(res.data.data));
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URI}/articles?${location}status=${props}`
+    );
+    setBoardListData(response.data.data);
+    navigate(`${location}status=${props}`);
+    setValue(props);
   };
   return (
     <DropdownDiv>

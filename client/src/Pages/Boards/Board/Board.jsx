@@ -1,10 +1,16 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import breakpoint from "../../../styles/breakpoint.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
+import {
+  PageWrapper,
+  ContentWrapper,
+  BoardItem,
+  SpinnerExtended,
+} from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
-import heart from "../../../assets/heart.svg";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
 import instance from "../../../api/core/default.js";
+import yellowHeart from "../../../assets/yellowHeart.gif";
+import blueHeart from "../../../assets/blueHeart.gif";
 
 //로컬 모듈
 import {
@@ -56,6 +62,14 @@ const QuillViewDiv = styled.div`
   height: max-content;
   text-align: left;
   padding-left: 10px;
+
+  > * img {
+    max-width: 1000px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      max-width: 400px;
+    }
+  }
 `;
 
 const HeartItem = styled(BoardItem)`
@@ -100,50 +114,63 @@ const Board = () => {
   const { id } = useParams();
   const { setBoardStoreData } = useBoardStore();
   const { pathname } = useLocation();
-  const [view, setView] = useState("");
+  const userId =
+    localStorage.getItem("userInfoStorage") &&
+    JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   // 게시글 삭제 요청
   const handleDelete = async () => {
     return await instance({
       method: "delete",
-      url: `http://indiego.kro.kr:80/articles/${id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
     });
   };
 
-  const handleDeleteOnSuccess = (response) => {
+  const handleDeleteOnSuccess = () => {
     alert("삭제되었습니다");
     navigate("/board/free?category=자유게시판&page=1");
+  };
+
+  const handleDeleteOnError = () => {
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
   };
 
   const { mutate: deleteBoard } = useMutation({
     mutationKey: ["handleDelete"],
     mutationFn: handleDelete,
     onSuccess: handleDeleteOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleDeleteOnError,
   });
 
   // 하트 누르기 요청
   const handleHeartCount = async () => {
     return await instance({
       method: "put",
-      url: `http://indiego.kro.kr:80/articles/${id}`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
     });
   };
 
-  const handleHeartCountOnSuccess = (response) => {
+  const handleHeartCountOnSuccess = () => {
     refetch();
-    console.log(response);
+  };
+
+  const handleHeartCountOnError = () => {
+    alert("로그인 후 이용하세요");
+    navigate("/login");
   };
   const { mutate: heartCount } = useMutation({
     mutationKey: ["handleHeartCount"],
     mutationFn: handleHeartCount,
     onSuccess: handleHeartCountOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleHeartCountOnError,
   });
 
   // Board 내용 가져오기
   const axiosBoard = async () => {
-    const response = await axios.get(`http://indiego.kro.kr:80/articles/${id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URI}/articles/${id}`
+    );
     return response.data;
   };
 
@@ -154,7 +181,6 @@ const Board = () => {
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
-    setView(response.data.view);
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
@@ -162,10 +188,6 @@ const Board = () => {
     queryFn: axiosBoard,
     onSuccess: axiosBoardSuccess,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   if (isError) {
     return <div>Error : {error.message}</div>;
@@ -178,36 +200,50 @@ const Board = () => {
         <div className="titleDiv">
           <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
           <div className="titleInfo">
-            {new Date(boardData.createdAt).toLocaleString()} || 조회수 :{" "}
-            {boardData.view}
+            {new Date(boardData.createdAt).toLocaleString()}
           </div>
         </div>
 
         <div className="lineDiv"></div>
-        <QuillViewDiv
-          dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
-        ></QuillViewDiv>
+        {isLoading ? (
+          <SpinnerExtended />
+        ) : (
+          <QuillViewDiv
+            dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
+          ></QuillViewDiv>
+        )}
+
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton" onClick={() => heartCount()}>
-              <img width={45} src={heart} alt="heart"></img>
+              <img
+                width={35}
+                src={boardData.likeStatus ? yellowHeart : blueHeart}
+                alt="heart"
+              ></img>
             </button>
             <div className="heartCount">{boardData.likeCount}</div>
           </div>
         </HeartItem>
-        <EditDeleteDiv>
-          <button
-            className="edButton"
-            onClick={() => {
-              navigate(`${pathname}/edit`);
-            }}
-          >
-            수정
-          </button>
-          <button className="edButton" onClick={deleteBoard}>
-            삭제
-          </button>
-        </EditDeleteDiv>
+
+        {boardData.memberId === userId ? (
+          <EditDeleteDiv>
+            <button
+              className="edButton"
+              onClick={() => {
+                navigate(`${pathname}/edit`);
+              }}
+            >
+              수정
+            </button>
+            <button className="edButton" onClick={deleteBoard}>
+              삭제
+            </button>
+          </EditDeleteDiv>
+        ) : (
+          <></>
+        )}
+
         {/* 댓글 리스트로 이동 */}
         <AnswerList
           boardData={boardData}
@@ -215,6 +251,7 @@ const Board = () => {
           setAnswerListData={setAnswerListData}
           id={id}
           refetch={refetch}
+          userId={userId}
         />
       </BoardInfoWrapper>
     </PageWrapper>

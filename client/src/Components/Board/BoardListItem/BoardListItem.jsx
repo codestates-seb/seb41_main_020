@@ -81,7 +81,6 @@ const BoardItemCreateInfo = styled.div`
 
 const BoardListItem = (props) => {
   const { pathname } = useLocation();
-  console.log("props : ", props);
   return (
     <BoardItem key={props.id}>
       <div className="likeDiv">

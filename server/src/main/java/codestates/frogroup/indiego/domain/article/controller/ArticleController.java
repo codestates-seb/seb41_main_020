@@ -99,7 +99,7 @@ public class ArticleController {
 
         // 쿠키 가져오기
         Cookie[] cookies = request.getCookies();
-        boolean isVisited = false;
+        Boolean isVisited = false;
 
         // 이미 조회한 게시글인 경우
         if (cookies != null) {
@@ -119,12 +119,24 @@ public class ArticleController {
 
             Cookie newCookie = new Cookie("visited_article_" + articleId, "true");
             newCookie.setMaxAge(60 * 60 * 24); // 하루
+            newCookie.setPath("/");
+            newCookie.setDomain("indiego.site");
+//            newCookie.setHttpOnly(true);
             response.addCookie(newCookie);
             responseDto.setView(viewCount);
         }
 
         return new ResponseEntity<>(new SingleResponseDto<>(responseDto), HttpStatus.OK);
     }
+
+//    @GetMapping("/{article-id}")
+//    public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId,
+//                                     HttpServletRequest request) {
+//
+//        ArticleDto.Response response = articleService.findArticle(articleId, request);
+//
+//        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+//    }
 
     /**
      * 게시글 삭제
