@@ -7,6 +7,7 @@ import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 import BoardListItem from "../../../Components/Board/BoardListItem/BoardListItem";
+import Spinner from "../../../Components/Spinner";
 
 //로컬 모듈
 import {
@@ -179,6 +180,18 @@ const WriteButton = styled(OKButton)`
   }
 `;
 
+export const SpinnerExtended = styled(Spinner)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  .lds-dual-ring:after {
+    border: 6px solid ${primary.primary300};
+    border-color: ${primary.primary300} transparent ${primary.primary300}
+      transparent;
+  }
+`;
+
 export default function BoardList() {
   const navigate = useNavigate();
   const { boardList, setBoardListData } = useBoardListStore();
@@ -217,10 +230,6 @@ export default function BoardList() {
     onSuccess: axiosBoardListOnSuccess,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
@@ -255,8 +264,8 @@ export default function BoardList() {
 
   return (
     <PageWrapper>
-      <Aside></Aside>
-      <MobileAside></MobileAside>
+      <Aside />
+      <MobileAside />
       <BoardWrapper>
         <div className="title">{urlCategory}</div>
         <div className="titleInfo">
@@ -268,9 +277,12 @@ export default function BoardList() {
           ></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {boardList.map((it) => (
-          <BoardListItem key={it.id} {...it} />
-        ))}
+        {isLoading ? (
+          <SpinnerExtended />
+        ) : (
+          boardList.map((it) => <BoardListItem key={it.id} {...it} />)
+        )}
+
         {console.log("*******************************")}
         {console.log(boardList)}
         {console.log("*******************************")}
