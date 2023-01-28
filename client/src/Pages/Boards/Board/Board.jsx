@@ -65,6 +65,10 @@ const QuillViewDiv = styled.div`
 
   > * img {
     max-width: 1000px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      max-width: 400px;
+    }
   }
 `;
 
