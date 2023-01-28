@@ -5,7 +5,7 @@ import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import instance from "../../../api/core/default.js";
@@ -99,32 +99,64 @@ const BoardCreate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation;
+  const arrayRef = useRef([""]);
+  const titleRef = useRef();
+
+  const handlePost = () => {
+    if (categoryValue === "") {
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (titleValue.length < 1) {
+      titleRef.current.focus();
+      console.log(321);
+      return;
+    }
+
+    if (contentValue.length < 1) {
+      window.scrollTo(0, 300);
+      return;
+    }
+
+    createBoard();
+  };
 
   const data = {
     title: titleValue,
     content: contentValue,
-    image: "",
+    image:
+      arrayRef.current.length === 1 ? arrayRef.current[0] : arrayRef.current[1],
     category: categoryValue,
   };
 
   const handleButton = async () => {
     const response = await instance({
       method: "post",
-      url: `http://indiego.kro.kr:80/articles`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles`,
       data,
     });
     return response.data.data;
   };
 
-  const handleButtonOnSuccess = (response) => {
+  const handleButtonOnSuccess = () => {
     navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
+  };
+
+  const handleButtonOnError = () => {
+    // if (response.response.status === 401) {
+    //   alert("로그인 후 이용하세요");
+    //   navigate("/login");
+    //   return;
+    // }
+    alert("로그인 후 이용하세요");
+    navigate("/login");
   };
 
   const { mutate: createBoard } = useMutation({
     mutationKey: ["handleButton"],
     mutationFn: handleButton,
     onSuccess: handleButtonOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleButtonOnError,
   });
   return (
     <PageWrapper>
@@ -134,11 +166,6 @@ const BoardCreate = () => {
         <div className="titleInfo">
           게시판 양식을 준수하여 게시물을 업로드 해주시기 바랍니다.
         </div>
-        <img
-          referrerPolicy="no-referrer"
-          src="https://indiego-fileupload.s3.ap-northeast-2.amazonaws.com/3f219da6-d805-4d07-891c-e381e5b891e3.png"
-          alt="이미지"
-        ></img>
         <PostBoard>
           <div className="postDiv">분류</div>
           <ClassificationDiv>
@@ -149,6 +176,7 @@ const BoardCreate = () => {
           <div className="postDiv">제목</div>
           <TitleInputDiv>
             <input
+              ref={titleRef}
               className="titleInput"
               placeholder="게시글의 제목을 작성해주세요."
               value={titleValue}
@@ -163,10 +191,11 @@ const BoardCreate = () => {
               value={contentValue}
               setValue={setContentValue}
               placeholder={"내용을 입력해주세요."}
+              arrayRef={arrayRef.current}
             ></Editor>
             {console.log(contentValue)}
           </ContentInputDiv>
-          <PostButton type="button" onClick={() => createBoard()}>
+          <PostButton type="button" onClick={handlePost}>
             글 올리기
           </PostButton>
         </PostBoard>

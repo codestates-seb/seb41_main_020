@@ -10,11 +10,12 @@ import OKButton from "../BoardList/OKButton.jsx";
 import AnswerItem from "./AnswerItem.jsx";
 
 import AnswerDummy from "../../../DummyData/AnswerDummy.js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useAnswerListStore from "../../../store/useAnswerListStore.js";
 import axios from "axios";
 import instance from "../../../api/core/default.js";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const AnswerWrapper = styled.div`
   margin-top: 60px;
@@ -77,28 +78,47 @@ const AnswerListWrapper = styled.div`
   }
 `;
 
-const AnswerList = ({ boardData, answerListData, refetch, id }) => {
+const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
   const [answerData, setAnswerData] = useState("");
+  const createAnswerRef = useRef();
+  const navigate = useNavigate();
+
+  const handleCreateAnswer = () => {
+    if (answerData.length < 1) {
+      createAnswerRef.current.focus();
+      return;
+    }
+    createAnswer();
+  };
   const handleButton = async () => {
     const data = { comment: answerData };
     return await instance({
       method: "post",
-      url: `http://indiego.kro.kr:80/articles/${id}/comments`,
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}/comments`,
       data,
     });
   };
 
-  const handleButtonOnSuccess = (response) => {
-    console.log(response);
-    console.log(answerListData);
+  const handleButtonOnSuccess = () => {
     refetch();
+  };
+
+  const handleButtonOnError = (response) => {
+    if (response.response.status === 401) {
+      alert("로그인 후 이용하세요");
+      navigate("/login");
+      return;
+    }
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
+    return;
   };
 
   const { mutate: createAnswer, isLoading } = useMutation({
     mutationKey: ["handleButton"],
     mutationFn: handleButton,
     onSuccess: handleButtonOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleButtonOnError,
   });
 
   if (isLoading) {
@@ -111,6 +131,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
       </div>
       <div className="answerInputDiv">
         <input
+          ref={createAnswerRef}
           className="answerInput"
           type="text"
           placeholder="댓글을 입력하세요."
@@ -121,7 +142,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
         />
       </div>
       <AnswerCreateButtonDiv>
-        <AnswerCreateButton type="button" onClick={() => createAnswer()}>
+        <AnswerCreateButton type="button" onClick={handleCreateAnswer}>
           작성하기
         </AnswerCreateButton>
       </AnswerCreateButtonDiv>
@@ -129,7 +150,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id }) => {
         <ul>
           {answerListData.map((it) => (
             <li key={it.id}>
-              <AnswerItem {...it} refetch={refetch} />
+              <AnswerItem {...it} refetch={refetch} userId={userId} />
             </li>
           ))}
         </ul>

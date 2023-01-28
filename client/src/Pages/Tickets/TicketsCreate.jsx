@@ -19,7 +19,7 @@ import {
 import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
 import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
@@ -214,12 +214,14 @@ const CancelButton = styled(PostButton)`
 
 export default function TicketsCreate() {
   // 카테고리
-  const [category, setCategory] = useState(""); // 사용
+  const [category, setCategory] = useState("음악"); // 사용
   // 공연명
   const [ticketName, setTicketName] = useState(""); // 사용
+  const ticketNameRef = useRef();
   // 장소
-  const [gu, setGu] = useState("구"); // 사용
+  const [gu, setGu] = useState(""); // 사용
   const [place, setPlace] = useState("어디서 공연을 하시나요?"); // 사용
+  const placeRef = useRef();
   const [detailPlace, setDetailPlace] = useState(""); // 사용
 
   // 공연 시작 정보
@@ -280,11 +282,30 @@ export default function TicketsCreate() {
   console.log(ticketsValue);
   console.log(latitude);
   console.log(longitude);
-  // 티켓 post
+  // 티켓 글 올리기
+  const handlePost = () => {
+    if (ticketName === "") {
+      ticketNameRef.current.focus();
+    }
+    if (place === "어디서 공연을 하시나요?") {
+      console.log(333);
+      placeRef.current.focus();
+    }
+    console.log(startDate);
+    console.log(endDate);
+    console.log(startTime);
+    console.log(sit);
+    console.log(ticketPrice);
+    console.log(ticketInfo);
+    console.log(ticketsValue);
+    console.log(latitude);
+    console.log(longitude);
+    // createTickets();
+  };
   const handleCreateTickets = async () => {
     const response = await instance({
       method: "post",
-      url: `http://indiego.kro.kr:80/shows`,
+      url: `${process.env.REACT_APP_SERVER_URI}/shows`,
       data,
     });
     console.log(response);
@@ -328,7 +349,7 @@ export default function TicketsCreate() {
     formData.append("file", file[0]); // formData는 키-밸류 구조
     try {
       const result = await axios.post(
-        "http://indiego.kro.kr:80/shows/uploads",
+        `${process.env.REACT_APP_SERVER_URI}/shows/uploads`,
         formData,
         {
           headers: {
@@ -360,6 +381,7 @@ export default function TicketsCreate() {
           <div className="postDiv">공연명</div>
           <TicketsCreateInputDiv>
             <input
+              ref={ticketNameRef}
               className="titleInput"
               placeholder="게시글의 제목을 작성해주세요."
               value={ticketName}
@@ -384,7 +406,9 @@ export default function TicketsCreate() {
 
           <div className="postDiv">공연 장소</div>
           <ChoiceButtonDiv>
-            <div className="place">{place}</div>
+            <div className="place" ref={placeRef}>
+              {place}
+            </div>
             <input
               className="placeInput"
               placeholder="상세 주소 입력"
@@ -464,7 +488,7 @@ export default function TicketsCreate() {
         </TicketsBoard>
 
         <ButtonDiv>
-          <PostButton onClick={() => createTickets()}>글 올리기</PostButton>
+          <PostButton onClick={handlePost}>글 올리기</PostButton>
           <CancelButton onClick={handleCancel}>취소하기</CancelButton>
         </ButtonDiv>
       </TicketsCreateContentWrapper>
