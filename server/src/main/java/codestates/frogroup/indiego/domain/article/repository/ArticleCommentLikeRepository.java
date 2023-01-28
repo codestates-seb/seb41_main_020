@@ -9,6 +9,6 @@ public interface ArticleCommentLikeRepository extends JpaRepository<ArticleComme
 
     List<ArticleCommentLike> findAllByArticleCommentId(Long commentId);
 
-    ArticleCommentLike findByMemberId(Long memberId);
+    ArticleCommentLike findByMemberIdAndArticleCommentId(Long memberId, Long articleCommentId);
 
 }
