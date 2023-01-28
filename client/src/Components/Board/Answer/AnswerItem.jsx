@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const AnswerListUserDiv = styled.div`
   display: flex;
   justify-content: left;
-  margin-bottom: 35px;
+  margin-top: 22px;
   border-bottom: 1px solid ${sub.sub200};
 `;
 
@@ -203,6 +203,11 @@ const AnswerItem = (props) => {
     onError: handleCompleteOnError,
   });
 
+  const handleCancel = () => {
+    setEditValue(props.comment);
+    handleEdit();
+  };
+
   // 삭제 코드
   const handleDelete = async () => {
     return await instance({
@@ -267,7 +272,7 @@ const AnswerItem = (props) => {
               >
                 완료
               </button>
-              <button type="button" className="edButton" onClick={handleEdit}>
+              <button type="button" className="edButton" onClick={handleCancel}>
                 취소
               </button>
             </div>
