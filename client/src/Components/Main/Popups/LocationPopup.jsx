@@ -54,6 +54,10 @@ const MapContainer = styled.div`
   }
 
   svg {
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 280px;
+    }
+
     text {
       width: max-content;
       height: max-content;
@@ -66,7 +70,7 @@ const MapContainer = styled.div`
 
       @media screen and (max-width: ${breakpoint.mobile}) {
         width: 100%;
-        height: 30%;
+        height: 100px;
       }
     }
 
@@ -313,7 +317,7 @@ const CloseButton = styled.button`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     padding: 5px;
-    width: 30%;
+    width: 10%;
     margin: 15px 10px;
   }
 `;
@@ -344,7 +348,6 @@ const ConcertListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 5%;
   margin-top: 20px;
 
   @media screen and (max-width: ${breakpoint.mobile}) {

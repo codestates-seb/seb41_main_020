@@ -4,6 +4,7 @@ import { primary, dtFontSize, sub } from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint";
 
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const ListItemContainer = styled.div`
   width: 100%;
@@ -28,7 +29,8 @@ const ListItemContainer = styled.div`
     font-weight: 700;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: 2vw;
+      font-size: 13px;
+      margin-top: 0;
     }
   }
 
@@ -39,16 +41,18 @@ const ListItemContainer = styled.div`
     margin-bottom: 5px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      font-size: 2vw;
+      font-size: 10px;
     }
   }
 `;
 
 export default function ListItem({ data }) {
   return (
-    <ListItemContainer>
-      <p className="title">{data.title}</p>
-      <p className="date">{`${data.showAt} - ${data.expiredAt}`}</p>
-    </ListItemContainer>
+    <Link to={`tickets/${data.id}`}>
+      <ListItemContainer>
+        <p className="title">{data.title}</p>
+        <p className="date">{`${data.showAt} - ${data.expiredAt}`}</p>
+      </ListItemContainer>
+    </Link>
   );
 }

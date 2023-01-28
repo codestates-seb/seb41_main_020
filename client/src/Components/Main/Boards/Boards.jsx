@@ -19,7 +19,7 @@ const BoardsContainer = styled.div`
   align-items: center;
 
   h1 {
-    width: 88%;
+    width: 100%;
     color: ${primary.primary500};
     font-size: ${dtFontSize.medium};
     margin-bottom: 10px;
@@ -96,11 +96,6 @@ export default function Boards({ category, children, path }) {
             );
           })
         )}
-        {/* <Board></Board>
-        <Board></Board>
-        <Board></Board>
-        <Board></Board>
-        <Board isLast={true}></Board> */}
       </BoardList>
     </BoardsContainer>
   );

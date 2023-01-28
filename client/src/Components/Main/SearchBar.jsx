@@ -148,10 +148,8 @@ const InputContainer = styled.div`
 export default function SearchBar({
   className,
   navigateTo,
-  fetchMode,
   defaultValue,
   additionalParams,
-  refetch,
 }) {
   const [isSearchOptionsClicked, setIsSearchOptionsClicked] = useState(false);
   const [searchOption, setSearchOption] = useState("공연명");

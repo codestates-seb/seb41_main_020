@@ -13,6 +13,7 @@ import { useInterval } from "../../../utils/useInterval";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { add } from "date-fns";
 
 const CarouselContainer = styled.div`
   width: ${(props) => props.width};
@@ -84,16 +85,22 @@ const Rank = styled.h2`
     font-size: 80px;
   }
 
+  @media screen and (max-width: 900px) {
+    font-size: 60px;
+    top: 60%;
+    left: 18%;
+  }
+
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: 60px;
-    top: 50%;
+    top: 60%;
     left: calc(5% + 8vw);
   }
 
   @media screen and (max-width: 500px) {
-    top: 70%;
-    left: 27%;
-    font-size: 40px;
+    top: 65%;
+    left: 22%;
+    font-size: 50px;
   }
 `;
 
@@ -104,7 +111,8 @@ export default function Carousel({
   isRankMode,
   minWidth,
   maxWidth,
-  sort,
+  status,
+  address,
 }) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [data, setData] = useState([]);
@@ -113,18 +121,19 @@ export default function Carousel({
   const serverURI = process.env.REACT_APP_SERVER_URI;
 
   const fetchShowData = () => {
-    return axios.get(`${serverURI}/shows`, {
-      params: { sort },
+    return axios.get(`${serverURI}/shows/sorts`, {
+      params: { status, address },
     });
   };
 
   const fetchShowDataOnSuccess = (response) => {
     const data = response.data.data;
+
     setData(data);
   };
 
   const { isLoading } = useQuery({
-    queryKey: ["fetchShowData", sort],
+    queryKey: ["fetchShowData", status],
     queryFn: fetchShowData,
     onSuccess: fetchShowDataOnSuccess,
     keepPreviousData: true,

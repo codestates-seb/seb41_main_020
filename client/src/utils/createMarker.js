@@ -36,6 +36,9 @@ const createMarker = (locObj, map, markerImage, kakao) => {
   const titleElement = document.createElement("p");
   titleElement.setAttribute("class", "marker_title");
   titleElement.textContent = locObj.title;
+  const artistElement = document.createElement("p");
+  artistElement.setAttribute("class", "marker_artist");
+  artistElement.textContent = locObj.nickname;
   const addressElement = document.createElement("p");
   addressElement.setAttribute("class", "marker_address");
   addressElement.textContent = locObj.address;
@@ -72,6 +75,7 @@ const createMarker = (locObj, map, markerImage, kakao) => {
   markerBox.append(
     imgElement,
     titleElement,
+    artistElement,
     addressElement,
     showAtElement,
     expiredAtElement,

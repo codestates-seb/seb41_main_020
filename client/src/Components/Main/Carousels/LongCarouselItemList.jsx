@@ -7,13 +7,12 @@ import styled from "styled-components";
 
 const ListContainer = styled.div`
   display: flex;
-  width: 837px;
-  max-width: 837px;
+  width: 95%;
   height: 100%;
-  overflow: hidden;
+  overflow-x: scroll;
+  /* background-color: bisque; */
 
   @media screen and (max-width: 1100px) {
-    width: calc(20px + 80vw);
   }
 `;
 
@@ -21,9 +20,8 @@ const ItemsContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 837px;
   height: 100%;
-  padding-left: 10px;
   margin-left: ${(props) => props.currentIdx * -100}%;
 
   transition: ${(props) => (props.isLast ? "unset" : "all 0.5s ease-in-out")};
