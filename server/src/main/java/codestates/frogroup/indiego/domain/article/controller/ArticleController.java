@@ -8,6 +8,7 @@ import codestates.frogroup.indiego.domain.article.service.ArticleService;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
+import codestates.frogroup.indiego.global.security.auth.jwt.TokenProvider;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +37,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleMapper mapper;
+    private final TokenProvider tokenProvider;
 
     /**
      * 게시글 작성
@@ -87,6 +90,15 @@ public class ArticleController {
         List<ArticleListResponseDto> responses = articleService.findPopularArticles(category);
 
         return new ResponseEntity<>(new PagelessMultiResponseDto<>(responses), HttpStatus.OK);
+    }
+
+    @GetMapping("/testapi")
+    public ResponseEntity ggg(HttpServletResponse response) throws IOException {
+
+
+        tokenProvider.refreshTokenSetCookie("test", response);
+        response.sendRedirect("http://indiego.site");
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     /**
