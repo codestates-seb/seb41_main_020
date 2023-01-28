@@ -94,6 +94,7 @@ public class SecurityConfiguration {
 		configuration.addExposedHeader("Refresh");
 		configuration.addAllowedHeader("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setMaxAge(3600L);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
