@@ -5,6 +5,7 @@ import search from "../../../assets/search.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useBoardListStore from "../../../store/useBoardListStore";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SearchBarDiv = styled.div`
   display: flex;
@@ -45,60 +46,46 @@ const SearchBarDiv = styled.div`
     background-color: blue;
   }
 `;
-const SearchBar = ({ location, placeholder }) => {
+const SearchBar = ({ location, placeholder, setPageData }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .get(
-        `http://indiego.kro.kr:80/${location}&search=${value}
-        `
-      )
-      .then((res) => setBoardListData(res.data.data));
+  const navigate = useNavigate();
+  const [searchParamse, setSearchParamase] = useSearchParams();
+
+  const onKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handlePage();
+    }
+  };
+
+  const handlePage = async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URI}/articles?${location}&search=${value}
+      `
+    );
+    setBoardListData(response.data.data);
+    setPageData(response.data.pageInfo);
+    searchParamse.append("search", value);
+    setSearchParamase(searchParamse);
+
     window.scrollTo(0, 0);
   };
 
-  // const searchBoardList = async () => {
-  //   const response = await axios.get(
-  //     `http://indiego.kro.kr:80/articles?articles?category=자유게시판&search=${value}`
-  //   );
-  //   return response.data.data;
-  // };
-
-  // const searchBoardListOnSuccess = (response) => {
-  //   setBoardListData(response);
-  // };
-  // const { isLoading, isError, error } = useQuery({
-  //   queryKey: ["searchBoardList"],
-  //   queryFn: searchBoardList,
-  //   onSuccess: searchBoardListOnSuccess,
-  // });
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (isError) {
-  //   return <div>Error : {error.message}</div>;
-  // }
-
   return (
-    <form onSubmit={handleSubmit}>
-      <SearchBarDiv>
-        <div className="aSearchBarDiv">
-          <input
-            className="searchBarInput"
-            placeholder={placeholder}
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-          />
-          <img className="searchImage" src={search} alt="돋보기"></img>
-        </div>
-      </SearchBarDiv>
-    </form>
+    <SearchBarDiv>
+      <div className="aSearchBarDiv">
+        <input
+          className="searchBarInput"
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          onKeyDown={onKeyDown}
+        />
+        <img className="searchImage" src={search} alt="돋보기"></img>
+      </div>
+    </SearchBarDiv>
   );
 };
 
