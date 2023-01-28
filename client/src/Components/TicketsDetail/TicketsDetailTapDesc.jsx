@@ -33,7 +33,7 @@ export default function TicketsDetailTapDesc() {
   const { ticketData, setTicketData } = useTicketDataStore((state) => state);
   return (
     <>
-      <ContentWrapper>{ticketData.detailImage}</ContentWrapper>
+      <ContentWrapper>{ticketData.detailDescription}</ContentWrapper>
     </>
   );
 }

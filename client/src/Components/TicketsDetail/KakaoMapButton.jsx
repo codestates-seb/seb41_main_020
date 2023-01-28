@@ -55,9 +55,6 @@ export default function KakaoMapButton({ detailAddress, latitude, longitude }) {
     window.open(`https://map.kakao.com/link/map/${locationId}`);
   };
 
-  console.log(process.env.REACT_APP_REST_API_KEY);
-  console.log(location);
-
   return (
     <ButtonComponent onClick={handleButtonClick}>
       <img alt="kakao map icon" src={kakaoMapIcon} />

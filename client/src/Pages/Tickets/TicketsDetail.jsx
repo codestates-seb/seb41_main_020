@@ -2,6 +2,10 @@
 import TicketsDetailTap from "../../Components/TicketsDetail/TicketsDetailTapMenu.jsx";
 import KakaoMapButton from "../../Components/TicketsDetail/KakaoMapButton.jsx";
 import TicketDeleteModal from "../../Components/TicketsDetail/TicketDeleteModal.jsx";
+import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
+import { faMinus } from "@fortawesome/free-solid-svg-icons/faMinus";
+import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -15,11 +19,12 @@ import {
 } from "../../styles/mixins";
 import useTicketDataStore from "../../store/useTicketDataStore";
 import useOpenModalStore from "../../store/useOpenModalStore.js";
+import instance from "../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -36,7 +41,7 @@ const Container = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 100%;
@@ -130,23 +135,26 @@ const ContentTopContainer = styled.div`
   width: 100%;
   height: max-content;
   justify-content: space-between;
-  padding: 5%;
+  padding: 2%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: column;
     align-items: center;
-    padding: 20px 5.13%;
+    padding: 2%;
   }
 `;
 
 const TopLeftContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  display: flex;
+  justify-content: space-between;
   min-width: max-content;
+  width: 65%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
+    flex-direction: column;
     margin-bottom: 20px;
+    width: 90%;
   }
 
   > h3 {
@@ -165,12 +173,14 @@ const TopLeftContainer = styled.div`
 `;
 
 const PosterImage = styled.img`
-  width: 300px;
-  height: 400px;
+  width: 270px;
+  height: 360px;
+  box-shadow: 0 5px 5px #6d6d6d;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     width: 240px;
     height: 320px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -196,17 +206,19 @@ const EmptySeat = styled.span`
   }
 `;
 
-const TopRightContainer = styled.div`
+const TicketInfoContainer = styled.div`
   display: flex;
-  width: 60%;
+  width: 55%;
   background-color: ${sub.sub100};
   border-radius: 10px;
   justify-content: space-between;
   flex-direction: column;
+  margin-left: 10px;
   min-height: 500px;
-  padding: 5%;
+  padding: 3%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-left: 0;
     min-height: 400px;
     width: 100%;
   }
@@ -326,6 +338,103 @@ const TopRightContainer = styled.div`
   }
 `;
 
+const TopRightContainer = styled.div`
+  border: 1px solid ${sub.sub300};
+  display: flex;
+  width: 22%;
+  background-color: white;
+  border-radius: 10px;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-left: 10px;
+  min-height: 500px;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-left: 0;
+    height: 400px;
+    width: 90%;
+  }
+
+  > .inner-container {
+    display: flex;
+    flex-direction: column;
+    height: 33.333%;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+
+    > .sub-title {
+      color: ${sub.sub800};
+      font-size: ${dtFontSize.medium};
+      font-weight: 600;
+      width: 100%;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      > .set-count-button {
+        all: unset;
+        align-items: center;
+        color: ${sub.sub400};
+        margin: 0 10px;
+
+        &:hover {
+          color: ${primary.primary300};
+          cursor: pointer;
+        }
+      }
+
+      > .reservation-seat-input {
+        width: 50px;
+
+        ::-webkit-outer-spin-button,
+        ::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+
+      > span {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  > .middle-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid ${sub.sub300};
+    border-bottom: 1px solid ${sub.sub300};
+    height: 33.333%;
+    position: relative;
+    justify-content: center;
+
+    > .sub-title {
+      color: ${sub.sub800};
+      font-size: ${dtFontSize.medium};
+      font-weight: 600;
+      width: 100%;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    > .error-message {
+      color: ${misc.red};
+      font-size: ${dtFontSize.small};
+      position: absolute;
+      top: 62%;
+    }
+  }
+`;
+
 const ImpossibleButton = styled(PillButton)`
   pointer-events: none;
 `;
@@ -334,14 +443,32 @@ export default function TicketsDetail() {
   const { ticketData, setTicketData } = useTicketDataStore((state) => state);
   const { openModal, setOpenModal } = useOpenModalStore((state) => state);
   const [isReservationPossible, setIsReservationPossible] = useState(true);
-  const ticketId = useParams().id;
+  const [ticketCount, setTicketCount] = useState(1);
+  const [date, setDate] = useState("");
+  const [dateError, setDateError] = useState(false);
+  const [isSameUser, setIsSameUser] = useState(false);
+  const params = useParams();
   const navigate = useNavigate();
-  const dummyLocation = {
-    title: "연우 소극장",
-    address: "서울 종로구 창경궁로35길 21",
-    latitude: 37.586999383263084,
-    longitude: 127.00176624935142,
-  };
+
+  console.log(ticketData.sellerId);
+
+  useEffect(() => {
+    setDateError(false);
+    setIsSameUser(false);
+    setIsReservationPossible(true);
+  }, [ticketData]);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("accessToken") &&
+      ticketData.sellerId ===
+        JSON.parse(localStorage.getItem("userInfoStorage")).id
+    ) {
+      setIsSameUser(true);
+    } else {
+      setIsSameUser(false);
+    }
+  });
 
   useEffect(() => {
     if (ticketData.emptySeats <= 0) {
@@ -349,10 +476,19 @@ export default function TicketsDetail() {
     }
   }, [ticketData]);
 
-  console.log(isReservationPossible);
+  useEffect(() => {
+    if (
+      new Date(date) < new Date(ticketData.showAt) ||
+      new Date(date) > new Date(ticketData.expiredAt)
+    ) {
+      setDateError(true);
+    } else {
+      setDateError(false);
+    }
+  }, [date]);
 
   const fetchData = () => {
-    return axios.get(`${process.env.REACT_APP_SERVER_URI}/shows/${ticketId}`);
+    return axios.get(`${process.env.REACT_APP_SERVER_URI}/shows/${params.id}`);
   };
 
   const fetchDataOnSuccess = (response) => {
@@ -374,12 +510,71 @@ export default function TicketsDetail() {
   });
 
   const handleMoveToEditPage = () => {
-    navigate(`/tickets/${ticketId}/edit`);
+    navigate(`/tickets/${params.id}/edit`);
+  };
+
+  const handleTicketPlus = () => {
+    if (ticketCount >= ticketData.emptySeats) {
+      return;
+    }
+    setTicketCount(ticketCount + 1);
+  };
+
+  const handleTicketMinus = () => {
+    if (ticketCount <= 1) {
+      return;
+    }
+    setTicketCount(ticketCount - 1);
+  };
+
+  const handleTicketChange = (e) => {
+    console.log(Number(e.target.value));
+    if (Number(e.target.value) > ticketData.emptySeats) {
+      return;
+    }
+    setTicketCount(Number(e.target.value));
+  };
+
+  const postData = () => {
+    return instance({
+      method: "post",
+      url: `/shows/reservations/${params.id}`,
+      data: { date, ticketCount },
+    });
+  };
+
+  const postDataOnsuccess = () => {
+    window.alert("공연 예매가 완료되었습니다.");
+  };
+
+  const postDataOnError = (error) => {
+    console.log(error);
+    // if (
+    //   error.response.status === 400 &&
+    //   error.response.data.message === "Token Expired"
+    // ) {
+    //   window.alert("다시 로그인해주세요.");
+    //   localStorage.clear();
+    //   setIsLogin(false);
+    //   navigate("/");
+    // } else if (error.response.status === 500) {
+    //   window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    // }
+  };
+
+  const { mutate: postReservation } = useMutation({
+    mutationFn: postData,
+    onSuccess: postDataOnsuccess,
+    onError: postDataOnError,
+  });
+
+  const handleReservation = () => {
+    postReservation();
   };
 
   return (
     <>
-      <TicketDeleteModal ticketId={ticketId} />
+      <TicketDeleteModal ticketId={params.id} />
       <Container>
         <ContentHeaderContainer>
           <HeaderTitleContainer>
@@ -388,70 +583,120 @@ export default function TicketsDetail() {
               {ticketData.title} / {ticketData.nickname}
             </h2>
           </HeaderTitleContainer>
-          <HeaderButtonContainer>
-            <PillButton
-              color={primary.primary300}
-              hoverColor={secondary.secondary500}
-              onClick={handleMoveToEditPage}
-            >
-              수정하기
-            </PillButton>
-            <PillButton
-              color={misc.red}
-              hoverColor={misc.lightred}
-              onClick={setOpenModal}
-            >
-              삭제하기
-            </PillButton>
-          </HeaderButtonContainer>
+          {isSameUser ? (
+            <HeaderButtonContainer>
+              <PillButton
+                color={primary.primary300}
+                hoverColor={secondary.secondary500}
+                onClick={handleMoveToEditPage}
+              >
+                수정하기
+              </PillButton>
+              <PillButton
+                color={misc.red}
+                hoverColor={misc.lightred}
+                onClick={setOpenModal}
+              >
+                삭제하기
+              </PillButton>
+            </HeaderButtonContainer>
+          ) : (
+            ""
+          )}
         </ContentHeaderContainer>
         <ContentContainer>
           <ContentTopContainer>
             <TopLeftContainer>
               <PosterImage alt="poster" src={ticketData.image} />
-              <h3>{ticketData.title}</h3>
-              <Price>₩ {ticketData.price}</Price>
-              <EmptySeat>
-                잔여 좌석: {ticketData.emptySeats} / {ticketData.total}
-              </EmptySeat>
-              {isReservationPossible ? (
-                <PillButton
-                  color={primary.primary300}
-                  hoverColor={secondary.secondary500}
-                >
-                  예매 가능
-                </PillButton>
-              ) : (
-                <ImpossibleButton color={misc.red}>예매 불가</ImpossibleButton>
-              )}
-            </TopLeftContainer>
-            <TopRightContainer>
-              <div>
-                <h3>{ticketData.title}</h3>
-                <h4>{ticketData.nickname}</h4>
-                <span className="title-description">
-                  {ticketData.address} / {ticketData.detailAddress}
-                </span>
-              </div>
-              <div>
-                <span className="sub-title">공연 소개</span>
-                <span className="description">{ticketData.content}</span>
-              </div>
-              <div>
-                <span className="sub-title">공연 기간 / 공연 시간</span>
-                <span className="description">
-                  {ticketData.showAt} ~ {ticketData.expiredAt} /{" "}
-                  {ticketData.showTime}시
-                </span>
-              </div>
-              <div className="location-container">
+              <TicketInfoContainer>
                 <div>
-                  <span className="location-title">위치</span>
-                  <span className="location-description">
+                  <h3>{ticketData.title}</h3>
+                  <h4>{ticketData.nickname}</h4>
+                  <span className="title-description">
                     {ticketData.address} / {ticketData.detailAddress}
                   </span>
                 </div>
-                {/* <KakaoMapButton location={dummyLocation} /> */}
+                <div>
+                  <span className="sub-title">공연 소개</span>
+                  <span className="description">{ticketData.introduction}</span>
+                </div>
+                <div>
+                  <span className="sub-title">공연 기간 / 공연 시간</span>
+                  <span className="description">
+                    {ticketData.showAt} ~ {ticketData.expiredAt} /{" "}
+                    {ticketData.showTime}시
+                  </span>
+                </div>
+                <div className="location-container">
+                  <div>
+                    <span className="location-title">위치</span>
+                    <span className="location-description">
+                      {ticketData.address} / {ticketData.detailAddress}
+                    </span>
+                  </div>
+                  <KakaoMapButton
+                    detailAddress={ticketData.detailAddress}
+                    latitude={ticketData.latitude}
+                    longitude={ticketData.longitude}
+                  />
+                </div>
+              </TicketInfoContainer>
+            </TopLeftContainer>
+            <TopRightContainer>
+              <div className="inner-container">
+                <span className="sub-title">티켓 정보</span>
+                <Price>₩ {ticketData.price}</Price>
+                <EmptySeat>
+                  잔여 좌석: {ticketData.emptySeats} / {ticketData.total}
+                </EmptySeat>
+              </div>
+              <div className="middle-container">
+                <span className="sub-title">예매 날짜 선택</span>
+                <ReactDatePicker setDate={setDate}></ReactDatePicker>
+                {dateError ? (
+                  <span className="error-message">공연 기간이 아닙니다</span>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="inner-container">
+                <span className="sub-title">수량 선택</span>
+                {isReservationPossible ? (
+                  <>
+                    <div>
+                      <button
+                        className="set-count-button"
+                        onClick={handleTicketMinus}
+                      >
+                        <FontAwesomeIcon icon={faMinus} size="1x" />
+                      </button>
+                      <input
+                        className="reservation-seat-input"
+                        onChange={handleTicketChange}
+                        type="number"
+                        value={ticketCount}
+                      />
+                      <span>매</span>
+                      <button
+                        className="set-count-button"
+                        onClick={handleTicketPlus}
+                      >
+                        <FontAwesomeIcon icon={faPlus} />
+                      </button>
+                    </div>
+                    <PillButton
+                      color={primary.primary300}
+                      hoverColor={secondary.secondary500}
+                      onClick={handleReservation}
+                    >
+                      예매하기
+                    </PillButton>
+                  </>
+                ) : (
+                  <ImpossibleButton color={misc.red}>
+                    예매 불가
+                  </ImpossibleButton>
+                )}
               </div>
             </TopRightContainer>
           </ContentTopContainer>
