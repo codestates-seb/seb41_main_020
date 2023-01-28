@@ -56,7 +56,7 @@ instance.interceptors.response.use(
             method: "GET",
             headers
           });
-        } catch(error) {
+        } finally {
           localStorage.clear();
         }
       }

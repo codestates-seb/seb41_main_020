@@ -375,7 +375,7 @@ export default function ProfileEdit() {
     formData.append("file", file[0]); // formData는 키-밸류 구조
     try {
       const result = await axios.post(
-        "http://indiego.kro.kr:80/shows/uploads",
+        `${process.env.REACT_APP_SERVER_URI}/members/${params.id}/uploads`,
         formData,
         {
           headers: {

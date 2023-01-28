@@ -2,6 +2,7 @@
 import ReviewList from "./ReviewList.jsx";
 import StarRating from "./StarRating.jsx";
 import { PillButton } from "../../Pages/Tickets/TicketsDetail.jsx";
+import useStarScoreStore from "../../store/useStarScoreStore.js";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -13,9 +14,12 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import instance from "../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components/macro";
 
 const ContentContainer = styled.div`
@@ -101,6 +105,50 @@ const ReviewWritingContainer = styled.div`
 `;
 
 export default function TicketsDetailTapReview() {
+  const { score, setScore } = useStarScoreStore((state) => state);
+  const [comment, setComment] = useState("");
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const postData = () => {
+    return instance({
+      method: "post",
+      url: `/shows/${params.id}/comments`,
+      data: { score, comment },
+    });
+  };
+
+  const postDataOnsuccess = (response) => {
+    console.log(response);
+  };
+
+  const postDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Token Expired"
+    ) {
+      window.alert("다시 로그인해주세요.");
+      localStorage.clear();
+      navigate("/");
+    } else if (error.response.status === 500) {
+      window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    }
+  };
+
+  const { mutate: postCommentData } = useMutation({
+    mutationFn: postData,
+    onSuccess: postDataOnsuccess,
+    onError: postDataOnError,
+  });
+
+  const handlePostComment = () => {
+    postCommentData();
+  };
+
+  const handleChangeComment = (e) => {
+    setComment(e.target.value);
+  };
+
   return (
     <ContentContainer>
       <div className="sub-title">한 줄 평 남기기</div>
@@ -113,11 +161,14 @@ export default function TicketsDetailTapReview() {
           <input
             maxLength="50"
             placeholder="한 줄 평은 50자 이내로 제한됩니다."
+            value={comment || ""}
+            onChange={handleChangeComment}
           />
         </div>
         <PillButton
           color={primary.primary300}
           hoverColor={secondary.secondary500}
+          onClick={handlePostComment}
         >
           작성하기
         </PillButton>

@@ -54,9 +54,9 @@ const Tabs = styled.ul`
 
 const TapContent = styled.div`
   display: flex;
+  height: max-content;
   justify-content: center;
   width: 100%;
-  min-height: 1500px;
   padding: 5%;
   scroll-margin: 120px;
 `;

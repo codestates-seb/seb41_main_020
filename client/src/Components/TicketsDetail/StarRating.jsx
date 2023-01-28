@@ -6,9 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
 import { sub, misc } from "../../styles/mixins";
+import useStarScoreStore from "../../store/useStarScoreStore";
 
 //라이브러리 및 라이브러리 메소드
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 const StarContainer = styled.div`
@@ -43,7 +44,7 @@ const Star = styled.div`
 export default function StarRating() {
   const starsArray = [0, 1, 2, 3, 4];
   const [clicked, setClicked] = useState([false, false, false, false, false]);
-  let score = clicked.filter(Boolean).length;
+  const { score, setScore } = useStarScoreStore((state) => state);
 
   const handleStarClick = (index) => {
     let clickStates = [...clicked];
@@ -51,7 +52,12 @@ export default function StarRating() {
       clickStates[i] = i <= index ? true : false;
     }
     setClicked(clickStates);
+    setScore(clicked.filter(Boolean).length);
   };
+
+  useEffect(() => {
+    setScore(clicked.filter(Boolean).length);
+  }, [clicked]);
 
   return (
     <StarContainer>

@@ -36,7 +36,7 @@ const ButtonComponent = styled.button`
 
 export default function KakaoMapButton({ detailAddress, latitude, longitude }) {
   const [locationId, setLocationId] = useState("");
-
+  console.log(detailAddress);
   const headers = {
     // eslint-disable-next-line prettier/prettier
     "Authorization": `KakaoAK ${process.env.REACT_APP_REST_API_KEY}`,
@@ -44,16 +44,19 @@ export default function KakaoMapButton({ detailAddress, latitude, longitude }) {
 
   axios
     .get(
-      `https://dapi.kakao.com/v2/local/search/keyword.json?y=${latitude}&x=${longitude}&query=${detailAddress}&page=1&size=1`,
+      `https://dapi.kakao.com/v2/local/search/keyword.json?page=1&size=15&sort=accuracy&query=${"연우 소극장"}`,
       { headers }
     )
     .then((response) => {
-      setLocationId(response.data.documents[0].id);
+      console.log(response);
+      // setLocationId(response.data.documents[0].id);
     });
 
   const handleButtonClick = () => {
     window.open(`https://map.kakao.com/link/map/${locationId}`);
   };
+
+  console.log(detailAddress, latitude, longitude);
 
   return (
     <ButtonComponent onClick={handleButtonClick}>

@@ -208,7 +208,7 @@ const EmptySeat = styled.span`
 
 const TicketInfoContainer = styled.div`
   display: flex;
-  width: 55%;
+  width: 58%;
   background-color: ${sub.sub100};
   border-radius: 10px;
   justify-content: space-between;
@@ -487,7 +487,7 @@ export default function TicketsDetail() {
 
   useEffect(() => {
     if (ticketCount <= 0) {
-      setTicketCount(1);
+      setTicketCount("");
     }
   }, [ticketCount]);
 
@@ -521,14 +521,14 @@ export default function TicketsDetail() {
     if (ticketCount >= ticketData.emptySeats) {
       return;
     }
-    setTicketCount(ticketCount + 1);
+    setTicketCount(Number(ticketCount) + 1);
   };
 
   const handleTicketMinus = () => {
     if (ticketCount <= 1) {
       return;
     }
-    setTicketCount(ticketCount - 1);
+    setTicketCount(Number(ticketCount) - 1);
   };
 
   const handleTicketChange = (e) => {
@@ -573,7 +573,7 @@ export default function TicketsDetail() {
   const handleReservation = () => {
     postReservation();
   };
-
+  console.log(ticketData);
   return (
     <>
       <TicketDeleteModal ticketId={params.id} />
@@ -615,12 +615,12 @@ export default function TicketsDetail() {
                   <h3>{ticketData.title}</h3>
                   <h4>{ticketData.nickname}</h4>
                   <span className="title-description">
-                    {ticketData.address} / {ticketData.detailAddress}
+                    {ticketData.detailAddress}
                   </span>
                 </div>
                 <div>
                   <span className="sub-title">공연 소개</span>
-                  <span className="description">{ticketData.introduction}</span>
+                  <span className="description">{ticketData.content}</span>
                 </div>
                 <div>
                   <span className="sub-title">공연 기간 / 공연 시간</span>
