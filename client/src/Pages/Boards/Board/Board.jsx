@@ -196,8 +196,7 @@ const Board = () => {
         <div className="titleDiv">
           <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
           <div className="titleInfo">
-            {new Date(boardData.createdAt).toLocaleString()} || 조회수 :{" "}
-            {boardData.view}
+            {new Date(boardData.createdAt).toLocaleString()}
           </div>
         </div>
 
