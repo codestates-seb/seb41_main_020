@@ -104,7 +104,7 @@ export default function Carousel({
   isRankMode,
   minWidth,
   maxWidth,
-  sort,
+  status,
 }) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [data, setData] = useState([]);
@@ -114,7 +114,7 @@ export default function Carousel({
 
   const fetchShowData = () => {
     return axios.get(`${serverURI}/shows`, {
-      params: { sort },
+      params: { status },
     });
   };
 
@@ -124,7 +124,7 @@ export default function Carousel({
   };
 
   const { isLoading } = useQuery({
-    queryKey: ["fetchShowData", sort],
+    queryKey: ["fetchShowData", status],
     queryFn: fetchShowData,
     onSuccess: fetchShowDataOnSuccess,
     keepPreviousData: true,

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
@@ -358,7 +358,11 @@ export default function Header() {
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const isLogin = useIsLoginStore((state) => state.isLogin);
+  const isLogin = !!localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    console.log(isLogin);
+  }, [isLogin]);
 
   useWindowSize(setNavOpen);
 

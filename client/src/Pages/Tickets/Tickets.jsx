@@ -132,13 +132,15 @@ export default function Tickets() {
   const [pageInfo, setPageInfo] = useState([]);
   const location = useLocation();
 
+  // console.log(queryParams);
+
   let searchURI = location.pathname + "?";
   queryParams.forEach((paramArr, index, arr) => {
     const queryKey = paramArr[0];
     const queryVal = paramArr[1];
 
     if (queryKey !== "page") {
-      if (index === arr.length - 1) {
+      if (index === arr.length - 2) {
         searchURI += queryKey + "=" + queryVal;
       } else {
         searchURI += queryKey + "=" + queryVal + "&";

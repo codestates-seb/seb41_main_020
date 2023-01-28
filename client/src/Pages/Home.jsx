@@ -11,10 +11,13 @@ import LocationPopup from "../Components/Main/Popups/LocationPopup.jsx";
 import LongCarousel from "../Components/Main/Carousels/LongCarousel.jsx";
 import DatePopup from "../Components/Main/Popups/DatePopup.jsx";
 
-import styled from "styled-components";
 import { dtFontSize, primary } from "../styles/mixins.js";
 import breakpoint from "../styles/breakpoint.js";
-import { dummyArr } from "../DummyData/mainDummy.js";
+import instance from "../api/core/default.js";
+
+import styled from "styled-components";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const MainContainer = styled.div`
   display: flex;
@@ -176,6 +179,8 @@ const BoardsGrid = styled.div`
 export default function Home() {
   const [LocationPopupOpen, setLocationPopupOpen] = useState(false);
   const [DatePopupOpen, setDatePopupOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState([]);
+  const isLogin = !!localStorage.getItem("accessToken");
 
   const locationPopupOnClickHandler = () => {
     setLocationPopupOpen(true);
@@ -184,6 +189,25 @@ export default function Home() {
   const datePopupOnClickHanlder = () => {
     setDatePopupOpen(true);
   };
+
+  const fetchUserInfoAtHome = () => {
+    const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+    console.log(userId);
+    return instance.get(`/members/${userId}`);
+  };
+
+  const fetchUserInfoAtHomeOnSuccess = (res) => {
+    const data = res.data.data;
+    console.log(data);
+    setUserInfo(data);
+  };
+
+  useQuery({
+    queryKey: ["fetchUserInfoAtHome", isLogin],
+    queryFn: fetchUserInfoAtHome,
+    onSuccess: fetchUserInfoAtHomeOnSuccess,
+    enabled: isLogin,
+  });
 
   return (
     <>
@@ -214,10 +238,10 @@ export default function Home() {
                 <h1>월간 예매율 순위</h1>
                 <Carousel
                   width={"70%"}
-                  minWidth={"300px"}
+                  minWidth={"320px"}
                   maxWidth={"480px"}
                   height={"100%"}
-                  sort="hot"
+                  status="별점순"
                   carouselItemList={CarouselItemList}
                   isRankMode={true}
                 ></Carousel>
@@ -226,10 +250,10 @@ export default function Home() {
                 <h1>새로 추가된 공연</h1>
                 <Carousel
                   width={"70%"}
-                  minWidth={"300px"}
+                  minWidth={"320px"}
                   maxWidth={"480px"}
                   height={"100%"}
-                  sort="new"
+                  status="최신순"
                   carouselItemList={CarouselItemList}
                 ></Carousel>
               </div>

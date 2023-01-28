@@ -152,36 +152,36 @@ export default function Carousel() {
     }
   };
 
-  useInterval(() => {
-    const viewPort = window.innerWidth;
-    if (viewPort > 900) {
-      if (currentIdx + 1 < parseInt(data.length / 3)) {
-        setCurrentIdx(currentIdx + 1);
-      } else {
-        setCurrentIdx(0);
-      }
-    } else {
-      if (data.length % 2) {
-        if (
-          currentIdx + 1 <= parseInt(data.length / 4) + 1 &&
-          currentIdx + 1 >= 0
-        ) {
-          setCurrentIdx(currentIdx + 1);
-        } else {
-          setCurrentIdx(0);
-        }
-      } else {
-        if (
-          currentIdx + 1 <= parseInt(data.length / 4) &&
-          currentIdx + 1 >= 0
-        ) {
-          setCurrentIdx(currentIdx + 1);
-        } else {
-          setCurrentIdx(0);
-        }
-      }
-    }
-  }, 3000);
+  // useInterval(() => {
+  //   const viewPort = window.innerWidth;
+  //   if (viewPort > 900) {
+  //     if (currentIdx + 1 < parseInt(data.length / 3)) {
+  //       setCurrentIdx(currentIdx + 1);
+  //     } else {
+  //       setCurrentIdx(0);
+  //     }
+  //   } else {
+  //     if (data.length % 2) {
+  //       if (
+  //         currentIdx + 1 <= parseInt(data.length / 4) + 1 &&
+  //         currentIdx + 1 >= 0
+  //       ) {
+  //         setCurrentIdx(currentIdx + 1);
+  //       } else {
+  //         setCurrentIdx(0);
+  //       }
+  //     } else {
+  //       if (
+  //         currentIdx + 1 <= parseInt(data.length / 4) &&
+  //         currentIdx + 1 >= 0
+  //       ) {
+  //         setCurrentIdx(currentIdx + 1);
+  //       } else {
+  //         setCurrentIdx(0);
+  //       }
+  //     }
+  //   }
+  // }, 3000);
 
   return (
     <Container>
@@ -190,25 +190,25 @@ export default function Carousel() {
         <Button className="my_location">나의 위치: 종로구</Button>
       </CarouselHeader>
       <CarouselContainer>
-        <PrevButton
+        {/* <PrevButton
           onClick={() => {
             pageButtonClickHandler(-1);
           }}
         >
           <img src={Arrow} alt="prev" />
-        </PrevButton>
+        </PrevButton> */}
         {isLoading ? (
           <Spinner />
         ) : (
           data && <LongCarouselItemList data={data} currentIdx={currentIdx} />
         )}
-        <NextButton
+        {/* <NextButton
           onClick={() => {
             pageButtonClickHandler(1);
           }}
         >
           <img src={Arrow} alt="next" />
-        </NextButton>
+        </NextButton> */}
       </CarouselContainer>
     </Container>
   );

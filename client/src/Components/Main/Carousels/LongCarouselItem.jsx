@@ -12,14 +12,14 @@ const ItemContainer = styled.div`
   width: 250px;
   max-width: 250px;
   height: 50%;
-  margin-right: 30px;
-  padding: 0 calc(3px + 1vw);
+  margin-right: 29px;
+  padding: 5px calc(3px + 1vw);
   background-color: ${sub.sub300};
   border-radius: 10px;
 
   @media screen and (max-width: 1100px) {
     width: calc(20vw + 38px);
-    margin-right: calc(10px + 2.3vw);
+    margin-right: calc(16px + 2.3vw);
   }
 
   @media screen and (max-width: 900px) {
@@ -64,8 +64,8 @@ const ImageContainer = styled.div`
   border-radius: 10px;
 
   img {
-    height: calc(60px + 2vw);
-    max-height: 100px;
+    width: 70px;
+    height: 85px;
     border-radius: 10px;
   }
 

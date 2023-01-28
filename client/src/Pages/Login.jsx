@@ -333,8 +333,8 @@ export default function Login() {
       response.headers.get("Authorization").split(" ")[1]
     );
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
-    setIsLogin(true);
-    window.location.replace("./");
+    setIsLogin("hi!");
+    // window.location.replace("./");
   };
 
   const postLoginOnError = (err) => {

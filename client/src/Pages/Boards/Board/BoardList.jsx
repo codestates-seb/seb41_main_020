@@ -187,7 +187,7 @@ export default function BoardList() {
 
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `http://indiego.kro.kr:80/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+      `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&?status=${urlStatus}&page=${urlPage}&size=${urlSize}`
     );
     return response.data;
   };

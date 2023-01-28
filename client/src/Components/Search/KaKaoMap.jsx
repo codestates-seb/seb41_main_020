@@ -100,13 +100,17 @@ const SearchedDataListContainer = styled.div`
     font-weight: 600;
     color: white;
     font-size: ${dtFontSize.small};
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow-x: hidden;
+    -webkit-box-orient: vertical;
   }
 
-  .address,
-  .date {
+  .artist,
+  .address {
     font-size: ${dtFontSize.xsmall};
     font-weight: 400;
-    color: #545454;
+    color: #dddddd;
   }
 `;
 
@@ -326,8 +330,8 @@ export default function KaKaoMap({ userInfo, searchedData, setSearchedData }) {
                   <span>{index + 1}.</span>
                   <div>
                     <p className="title">{`${data.title}`}</p>
-                    <p className="address">{data.address}</p>
-                    <p className="date">{`${data.showAt} - ${data.expiredAt}`}</p>
+                    <p className="artist">{data.nickname}</p>
+                    <p className="address">{`${data.address}`}</p>
                   </div>
                 </li>
               );
