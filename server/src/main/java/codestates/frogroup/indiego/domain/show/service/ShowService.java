@@ -68,9 +68,12 @@ public class ShowService {
     }
 
     @Transactional
-    public void deleteShow(Long id) {
+    public void deleteShow(Long id, Long memberId) {
 
         Show findShow = findVerifiedShow(id);
+        if(memberId != findShow.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
+        }
         showRepository.delete(findShow);
 
     }
