@@ -99,23 +99,13 @@ public class ArticleController {
 
         // 쿠키 가져오기
         Cookie[] cookies = request.getCookies();
-
-        for (Cookie cookie : cookies) {
-            log.info("cookie.name={]",cookie.getName());
-            log.info("cookie.value={]",cookie.getValue());
-            log.info("cookie.getPath={]",cookie.getPath());
-        }
-
         Boolean isVisited = false;
-
-        log.info("isVisited={}", isVisited);
 
         // 이미 조회한 게시글인 경우
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("visited_article_" + articleId) && cookie.getValue().equals("true")) {
                     isVisited = true;
-                    log.info("isVisited={}", isVisited);
                     break;
                 }
             }
