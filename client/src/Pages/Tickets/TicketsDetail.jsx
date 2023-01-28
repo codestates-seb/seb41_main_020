@@ -450,8 +450,6 @@ export default function TicketsDetail() {
   const params = useParams();
   const navigate = useNavigate();
 
-  console.log(ticketData.sellerId);
-
   useEffect(() => {
     setDateError(false);
     setIsSameUser(false);
@@ -486,6 +484,12 @@ export default function TicketsDetail() {
       setDateError(false);
     }
   }, [date]);
+
+  useEffect(() => {
+    if (ticketCount <= 0) {
+      setTicketCount(1);
+    }
+  }, [ticketCount]);
 
   const fetchData = () => {
     return axios.get(`${process.env.REACT_APP_SERVER_URI}/shows/${params.id}`);
@@ -548,18 +552,16 @@ export default function TicketsDetail() {
   };
 
   const postDataOnError = (error) => {
-    console.log(error);
-    // if (
-    //   error.response.status === 400 &&
-    //   error.response.data.message === "Token Expired"
-    // ) {
-    //   window.alert("다시 로그인해주세요.");
-    //   localStorage.clear();
-    //   setIsLogin(false);
-    //   navigate("/");
-    // } else if (error.response.status === 500) {
-    //   window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
-    // }
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Token Expired"
+    ) {
+      window.alert("다시 로그인해주세요.");
+      localStorage.clear();
+      navigate("/");
+    } else if (error.response.status === 500) {
+      window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    }
   };
 
   const { mutate: postReservation } = useMutation({
