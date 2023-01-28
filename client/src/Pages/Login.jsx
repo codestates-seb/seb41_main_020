@@ -337,7 +337,7 @@ export default function Login() {
       response.headers.get("Authorization").split(" ")[1]
     );
     localStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
-    setIsLogin(true);
+    setIsLogin("hi!");
     window.location.replace("./");
   };
 

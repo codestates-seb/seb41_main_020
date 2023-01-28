@@ -7,12 +7,11 @@ import notion from "../assets/notion.png";
 
 const FooterContainer = styled.div`
   width: 100%;
-  height: 200px;
+  height: 80px;
   margin-top: 200px;
   background-color: ${sub.sub700};
   color: white;
   display: flex;
-  flex-direction: column;
   position: relative;
 
   p {
@@ -28,8 +27,9 @@ const FooterContainer = styled.div`
 
 const FooterContent = styled.div`
   display: flex;
-  flex-direction: column;
   margin-left: 10px;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const LogoContainer = styled.div`
@@ -53,6 +53,8 @@ const FooterHeadContainer = styled.div`
 const LinkContainer = styled.div`
   display: flex;
   font-size: ${dtFontSize.small};
+  align-items: center;
+  margin-left: 20px;
 
   a {
     text-decoration: none;
@@ -81,12 +83,16 @@ const LinkContainer = styled.div`
 
 const TeamInfoContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  margin-top: 10px;
+  align-items: center;
 `;
 
 const GroupContainer = styled.div`
   display: flex;
+  margin-right: 10px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
 
   p {
     font-weight: 800;

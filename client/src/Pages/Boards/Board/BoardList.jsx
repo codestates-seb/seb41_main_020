@@ -7,6 +7,7 @@ import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 import BoardListItem from "../../../Components/Board/BoardListItem/BoardListItem";
+import Spinner from "../../../Components/Spinner";
 
 //로컬 모듈
 import {
@@ -31,6 +32,7 @@ import {
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
+import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 export const PageWrapper = styled.div`
   /* background-color: black; */
@@ -179,6 +181,18 @@ const WriteButton = styled(OKButton)`
   }
 `;
 
+export const SpinnerExtended = styled(Spinner)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  .lds-dual-ring:after {
+    border: 6px solid ${primary.primary300};
+    border-color: ${primary.primary300} transparent ${primary.primary300}
+      transparent;
+  }
+`;
+
 export default function BoardList() {
   const navigate = useNavigate();
   const { boardList, setBoardListData } = useBoardListStore();
@@ -190,18 +204,58 @@ export default function BoardList() {
   const urlSize = searchParams.get("size");
 
   const queryParams = [...searchParams.entries()];
-  console.log(queryParams);
+  const params = {};
+  queryParams.forEach((queryArr) => {
+    params[queryArr[0]] = queryArr[1];
+    console.log("queryArr : ", queryArr);
+    console.log("queryParams22 : ", params);
+  });
 
+  console.log("queryParams11 : ", queryParams);
+
+  // 게시판 별 URI
   const { pathname } = useLocation();
 
-  const userId = localStorage.getItem("userInfoStorage");
+  // 드롭다운에 보낼 URI
+  var DropdownURI = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "status") {
+      continue;
+    }
+    DropdownURI += `${queryArr[0]}=${queryArr[1]}&`;
+  }
 
-  console.log(`${urlCategory} ${urlPage} ${urlStatus} ${urlSize} ${pathname}`);
+  // SearchBar에 보낼 URI
+  var SearchBarUri = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "search") {
+      continue;
+    }
+    SearchBarUri += `${queryArr[0]}=${queryArr[1]}&`;
+  }
+  console.log("SearchBarUri : ", SearchBarUri);
+
+  // 페이지네이션에 보낼 URI
+  var PageNationURI = "";
+  for (let queryArr of queryParams) {
+    // if (queryArr[0] === "search") {
+    //   PageNationURI += `${queryArr[0]}=${queryArr[1]}`;
+    //   continue;
+    // }
+    if (queryArr[0] === "page") {
+      continue;
+    }
+    PageNationURI += `${queryArr[0]}=${queryArr[1]}&`;
+  }
+
+  // 로그인 ID 정보
+  const userId = localStorage.getItem("userInfoStorage");
 
   // 게시글 리스트 불러오기
   const axiosBoardList = async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
+      `${process.env.REACT_APP_SERVER_URI}/articles`,
+      { params }
     );
     return response.data;
   };
@@ -217,32 +271,9 @@ export default function BoardList() {
     onSuccess: axiosBoardListOnSuccess,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (isError) {
     return <div>Error : {error.message}</div>;
   }
-
-  // 게시글 정보 불러오기(하트 개수 표시를 위함)
-  // const axiosBoard = async () => {
-  //   const response = await axios.get(
-  //     `http://indiego.kro.kr:80/articles?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`
-  //   );
-  //   return response.data;
-  // };
-  // const axiosBoardListOnSuccess = (response) => {
-  //   setBoardListData(response.data);
-  //   setPageData(response.pageInfo);
-  //   window.scrollTo(0, 0);
-  // };
-
-  // const { isLoading, isError, error } = useQuery({
-  //   queryKey: ["axiosBoardList", urlPage],
-  //   queryFn: axiosBoardList,
-  //   onSuccess: axiosBoardListOnSuccess,
-  // });
 
   const handleWriteButton = () => {
     if (userId === null) {
@@ -255,22 +286,23 @@ export default function BoardList() {
 
   return (
     <PageWrapper>
-      <Aside></Aside>
-      <MobileAside></MobileAside>
+      <Aside />
+      <MobileAside />
       <BoardWrapper>
         <div className="title">{urlCategory}</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>
         <div className="dropboxDiv">
-          <Dropdown
-            location={`${pathname}?category=${urlCategory}&size=${urlSize}&page=${urlPage}`}
-          ></Dropdown>
+          <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {boardList.map((it) => (
-          <BoardListItem key={it.id} {...it} />
-        ))}
+        {isLoading ? (
+          <SpinnerExtended />
+        ) : (
+          boardList.map((it) => <BoardListItem key={it.id} {...it} />)
+        )}
+
         {console.log("*******************************")}
         {console.log(boardList)}
         {console.log("*******************************")}
@@ -281,12 +313,12 @@ export default function BoardList() {
           </WriteButton>
         </WriteButtonDiv>
         <PageNation
-          location={`${pathname}?category=${urlCategory}&status=${urlStatus}&size=${urlSize}`}
+          location={`${pathname}?${PageNationURI}`}
           pageData={pageData}
         ></PageNation>
         <SearchBar
           placeholder="검색어를 입력해주세요"
-          location={`${pathname}?category=${urlCategory}&status=${urlStatus}&page=${urlPage}&size=${urlSize}`}
+          location={`${pathname}?${SearchBarUri}`}
           setPageData={setPageData}
         ></SearchBar>
       </BoardWrapper>

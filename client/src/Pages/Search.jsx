@@ -116,7 +116,7 @@ const SearchBarContainer = styled.div`
 `;
 
 export default function Search() {
-  const isLogin = useIsLoginStore((state) => state.isLogin);
+  const isLogin = !!localStorage.getItem("accessToken");
   const [userInfo, setUserInfo] = useState({
     address: "강남구",
     location: [37.4965304, 127.024758],
@@ -131,11 +131,12 @@ export default function Search() {
 
   const fetchUserDataOnSuccess = (res) => {
     const data = res.data.data;
+    console.log(data);
     setUserInfo({
       address: data.profile[0].address || "강남구",
       location:
-        data.latitude && data.longitutde
-          ? [data.latitude, data.longitutde]
+        data.latitude && data.longitude
+          ? [data.latitude, data.longitude]
           : [37.4965304, 127.024758],
     });
   };

@@ -62,7 +62,7 @@ const SearchedDataListContainer = styled.div`
   flex-direction: column;
   background-color: ${primary.primary100}a2;
   border-radius: 10px;
-  overflow: scroll;
+  overflow-y: scroll;
   width: 90%;
   height: 60%;
   opacity: ${(props) => (props.isSearched ? 1 : 0)};
@@ -100,13 +100,17 @@ const SearchedDataListContainer = styled.div`
     font-weight: 600;
     color: white;
     font-size: ${dtFontSize.small};
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow-x: hidden;
+    -webkit-box-orient: vertical;
   }
 
-  .address,
-  .date {
+  .artist,
+  .address {
     font-size: ${dtFontSize.xsmall};
     font-weight: 400;
-    color: #545454;
+    color: #dddddd;
   }
 `;
 
@@ -304,6 +308,25 @@ export default function KaKaoMap({ userInfo, searchedData, setSearchedData }) {
     map.setCenter(new kakao.maps.LatLng(data.latitude, data.longitude));
   };
 
+  useEffect(() => {
+    console.log("in useEffect", userInfo);
+    const userXBoundary = [
+      userInfo.location[0] - 0.0040515,
+      userInfo.location[0] + 0.0040515,
+    ];
+    const userYBoundary = [
+      userInfo.location[1] - 0.0073285,
+      userInfo.location[1] + 0.0073285,
+    ];
+
+    setXBoundary(userXBoundary);
+    setYBoundary(userYBoundary);
+    setFetchTrigger(true);
+    mapElement.current.setCenter(
+      new kakao.maps.LatLng(userInfo.location[0], userInfo.location[1])
+    );
+  }, [userInfo]);
+
   return (
     <Container>
       <MapSearchPanelContainer isSearched={!!searchedData}>
@@ -326,8 +349,8 @@ export default function KaKaoMap({ userInfo, searchedData, setSearchedData }) {
                   <span>{index + 1}.</span>
                   <div>
                     <p className="title">{`${data.title}`}</p>
-                    <p className="address">{data.address}</p>
-                    <p className="date">{`${data.showAt} - ${data.expiredAt}`}</p>
+                    <p className="artist">{data.nickname}</p>
+                    <p className="address">{`${data.address}`}</p>
                   </div>
                 </li>
               );
