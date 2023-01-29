@@ -27,7 +27,7 @@ import instance from "../../api/core/default.js";
 //라이브러리 및 라이브러리 메소드
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -261,6 +261,8 @@ export default function TicketsCreate() {
   const [imageUrl, setImageUrl] = useState(
     "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
   );
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
+  const userRole = JSON.parse(localStorage.getItem("userInfoStorage"))?.role;
 
   // 티켓 post에 보낼 데이터
   const data = {
@@ -385,6 +387,15 @@ export default function TicketsCreate() {
       alert("이미지 업로드에 실패하였습니다");
     }
   };
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+    if (userRole !== "PERFORMER") {
+      navigate("/notFound");
+    }
+  }, []);
 
   return (
     <PageWrapper>

@@ -393,6 +393,7 @@ export default function TicketsEdit() {
       alert("이미지 업로드에 실패하였습니다");
     }
   };
+
   useEffect(() => {
     if (!userId) {
       navigate("/notFound");
