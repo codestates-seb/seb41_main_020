@@ -20,12 +20,16 @@
 - 
 </br>
 
-## 📌 기술 스택
+## 📌 기술 스택 및 아키텍처
+
+![아키텍처](https://user-images.githubusercontent.com/80394894/215329355-ef124266-72e1-44b4-8af3-c90261fb987d.PNG)
 
 </br>
 </br>
 
 ## 📓 ERD
+
+![인디고 erd 다이어그램](https://user-images.githubusercontent.com/80394894/215329542-fdfa3b2e-a627-4427-a68f-9cc50e2274dc.PNG)
 
 </br>
 </br>
