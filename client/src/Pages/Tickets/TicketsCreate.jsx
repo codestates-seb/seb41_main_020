@@ -292,7 +292,7 @@ export default function TicketsCreate() {
       detailPlaceRef.current.focus();
       return;
     }
-    if (startTime === "" || startTime > 24) {
+    if (startTime === "") {
       startTimeRef.current.focus();
       return;
     }
@@ -453,8 +453,8 @@ export default function TicketsCreate() {
             <div className="DatePickerInfoDiv">
               <input
                 ref={startTimeRef}
-                type="number"
-                max="24"
+                type="text"
+                max="25"
                 className="DatePickerInput"
                 placeholder="시작 시간"
                 value={startTime}
