@@ -317,7 +317,9 @@ export default function TicketsEdit() {
       window.scrollTo(0, 1850);
       return;
     }
-    createTickets();
+    if (window.confirm("수정하시겠습니까?")) {
+      createTickets();
+    }
   };
 
   const handleCreateTickets = async () => {

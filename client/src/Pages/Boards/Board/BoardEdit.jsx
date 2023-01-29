@@ -163,7 +163,9 @@ const BoardEdit = () => {
       return;
     }
 
-    editBoard();
+    if (window.confirm("수정하시겠습니까?")) {
+      editBoard();
+    }
   };
 
   const handleButton = async () => {
