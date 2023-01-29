@@ -224,7 +224,7 @@ const CancelButton = styled(PostButton)`
 
 export default function TicketsEdit() {
   const { ticketData } = useTicketDataStore();
-  const newAdress = ticketData && ticketData?.detailAddress.split(",");
+  const newAdress = ticketData && ticketData?.detailAddress.split("/");
 
   // 카테고리
   const [category, setCategory] = useState(ticketData.category); // 사용
@@ -275,7 +275,7 @@ export default function TicketsEdit() {
     category: category,
     price: ticketPrice,
     address: gu,
-    detailAddress: `${place},${detailPlace}`,
+    detailAddress: `${place}/${detailPlace}`,
     expiredAt: endDate,
     showAt: startDate,
     showTime: startTime,
