@@ -134,7 +134,6 @@ export default function Carousel({
       // const lastData = data[data.length - 1];
       data.push(data[0]);
       data.unshift(data[data.length - 1]);
-      console.log(data);
     }
 
     setData(data);
