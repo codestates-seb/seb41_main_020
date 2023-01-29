@@ -30,9 +30,6 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
 
 const BoardInfoWrapper = styled(ContentWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-top: 30px;
-  }
   .titleDiv {
     display: flex;
     justify-content: space-between;
