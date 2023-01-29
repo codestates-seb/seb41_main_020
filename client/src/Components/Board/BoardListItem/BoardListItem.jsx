@@ -58,6 +58,7 @@ const BoardItemContent = styled.div`
 `;
 
 const BoardItemCreateInfo = styled.div`
+  width: 250px;
   display: flex;
   flex-direction: row;
 
@@ -65,15 +66,19 @@ const BoardItemCreateInfo = styled.div`
     display: none;
   }
   .authorDiv {
+    width: 30px;
     font-size: ${dtFontSize.xsmall};
     font-weight: 300;
     color: ${sub.sub300};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .createDateDiv {
+    margin-left: 20px;
     font-size: ${dtFontSize.xsmall};
     font-weight: 300;
-    margin-left: 20px;
     margin-bottom: 10px;
     color: ${sub.sub300};
   }
