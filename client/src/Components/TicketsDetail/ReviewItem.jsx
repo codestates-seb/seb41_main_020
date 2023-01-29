@@ -177,7 +177,8 @@ export default function ReviewItem({ reviewData }) {
   const patchDataOnsuccess = (response) => {
     window.alert("한줄평 수정이 완료되었습니다!");
     setEditMode(!editMode);
-    queryClient.invalidateQueries("fetchReviewData");
+    queryClient.invalidateQueries("fetchReviewData", { refetchInactive: true });
+    location.reload();
   };
 
   const patchDataOnError = (error) => {
@@ -236,6 +237,8 @@ export default function ReviewItem({ reviewData }) {
   const handleDeleteComment = () => {
     deleteCommentData();
   };
+
+  console.log(reviewData.score);
 
   return (
     <ReviewItemContainer>
