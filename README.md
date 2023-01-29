@@ -2,7 +2,7 @@
 
 |김경배|김혜원|박연환|김정희|박성호|이재혁|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|||||![박성호](https://user-images.githubusercontent.com/80394894/210201174-7972272f-9b5f-4bd2-b148-bc7269b907c2.jpg)||
+|<img alt="김경배" src="" height="150" width="150">|<img alt="김혜원" src="" height="100" width="100">|<img alt="박연환" src="" height="100" width="100">|<img alt="김정희" src="" height="100" width="100">|<img alt="박성호" src="https://user-images.githubusercontent.com/80394894/210201174-7972272f-9b5f-4bd2-b148-bc7269b907c2.jpg" height="100" width="100">|<img alt="이재혁" src="https://user-images.githubusercontent.com/95069395/215324198-c238be32-d721-4c18-8cea-e56f8ca35486.png" height="100" width="100">|
 |**FE**|**FE**|**FE**|**BE**|**BE**|**BE**|
 </br>
 
@@ -13,7 +13,7 @@
 
 
 ## 🗓️ 프로젝트 기간
-- 
+- 2023.01.03 ~ 2023.02.03
 </br>
 
 ## 📚 문서
