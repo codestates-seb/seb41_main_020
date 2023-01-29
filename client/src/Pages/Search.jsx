@@ -131,7 +131,6 @@ export default function Search() {
 
   const fetchUserDataOnSuccess = (res) => {
     const data = res.data.data;
-    console.log(data);
     setUserInfo({
       address: data.profile[0].address || "강남구",
       location:

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import NotFoundSVG from "../assets/NotFound_animate.svg";
+import breakpoint from "../styles/breakpoint";
 import { dtFontSize, primary } from "../styles/mixins";
 
 const Container = styled.div`
@@ -16,6 +17,10 @@ const Container = styled.div`
     position: absolute;
     top: 5%;
     width: 400px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 350px;
+    }
   }
 
   .notfound_info {
@@ -23,7 +28,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     position: absolute;
-    top: 65%;
+    top: 95%;
 
     h1 {
       font-size: ${dtFontSize.xlarge};
@@ -34,6 +39,14 @@ const Container = styled.div`
     .small {
       font-size: ${dtFontSize.small};
       color: ${primary.primary300};
+    }
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      top: 85%;
+
+      h1 {
+        font-size: ${dtFontSize.large};
+      }
     }
   }
 `;
