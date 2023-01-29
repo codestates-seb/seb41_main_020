@@ -84,10 +84,15 @@ const ImageDiv = styled.div`
   text-align: left;
   margin-bottom: 50px;
 
-  .imageImg {
+  img {
     width: 400px;
     height: 400px;
     margin-bottom: 20px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 200px;
+      height: 200px;
+    }
   }
 
   label {
@@ -129,6 +134,7 @@ const ChoiceButtonDiv = styled.div`
     padding: 8px;
     border: 1px solid ${sub.sub400};
     margin-bottom: 5px;
+    font-size: ${dtFontSize.small};
   }
 
   .placeInput {
@@ -139,7 +145,7 @@ const ChoiceButtonDiv = styled.div`
     padding: 8px;
     border: 1px solid ${sub.sub400};
     margin-bottom: 5px;
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
   }
 `;
 
@@ -223,18 +229,23 @@ export default function TicketsCreate() {
   const [place, setPlace] = useState("어디서 공연을 하시나요?"); // 사용
   const placeRef = useRef();
   const [detailPlace, setDetailPlace] = useState(""); // 사용
+  const detailPlaceRef = useRef();
 
   // 공연 시작 정보
   const [startDate, setStartDate] = useState(""); // 사용
   const [endDate, setEndDate] = useState(""); // 사용
-  const [startTime, setStartTime] = useState("");
+  const [startTime, setStartTime] = useState(""); // 사용
+  const startTimeRef = useRef();
 
   // 공연 좌석 수
   const [sit, setSit] = useState("");
+  const sitRef = useRef();
   // 티켓 가격
   const [ticketPrice, setTicketPrice] = useState(""); // 사용
+  const ticketPriceRef = useRef();
   // 공연 상세
   const [ticketInfo, setTicketInfo] = useState(""); // 사용
+  const ticketInfoRef = useRef();
   // quill 에디터
   const [ticketsValue, setTicketsValue] = useState("");
 
@@ -252,55 +263,56 @@ export default function TicketsCreate() {
   const data = {
     title: ticketName,
     content: ticketInfo,
-    image:
-      "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
+    image: imageUrl,
     category: category,
     price: ticketPrice,
     address: gu,
-    detailAddress: `${place} ${detailPlace}`,
+    detailAddress: `${place},${detailPlace}`,
     expiredAt: endDate,
-    showAt: startTime,
-    //?
+    showAt: startDate,
     showTime: startTime,
-    detailImage:
-      "https://user-images.githubusercontent.com/95069395/211246989-dd36a342-bf18-412e-b3ec-841ab3280d56.png",
+    detailDescription: ticketsValue,
     latitude: latitude,
     longitude: longitude,
     total: sit,
   };
 
-  console.log(category);
-  console.log(ticketName);
-  console.log(gu);
-  console.log(place);
-  console.log(startDate);
-  console.log(endDate);
-  console.log(startTime);
-  console.log(sit);
-  console.log(ticketPrice);
-  console.log(ticketInfo);
-  console.log(ticketsValue);
-  console.log(latitude);
-  console.log(longitude);
   // 티켓 글 올리기
   const handlePost = () => {
     if (ticketName === "") {
       ticketNameRef.current.focus();
+      return;
     }
     if (place === "어디서 공연을 하시나요?") {
-      console.log(333);
-      placeRef.current.focus();
+      placeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
     }
-    console.log(startDate);
-    console.log(endDate);
-    console.log(startTime);
-    console.log(sit);
-    console.log(ticketPrice);
-    console.log(ticketInfo);
-    console.log(ticketsValue);
-    console.log(latitude);
-    console.log(longitude);
-    // createTickets();
+
+    if (detailPlace === "") {
+      detailPlaceRef.current.focus();
+      return;
+    }
+    if (startTime === "") {
+      startTimeRef.current.focus();
+      return;
+    }
+    if (sit === "") {
+      sitRef.current.focus();
+      return;
+    }
+    if (ticketPrice === "") {
+      ticketPriceRef.current.focus();
+      return;
+    }
+    if (ticketInfo === "") {
+      ticketInfoRef.current.focus();
+      return;
+    }
+    if (ticketsValue === "" || ticketsValue === "<p><br></p>") {
+      window.scrollTo(0, 1850);
+      return;
+    }
+    createTickets();
   };
   const handleCreateTickets = async () => {
     const response = await instance({
@@ -308,18 +320,25 @@ export default function TicketsCreate() {
       url: `${process.env.REACT_APP_SERVER_URI}/shows`,
       data,
     });
-    console.log(response);
   };
 
-  const handleCreateTicketsOnSuccess = (response) => {
-    navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
+  const handleCreateTicketsOnSuccess = () => {
+    navigate("/tickets");
+  };
+
+  const handleCreateTicketsOnError = (response) => {
+    if (response.response.status === 500) {
+      alert("서버 오류. 잠시 후 다시 시도해 주세요");
+    }
+    alert("로그인 시간이 만료되었습니다");
+    navigate("/login");
   };
 
   const { mutate: createTickets } = useMutation({
     mutationKey: ["handleCreateTickets"],
     mutationFn: handleCreateTickets,
     onSuccess: handleCreateTicketsOnSuccess,
-    // onError: postButtonOnError,
+    onError: handleCreateTicketsOnError,
   });
 
   useEffect(() => {
@@ -345,7 +364,6 @@ export default function TicketsCreate() {
   const onLoadFile = async (e) => {
     const file = e.target.files;
     const formData = new FormData();
-    console.log(file[0]);
     formData.append("file", file[0]); // formData는 키-밸류 구조
     try {
       const result = await axios.post(
@@ -358,8 +376,6 @@ export default function TicketsCreate() {
           },
         }
       );
-      console.log("result : ", result);
-      console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
       setImageUrl(result.data.data);
     } catch (error) {
       console.log(error);
@@ -393,7 +409,7 @@ export default function TicketsCreate() {
 
           <div className="postDiv">공연 포스터</div>
           <ImageDiv>
-            <img className="imageImg" src={imageUrl} alt="공연 포스터" />
+            <img src={imageUrl} alt="공연 포스터" />
             <label htmlFor="ex_file">공연 포스터 업로드</label>
             <input
               className="imgInput"
@@ -410,6 +426,7 @@ export default function TicketsCreate() {
               {place}
             </div>
             <input
+              ref={detailPlaceRef}
               className="placeInput"
               placeholder="상세 주소 입력"
               value={detailPlace}
@@ -433,6 +450,7 @@ export default function TicketsCreate() {
             시작시간 - 숫자만 입력 (ex: 9)
             <div className="DatePickerInfoDiv">
               <input
+                ref={startTimeRef}
                 type="text"
                 max="25"
                 className="DatePickerInput"
@@ -447,8 +465,9 @@ export default function TicketsCreate() {
           <div className="postDiv">공연 좌석 수</div>
           <TicketsCreateInputDiv>
             <input
+              ref={sitRef}
               className="contentInput"
-              placeholder="공연 좌석 수를 입력해주세요."
+              placeholder="공연 좌석 수"
               value={sit}
               onChange={(e) => {
                 setSit(e.target.value.replace(/[^0-9]/g, ""));
@@ -458,8 +477,9 @@ export default function TicketsCreate() {
           <div className="postDiv">티켓 가격</div>
           <TicketsCreateInputDiv>
             <input
+              ref={ticketPriceRef}
               className="contentInput"
-              placeholder="티켓 가격을 입력해주세요"
+              placeholder="티켓 가격"
               value={ticketPrice}
               onChange={(e) => {
                 setTicketPrice(e.target.value.replace(/[^0-9]/g, ""));
@@ -470,6 +490,7 @@ export default function TicketsCreate() {
           <div className="postDiv">공연 상세</div>
           <TicketsCreateInputDiv>
             <textarea
+              ref={ticketInfoRef}
               className="textAreaInput"
               value={ticketInfo}
               onChange={(e) => {

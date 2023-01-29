@@ -1,8 +1,6 @@
 package codestates.frogroup.indiego.domain.show.service;
 
-import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowComment;
@@ -11,17 +9,13 @@ import codestates.frogroup.indiego.domain.show.repository.ScoreRepository;
 import codestates.frogroup.indiego.domain.show.repository.ShowCommentRepository;
 import codestates.frogroup.indiego.global.exception.BusinessLogicException;
 import codestates.frogroup.indiego.global.exception.ExceptionCode;
-import codestates.frogroup.indiego.global.redis.RedisDao;
 import codestates.frogroup.indiego.global.redis.RedisKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -66,18 +60,14 @@ public class ShowCommentService {
         scoreRepository.setValues(key, s);
     }
 
-    public Page<ShowComment> findShowComment(Long showId, int page, int size ){
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return findShowCommentList(showId,pageable);
-    }
 
     public ShowComment findShowComment(Long showCommentId){
         Optional<ShowComment> showComment = showCommentRepository.findById(showCommentId);
         return showComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.SHOW_COMMENT_NOT_FOUND));
     }
 
-    public Page<ShowComment> findShowCommentList(Long showId, Pageable pageable){
-        Page<ShowComment> showCommentList = showCommentRepository.findAllByShowId(showId, pageable);
+    public List<ShowComment> findShowCommentList(Long showId){
+        List<ShowComment> showCommentList = showCommentRepository.findAllByShowId(showId);
         if(showCommentList == null){
             throw new BusinessLogicException(ExceptionCode.SHOW_COMMENT_NOT_FOUND);
         }

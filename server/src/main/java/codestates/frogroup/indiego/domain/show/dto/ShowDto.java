@@ -48,8 +48,6 @@ public class ShowDto {
 
         @NotNull
         private Integer total; // 정원
-        @NotNull
-        private String introduction;
     }
 
 
@@ -78,8 +76,6 @@ public class ShowDto {
         private Double longitude;
 
         private Integer total; // 정원
-
-        private String introduction;
 
     }
 
@@ -115,7 +111,6 @@ public class ShowDto {
         private Integer emptySeats;
         private boolean isBookmarked;
         private String nickname;
-        private String introduction;
     }
 
     @Getter
@@ -145,7 +140,6 @@ public class ShowDto {
         private String status;
         private Double scoreAverage; // 평균별점
         private Integer total; // 정원
-        private String introduction;
 
     }
 

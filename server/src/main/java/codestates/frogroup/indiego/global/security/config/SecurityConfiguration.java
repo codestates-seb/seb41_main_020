@@ -59,12 +59,14 @@ public class SecurityConfiguration {
 						.antMatchers(HttpMethod.PATCH, "/members/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PUT, "/members/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.DELETE, "/members/**").hasAnyRole("USER","PERFORMER","ADMIN")
-						.antMatchers(HttpMethod.POST, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.POST, "/shows").hasAnyRole("PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.POST, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.GET, "/shows/seller").hasAnyRole("PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.PATCH, "/shows/*").hasAnyRole("PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PATCH, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PUT, "/shows/**").hasAnyRole("USER","PERFORMER","ADMIN")
-						.antMatchers(HttpMethod.DELETE, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.DELETE, "/shows").hasAnyRole("PERFORMER","ADMIN")
+						.antMatchers(HttpMethod.DELETE, "/shows/**").hasAnyRole("USER", "PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.POST, "/articles/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PATCH, "/articles/**").hasAnyRole("USER","PERFORMER","ADMIN")
 						.antMatchers(HttpMethod.PUT, "/articles/**").hasAnyRole("USER","PERFORMER","ADMIN")
@@ -94,6 +96,7 @@ public class SecurityConfiguration {
 		configuration.addExposedHeader("Refresh");
 		configuration.addAllowedHeader("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setMaxAge(3600L);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);

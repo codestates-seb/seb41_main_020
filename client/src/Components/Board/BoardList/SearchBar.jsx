@@ -50,7 +50,7 @@ const SearchBar = ({ location, placeholder, setPageData }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
   const navigate = useNavigate();
-  const [searchParamse, setSearchParamase] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -60,13 +60,14 @@ const SearchBar = ({ location, placeholder, setPageData }) => {
 
   const handlePage = async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles?${location}&search=${value}
+      `${process.env.REACT_APP_SERVER_URI}/articles?${location}search=${value}
       `
     );
     setBoardListData(response.data.data);
     setPageData(response.data.pageInfo);
-    searchParamse.append("search", value);
-    setSearchParamase(searchParamse);
+    searchParams.set("search", value);
+    searchParams.set("page", 1);
+    setSearchParams(searchParams);
 
     window.scrollTo(0, 0);
   };

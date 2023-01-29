@@ -5,10 +5,12 @@ import codestates.frogroup.indiego.domain.article.entity.Article;
 import codestates.frogroup.indiego.domain.article.dto.ArticleDto;
 import codestates.frogroup.indiego.domain.article.mapper.ArticleMapper;
 import codestates.frogroup.indiego.domain.article.service.ArticleService;
+import codestates.frogroup.indiego.domain.member.entity.Member;
 import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.PagelessMultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
+import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -95,8 +98,10 @@ public class ArticleController {
     @GetMapping("/{article-id}")
     public ResponseEntity getArticle(@Positive @PathVariable("article-id") Long articleId,
                                      HttpServletRequest request,
-                                     HttpServletResponse response) {
+                                     HttpServletResponse response,
+                                     @AuthenticationPrincipal Member member) {
 
+//        log.info("member={}, id={}, name={}, auth={}", member, member.getId(), member.getEmail(), member.getRoles());
         // 쿠키 가져오기
         Cookie[] cookies = request.getCookies();
         Boolean isVisited = false;
@@ -111,7 +116,7 @@ public class ArticleController {
             }
         }
 
-        ArticleDto.Response responseDto = articleService.findArticle(articleId);
+        ArticleDto.Response responseDto = articleService.findArticle(articleId, member);
 
         // 조회한 게시글이 아닌 경우
         if (!isVisited) {
@@ -119,6 +124,9 @@ public class ArticleController {
 
             Cookie newCookie = new Cookie("visited_article_" + articleId, "true");
             newCookie.setMaxAge(60 * 60 * 24); // 하루
+            newCookie.setPath("/");
+            newCookie.setDomain("indiego.site");
+//            newCookie.setHttpOnly(true);
             response.addCookie(newCookie);
             responseDto.setView(viewCount);
         }

@@ -2,8 +2,6 @@ package codestates.frogroup.indiego.domain.show.service;
 
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
-import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
-import codestates.frogroup.indiego.domain.member.service.MemberService;
 import codestates.frogroup.indiego.domain.show.dto.ShowReservationDto;
 import codestates.frogroup.indiego.domain.show.entity.Show;
 import codestates.frogroup.indiego.domain.show.entity.ShowReservation;
@@ -43,9 +41,12 @@ public class ShowReservationService {
 
 
     @Transactional
-    public void deleteShow(Long id) {
+    public void deleteShow(Long id, Long memberId) {
         ShowReservation reservation = findVerifiedReservation(id);
         Show show = reservation.getShow();
+        if(memberId != reservation.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
+        }
         if(show.getStatus() == Show.ShowStatus.SOLD_OUT){
             show.setStatus(Show.ShowStatus.SALE);
         }

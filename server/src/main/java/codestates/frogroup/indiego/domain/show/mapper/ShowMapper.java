@@ -24,7 +24,6 @@ public interface ShowMapper {
     @Mapping(source = "detailDescription", target = "showBoard.detailDescription")
     @Mapping(source = "detailAddress", target = "showBoard.detailAddress")
     @Mapping(source = "showTime", target = "showBoard.showTime")
-    @Mapping(source = "introduction", target = "introduction")
     Show showPostDtoToShow(ShowDto.Post post);
 
     @Mapping(source = "title", target = "showBoard.board.title")
@@ -40,7 +39,6 @@ public interface ShowMapper {
     @Mapping(source = "detailDescription", target = "showBoard.detailDescription")
     @Mapping(source = "detailAddress", target = "showBoard.detailAddress")
     @Mapping(source = "showTime", target = "showBoard.showTime")
-    @Mapping(source = "introduction", target = "introduction")
     Show showPatchDtoToShow(ShowDto.Patch patch);
 
     @Mapping(source = "showBoard.board.title", target = "title")
@@ -57,7 +55,6 @@ public interface ShowMapper {
     @Mapping(source = "showBoard.detailDescription", target = "detailDescription")
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
     @Mapping(source = "showBoard.showTime", target = "showTime")
-    @Mapping(source = "introduction", target = "introduction")
     ShowDto.postResponse showToShowPostResponse(Show show);
 
     @Mapping(source = "showBoard.board.title", target = "title")
@@ -76,7 +73,6 @@ public interface ShowMapper {
     @Mapping(source = "showBoard.detailAddress", target = "detailAddress")
     @Mapping(source = "showBoard.showTime", target = "showTime")
     @Mapping(source = "member.profile.nickname", target = "nickname")
-    @Mapping(source = "introduction", target = "introduction")
     ShowDto.Response showToShowResponse(Show show);
 
     @Mapping(source = "id", target = "id")
@@ -113,7 +109,6 @@ public interface ShowMapper {
     @Mapping(source = "detailAddress", target = "showBoard.detailAddress")
     @Mapping(source = "showTime", target = "showBoard.showTime")
     @Mapping(source = "nickname", target = "member.profile.nickname")
-    @Mapping(source = "introduction", target = "introduction")
     Show showResponseToShow(ShowDto.Response response);
 
 }

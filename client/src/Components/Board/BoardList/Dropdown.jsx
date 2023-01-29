@@ -62,21 +62,19 @@ const Dropdown = ({ location }) => {
   const [toggle, setToggle] = useState(false);
   const [value, setValue] = useState("최신순");
   const { setBoardListData } = useBoardListStore();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const urlStatus = searchParams.get("status");
 
   const navigate = useNavigate();
 
   const handleDropdown = async (props) => {
     setToggle(!toggle);
-    console.log(123);
-    console.log(location);
 
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles?${location}&status=${props}`
+      `${process.env.REACT_APP_SERVER_URI}/articles?${location}status=${props}`
     );
     setBoardListData(response.data.data);
-    navigate(`${location}&status=${props}`);
+    navigate(`${location}status=${props}`);
     setValue(props);
   };
   return (

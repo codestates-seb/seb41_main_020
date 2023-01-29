@@ -1,11 +1,17 @@
 //페이지, 리액트 컴포넌트, 정적 파일
 import breakpoint from "../../../styles/breakpoint.js";
-import { PageWrapper, ContentWrapper, BoardItem } from "./BoardList.jsx";
+import {
+  PageWrapper,
+  ContentWrapper,
+  BoardItem,
+  SpinnerExtended,
+} from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
 import instance from "../../../api/core/default.js";
 import yellowHeart from "../../../assets/yellowHeart.gif";
 import blueHeart from "../../../assets/blueHeart.gif";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 //로컬 모듈
 import {
@@ -18,7 +24,7 @@ import {
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
@@ -60,6 +66,10 @@ const QuillViewDiv = styled.div`
 
   > * img {
     max-width: 1000px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      max-width: 350px;
+    }
   }
 `;
 
@@ -159,30 +169,32 @@ const Board = () => {
 
   // Board 내용 가져오기
   const axiosBoard = async () => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles/${id}`
-    );
+    const response = await instance({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
+    });
     return response.data;
   };
 
   const axiosBoardSuccess = (response) => {
-    console.log("&&&&&&&&&&&&&&&&&");
-    console.log(response);
-    console.log("&&&&&&&&&&&&&&&&&");
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
+  };
+
+  const axiosBoardError = (response) => {
+    if (response.response.status === 400) {
+      navigate("/notFound");
+    }
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
     queryKey: ["axiosBoard", answerListData],
     queryFn: axiosBoard,
     onSuccess: axiosBoardSuccess,
+    onError: axiosBoardError,
+    retry: false,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   if (isError) {
     return <div>Error : {error.message}</div>;
@@ -193,17 +205,23 @@ const Board = () => {
       <BoardInfoWrapper>
         <div className="title">{boardData.title}</div>
         <div className="titleDiv">
-          <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
+          <Link className="titleInfo" to={`/members/${boardData.memberId}`}>
+            글쓴이 : {boardData.nickname}
+          </Link>
           <div className="titleInfo">
-            {new Date(boardData.createdAt).toLocaleString()} || 조회수 :{" "}
-            {boardData.view}
+            {new Date(boardData.createdAt).toLocaleString()}
           </div>
         </div>
 
         <div className="lineDiv"></div>
-        <QuillViewDiv
-          dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
-        ></QuillViewDiv>
+        {isLoading ? (
+          <SpinnerExtended />
+        ) : (
+          <QuillViewDiv
+            dangerouslySetInnerHTML={{ __html: boardData.content }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
+          ></QuillViewDiv>
+        )}
+
         <HeartItem>
           <div className="likeDiv">
             <button className="heartButton" onClick={() => heartCount()}>

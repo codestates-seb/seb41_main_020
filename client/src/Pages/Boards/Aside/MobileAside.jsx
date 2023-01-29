@@ -7,20 +7,21 @@ import { primary, mbFontSize, sub } from "../../../styles/mixins";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const MobileAsideDiv = styled.div`
-  z-index: 15;
-  position: fixed;
+  /* z-index: 15;
+  position: fixed; */
   width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
-  padding: 0 50px;
+  padding: 0 px;
   border-bottom: 3px solid ${sub.sub200};
   background-color: white;
   overflow-x: scroll;
+  margin-bottom: 20px;
 
-  ::-webkit-scrollbar {
+  /* ::-webkit-scrollbar {
     display: none;
-  }
+  } */
 
   display: none;
 
@@ -37,7 +38,7 @@ const MobileAsideDiv = styled.div`
       font-size: ${mbFontSize.medium};
       width: 120px;
       height: 40px;
-      margin: 0 10px;
+      margin-right: 20px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -50,7 +51,7 @@ const MobileAsideDiv = styled.div`
       font-size: ${mbFontSize.medium};
       width: 120px;
       height: 40px;
-      margin: 0 10px;
+      margin-right: 20px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -74,7 +75,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/free");
+            navigate(
+              "/board/free?category=자유게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           자유 게시판
@@ -86,7 +89,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/employ");
+            navigate(
+              "/board/employ?category=구인게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           구인 게시판
@@ -98,7 +103,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/request");
+            navigate(
+              "/board/request?category=요청게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           요청 게시판
@@ -110,7 +117,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/advertise");
+            navigate(
+              "/board/advertise?category=홍보게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           홍보 게시판
@@ -122,7 +131,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/review");
+            navigate(
+              "/board/review?category=후기게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           후기 게시판

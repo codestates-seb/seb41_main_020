@@ -1,5 +1,4 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import heart from "../../../assets/heart.svg";
 import pen from "../../../assets/pen.svg";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Aside from "../Aside/Aside.jsx";
@@ -7,6 +6,8 @@ import MobileAside from "../Aside/MobileAside.jsx";
 import SearchBar from "../../../Components/Board/BoardList/SearchBar.jsx";
 import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
+import BoardListItem from "../../../Components/Board/BoardListItem/BoardListItem";
+import Spinner from "../../../Components/Spinner";
 
 //로컬 모듈
 import {
@@ -20,14 +21,20 @@ import breakpoint from "../../../styles/breakpoint";
 import BoardDummy from "../../../DummyData/BoardDummy.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useBoardListStore from "../../../store/useBoardListStore";
 
 export const PageWrapper = styled.div`
+  /* background-color: black; */
   display: flex;
   text-align: center;
 `;
@@ -39,11 +46,13 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   width: 60%;
   padding-left: 10px;
-  height: 1400px;
+  height: max-content;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-left: 50px;
-    width: 90%;
+    margin-top: 0;
+    width: 95%;
+    margin-left: 10px;
+    padding-left: 0;
   }
 
   .title {
@@ -80,11 +89,7 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-const BoardWrapper = styled(ContentWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-top: 130px;
-  }
-`;
+const BoardWrapper = styled(ContentWrapper)``;
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;
@@ -125,71 +130,15 @@ export const BoardItem = styled.div`
     text-align: center;
     justify-content: center;
     width: 120px;
+    padding: 3px 0;
+
+    img {
+      width: 100px;
+    }
 
     @media screen and (max-width: ${breakpoint.mobile}) {
       display: none;
     }
-  }
-`;
-
-const BoardItemContent = styled.div`
-  margin-left: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    justify-content: flex-start;
-  }
-
-  .titleButton {
-    width: max-content;
-    margin-top: 10px;
-    font-size: ${dtFontSize.medium};
-    font-weight: 700;
-    text-align: left;
-    color: ${sub.sub900};
-    background-color: white;
-    border: none;
-    cursor: pointer;
-
-    @media screen and (max-width: ${breakpoint.mobile}) {
-      margin-top: 10px;
-      font-size: ${mbFontSize.large};
-    }
-  }
-  .contentDiv {
-    font-size: ${dtFontSize.small};
-    font-weight: 500;
-    text-align: left;
-    color: ${sub.sub700};
-
-    @media screen and (max-width: ${breakpoint.mobile}) {
-      margin-top: 10px;
-      font-size: ${mbFontSize.medium};
-    }
-  }
-`;
-
-const BoardItemCreateInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    display: none;
-  }
-  .authorDiv {
-    font-size: ${dtFontSize.xsmall};
-    font-weight: 300;
-    color: ${sub.sub300};
-  }
-
-  .createDateDiv {
-    font-size: ${dtFontSize.xsmall};
-    font-weight: 300;
-    margin-left: 20px;
-    margin-bottom: 10px;
-    color: ${sub.sub300};
   }
 `;
 
@@ -198,6 +147,11 @@ const WriteButtonDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: right;
+
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    justify-content: center;
+    margin: 30px 0;
+  }
 
   & :hover {
     background-color: ${secondary.secondary500};
@@ -223,88 +177,131 @@ const WriteButton = styled(OKButton)`
   }
 `;
 
-export default function BoardList() {
+export const SpinnerExtended = styled(Spinner)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  .lds-dual-ring:after {
+    border: 6px solid ${primary.primary300};
+    border-color: ${primary.primary300} transparent ${primary.primary300}
+      transparent;
+  }
+`;
+
+export default function AdvertiseBoardList() {
   const navigate = useNavigate();
-  // const { boardList, getBoardListData } = boardListStore();
+  const { boardList, setBoardListData } = useBoardListStore();
+  const [pageData, setPageData] = useState([]);
+  const [searchParams] = useSearchParams();
+  const urlPage = searchParams.get("page");
+  const urlCategory = searchParams.get("category");
+  const urlStatus = searchParams.get("status");
+  const urlSize = searchParams.get("size");
 
-  // const axiosBoardList = async () => {
-  //   const response = await axios.get(
-  //     `http://ec2-13-125-98-211.ap-northeast-2.compute.amazonaws.com/articles`,
-  //     { withCredentials: true }
-  //   );
-  //   return response.data.data;
-  // };
+  const queryParams = [...searchParams.entries()];
+  const params = {};
+  queryParams.forEach((queryArr) => {
+    params[queryArr[0]] = queryArr[1];
+  });
 
-  // const { isLoading, isError, data, error } = useQuery(
-  //   ["axiosBoardList"],
-  //   axiosBoardList
-  // );
+  // 게시판 별 URI
+  const { pathname } = useLocation();
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  // 드롭다운에 보낼 URI
+  var DropdownURI = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "status") {
+      continue;
+    }
+    DropdownURI += `${queryArr[0]}=${queryArr[1]}&`;
+  }
 
-  // if (isError) {
-  //   return <div>Error : {error.message}</div>;
-  // }
+  // SearchBar에 보낼 URI
+  var SearchBarUri = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "search") {
+      continue;
+    }
+    SearchBarUri += `${queryArr[0]}=${queryArr[1]}&`;
+  }
 
-  // console.log(data);
-  // getBoardListData(data); // zustand로 가져감
+  // 페이지네이션에 보낼 URI
+  var PageNationURI = "";
+  for (let queryArr of queryParams) {
+    if (queryArr[0] === "page") {
+      continue;
+    }
+    PageNationURI += `${queryArr[0]}=${queryArr[1]}&`;
+  }
+
+  // 로그인 ID 정보
+  const userId = localStorage.getItem("userInfoStorage");
+
+  // 게시글 리스트 불러오기
+  const axiosBoardList = async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URI}/articles`,
+      { params }
+    );
+    return response.data;
+  };
+  const axiosBoardListOnSuccess = (response) => {
+    setBoardListData(response.data);
+    setPageData(response.pageInfo);
+    window.scrollTo(0, 0);
+  };
+
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["axiosBoardList", urlPage],
+    queryFn: axiosBoardList,
+    onSuccess: axiosBoardListOnSuccess,
+  });
+
+  if (isError) {
+    return <div>Error : {error.message}</div>;
+  }
+
+  const handleWriteButton = () => {
+    if (userId === null) {
+      alert("로그인 후 이용할 수 있습니다");
+      navigate("/login");
+      return;
+    }
+    navigate(`${pathname}/create`);
+  };
 
   return (
     <PageWrapper>
-      <Aside></Aside>
-      <MobileAside></MobileAside>
+      <Aside />
       <BoardWrapper>
+        <MobileAside />
         <div className="title">홍보게시판</div>
         <div className="titleInfo">공연을 홍보할 수 있는 게시판 입니다.</div>
         <div className="dropboxDiv">
-          <Dropdown></Dropdown>
+          <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {/* boardList 가져오기 */}
-        {BoardDummy.map((it) => (
-          <BoardItem key={it.id}>
-            <div className="likeDiv">
-              <div>
-                <div className="heartImageDiv">
-                  <img width={30} src={heart} alt="heart"></img>
-                </div>
-              </div>
-              <div className="heartCount">157</div>
-            </div>
-            <div className="imageDiv">
-              <img width={50} src={heart} alt="heart"></img>
-            </div>
-            <BoardItemContent>
-              <button
-                className="titleButton"
-                onClick={() => {
-                  navigate("/board/1");
-                }}
-              >
-                {it.title}
-              </button>
-              <div className="contentDiv">{it.content}</div>
-              <BoardItemCreateInfo>
-                <div className="authorDiv">{it.author}</div>
-                <div className="createDateDiv">{it.createdData}</div>
-              </BoardItemCreateInfo>
-            </BoardItemContent>
-          </BoardItem>
-        ))}
+        {isLoading ? (
+          <SpinnerExtended />
+        ) : (
+          boardList.map((it) => <BoardListItem key={it.id} {...it} />)
+        )}
         <WriteButtonDiv>
-          <WriteButton
-            onClick={() => {
-              navigate("/board/create");
-            }}
-          >
+          <WriteButton onClick={handleWriteButton}>
             <img className="pencelImage" src={pen} alt="pen"></img>
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
         </WriteButtonDiv>
-        <PageNation></PageNation>
-        <SearchBar placeholder="검색어를 입력해주세요"></SearchBar>
+        <PageNation
+          location={`${pathname}?${PageNationURI}`}
+          pageData={pageData}
+        ></PageNation>
+        <SearchBar
+          placeholder="검색어를 입력해주세요"
+          location={`${pathname}?${SearchBarUri}`}
+          setPageData={setPageData}
+        ></SearchBar>
       </BoardWrapper>
     </PageWrapper>
   );

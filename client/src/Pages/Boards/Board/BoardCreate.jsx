@@ -9,7 +9,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import instance from "../../../api/core/default.js";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 export const PostWrapper = styled(ContentWrapper)`
@@ -17,6 +17,7 @@ export const PostWrapper = styled(ContentWrapper)`
   padding-right: 10px;
   height: max-content;
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 30px;
     width: 99%;
   }
 `;
@@ -96,11 +97,14 @@ const BoardCreate = () => {
   const [contentValue, setContentValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
   const [titleValue, setTitleValue] = useState("");
-  const { id } = useParams();
   const navigate = useNavigate();
-  const { pathname } = useLocation;
   const arrayRef = useRef([""]);
   const titleRef = useRef();
+  const { pathname } = useLocation();
+
+  // 기존 경로에서 /create를 빼는 작업
+  const newPathName = pathname.split("/");
+  const PathNameURI = `${newPathName[1]}/${newPathName[2]}`;
 
   const handlePost = () => {
     if (categoryValue === "") {
@@ -109,7 +113,6 @@ const BoardCreate = () => {
     }
     if (titleValue.length < 1) {
       titleRef.current.focus();
-      console.log(321);
       return;
     }
 
@@ -139,15 +142,12 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = () => {
-    navigate(`/board/free?category=자유게시판&status=최신순&page=1&size=10`);
+    navigate(
+      `/${PathNameURI}?category=${categoryValue}&status=최신순&page=1&size=10`
+    );
   };
 
   const handleButtonOnError = () => {
-    // if (response.response.status === 401) {
-    //   alert("로그인 후 이용하세요");
-    //   navigate("/login");
-    //   return;
-    // }
     alert("로그인 후 이용하세요");
     navigate("/login");
   };
@@ -193,7 +193,6 @@ const BoardCreate = () => {
               placeholder={"내용을 입력해주세요."}
               arrayRef={arrayRef.current}
             ></Editor>
-            {console.log(contentValue)}
           </ContentInputDiv>
           <PostButton type="button" onClick={handlePost}>
             글 올리기
