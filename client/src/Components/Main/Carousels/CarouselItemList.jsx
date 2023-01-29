@@ -21,17 +21,18 @@ const ItemsContainer = styled.div`
   width: 250px;
   height: 100%;
   margin-left: ${(props) => props.currentIdx * -250}px;
-  transition: ${(props) => (props.isLast ? "unset" : "all 0.5s ease-in-out")};
+  transition: ${(props) =>
+    props.transition ? "all 0.5s ease-in-out" : "unset"};
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     margin-left: ${(props) => props.currentIdx * -100}%;
   }
 `;
 
-export default function CarouselItemList({ data, currentIdx }) {
+export default function CarouselItemList({ data, currentIdx, transition }) {
   return (
     <RendererContainer>
-      <ItemsContainer isLast={currentIdx === 0} currentIdx={currentIdx}>
+      <ItemsContainer transition={transition} currentIdx={currentIdx}>
         {data.map((item, index) => {
           return <Item data={item} key={index} />;
         })}

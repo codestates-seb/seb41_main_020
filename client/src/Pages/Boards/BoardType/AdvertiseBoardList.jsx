@@ -49,6 +49,7 @@ export const ContentWrapper = styled.div`
   height: max-content;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 0;
     width: 95%;
     margin-left: 10px;
     padding-left: 0;
@@ -88,11 +89,7 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-const BoardWrapper = styled(ContentWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-top: 130px;
-  }
-`;
+const BoardWrapper = styled(ContentWrapper)``;
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;
@@ -286,8 +283,8 @@ export default function AdvertiseBoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
+        <MobileAside />
         <div className="title">홍보게시판</div>
         <div className="titleInfo">공연을 홍보할 수 있는 게시판 입니다.</div>
         <div className="dropboxDiv">

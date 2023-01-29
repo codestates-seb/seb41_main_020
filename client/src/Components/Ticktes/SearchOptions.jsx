@@ -277,7 +277,6 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
   useEffect(() => {
     let newSearchURI = currentURL.pathname + "?";
     let newQueryParams = [];
-    console.log(queryParams, "qp");
     if (queryParams.length > 0) {
       newQueryParams = newQueryParams.concat(queryParams.slice(0, 2));
     }
@@ -286,7 +285,6 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
         newQueryParams.push(param);
       }
     });
-    console.log(newQueryParams);
     newQueryParams.forEach((param) => {
       if (param) {
         const queryKey = param[0];
