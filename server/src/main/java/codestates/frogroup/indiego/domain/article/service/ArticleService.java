@@ -222,14 +222,21 @@ public class ArticleService {
         if (member == null) {
             response.setLikeStatus(false);
         } else {
-            ArticleLike articleLike =
-                    articleLikeRepository.findByMemberIdAndArticleId(member.getId(), article.getId());
-            if (articleLike == null) {
-                response.setLikeStatus(false);
-            } else {
-                response.setLikeStatus(true);
-            }
+            ArticleLike articleLike = articleLikeRepository.findByMemberIdAndArticleId(member.getId(), article.getId());
+            response.setLikeStatus(articleLike != null);
         }
+
+//        if (member == null) {
+//            response.setLikeStatus(false);
+//        } else {
+//            ArticleLike articleLike =
+//                    articleLikeRepository.findByMemberIdAndArticleId(member.getId(), article.getId());
+//            if (articleLike == null) {
+//                response.setLikeStatus(false);
+//            } else {
+//                response.setLikeStatus(true);
+//            }
+//        }
 
         return response;
     }
