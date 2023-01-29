@@ -510,8 +510,7 @@ export default function TicketsDetail() {
   };
 
   const fetchDataOnError = (error) => {
-    window.alert("존재하지 않는 공연입니다.");
-    navigate("/");
+    navigate("/notFound");
   };
 
   const { isLoading } = useQuery({
@@ -542,7 +541,6 @@ export default function TicketsDetail() {
   };
 
   const handleTicketChange = (e) => {
-    console.log(Number(e.target.value));
     if (Number(e.target.value) > ticketData.emptySeats) {
       return;
     }

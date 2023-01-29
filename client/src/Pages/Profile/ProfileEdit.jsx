@@ -285,7 +285,7 @@ export default function ProfileEdit() {
   const [nicknameInputOnFocus, setNicknameInputOnFocus] = useState(false);
   const [introduction, setIntroduction] = useState("");
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
-  const { profileData, setProfileData } = useProfileDataStore((state) => state);
+  const [profileData, setProfileData] = useState();
   const navigate = useNavigate();
   const params = useParams();
 
@@ -296,23 +296,17 @@ export default function ProfileEdit() {
     useSelectedProfileLocationStore((selectedLocation) => selectedLocation);
 
   const handleProfilEditPageColor = () => {
-    if (profileData && profileData.role === "PERFORMER") {
+    const role = JSON.parse(localStorage.getItem("userInfoStorage")).role;
+    if (role === "PERFORMER") {
       setfontColor(secondary.secondary600);
       setButtonColor(secondary.secondary500);
       setButtonHoverColor(primary.primary200);
-    } else if (profileData && profileData.role === "USER") {
+    } else if (role === "USER") {
       setfontColor(primary.primary500);
       setButtonColor(primary.primary300);
       setButtonHoverColor(secondary.secondary500);
     }
   };
-
-  useEffect(() => {
-    setImageUrl(profileData && profileData.profile[0].image);
-    setNickname(profileData && profileData.profile[0].nickname);
-    setIntroduction(profileData && profileData.profile[0].introduction);
-    handleProfilEditPageColor();
-  }, []);
 
   useEffect(() => {
     if (nickname && nickname.length <= 10) {
@@ -371,7 +365,6 @@ export default function ProfileEdit() {
   const onLoadFile = async (e) => {
     const file = e.target.files;
     const formData = new FormData();
-    console.log(file[0]);
     formData.append("file", file[0]); // formData는 키-밸류 구조
     try {
       const result = await axios.post(
@@ -384,112 +377,156 @@ export default function ProfileEdit() {
           },
         }
       );
-      console.log("result : ", result);
-      console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
       setImageUrl(result.data.data);
     } catch (error) {
-      console.log(error);
+      window.alert("이미지 업로드에 실패했습니다.");
     }
   };
 
+  const fetchData = () => {
+    return instance({
+      method: "get",
+      url: `/members/${params.id}/mypage`,
+    });
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    setProfileData(response.data.data && response.data.data);
+    setImageUrl(response.data.data && response.data.data.profile[0].image);
+    setNickname(response.data.data && response.data.data.profile[0].nickname);
+    setIntroduction(
+      response.data.data && response.data.data.profile[0].introduction
+    );
+    handleProfilEditPageColor();
+  };
+
+  const fetchDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Member is not the same"
+    ) {
+      navigate("/notFound");
+    } else if (
+      error.response.status === 404 &&
+      error.response.data.message === "Anonymous User"
+    ) {
+      navigate("/notFound");
+    }
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchUserProfileData"],
+    queryFn: fetchData,
+    keepPreviousData: true,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
+
   return (
-    <Container>
-      <SelectProfileLocationModal />
-      <ContentHeaderContainer>
-        <PageTitleContainer>
-          <PageTitle fontColor={fontColor}>마이페이지</PageTitle>
-        </PageTitleContainer>
-      </ContentHeaderContainer>
-      <ContentContainer>
-        <SubTitleContainer>
-          <SubTitle fontColor={fontColor}>내 정보 수정하기</SubTitle>
-          <span>내 정보를 확인하고 수정할 수 있습니다</span>
-        </SubTitleContainer>
-        <EditContainer>
-          <div className="edit-profile-image-container">
-            <EditContainerSubTitle fontColor={fontColor}>
-              나의 프로필 사진
-            </EditContainerSubTitle>
-            <div className="profile-image-container">
-              <img alt="profile img" src={imageUrl} />
-              <input
-                className="imgInput"
-                type="file"
-                id="ex_file"
-                accept="img/*"
-                onChange={onLoadFile}
-              />
-            </div>
-            <p>
-              이미지 파일의 형식은 jpg, jpeg, png로 권장합니다 <br /> 파일의
-              크기는 10MB 이하로 제한됩니다
-            </p>
-          </div>
-          <div className="edit-nickname-container">
-            <EditContainerSubTitle fontColor={fontColor}>
-              닉네임
-            </EditContainerSubTitle>
-            <input
-              className="nickname-input"
-              maxLength="10"
-              value={nickname || ""}
-              onChange={(e) => {
-                setNickname(e.target.value);
-              }}
-              onFocus={() => setNicknameInputOnFocus(true)}
-            />
-            {nicknameInputOnFocus ? (
-              <ul className="validation-message-container">
-                {nicknameValid ? (
-                  ""
+    <>
+      {profileData ? (
+        <Container>
+          <SelectProfileLocationModal />
+          <ContentHeaderContainer>
+            <PageTitleContainer>
+              <PageTitle fontColor={fontColor}>마이페이지</PageTitle>
+            </PageTitleContainer>
+          </ContentHeaderContainer>
+          <ContentContainer>
+            <SubTitleContainer>
+              <SubTitle fontColor={fontColor}>내 정보 수정하기</SubTitle>
+              <span>내 정보를 확인하고 수정할 수 있습니다</span>
+            </SubTitleContainer>
+            <EditContainer>
+              <div className="edit-profile-image-container">
+                <EditContainerSubTitle fontColor={fontColor}>
+                  나의 프로필 사진
+                </EditContainerSubTitle>
+                <div className="profile-image-container">
+                  <img alt="profile img" src={imageUrl} />
+                  <input
+                    className="imgInput"
+                    type="file"
+                    id="ex_file"
+                    accept="img/*"
+                    onChange={onLoadFile}
+                  />
+                </div>
+                <p>
+                  이미지 파일의 형식은 jpg, jpeg, png로 권장합니다 <br /> 파일의
+                  크기는 10MB 이하로 제한됩니다
+                </p>
+              </div>
+              <div className="edit-nickname-container">
+                <EditContainerSubTitle fontColor={fontColor}>
+                  닉네임
+                </EditContainerSubTitle>
+                <input
+                  className="nickname-input"
+                  maxLength="10"
+                  defaultValue={nickname || ""}
+                  onChange={(e) => {
+                    setNickname(e.target.value);
+                  }}
+                  onFocus={() => setNicknameInputOnFocus(true)}
+                />
+                {nicknameInputOnFocus ? (
+                  <ul className="validation-message-container">
+                    {nicknameValid ? (
+                      ""
+                    ) : (
+                      <li className="validation-message">
+                        ⚠︎ 닉네임은 1자 이상 10자 이하여야 합니다
+                      </li>
+                    )}
+                  </ul>
                 ) : (
-                  <li className="validation-message">
-                    ⚠︎ 닉네임은 1자 이상 10자 이하여야 합니다
-                  </li>
+                  ""
                 )}
-              </ul>
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="edit-location-container">
-            <EditContainerSubTitle fontColor={fontColor}>
-              우리 동네
-            </EditContainerSubTitle>
-            <div>
-              <input className="location-input" value={address} />
-              <PillButton
-                color={buttonColor}
-                hoverColor={buttonHoverColor}
-                onClick={setOpenModal}
-              >
-                지역 선택
-              </PillButton>
-            </div>
-          </div>
-          <div className="edit-about-container">
-            <EditContainerSubTitle fontColor={fontColor}>
-              소개
-            </EditContainerSubTitle>
-            <textarea
-              className="about-input"
-              value={introduction || ""}
-              onChange={(e) => {
-                setIntroduction(e.target.value);
-              }}
-            />
-          </div>
-          <div className="complete-button-container">
-            <PillButton
-              color={buttonColor}
-              hoverColor={buttonHoverColor}
-              onClick={handlePatchData}
-            >
-              수정 완료
-            </PillButton>
-          </div>
-        </EditContainer>
-      </ContentContainer>
-    </Container>
+              </div>
+              <div className="edit-location-container">
+                <EditContainerSubTitle fontColor={fontColor}>
+                  우리 동네
+                </EditContainerSubTitle>
+                <div>
+                  <input className="location-input" defaultValue={address} />
+                  <PillButton
+                    color={buttonColor}
+                    hoverColor={buttonHoverColor}
+                    onClick={setOpenModal}
+                  >
+                    지역 선택
+                  </PillButton>
+                </div>
+              </div>
+              <div className="edit-about-container">
+                <EditContainerSubTitle fontColor={fontColor}>
+                  소개
+                </EditContainerSubTitle>
+                <textarea
+                  className="about-input"
+                  defaultValue={introduction || ""}
+                  onChange={(e) => {
+                    setIntroduction(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="complete-button-container">
+                <PillButton
+                  color={buttonColor}
+                  hoverColor={buttonHoverColor}
+                  onClick={handlePatchData}
+                >
+                  수정 완료
+                </PillButton>
+              </div>
+            </EditContainer>
+          </ContentContainer>
+        </Container>
+      ) : (
+        <div>loading</div>
+      )}
+    </>
   );
 }

@@ -63,12 +63,12 @@ export default function ReviewList() {
   };
 
   const fetchDataOnSuccess = (response) => {
-    console.log(response.data.data && response.data.data);
-    setData(response.data.data && response.data.data);
+    const latestData = response.data.data.reverse();
+    setData(latestData);
   };
 
   const fetchDataOnError = (err) => {
-    console.log(err);
+    window.alert("일시적인 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.");
   };
 
   const { isLoading } = useQuery({

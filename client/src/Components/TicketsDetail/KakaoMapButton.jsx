@@ -1,5 +1,4 @@
 //페이지, 리액트 컴포넌트, 정적 파일
-import TicketsDetailTap from "./TicketsDetailTapMenu.jsx";
 import kakaoMapIcon from "../../assets/kakaoMapIcon.jpg";
 
 //로컬 모듈
@@ -8,7 +7,6 @@ import breakpoint from "../../styles/breakpoint";
 //라이브러리 및 라이브러리 메소드
 import { React, useState } from "react";
 import styled from "styled-components/macro";
-import axios from "axios";
 
 const ButtonComponent = styled.button`
   all: unset;
@@ -36,26 +34,17 @@ const ButtonComponent = styled.button`
 
 export default function KakaoMapButton({ detailAddress, latitude, longitude }) {
   const [locationId, setLocationId] = useState("");
-  console.log(detailAddress);
+  const locationName = detailAddress && detailAddress.split("/")[1];
   const headers = {
     // eslint-disable-next-line prettier/prettier
     "Authorization": `KakaoAK ${process.env.REACT_APP_REST_API_KEY}`,
   };
 
-  axios
-    .get(
-      `https://dapi.kakao.com/v2/local/search/keyword.json?page=1&size=15&sort=accuracy&query=${detailAddress}`,
-      { headers }
-    )
-    .then((response) => {
-      setLocationId(response.data.documents[0].id);
-    });
-
   const handleButtonClick = () => {
-    window.open(`https://map.kakao.com/link/map/${locationId}`);
+    window.open(
+      `https://map.kakao.com/link/map/${locationName},${latitude},${longitude}`
+    );
   };
-
-  console.log(detailAddress, latitude, longitude);
 
   return (
     <ButtonComponent onClick={handleButtonClick}>

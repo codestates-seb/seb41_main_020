@@ -20,7 +20,7 @@ import instance from "../../api/core/default";
 //라이브러리 및 라이브러리 메소드
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components/macro";
 
 const ReviewItemContainer = styled.li`
@@ -142,7 +142,7 @@ export default function ReviewItem({ reviewData }) {
   const [isLogin, setIsLogin] = useState(false);
   const { score, setScore } = useStarScoreStore((state) => state);
   const navigate = useNavigate();
-  console.log(reviewData);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (
@@ -176,6 +176,8 @@ export default function ReviewItem({ reviewData }) {
 
   const patchDataOnsuccess = (response) => {
     window.alert("한줄평 수정이 완료되었습니다!");
+    setEditMode(!editMode);
+    queryClient.invalidateQueries("fetchReviewData");
   };
 
   const patchDataOnError = (error) => {

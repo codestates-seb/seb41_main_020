@@ -162,6 +162,11 @@ export default function TicketsDetailTapReview() {
       error.response.data.message === "후기를 작성할 수 있는 권한이 없습니다."
     ) {
       window.alert("공연을 예매한 분만 한 줄 평을 작성할 수 있습니다.");
+    } else if (
+      error.response.status === 403 &&
+      error.response.data.message === "후기를 이미 작성하셨습니다."
+    ) {
+      window.alert("후기를 이미 작성하셨습니다.");
     }
   };
 

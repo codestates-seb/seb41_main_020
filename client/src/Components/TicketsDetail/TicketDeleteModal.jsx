@@ -101,7 +101,6 @@ const ModalButton = styled.button`
 export default function TicketDeleteModal(ticketId) {
   const { openModal, setOpenModal } = useOpenModalStore((state) => state);
   const navigate = useNavigate();
-  console.log(ticketId.ticketId);
 
   const handleTicketDelete = () => {
     return instance({
