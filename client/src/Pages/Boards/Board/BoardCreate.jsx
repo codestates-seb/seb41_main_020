@@ -121,9 +121,7 @@ const BoardCreate = () => {
       return;
     }
 
-    if (window.confirm("작성하시겠습니까?")) {
-      createBoard();
-    }
+    createBoard();
   };
 
   const data = {

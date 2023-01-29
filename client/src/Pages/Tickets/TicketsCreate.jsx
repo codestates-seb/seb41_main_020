@@ -312,9 +312,7 @@ export default function TicketsCreate() {
       window.scrollTo(0, 1850);
       return;
     }
-    if (window.confirm("작성하시겠습니까?")) {
-      createTickets();
-    }
+    createTickets();
   };
   const handleCreateTickets = async () => {
     const response = await instance({
