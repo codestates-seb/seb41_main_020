@@ -77,9 +77,10 @@ public class ShowCommentService {
     public ShowComment updateShowComment(ShowComment showComment, ShowComment findShowComment, Show show, Member member){
         verifiedShowComment(findShowComment,show);
         memberService.verifiedMemberId(findShowComment.getMember().getId(), member.getId()); // 작성한 유저가 맞는지 확인
-        Optional.ofNullable(showComment.getScore()).ifPresent(score -> findShowComment.setScore(score));
+       // Optional.ofNullable(showComment.getScore()).ifPresent(score -> findShowComment.setScore(score));
+        findShowComment.setScore(showComment.getScore());
         Optional.ofNullable(showComment.getComment()).ifPresent(comment -> findShowComment.setComment(comment));
-
+        showComment.addMember(member);
         modifyScoreAverage(showComment, show);
 
         return findShowComment;
