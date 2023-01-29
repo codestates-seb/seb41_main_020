@@ -65,8 +65,9 @@ public class ShowReservationController {
 
 
     @DeleteMapping("/{reservation-id}")
-    public ResponseEntity deleteReservation(@PathVariable("reservation-id") long reservationId){
-        showReservationService.deleteShow(reservationId);
+    public ResponseEntity deleteReservation(@PathVariable("reservation-id") long reservationId,
+                                            @LoginMemberId Long memberId){
+        showReservationService.deleteShow(reservationId, memberId);
         return new ResponseEntity<>(
                 HttpStatus.NO_CONTENT
         );
