@@ -49,6 +49,7 @@ export const ContentWrapper = styled.div`
   height: max-content;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 0;
     width: 95%;
     margin-left: 10px;
     padding-left: 0;
@@ -88,11 +89,8 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-const BoardWrapper = styled(ContentWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-top: 130px;
-  }
-`;
+const BoardWrapper = styled(ContentWrapper)``;
+
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;
@@ -206,11 +204,7 @@ export default function EmployBoardList() {
   const params = {};
   queryParams.forEach((queryArr) => {
     params[queryArr[0]] = queryArr[1];
-    console.log("queryArr : ", queryArr);
-    console.log("queryParams22 : ", params);
   });
-
-  console.log("queryParams11 : ", queryParams);
 
   // 게시판 별 URI
   const { pathname } = useLocation();
@@ -232,7 +226,6 @@ export default function EmployBoardList() {
     }
     SearchBarUri += `${queryArr[0]}=${queryArr[1]}&`;
   }
-  console.log("SearchBarUri : ", SearchBarUri);
 
   // 페이지네이션에 보낼 URI
   var PageNationURI = "";
@@ -286,8 +279,8 @@ export default function EmployBoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
+        <MobileAside />
         <div className="title">구인게시판</div>
         <div className="titleInfo">
           함께 공연을 할 사람을 구인하는 게시판 입니다.
@@ -302,9 +295,6 @@ export default function EmployBoardList() {
           boardList.map((it) => <BoardListItem key={it.id} {...it} />)
         )}
 
-        {console.log("*******************************")}
-        {console.log(boardList)}
-        {console.log("*******************************")}
         <WriteButtonDiv>
           <WriteButton onClick={handleWriteButton}>
             <img className="pencelImage" src={pen} alt="pen"></img>

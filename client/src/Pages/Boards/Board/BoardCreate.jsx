@@ -9,7 +9,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import instance from "../../../api/core/default.js";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 export const PostWrapper = styled(ContentWrapper)`
@@ -17,6 +17,7 @@ export const PostWrapper = styled(ContentWrapper)`
   padding-right: 10px;
   height: max-content;
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 30px;
     width: 99%;
   }
 `;
@@ -112,7 +113,6 @@ const BoardCreate = () => {
     }
     if (titleValue.length < 1) {
       titleRef.current.focus();
-      console.log(321);
       return;
     }
 
@@ -193,7 +193,6 @@ const BoardCreate = () => {
               placeholder={"내용을 입력해주세요."}
               arrayRef={arrayRef.current}
             ></Editor>
-            {console.log(contentValue)}
           </ContentInputDiv>
           <PostButton type="button" onClick={handlePost}>
             글 올리기

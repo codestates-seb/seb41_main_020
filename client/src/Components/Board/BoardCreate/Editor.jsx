@@ -70,7 +70,6 @@ const Editor = ({ placeholder, value, setValue, arrayRef }) => {
             },
           }
         );
-        console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
         const IMG_URL = result.data.data;
 
         const editor = quillRef.current.getEditor(); // 에디터 객체 가져오기
