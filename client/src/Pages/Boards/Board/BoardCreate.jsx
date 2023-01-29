@@ -1,14 +1,18 @@
-import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
+//페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper, ContentWrapper } from "./BoardList.jsx";
-import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
-import AnswerList from "../../../Components/Board/Answer/AnswerList";
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
+
+//로컬 모듈
+import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
+import breakpoint from "../../../styles/breakpoint.js";
 import instance from "../../../api/core/default.js";
+
+//라이브러리 및 라이브러리 메소드
+import React, { useState, useRef } from "react";
+import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
@@ -121,9 +125,7 @@ const BoardCreate = () => {
       return;
     }
 
-    if (window.confirm("작성하시겠습니까?")) {
-      createBoard();
-    }
+    createBoard();
   };
 
   const data = {
@@ -144,6 +146,7 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = () => {
+    alert("작성하였습니다");
     navigate(
       `/${PathNameURI}?category=${categoryValue}&status=최신순&page=1&size=10`
     );

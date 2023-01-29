@@ -4,7 +4,7 @@ import axios from "axios";
 import useBoardListStore from "../../../store/useBoardListStore";
 
 import { sub, dtFontSize, primary } from "../../../styles/mixins";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const DropdownDiv = styled.div`
   display: inline-flex;
@@ -62,8 +62,6 @@ const Dropdown = ({ location }) => {
   const [toggle, setToggle] = useState(false);
   const [value, setValue] = useState("최신순");
   const { setBoardListData } = useBoardListStore();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const urlStatus = searchParams.get("status");
 
   const navigate = useNavigate();
 
