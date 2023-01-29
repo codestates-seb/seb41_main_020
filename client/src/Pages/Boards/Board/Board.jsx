@@ -11,6 +11,7 @@ import AnswerList from "../../../Components/Board/Answer/AnswerList";
 import instance from "../../../api/core/default.js";
 import yellowHeart from "../../../assets/yellowHeart.gif";
 import blueHeart from "../../../assets/blueHeart.gif";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 //로컬 모듈
 import {
@@ -23,7 +24,7 @@ import {
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
@@ -199,7 +200,9 @@ const Board = () => {
       <BoardInfoWrapper>
         <div className="title">{boardData.title}</div>
         <div className="titleDiv">
-          <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
+          <Link className="titleInfo" to={`/members/${boardData.memberId}`}>
+            글쓴이 : {boardData.nickname}
+          </Link>
           <div className="titleInfo">
             {new Date(boardData.createdAt).toLocaleString()}
           </div>
