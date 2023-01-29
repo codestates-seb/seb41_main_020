@@ -34,7 +34,7 @@ const BoardItemContent = styled.div`
     cursor: pointer;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      margin-top: 10px;
+      margin-top: 15px;
       font-size: ${mbFontSize.large};
     }
   }
