@@ -31,11 +31,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const TicketsCreateContentWrapper = styled(PostWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    /* width: 90%; */
-  } ;
-`;
+const TicketsCreateContentWrapper = styled(PostWrapper)``;
 
 const TicketsBoard = styled(PostBoard)`
   height: max-content;

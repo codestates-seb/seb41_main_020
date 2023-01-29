@@ -11,7 +11,7 @@ import breakpoint from "../../../styles/breakpoint.js";
 import instance from "../../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -105,10 +105,17 @@ const BoardCreate = () => {
   const arrayRef = useRef([""]);
   const titleRef = useRef();
   const { pathname } = useLocation();
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
 
   // 기존 경로에서 /create를 빼는 작업
   const newPathName = pathname.split("/");
   const PathNameURI = `${newPathName[1]}/${newPathName[2]}`;
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+  }, []);
 
   const handlePost = () => {
     if (categoryValue === "") {
