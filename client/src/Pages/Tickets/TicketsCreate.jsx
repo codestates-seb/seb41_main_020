@@ -1,3 +1,4 @@
+//페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper } from "../Boards/Board/BoardList.jsx";
 import {
   PostWrapper,
@@ -7,7 +8,12 @@ import {
 } from "../Boards/Board/BoardCreate.jsx";
 import breakpoint from "../../styles/breakpoint.js";
 import CategoryDropdown from "../../Components/Board/TicketsCreate/CategoryDropdown.jsx";
+import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
+import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
+import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
+import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
 
+//로컬 모듈
 import {
   dtFontSize,
   sub,
@@ -16,15 +22,12 @@ import {
   mbFontSize,
   primary,
 } from "../../styles/mixins.js";
-import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
-import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
+import instance from "../../api/core/default.js";
 
+//라이브러리 및 라이브러리 메소드
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
-import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
 import { useMutation } from "@tanstack/react-query";
-import instance from "../../api/core/default.js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -379,7 +382,7 @@ export default function TicketsCreate() {
       );
       setImageUrl(result.data.data);
     } catch (error) {
-      console.log(error);
+      alert("이미지 업로드에 실패하였습니다");
     }
   };
 

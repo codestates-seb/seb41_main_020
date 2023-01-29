@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import imageHandler from "../../../api/core/imageHandler";
-import instance from "../../../api/core/default";
 import ImageResize from "quill-image-resize";
 Quill.register("modules/ImageResize", ImageResize);
 
@@ -80,7 +78,7 @@ const Editor = ({ placeholder, value, setValue, arrayRef }) => {
 
         arrayRef.push(IMG_URL);
       } catch (error) {
-        console.log(error);
+        alert("이미지 업로드에 실패하였습니다");
       }
     });
   };
