@@ -72,6 +72,10 @@ const AnswerListContentDiv = styled.div`
     font-size: ${dtFontSize.medium};
     width: 100%;
     padding: 2px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
 
   @media screen and (max-width: ${breakpoint.mobile}) {
@@ -169,9 +173,8 @@ const AnswerItem = (props) => {
       alert("1글자 이상을 적어야 합니다");
       return;
     }
-    if (window.confirm("수정하시겠습니까?")) {
-      editAnswer();
-    }
+    alert("수정하였습니다");
+    editAnswer();
   };
 
   const handleComplete = async () => {

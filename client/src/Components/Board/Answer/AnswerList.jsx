@@ -84,9 +84,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
       createAnswerRef.current.focus();
       return;
     }
-    if (window.confirm("작성하시겠습니까?")) {
-      createAnswer();
-    }
+    createAnswer();
   };
 
   const handleButton = async () => {
@@ -100,6 +98,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
 
   const handleButtonOnSuccess = () => {
     setAnswerData("");
+    alert("작성하였습니다");
     refetch();
   };
 

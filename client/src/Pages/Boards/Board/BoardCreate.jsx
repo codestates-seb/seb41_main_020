@@ -121,9 +121,7 @@ const BoardCreate = () => {
       return;
     }
 
-    if (window.confirm("작성하시겠습니까?")) {
-      createBoard();
-    }
+    createBoard();
   };
 
   const data = {
@@ -144,6 +142,7 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = () => {
+    alert("작성하였습니다");
     navigate(
       `/${PathNameURI}?category=${categoryValue}&status=최신순&page=1&size=10`
     );
