@@ -83,14 +83,14 @@ public class ShowCommentService {
         showComment.addMember(member);
         modifyScoreAverage(showComment, show);
 
-        return findShowComment;
+        return showCommentRepository.save(findShowComment);
     }
 
     private void modifyScoreAverage(ShowComment showComment, Show show) {
 
         String key = redisKey.getScoreAverageKey(show.getId());
         Double scoreAverage = show.getScoreAverage();
-        scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
+        scoreAverage -= showCommentRepository.findByShowIdAndMemberId(show.getId(), showComment.getMember().getId()).getScore();
         scoreAverage += showComment.getScore();
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));
