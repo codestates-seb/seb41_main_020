@@ -292,7 +292,7 @@ export default function TicketsCreate() {
       detailPlaceRef.current.focus();
       return;
     }
-    if (startTime === "") {
+    if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
     }
@@ -312,7 +312,9 @@ export default function TicketsCreate() {
       window.scrollTo(0, 1850);
       return;
     }
-    createTickets();
+    if (window.confirm("작성하시겠습니까?")) {
+      createTickets();
+    }
   };
   const handleCreateTickets = async () => {
     const response = await instance({
@@ -451,8 +453,8 @@ export default function TicketsCreate() {
             <div className="DatePickerInfoDiv">
               <input
                 ref={startTimeRef}
-                type="text"
-                max="25"
+                type="number"
+                max="24"
                 className="DatePickerInput"
                 placeholder="시작 시간"
                 value={startTime}

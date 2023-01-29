@@ -120,6 +120,13 @@ const Board = () => {
     JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   // 게시글 삭제 요청
+
+  const handleBoardDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      deleteBoard();
+    }
+  };
+
   const handleDelete = async () => {
     return await instance({
       method: "delete",
@@ -245,7 +252,7 @@ const Board = () => {
             >
               수정
             </button>
-            <button className="edButton" onClick={deleteBoard}>
+            <button className="edButton" onClick={handleBoardDelete}>
               삭제
             </button>
           </EditDeleteDiv>
