@@ -3,6 +3,7 @@ import ReviewList from "./ReviewList.jsx";
 import StarRating from "./StarRating.jsx";
 import { PillButton } from "../../Pages/Tickets/TicketsDetail.jsx";
 import useStarScoreStore from "../../store/useStarScoreStore.js";
+import useClickedStarStore from "../../store/useClickedStarStore.js";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -17,9 +18,9 @@ import {
 import instance from "../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components/macro";
 
 const ContentContainer = styled.div`
@@ -102,13 +103,34 @@ const ReviewWritingContainer = styled.div`
       }
     }
   }
+
+  > .alert-message {
+    color: ${primary.primary300};
+    font-size: ${dtFontSize.medium};
+    font-weight: 600;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
+  }
 `;
 
 export default function TicketsDetailTapReview() {
   const { score, setScore } = useStarScoreStore((state) => state);
+  const { clicked, setClicked } = useClickedStarStore((state) => state);
   const [comment, setComment] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [localStorage.getItem("accessToken")]);
 
   const postData = () => {
     return instance({
@@ -119,7 +141,10 @@ export default function TicketsDetailTapReview() {
   };
 
   const postDataOnsuccess = (response) => {
-    console.log(response);
+    queryClient.invalidateQueries("fetchReviewData");
+    window.alert("한줄평 작성이 완료되었습니다!");
+    setComment("");
+    setClicked([false, false, false, false, false]);
   };
 
   const postDataOnError = (error) => {
@@ -132,6 +157,11 @@ export default function TicketsDetailTapReview() {
       navigate("/");
     } else if (error.response.status === 500) {
       window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    } else if (
+      error.response.status === 403 &&
+      error.response.data.message === "후기를 작성할 수 있는 권한이 없습니다."
+    ) {
+      window.alert("공연을 예매한 분만 한 줄 평을 작성할 수 있습니다.");
     }
   };
 
@@ -165,13 +195,19 @@ export default function TicketsDetailTapReview() {
             onChange={handleChangeComment}
           />
         </div>
-        <PillButton
-          color={primary.primary300}
-          hoverColor={secondary.secondary500}
-          onClick={handlePostComment}
-        >
-          작성하기
-        </PillButton>
+        {isLogin ? (
+          <PillButton
+            color={primary.primary300}
+            hoverColor={secondary.secondary500}
+            onClick={handlePostComment}
+          >
+            작성하기
+          </PillButton>
+        ) : (
+          <span className="alert-message">
+            한 줄 평은 로그인한 상태에서만 작성 가능합니다
+          </span>
+        )}
       </ReviewWritingContainer>
       <div className="sub-title">공연 한 줄 평</div>
       <div className="sub-description">

@@ -28,6 +28,7 @@ const Tabs = styled.ul`
   left: 0;
   width: 100%;
   height: 70px;
+  z-index: 10;
 
   > li {
     all: unset;

@@ -363,6 +363,16 @@ const TopRightContainer = styled.div`
     justify-content: center;
     align-items: center;
 
+    > .error-message {
+      color: ${misc.red};
+      font-size: ${dtFontSize.small};
+      margin-bottom: 5px;
+
+      @media screen and (max-width: ${breakpoint.mobile}) {
+        font-size: ${mbFontSize.small};
+      }
+    }
+
     > .sub-title {
       color: ${sub.sub800};
       font-size: ${dtFontSize.medium};
@@ -483,7 +493,7 @@ export default function TicketsDetail() {
     } else {
       setDateError(false);
     }
-  }, [date]);
+  });
 
   useEffect(() => {
     if (ticketCount <= 0) {
@@ -573,7 +583,6 @@ export default function TicketsDetail() {
   const handleReservation = () => {
     postReservation();
   };
-  console.log(ticketData);
   return (
     <>
       <TicketDeleteModal ticketId={params.id} />
@@ -633,7 +642,7 @@ export default function TicketsDetail() {
                   <div>
                     <span className="location-title">위치</span>
                     <span className="location-description">
-                      {ticketData.address} / {ticketData.detailAddress}
+                      {ticketData.detailAddress}
                     </span>
                   </div>
                   <KakaoMapButton
@@ -686,6 +695,11 @@ export default function TicketsDetail() {
                         <FontAwesomeIcon icon={faPlus} />
                       </button>
                     </div>
+                    {ticketCount === "" ? (
+                      <span className="error-message">수량을 입력해주세요</span>
+                    ) : (
+                      ""
+                    )}
                     <PillButton
                       color={primary.primary300}
                       hoverColor={secondary.secondary500}

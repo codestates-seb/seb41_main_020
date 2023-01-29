@@ -1,7 +1,8 @@
-/* eslint-disable import/no-unresolved */
 //페이지, 리액트 컴포넌트, 정적 파일
 import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ScoredStar from "../TicketsDetail/ScoredStar";
+import StarRating from "./StarRating.jsx";
 
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
@@ -13,9 +14,13 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import useStarScoreStore from "../../store/useStarScoreStore";
+import instance from "../../api/core/default";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components/macro";
 
 const ReviewItemContainer = styled.li`
@@ -115,30 +120,157 @@ const ReviewItemContainer = styled.li`
       font-size: ${mbFontSize.small};
     }
   }
+
+  > .edit-comment-input {
+    border: 2px solid ${sub.sub300};
+    border-radius: 10px;
+    width: 95%;
+    height: 30px;
+    padding: 10px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.small};
+      height: 40px;
+    }
+  }
 `;
 
-export default function ReviewItem() {
+export default function ReviewItem({ reviewData }) {
+  const [editMode, setEditMode] = useState(false);
+  const [comment, setComment] = useState("");
+  const [isSameUser, setIsSameUser] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const { score, setScore } = useStarScoreStore((state) => state);
+  const navigate = useNavigate();
+  console.log(reviewData);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("accessToken") &&
+      reviewData.memberId ===
+        JSON.parse(localStorage.getItem("userInfoStorage")).id
+    ) {
+      setIsSameUser(true);
+    } else {
+      setIsSameUser(false);
+    }
+
+    setComment(reviewData.comment);
+  }, [localStorage.getItem("accessToken")]);
+
+  const handleEditMode = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleEditCommentInput = (e) => {
+    setComment(e.target.value);
+  };
+
+  const patchData = () => {
+    return instance({
+      method: "patch",
+      url: `/shows/${reviewData.showId}/comments/${reviewData.commentId}`,
+      data: { score, comment },
+    });
+  };
+
+  const patchDataOnsuccess = (response) => {
+    window.alert("한줄평 수정이 완료되었습니다!");
+  };
+
+  const patchDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Token Expired"
+    ) {
+      window.alert("다시 로그인해주세요.");
+      localStorage.clear();
+      navigate("/");
+    } else if (error.response.status === 500) {
+      window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    }
+  };
+
+  const { mutate: patchCommentData } = useMutation({
+    mutationFn: patchData,
+    onSuccess: patchDataOnsuccess,
+    onError: patchDataOnError,
+  });
+
+  const handleEditComment = () => {
+    patchCommentData();
+  };
+
+  const deleteData = () => {
+    return instance({
+      method: "delete",
+      url: `/shows/${reviewData.showId}/comments/${reviewData.commentId}`,
+    });
+  };
+
+  const deleteDataOnsuccess = (response) => {
+    window.alert("한줄평 삭제가 완료되었습니다!");
+  };
+
+  const deleteDataOnError = (error) => {
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === "Token Expired"
+    ) {
+      window.alert("다시 로그인해주세요.");
+      localStorage.clear();
+      navigate("/");
+    } else if (error.response.status === 500) {
+      window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
+    }
+  };
+
+  const { mutate: deleteCommentData } = useMutation({
+    mutationFn: deleteData,
+    onSuccess: deleteDataOnsuccess,
+    onError: deleteDataOnError,
+  });
+
+  const handleDeleteComment = () => {
+    deleteCommentData();
+  };
+
   return (
     <ReviewItemContainer>
       <div className="top-container">
         <div className="top-left-container">
           <div className="star-rating-container">
-            <FontAwesomeIcon icon={faStar} color={misc.orange} />
-            <FontAwesomeIcon icon={faStar} color={misc.orange} />
-            <FontAwesomeIcon icon={faStar} color={misc.orange} />
-            <FontAwesomeIcon icon={faStar} color={misc.orange} />
-            <FontAwesomeIcon icon={faStar} color={sub.sub300} />
+            {editMode ? (
+              <StarRating />
+            ) : (
+              <ScoredStar score={reviewData.score} />
+            )}
           </div>
-          <div className="reviewer-name">일이삼사오육칠팔구십</div>
+          <div className="reviewer-name">{reviewData.nickname}</div>
         </div>
-        <div className="button-container">
-          <button>수정</button>
-          <button>삭제</button>
-        </div>
+        {isSameUser ? (
+          <div className="button-container">
+            {editMode ? (
+              <button onClick={handleEditComment}>완료</button>
+            ) : (
+              <button onClick={handleEditMode}>수정</button>
+            )}
+            <button onClick={handleDeleteComment}>삭제</button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
-      <span className="review-content">
-        오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한오십자제한
-      </span>
+      {editMode ? (
+        <input
+          className="edit-comment-input"
+          value={comment}
+          onChange={handleEditCommentInput}
+          maxLength="50"
+        />
+      ) : (
+        <span className="review-content">{reviewData.comment}</span>
+      )}
     </ReviewItemContainer>
   );
 }

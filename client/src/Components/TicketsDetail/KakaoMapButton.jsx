@@ -44,12 +44,11 @@ export default function KakaoMapButton({ detailAddress, latitude, longitude }) {
 
   axios
     .get(
-      `https://dapi.kakao.com/v2/local/search/keyword.json?page=1&size=15&sort=accuracy&query=${"연우 소극장"}`,
+      `https://dapi.kakao.com/v2/local/search/keyword.json?page=1&size=15&sort=accuracy&query=${detailAddress}`,
       { headers }
     )
     .then((response) => {
-      console.log(response);
-      // setLocationId(response.data.documents[0].id);
+      setLocationId(response.data.documents[0].id);
     });
 
   const handleButtonClick = () => {
