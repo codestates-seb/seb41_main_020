@@ -90,11 +90,8 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-const BoardWrapper = styled(ContentWrapper)`
-  /* @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-top: 130px;
-  } */
-`;
+const BoardWrapper = styled(ContentWrapper)``;
+
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;

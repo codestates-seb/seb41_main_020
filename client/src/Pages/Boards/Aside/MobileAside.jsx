@@ -75,7 +75,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/free");
+            navigate(
+              "/board/free?category=자유게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           자유 게시판
@@ -87,7 +89,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/employ");
+            navigate(
+              "/board/employ?category=구인게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           구인 게시판
@@ -99,7 +103,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/request");
+            navigate(
+              "/board/request?category=요청게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           요청 게시판
@@ -111,7 +117,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/advertise");
+            navigate(
+              "/board/advertise?category=홍보게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           홍보 게시판
@@ -123,7 +131,9 @@ const MobileAside = () => {
               : "mobileAsideItem"
           }
           onClick={() => {
-            navigate("/board/review");
+            navigate(
+              "/board/review?category=후기게시판&status=최신순&page=1&size=10"
+            );
           }}
         >
           후기 게시판
