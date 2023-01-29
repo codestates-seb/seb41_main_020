@@ -146,6 +146,7 @@ export default function Carousel({
 
   useInterval(() => {
     setCurrentIdx(currentIdx + 1);
+    setTransition(true);
   }, 3500);
 
   const pageButtonClickHandler = (num) => {

@@ -76,25 +76,6 @@ const PostDetailContainer = styled.div`
 `;
 
 export default function Board({ data, isLast }) {
-  dayjs.extend(relativeTime).extend(updateLocale);
-  dayjs.updateLocale("en", {
-    relativeTime: {
-      past: "%s 전",
-      s: "초",
-      m: "1분",
-      mm: "분",
-      h: "1시간",
-      hh: "%d 시간",
-      d: "1일",
-      dd: "%d 일",
-      M: "1달",
-      MM: "%d 달",
-      y: "1년",
-      yy: "%d 년",
-    },
-  });
-  const createdAt = dayjs(data.createdAt).fromNow();
-
   return (
     <BoardContainer isLast={isLast}>
       <VoteContainer>
@@ -114,7 +95,7 @@ export default function Board({ data, isLast }) {
       <PostDetailContainer>
         <p className="title">{data.title}</p>
         <p className="content">{data.content}</p>
-        <p className="info">{createdAt}</p>
+        <p className="info">{new Date(data.createdAt).toLocaleString()}</p>
       </PostDetailContainer>
     </BoardContainer>
   );
