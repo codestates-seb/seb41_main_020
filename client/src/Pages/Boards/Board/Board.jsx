@@ -177,18 +177,23 @@ const Board = () => {
   };
 
   const axiosBoardSuccess = (response) => {
-    console.log("&&&&&&&&&&&&&&&&&");
-    console.log(response);
-    console.log("&&&&&&&&&&&&&&&&&");
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
+  };
+
+  const axiosBoardError = (response) => {
+    if (response.response.status === 400) {
+      navigate("/notFound");
+    }
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
     queryKey: ["axiosBoard", answerListData],
     queryFn: axiosBoard,
     onSuccess: axiosBoardSuccess,
+    onError: axiosBoardError,
+    retry: false,
   });
 
   if (isError) {
