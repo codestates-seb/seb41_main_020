@@ -2,7 +2,7 @@
 
 |김경배|김혜원|박연환|김정희|박성호|이재혁|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|||||![박성호](https://user-images.githubusercontent.com/80394894/210201174-7972272f-9b5f-4bd2-b148-bc7269b907c2.jpg)||
+|||||![박성호](https://user-images.githubusercontent.com/80394894/210201174-7972272f-9b5f-4bd2-b148-bc7269b907c2.jpg)|![이재혁](https://user-images.githubusercontent.com/95069395/215314729-21c2f78f-0881-43f4-af4c-b1f018abdf6a.png)|
 |**FE**|**FE**|**FE**|**BE**|**BE**|**BE**|
 </br>
 
