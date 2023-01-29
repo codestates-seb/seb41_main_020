@@ -7,10 +7,10 @@ import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
 import instance from "../../../api/core/default.js";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
 
 export const PostWrapper = styled(ContentWrapper)`
@@ -103,7 +103,43 @@ const BoardEdit = () => {
   const { pathname } = useLocation();
   const titleRef = useRef();
   const arrayRef = useRef([""]);
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
 
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+  }, []);
+
+  const getEditBoard = async () => {
+    const response = await instance({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
+    });
+    return response.data;
+  };
+
+  const getEditBoardOnSuccess = (response) => {
+    if (response.data.memberId !== userId) {
+      navigate("/notFound");
+    }
+  };
+
+  const getEditBoardOnError = (response) => {
+    if (response.response.status === 400) {
+      navigate("/notFound");
+    }
+  };
+
+  const { isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["getEditBoard"],
+    queryFn: getEditBoard,
+    onSuccess: getEditBoardOnSuccess,
+    onError: getEditBoardOnError,
+    retry: false,
+  });
+
+  ///
   const data = {
     title: titleValue,
     content: contentValue,
@@ -119,7 +155,6 @@ const BoardEdit = () => {
     }
     if (titleValue.length < 1) {
       titleRef.current.focus();
-      console.log(contentValue);
       return;
     }
 
@@ -137,9 +172,6 @@ const BoardEdit = () => {
       url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
       data,
     });
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    console.log(response.data);
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     return response.data;
   };
 

@@ -259,23 +259,6 @@ export default function TicketsCreate() {
     "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
   );
 
-  console.log("-----------------------------------");
-  console.log("title : ", ticketName),
-    console.log("image : ", ticketInfo),
-    console.log("category : ", imageUrl),
-    console.log("price : ", category),
-    console.log("address : ", gu),
-    console.log("detailAddress : ", `${place} ${detailPlace}`),
-    console.log("expiredAt : ", endDate),
-    console.log("showAt : ", startDate),
-    console.log("showTime : ", startTime),
-    console.log("detailDescription : ", ticketsValue),
-    console.log("latitude : ", latitude),
-    console.log("longitude : ", longitude),
-    console.log("total : ", sit),
-    console.log("introduction : ", "룰루랄라"),
-    console.log("-----------------------------------");
-
   // 티켓 post에 보낼 데이터
   const data = {
     title: ticketName,
@@ -337,7 +320,6 @@ export default function TicketsCreate() {
       url: `${process.env.REACT_APP_SERVER_URI}/shows`,
       data,
     });
-    console.log(response);
   };
 
   const handleCreateTicketsOnSuccess = () => {
@@ -382,7 +364,6 @@ export default function TicketsCreate() {
   const onLoadFile = async (e) => {
     const file = e.target.files;
     const formData = new FormData();
-    console.log(file[0]);
     formData.append("file", file[0]); // formData는 키-밸류 구조
     try {
       const result = await axios.post(
@@ -395,8 +376,6 @@ export default function TicketsCreate() {
           },
         }
       );
-      console.log("result : ", result);
-      console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
       setImageUrl(result.data.data);
     } catch (error) {
       console.log(error);

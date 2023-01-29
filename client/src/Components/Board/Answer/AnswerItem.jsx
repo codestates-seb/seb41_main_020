@@ -153,10 +153,6 @@ const AnswerItem = (props) => {
       return;
     }
 
-    // alert("로그인 시간이 만료되었습니다");
-    // navigate("/login");
-    console.log(props);
-    console.log(response.response);
     return;
   };
 

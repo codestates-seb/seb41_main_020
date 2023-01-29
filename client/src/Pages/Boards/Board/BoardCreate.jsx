@@ -113,7 +113,6 @@ const BoardCreate = () => {
     }
     if (titleValue.length < 1) {
       titleRef.current.focus();
-      console.log(321);
       return;
     }
 
@@ -194,7 +193,6 @@ const BoardCreate = () => {
               placeholder={"내용을 입력해주세요."}
               arrayRef={arrayRef.current}
             ></Editor>
-            {console.log(contentValue)}
           </ContentInputDiv>
           <PostButton type="button" onClick={handlePost}>
             글 올리기

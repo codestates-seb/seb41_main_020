@@ -23,7 +23,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
 import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import instance from "../../api/core/default.js";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -221,7 +221,7 @@ const CancelButton = styled(PostButton)`
 
 export default function TicketsEdit() {
   const { ticketData } = useTicketDataStore();
-  const newAdress = ticketData.detailAddress.split(",");
+  const newAdress = ticketData && ticketData?.detailAddress.split(",");
 
   // 카테고리
   const [category, setCategory] = useState(ticketData.category); // 사용
@@ -262,6 +262,7 @@ export default function TicketsEdit() {
 
   // 이미지 정보
   const [imageUrl, setImageUrl] = useState(ticketData.image);
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
 
   // 티켓 post에 보낼 데이터
   const data = {
@@ -387,6 +388,40 @@ export default function TicketsEdit() {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+  }, []);
+
+  const getEditTickets = async () => {
+    const response = await instance({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/shows/${ticketData.id}`,
+    });
+    return response.data;
+  };
+
+  const getEditTicketsOnSuccess = (response) => {
+    if (response.data.sellerId !== userId) {
+      navigate("/notFound");
+    }
+  };
+
+  const getEditTicketsOnError = (response) => {
+    if (response.response.status === 400) {
+      navigate("/notFound");
+    }
+  };
+
+  const { isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["getEditTickets"],
+    queryFn: getEditTickets,
+    onSuccess: getEditTicketsOnSuccess,
+    onError: getEditTicketsOnError,
+    retry: false,
+  });
+  /////////////////////////////////////////////////////
 
   return (
     <PageWrapper>
