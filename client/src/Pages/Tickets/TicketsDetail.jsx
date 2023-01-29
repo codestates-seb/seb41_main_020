@@ -19,6 +19,7 @@ import {
 } from "../../styles/mixins";
 import useTicketDataStore from "../../store/useTicketDataStore";
 import useOpenModalStore from "../../store/useOpenModalStore.js";
+import useClickedStarStore from "../../store/useClickedStarStore.js";
 import instance from "../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
@@ -457,6 +458,7 @@ export default function TicketsDetail() {
   const [date, setDate] = useState("");
   const [dateError, setDateError] = useState(false);
   const [isSameUser, setIsSameUser] = useState(false);
+  const { clicked, setClicked } = useClickedStarStore((state) => state);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -464,6 +466,7 @@ export default function TicketsDetail() {
     setDateError(false);
     setIsSameUser(false);
     setIsReservationPossible(true);
+    setClicked([false, false, false, false, false]);
   }, [ticketData]);
 
   useEffect(() => {

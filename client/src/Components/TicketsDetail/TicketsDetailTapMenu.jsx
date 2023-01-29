@@ -68,7 +68,7 @@ export default function TicketsDetailTap() {
 
   const menuArr = [
     { name: "공연 상세", content: <TicketsDetailTapDesc /> },
-    { name: "공연 한 줄 평", content: <TicketsDetailTapReview /> },
+    { name: "공연 후기", content: <TicketsDetailTapReview /> },
   ];
 
   const selectMenuHandler = (index) => {
