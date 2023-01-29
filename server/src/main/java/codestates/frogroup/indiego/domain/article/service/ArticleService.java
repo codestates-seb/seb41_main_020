@@ -15,6 +15,7 @@ import codestates.frogroup.indiego.global.exception.ExceptionCode;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Path;
 import codestates.frogroup.indiego.global.fileupload.AwsS3Service;
 import codestates.frogroup.indiego.global.redis.RedisKey;
+import codestates.frogroup.indiego.global.security.auth.userdetails.AuthMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,7 +56,7 @@ public class ArticleService {
 
         Article savedArticle = articleRepository.save(article);
 
-        return getResponse(savedArticle);
+        return mapper.articleToArticleResponse(savedArticle);
     }
 
     /**
@@ -72,7 +73,7 @@ public class ArticleService {
             Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
             Article savedArticle = articleRepository.save(updateArticle);
 
-            return getResponse(savedArticle);
+            return mapper.articleToArticleResponse(savedArticle);
         }
 
         throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
@@ -106,7 +107,7 @@ public class ArticleService {
      * TODO: 게시글 조회는 읽기만 하고 조회수를 증가시키는 방법은 없을까?
      */
     //    @Transactional // TODO: @Transactional 조금 더 알아보기
-    public ArticleDto.Response findArticle(Long articleId) {
+    public ArticleDto.Response findArticle(Long articleId, Member member) {
 
         Article findArticle = findVerifiedArticle(articleId);
 
@@ -121,7 +122,9 @@ public class ArticleService {
         // redis의 조회수 증가
 //        viewCount = articleRepository.incrementViewCount(articleId);
 //        log.info("viewCount3={}", viewCount);
-        ArticleDto.Response response = getResponse(findArticle);
+
+        ArticleDto.Response response = getResponse(findArticle, member);
+
         response.setView(viewCount);
 
         return response;
@@ -210,18 +213,30 @@ public class ArticleService {
     /**
      * Response 처리 메서드
      */
-    private ArticleDto.Response getResponse(Article article) {
+    private ArticleDto.Response getResponse(Article article, Member member) {
 
         ArticleDto.Response response = mapper.articleToArticleResponse(article);
 //        long likeCount = articleLikeRepository.countByArticleId(article.getId());
 //        response.setLikeCount(likeCount);
 
-        ArticleLike articleLike = articleLikeRepository.findByMemberIdAndArticleId(article.getMember().getId(), article.getId());
-        if (articleLike == null) {
+        if (member == null) {
             response.setLikeStatus(false);
         } else {
-            response.setLikeStatus(true);
+            ArticleLike articleLike = articleLikeRepository.findByMemberIdAndArticleId(member.getId(), article.getId());
+            response.setLikeStatus(articleLike != null);
         }
+
+//        if (member == null) {
+//            response.setLikeStatus(false);
+//        } else {
+//            ArticleLike articleLike =
+//                    articleLikeRepository.findByMemberIdAndArticleId(member.getId(), article.getId());
+//            if (articleLike == null) {
+//                response.setLikeStatus(false);
+//            } else {
+//                response.setLikeStatus(true);
+//            }
+//        }
 
         return response;
     }

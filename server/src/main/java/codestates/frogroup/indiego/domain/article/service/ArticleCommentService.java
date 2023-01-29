@@ -92,7 +92,7 @@ public class ArticleCommentService {
      */
     @Transactional
     public void deleteArticleComment(Long articleId, Long commentId, Long memberId) {
-//        findVerifiedArticle(articleId);
+        findVerifiedArticle(articleId);
         memberService.findVerifiedMember(memberId);
         ArticleComment findArticleComment = findVerifiedArticleComment(commentId);
 
@@ -148,7 +148,7 @@ public class ArticleCommentService {
 
     private ArticleComment findVerifiedArticleComment(Long articleCommentId) {
         return articleCommentRepository.findById(articleCommentId).orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+                () -> new BusinessLogicException(ExceptionCode.ARTICLE_COMMENT_NOT_FOUND));
     }
 
     private Article findVerifiedArticle(Long articleId) {
