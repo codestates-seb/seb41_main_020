@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Spinner from "../../Spinner";
 
@@ -114,8 +114,9 @@ export default function Carousel({
   status,
   address,
 }) {
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [currentIdx, setCurrentIdx] = useState(1);
   const [data, setData] = useState([]);
+  const [transition, setTransition] = useState(true);
 
   const CarouselItemList = carouselItemList;
   const serverURI = process.env.REACT_APP_SERVER_URI;
@@ -128,6 +129,13 @@ export default function Carousel({
 
   const fetchShowDataOnSuccess = (response) => {
     const data = response.data.data;
+    if (data.length > 1) {
+      // const firstData = data[0];
+      // const lastData = data[data.length - 1];
+      data.push(data[0]);
+      data.unshift(data[data.length - 1]);
+      console.log(data);
+    }
 
     setData(data);
   };
@@ -140,18 +148,30 @@ export default function Carousel({
   });
 
   useInterval(() => {
-    if (currentIdx + 1 >= data.length) {
-      setCurrentIdx(0);
-    } else {
-      setCurrentIdx(currentIdx + 1);
-    }
+    setCurrentIdx(currentIdx + 1);
   }, 3500);
 
   const pageButtonClickHandler = (num) => {
-    if (currentIdx + num < data.length && currentIdx + num >= 0) {
+    if (currentIdx > 0) {
       setCurrentIdx(currentIdx + num);
+      setTransition(true);
     }
   };
+
+  useEffect(() => {
+    if (currentIdx === 0) {
+      setTimeout(() => {
+        setCurrentIdx(data.length - 2);
+        setTransition(false);
+      }, 500);
+    } else if (currentIdx === data.length - 1) {
+      setTimeout(() => {
+        setCurrentIdx(1);
+        setTransition(false);
+      }, 500);
+    }
+  }, [currentIdx]);
+
   return (
     <CarouselContainer
       width={width}
@@ -170,9 +190,23 @@ export default function Carousel({
         <Spinner />
       ) : (
         CarouselItemList &&
-        data && <CarouselItemList data={data} currentIdx={currentIdx} />
+        data && (
+          <CarouselItemList
+            data={data}
+            currentIdx={currentIdx}
+            transition={transition}
+          />
+        )
       )}
-      {isRankMode && <Rank>{currentIdx + 1}</Rank>}
+      {isRankMode && (
+        <Rank>
+          {currentIdx === 0
+            ? data.length - 2
+            : currentIdx === data.length - 1
+            ? 1
+            : currentIdx}
+        </Rank>
+      )}
       <NextButton
         onClick={() => {
           pageButtonClickHandler(1);
