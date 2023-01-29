@@ -10,14 +10,17 @@ import codestates.frogroup.indiego.domain.show.mapper.ShowCommentMapper;
 import codestates.frogroup.indiego.domain.show.mapper.ShowMapper;
 import codestates.frogroup.indiego.domain.show.service.ShowCommentService;
 import codestates.frogroup.indiego.domain.show.service.ShowService;
+import codestates.frogroup.indiego.global.dto.MultiResponseDto;
 import codestates.frogroup.indiego.global.dto.SingleResponseDto;
 import codestates.frogroup.indiego.global.security.auth.loginresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -73,11 +76,14 @@ public class ShowCommentController {
     }
 
     @GetMapping("{show-id}/comments")
-    public ResponseEntity getComments(@PathVariable("show-id") long showId){
+    public ResponseEntity getComments(@Positive @RequestParam int page,
+                                      @Positive @RequestParam int size,
+                                      @PathVariable("show-id") long showId){
 
-        List<ShowComment> showCommentList = showCommentService.findShowCommentList(showId);
+        Page<ShowComment> showCommentPage = showCommentService.findShowComment(showId,page-1,size);
+        List<ShowComment> showCommentList = showCommentPage.getContent();
         List<ShowCommentDto.Response> responses = showCommentMapper.commentListToResponseDtoList(showCommentList);
-        return new ResponseEntity<>(new SingleResponseDto<>(responses), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(responses,showCommentPage), HttpStatus.OK);
     }
 
 
