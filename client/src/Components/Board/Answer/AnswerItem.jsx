@@ -10,7 +10,7 @@ import blueHeart from "../../../assets/blueHeart.gif";
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import instance from "../../../api/core/default.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AnswerListUserDiv = styled.div`
   display: flex;
@@ -153,10 +153,6 @@ const AnswerItem = (props) => {
       return;
     }
 
-    // alert("로그인 시간이 만료되었습니다");
-    // navigate("/login");
-    console.log(props);
-    console.log(response.response);
     return;
   };
 
@@ -173,7 +169,9 @@ const AnswerItem = (props) => {
       alert("1글자 이상을 적어야 합니다");
       return;
     }
-    editAnswer();
+    if (window.confirm("수정하시겠습니까?")) {
+      editAnswer();
+    }
   };
 
   const handleComplete = async () => {
@@ -209,6 +207,11 @@ const AnswerItem = (props) => {
   };
 
   // 삭제 코드
+  const handleAnswerDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      deleteAnswer();
+    }
+  };
   const handleDelete = async () => {
     return await instance({
       method: "delete",
@@ -238,7 +241,9 @@ const AnswerItem = (props) => {
         <img className="userImage" src={props.image} alt="userImage" />
       </AnswerListImageDiv>
       <AnswerListInfoDiv>
-        <div className="answerListUserName">{props.nickname}</div>
+        <Link className="answerListUserName" to={`/members/${props.memberId}`}>
+          {props.nickname}
+        </Link>
         <div className="answerListCreateDate">
           {new Date(props.createdAt).toLocaleString()}
         </div>
@@ -284,7 +289,7 @@ const AnswerItem = (props) => {
               <button
                 type="button"
                 className="edButton"
-                onClick={() => deleteAnswer()}
+                onClick={handleAnswerDelete}
               >
                 삭제
               </button>

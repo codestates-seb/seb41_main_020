@@ -28,7 +28,7 @@ const PopupContainer = styled.div`
   h1 {
     font-size: ${dtFontSize.xlarge};
     text-align: center;
-    color: ${sub.sub800};
+    color: ${primary.primary300};
     margin-top: 10px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {

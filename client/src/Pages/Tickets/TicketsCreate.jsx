@@ -84,10 +84,15 @@ const ImageDiv = styled.div`
   text-align: left;
   margin-bottom: 50px;
 
-  .imageImg {
+  img {
     width: 400px;
     height: 400px;
     margin-bottom: 20px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 200px;
+      height: 200px;
+    }
   }
 
   label {
@@ -129,6 +134,7 @@ const ChoiceButtonDiv = styled.div`
     padding: 8px;
     border: 1px solid ${sub.sub400};
     margin-bottom: 5px;
+    font-size: ${dtFontSize.small};
   }
 
   .placeInput {
@@ -139,7 +145,7 @@ const ChoiceButtonDiv = styled.div`
     padding: 8px;
     border: 1px solid ${sub.sub400};
     margin-bottom: 5px;
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
   }
 `;
 
@@ -253,23 +259,6 @@ export default function TicketsCreate() {
     "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
   );
 
-  console.log("-----------------------------------");
-  console.log("title : ", ticketName),
-    console.log("image : ", ticketInfo),
-    console.log("category : ", imageUrl),
-    console.log("price : ", category),
-    console.log("address : ", gu),
-    console.log("detailAddress : ", `${place} ${detailPlace}`),
-    console.log("expiredAt : ", endDate),
-    console.log("showAt : ", startDate),
-    console.log("showTime : ", startTime),
-    console.log("detailDescription : ", ticketsValue),
-    console.log("latitude : ", latitude),
-    console.log("longitude : ", longitude),
-    console.log("total : ", sit),
-    console.log("introduction : ", "룰루랄라"),
-    console.log("-----------------------------------");
-
   // 티켓 post에 보낼 데이터
   const data = {
     title: ticketName,
@@ -278,7 +267,7 @@ export default function TicketsCreate() {
     category: category,
     price: ticketPrice,
     address: gu,
-    detailAddress: `${place} ${detailPlace}`,
+    detailAddress: `${place},${detailPlace}`,
     expiredAt: endDate,
     showAt: startDate,
     showTime: startTime,
@@ -303,7 +292,7 @@ export default function TicketsCreate() {
       detailPlaceRef.current.focus();
       return;
     }
-    if (startTime === "") {
+    if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
     }
@@ -323,7 +312,9 @@ export default function TicketsCreate() {
       window.scrollTo(0, 1850);
       return;
     }
-    createTickets();
+    if (window.confirm("작성하시겠습니까?")) {
+      createTickets();
+    }
   };
   const handleCreateTickets = async () => {
     const response = await instance({
@@ -331,7 +322,6 @@ export default function TicketsCreate() {
       url: `${process.env.REACT_APP_SERVER_URI}/shows`,
       data,
     });
-    console.log(response);
   };
 
   const handleCreateTicketsOnSuccess = () => {
@@ -376,7 +366,6 @@ export default function TicketsCreate() {
   const onLoadFile = async (e) => {
     const file = e.target.files;
     const formData = new FormData();
-    console.log(file[0]);
     formData.append("file", file[0]); // formData는 키-밸류 구조
     try {
       const result = await axios.post(
@@ -389,8 +378,6 @@ export default function TicketsCreate() {
           },
         }
       );
-      console.log("result : ", result);
-      console.log("성공 시, 백엔드가 보내주는 데이터", result.data.data);
       setImageUrl(result.data.data);
     } catch (error) {
       console.log(error);
@@ -424,7 +411,7 @@ export default function TicketsCreate() {
 
           <div className="postDiv">공연 포스터</div>
           <ImageDiv>
-            <img className="imageImg" src={imageUrl} alt="공연 포스터" />
+            <img src={imageUrl} alt="공연 포스터" />
             <label htmlFor="ex_file">공연 포스터 업로드</label>
             <input
               className="imgInput"
@@ -466,8 +453,8 @@ export default function TicketsCreate() {
             <div className="DatePickerInfoDiv">
               <input
                 ref={startTimeRef}
-                type="text"
-                max="25"
+                type="number"
+                max="24"
                 className="DatePickerInput"
                 placeholder="시작 시간"
                 value={startTime}
@@ -482,7 +469,7 @@ export default function TicketsCreate() {
             <input
               ref={sitRef}
               className="contentInput"
-              placeholder="공연 좌석 수를 입력해주세요."
+              placeholder="공연 좌석 수"
               value={sit}
               onChange={(e) => {
                 setSit(e.target.value.replace(/[^0-9]/g, ""));
@@ -494,7 +481,7 @@ export default function TicketsCreate() {
             <input
               ref={ticketPriceRef}
               className="contentInput"
-              placeholder="티켓 가격을 입력해주세요"
+              placeholder="티켓 가격"
               value={ticketPrice}
               onChange={(e) => {
                 setTicketPrice(e.target.value.replace(/[^0-9]/g, ""));

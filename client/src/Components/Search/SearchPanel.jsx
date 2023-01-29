@@ -63,6 +63,7 @@ const SearchBarContainer = styled.div`
   }
 
   svg {
+    margin: 0 5px;
     :hover {
       cursor: pointer;
       path {

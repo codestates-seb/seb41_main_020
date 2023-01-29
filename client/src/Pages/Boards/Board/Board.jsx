@@ -11,6 +11,7 @@ import AnswerList from "../../../Components/Board/Answer/AnswerList";
 import instance from "../../../api/core/default.js";
 import yellowHeart from "../../../assets/yellowHeart.gif";
 import blueHeart from "../../../assets/blueHeart.gif";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 //로컬 모듈
 import {
@@ -23,12 +24,15 @@ import {
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useBoardStore from "../../../store/useBoardStore.js";
 
 const BoardInfoWrapper = styled(ContentWrapper)`
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 30px;
+  }
   .titleDiv {
     display: flex;
     justify-content: space-between;
@@ -67,7 +71,7 @@ const QuillViewDiv = styled.div`
     max-width: 1000px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      max-width: 400px;
+      max-width: 350px;
     }
   }
 `;
@@ -119,6 +123,13 @@ const Board = () => {
     JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   // 게시글 삭제 요청
+
+  const handleBoardDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      deleteBoard();
+    }
+  };
+
   const handleDelete = async () => {
     return await instance({
       method: "delete",
@@ -168,25 +179,31 @@ const Board = () => {
 
   // Board 내용 가져오기
   const axiosBoard = async () => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URI}/articles/${id}`
-    );
+    const response = await instance({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/articles/${id}`,
+    });
     return response.data;
   };
 
   const axiosBoardSuccess = (response) => {
-    console.log("&&&&&&&&&&&&&&&&&");
-    console.log(response);
-    console.log("&&&&&&&&&&&&&&&&&");
     setBoardData(response.data);
     setAnswerListData(response.data.articleComments);
     setBoardStoreData(response.data);
+  };
+
+  const axiosBoardError = (response) => {
+    if (response.response.status === 400) {
+      navigate("/notFound");
+    }
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
     queryKey: ["axiosBoard", answerListData],
     queryFn: axiosBoard,
     onSuccess: axiosBoardSuccess,
+    onError: axiosBoardError,
+    retry: false,
   });
 
   if (isError) {
@@ -198,7 +215,9 @@ const Board = () => {
       <BoardInfoWrapper>
         <div className="title">{boardData.title}</div>
         <div className="titleDiv">
-          <div className="titleInfo">글쓴이 : {boardData.nickname}</div>
+          <Link className="titleInfo" to={`/members/${boardData.memberId}`}>
+            글쓴이 : {boardData.nickname}
+          </Link>
           <div className="titleInfo">
             {new Date(boardData.createdAt).toLocaleString()}
           </div>
@@ -236,7 +255,7 @@ const Board = () => {
             >
               수정
             </button>
-            <button className="edButton" onClick={deleteBoard}>
+            <button className="edButton" onClick={handleBoardDelete}>
               삭제
             </button>
           </EditDeleteDiv>

@@ -309,7 +309,6 @@ export default function KaKaoMap({ userInfo, searchedData, setSearchedData }) {
   };
 
   useEffect(() => {
-    console.log("in useEffect", userInfo);
     const userXBoundary = [
       userInfo.location[0] - 0.0040515,
       userInfo.location[0] + 0.0040515,
