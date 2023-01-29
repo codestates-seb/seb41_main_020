@@ -84,10 +84,15 @@ const ImageDiv = styled.div`
   text-align: left;
   margin-bottom: 50px;
 
-  .imageImg {
+  img {
     width: 400px;
     height: 400px;
     margin-bottom: 20px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      width: 200px;
+      height: 200px;
+    }
   }
 
   label {
@@ -129,6 +134,7 @@ const ChoiceButtonDiv = styled.div`
     padding: 8px;
     border: 1px solid ${sub.sub400};
     margin-bottom: 5px;
+    font-size: ${dtFontSize.small};
   }
 
   .placeInput {
@@ -139,7 +145,7 @@ const ChoiceButtonDiv = styled.div`
     padding: 8px;
     border: 1px solid ${sub.sub400};
     margin-bottom: 5px;
-    font-size: ${dtFontSize.medium};
+    font-size: ${dtFontSize.small};
   }
 `;
 
@@ -424,7 +430,7 @@ export default function TicketsCreate() {
 
           <div className="postDiv">공연 포스터</div>
           <ImageDiv>
-            <img className="imageImg" src={imageUrl} alt="공연 포스터" />
+            <img src={imageUrl} alt="공연 포스터" />
             <label htmlFor="ex_file">공연 포스터 업로드</label>
             <input
               className="imgInput"
@@ -482,7 +488,7 @@ export default function TicketsCreate() {
             <input
               ref={sitRef}
               className="contentInput"
-              placeholder="공연 좌석 수를 입력해주세요."
+              placeholder="공연 좌석 수"
               value={sit}
               onChange={(e) => {
                 setSit(e.target.value.replace(/[^0-9]/g, ""));
@@ -494,7 +500,7 @@ export default function TicketsCreate() {
             <input
               ref={ticketPriceRef}
               className="contentInput"
-              placeholder="티켓 가격을 입력해주세요"
+              placeholder="티켓 가격"
               value={ticketPrice}
               onChange={(e) => {
                 setTicketPrice(e.target.value.replace(/[^0-9]/g, ""));
