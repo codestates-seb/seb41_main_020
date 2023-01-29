@@ -130,8 +130,6 @@ export default function Carousel({
   const fetchShowDataOnSuccess = (response) => {
     const data = response.data.data;
     if (data.length > 1) {
-      // const firstData = data[0];
-      // const lastData = data[data.length - 1];
       data.push(data[0]);
       data.unshift(data[data.length - 1]);
     }
@@ -151,7 +149,7 @@ export default function Carousel({
   }, 3500);
 
   const pageButtonClickHandler = (num) => {
-    if (currentIdx > 0) {
+    if (currentIdx > 0 && currentIdx < data.length - 1) {
       setCurrentIdx(currentIdx + num);
       setTransition(true);
     }
