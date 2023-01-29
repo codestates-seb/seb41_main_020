@@ -69,7 +69,6 @@ const Dropdown = ({ location }) => {
 
   const handleDropdown = async (props) => {
     setToggle(!toggle);
-    console.log(location);
 
     const response = await axios.get(
       `${process.env.REACT_APP_SERVER_URI}/articles?${location}status=${props}`

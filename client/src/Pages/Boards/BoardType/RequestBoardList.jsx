@@ -203,11 +203,7 @@ export default function RequestBoardList() {
   const params = {};
   queryParams.forEach((queryArr) => {
     params[queryArr[0]] = queryArr[1];
-    console.log("queryArr : ", queryArr);
-    console.log("queryParams22 : ", params);
   });
-
-  console.log("queryParams11 : ", queryParams);
 
   // 게시판 별 URI
   const { pathname } = useLocation();
@@ -229,7 +225,6 @@ export default function RequestBoardList() {
     }
     SearchBarUri += `${queryArr[0]}=${queryArr[1]}&`;
   }
-  console.log("SearchBarUri : ", SearchBarUri);
 
   // 페이지네이션에 보낼 URI
   var PageNationURI = "";
@@ -299,9 +294,6 @@ export default function RequestBoardList() {
           boardList.map((it) => <BoardListItem key={it.id} {...it} />)
         )}
 
-        {console.log("*******************************")}
-        {console.log(boardList)}
-        {console.log("*******************************")}
         <WriteButtonDiv>
           <WriteButton onClick={handleWriteButton}>
             <img className="pencelImage" src={pen} alt="pen"></img>

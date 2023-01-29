@@ -95,9 +95,6 @@ const PageNation = ({ pageData, location, className }) => {
     return it.num > pageData.page - 3 && it.num < pageData.page + 3;
   });
 
-  // console.log("-----------------------------");
-  // console.log(FilterData);
-  // console.log("-----------------------------");
   return (
     <PageNationDiv className={className}>
       <button
