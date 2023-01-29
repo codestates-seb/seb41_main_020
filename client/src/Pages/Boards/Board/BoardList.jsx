@@ -35,7 +35,6 @@ import useBoardListStore from "../../../store/useBoardListStore";
 import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 export const PageWrapper = styled.div`
-  /* background-color: black; */
   display: flex;
   text-align: center;
 `;
@@ -97,16 +96,23 @@ export const BoardItem = styled.div`
   display: flex;
   height: 100px;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    height: 80px;
+  }
+
   .likeDiv {
-    width: 130px;
+    width: 120px;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    min-width: 120px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      width: 80px;
+      width: 60px;
+      padding-left: 10px;
+      min-width: 60px;
     }
 
     .heartButton {
@@ -125,6 +131,12 @@ export const BoardItem = styled.div`
       margin-bottom: 5px;
       background-color: white;
       border: white;
+
+      img {
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          width: 20px;
+        }
+      }
     }
   }
   .imageDiv {
@@ -236,10 +248,6 @@ export default function BoardList() {
   // 페이지네이션에 보낼 URI
   var PageNationURI = "";
   for (let queryArr of queryParams) {
-    // if (queryArr[0] === "search") {
-    //   PageNationURI += `${queryArr[0]}=${queryArr[1]}`;
-    //   continue;
-    // }
     if (queryArr[0] === "page") {
       continue;
     }

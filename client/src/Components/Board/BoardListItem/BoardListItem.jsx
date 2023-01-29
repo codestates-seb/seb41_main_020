@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 
 const BoardItemContent = styled.div`
-  margin-left: 30px;
+  margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
