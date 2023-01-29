@@ -25,7 +25,6 @@ const ReactDatePicker = ({ setDate }) => {
         dateFormat="yyyy년 MM월 dd일"
         customInput={<ExampleCustomInput />}
       />
-      {/* {console.log(startDate.toLocaleString())} */}
     </div>
   );
 };

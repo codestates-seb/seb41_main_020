@@ -1,4 +1,8 @@
-import styled from "styled-components";
+//페이지, 리액트 컴포넌트, 정적 파일
+import OKButton from "../BoardList/OKButton.jsx";
+import AnswerItem from "./AnswerItem.jsx";
+
+//로컬 모듈
 import {
   primary,
   dtFontSize,
@@ -6,14 +10,11 @@ import {
   mbFontSize,
 } from "../../../styles/mixins.js";
 import breakpoint from "../../../styles/breakpoint.js";
-import OKButton from "../BoardList/OKButton.jsx";
-import AnswerItem from "./AnswerItem.jsx";
-
-import AnswerDummy from "../../../DummyData/AnswerDummy.js";
-import React, { useEffect, useRef, useState } from "react";
-import useAnswerListStore from "../../../store/useAnswerListStore.js";
-import axios from "axios";
 import instance from "../../../api/core/default.js";
+
+//라이브러리 및 라이브러리 메소드
+import React, { useRef, useState } from "react";
+import styled from "styled-components";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -86,6 +87,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
     }
     createAnswer();
   };
+
   const handleButton = async () => {
     const data = { comment: answerData };
     return await instance({
@@ -97,6 +99,7 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
 
   const handleButtonOnSuccess = () => {
     setAnswerData("");
+    alert("작성하였습니다");
     refetch();
   };
 

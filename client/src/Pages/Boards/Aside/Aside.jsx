@@ -1,6 +1,8 @@
+//로컬 모듈
 import { primary, dtFontSize, sub } from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint";
 
+//라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";

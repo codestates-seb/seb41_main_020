@@ -77,19 +77,20 @@ public class ShowCommentService {
     public ShowComment updateShowComment(ShowComment showComment, ShowComment findShowComment, Show show, Member member){
         verifiedShowComment(findShowComment,show);
         memberService.verifiedMemberId(findShowComment.getMember().getId(), member.getId()); // 작성한 유저가 맞는지 확인
-        Optional.ofNullable(showComment.getScore()).ifPresent(score -> findShowComment.setScore(score));
+       // Optional.ofNullable(showComment.getScore()).ifPresent(score -> findShowComment.setScore(score));
+        findShowComment.setScore(showComment.getScore());
         Optional.ofNullable(showComment.getComment()).ifPresent(comment -> findShowComment.setComment(comment));
-
+        showComment.addMember(member);
         modifyScoreAverage(showComment, show);
 
-        return findShowComment;
+        return showCommentRepository.save(findShowComment);
     }
 
     private void modifyScoreAverage(ShowComment showComment, Show show) {
 
         String key = redisKey.getScoreAverageKey(show.getId());
         Double scoreAverage = show.getScoreAverage();
-        scoreAverage -= showCommentRepository.findByMember_Id(showComment.getMember().getId()).getScore();
+        scoreAverage -= showCommentRepository.findByShowIdAndMemberId(show.getId(), showComment.getMember().getId()).getScore();
         scoreAverage += showComment.getScore();
         Integer cntPeople = showCommentRepository.countByShowId(show.getId());
         String s = Double.toString((scoreAverage*cntPeople+ showComment.getScore())/ (cntPeople+1));

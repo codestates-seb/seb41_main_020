@@ -1,17 +1,21 @@
-import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
+//페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper, ContentWrapper } from "./BoardList.jsx";
 import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
-import instance from "../../../api/core/default.js";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 
+//로컬 모듈
+import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
+import useBoardStore from "../../../store/useBoardStore.js";
+import instance from "../../../api/core/default.js";
+
+//라이브러리 및 라이브러리 메소드
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import useBoardStore from "../../../store/useBoardStore.js";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 export const PostWrapper = styled(ContentWrapper)`
   width: 70vw;
@@ -131,7 +135,7 @@ const BoardEdit = () => {
     }
   };
 
-  const { isLoading, isError, error, refetch } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ["getEditBoard"],
     queryFn: getEditBoard,
     onSuccess: getEditBoardOnSuccess,
@@ -139,7 +143,6 @@ const BoardEdit = () => {
     retry: false,
   });
 
-  ///
   const data = {
     title: titleValue,
     content: contentValue,
@@ -163,7 +166,9 @@ const BoardEdit = () => {
       return;
     }
 
-    editBoard();
+    if (window.confirm("수정하시겠습니까?")) {
+      editBoard();
+    }
   };
 
   const handleButton = async () => {

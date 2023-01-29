@@ -8,10 +8,8 @@ import {
 } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
-import instance from "../../../api/core/default.js";
 import yellowHeart from "../../../assets/yellowHeart.gif";
 import blueHeart from "../../../assets/blueHeart.gif";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 //로컬 모듈
 import {
@@ -20,16 +18,19 @@ import {
   sub,
   mbFontSize,
 } from "../../../styles/mixins.js";
+import useBoardStore from "../../../store/useBoardStore.js";
+import instance from "../../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import useBoardStore from "../../../store/useBoardStore.js";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 const BoardInfoWrapper = styled(ContentWrapper)`
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 30px;
+  }
   .titleDiv {
     display: flex;
     justify-content: space-between;
@@ -120,6 +121,13 @@ const Board = () => {
     JSON.parse(localStorage.getItem("userInfoStorage")).id;
 
   // 게시글 삭제 요청
+
+  const handleBoardDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      deleteBoard();
+    }
+  };
+
   const handleDelete = async () => {
     return await instance({
       method: "delete",
@@ -245,7 +253,7 @@ const Board = () => {
             >
               수정
             </button>
-            <button className="edButton" onClick={deleteBoard}>
+            <button className="edButton" onClick={handleBoardDelete}>
               삭제
             </button>
           </EditDeleteDiv>
