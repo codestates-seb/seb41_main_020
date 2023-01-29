@@ -19,9 +19,15 @@ const FooterContainer = styled.div`
     font-weight: 300;
   }
 
-  span {
+  .frogroup {
     font-weight: 600;
     color: green;
+    font-size: ${dtFontSize.xsmall};
+    margin-left: 10px;
+
+    @media screen and (max-width: 500px) {
+      font-size: 10px;
+    }
   }
 `;
 
@@ -30,6 +36,11 @@ const FooterContent = styled.div`
   margin-left: 10px;
   justify-content: flex-start;
   align-items: center;
+  width: 100%;
+
+  @media screen and (max-width: 500px) {
+    justify-content: space-evenly;
+  }
 `;
 
 const LogoContainer = styled.div`
@@ -37,6 +48,12 @@ const LogoContainer = styled.div`
 
   svg {
     width: 120px;
+  }
+
+  @media screen and (max-width: 500px) {
+    svg {
+      width: 60px;
+    }
   }
 `;
 
@@ -47,6 +64,10 @@ const FooterHeadContainer = styled.div`
   .copyright {
     margin-left: 10px;
     font-size: ${dtFontSize.xsmall};
+
+    @media screen and (max-width: 500px) {
+      display: none;
+    }
   }
 `;
 
@@ -55,6 +76,10 @@ const LinkContainer = styled.div`
   font-size: ${dtFontSize.small};
   align-items: center;
   margin-left: 20px;
+
+  @media screen and (max-width: 500px) {
+    margin: 0 5px;
+  }
 
   a {
     text-decoration: none;
@@ -67,17 +92,32 @@ const LinkContainer = styled.div`
   }
 
   .logo {
-    img {
-      width: 15px;
-      background-color: white;
-      border-radius: 50%;
-    }
+    width: 15px;
+    background-color: white;
+    border-radius: 50%;
     margin-right: 5px;
+    @media screen and (max-width: 500px) {
+      margin: 0;
+    }
   }
 
   .link {
     font-weight: 800;
     margin-right: 20px;
+
+    @media screen and (max-width: 500px) {
+      margin-right: 5px;
+    }
+  }
+
+  span {
+    @media screen and (max-width: 500px) {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 10px;
   }
 `;
 
@@ -94,6 +134,10 @@ const GroupContainer = styled.div`
     flex-direction: column;
   }
 
+  @media screen and (max-width: 500px) {
+    font-size: 10px;
+  }
+
   p {
     font-weight: 800;
     margin-right: 10px;
@@ -107,6 +151,10 @@ const GroupContainer = styled.div`
 
     :hover {
       color: ${primary.primary300};
+    }
+
+    @media screen and (max-width: 500px) {
+      font-size: 10px;
     }
   }
 `;
@@ -151,28 +199,23 @@ export default function Footer() {
               />
             </svg>
           </LogoContainer>
-          <p className="copyright">
-            Copyright © <span>🐸 frogroup</span>
-          </p>
+          <p className="copyright">Copyright ©</p>
+          <span className="frogroup">🐸 frogroup</span>
         </FooterHeadContainer>
         <LinkContainer>
           <a
             href="https://github.com/codestates-seb/seb41_main_020"
             className="link"
           >
-            <span className="logo">
-              <img src={github} alt="github" />
-            </span>
-            Github
+            <img className="logo" src={github} alt="github" />
+            <span>Github</span>
           </a>
           <a
             href="https://www.notion.so/ffbb3cab6709480f8466d9bee1c503d3"
             className="link"
           >
-            <span className="logo">
-              <img src={notion} alt="notion" />
-            </span>
-            Notion
+            <img className="logo" src={notion} alt="notion" />
+            <span>Notion</span>
           </a>
         </LinkContainer>
         <TeamInfoContainer>
