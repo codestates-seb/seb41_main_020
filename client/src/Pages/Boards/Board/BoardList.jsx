@@ -35,7 +35,6 @@ import useBoardListStore from "../../../store/useBoardListStore";
 import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 export const PageWrapper = styled.div`
-  /* background-color: black; */
   display: flex;
   text-align: center;
 `;
@@ -50,6 +49,7 @@ export const ContentWrapper = styled.div`
   height: max-content;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 0;
     width: 95%;
     margin-left: 10px;
     padding-left: 0;
@@ -89,26 +89,30 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-const BoardWrapper = styled(ContentWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    margin-top: 130px;
-  }
-`;
+const BoardWrapper = styled(ContentWrapper)``;
+
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
   display: flex;
   height: 100px;
 
+  @media screen and (max-width: ${breakpoint.mobile}) {
+    height: 80px;
+  }
+
   .likeDiv {
-    width: 130px;
+    width: 120px;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    min-width: 120px;
 
     @media screen and (max-width: ${breakpoint.mobile}) {
-      width: 80px;
+      width: 60px;
+      padding-left: 10px;
+      min-width: 60px;
     }
 
     .heartButton {
@@ -127,6 +131,12 @@ export const BoardItem = styled.div`
       margin-bottom: 5px;
       background-color: white;
       border: white;
+
+      img {
+        @media screen and (max-width: ${breakpoint.mobile}) {
+          width: 20px;
+        }
+      }
     }
   }
   .imageDiv {
@@ -238,10 +248,6 @@ export default function BoardList() {
   // 페이지네이션에 보낼 URI
   var PageNationURI = "";
   for (let queryArr of queryParams) {
-    // if (queryArr[0] === "search") {
-    //   PageNationURI += `${queryArr[0]}=${queryArr[1]}`;
-    //   continue;
-    // }
     if (queryArr[0] === "page") {
       continue;
     }
@@ -287,9 +293,9 @@ export default function BoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
-        <div className="title">{urlCategory}</div>
+        <MobileAside></MobileAside>
+        <div className="title">자유게시판</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>
