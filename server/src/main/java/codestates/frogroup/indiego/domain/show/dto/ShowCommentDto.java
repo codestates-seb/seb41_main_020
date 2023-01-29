@@ -21,7 +21,7 @@ public class ShowCommentDto {
     @Builder
     public static class Patch{
         @NotNull
-        private double score;
+        private Double score;
         private String comment;
     }
 
