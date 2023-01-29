@@ -278,7 +278,7 @@ export default function TicketsCreate() {
     category: category,
     price: ticketPrice,
     address: gu,
-    detailAddress: `${place} ${detailPlace}`,
+    detailAddress: `${place},${detailPlace}`,
     expiredAt: endDate,
     showAt: startDate,
     showTime: startTime,

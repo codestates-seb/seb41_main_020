@@ -286,8 +286,8 @@ export default function ReviewBoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
+        <MobileAside />
         <div className="title">후기게시판</div>
         <div className="titleInfo">
           공연의 후기를 작성할 수 있는 게시판 입니다.

@@ -7,20 +7,21 @@ import { primary, mbFontSize, sub } from "../../../styles/mixins";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const MobileAsideDiv = styled.div`
-  z-index: 30;
-  position: fixed;
+  /* z-index: 15;
+  position: fixed; */
   width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
-  padding: 0 50px;
+  padding: 0 px;
   border-bottom: 3px solid ${sub.sub200};
   background-color: white;
   overflow-x: scroll;
+  margin-bottom: 20px;
 
-  ::-webkit-scrollbar {
+  /* ::-webkit-scrollbar {
     display: none;
-  }
+  } */
 
   display: none;
 
@@ -37,7 +38,7 @@ const MobileAsideDiv = styled.div`
       font-size: ${mbFontSize.medium};
       width: 120px;
       height: 40px;
-      margin: 0 10px;
+      margin-right: 20px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -50,7 +51,7 @@ const MobileAsideDiv = styled.div`
       font-size: ${mbFontSize.medium};
       width: 120px;
       height: 40px;
-      margin: 0 10px;
+      margin-right: 20px;
       font-weight: 700;
       cursor: pointer;
     }

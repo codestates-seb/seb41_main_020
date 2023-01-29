@@ -286,8 +286,8 @@ export default function AdvertiseBoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
+        <MobileAside />
         <div className="title">홍보게시판</div>
         <div className="titleInfo">공연을 홍보할 수 있는 게시판 입니다.</div>
         <div className="dropboxDiv">

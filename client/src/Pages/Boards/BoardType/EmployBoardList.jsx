@@ -286,8 +286,8 @@ export default function EmployBoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
+        <MobileAside />
         <div className="title">구인게시판</div>
         <div className="titleInfo">
           함께 공연을 할 사람을 구인하는 게시판 입니다.

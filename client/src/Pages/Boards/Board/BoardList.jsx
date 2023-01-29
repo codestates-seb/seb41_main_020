@@ -50,6 +50,7 @@ export const ContentWrapper = styled.div`
   height: max-content;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
+    margin-top: 0;
     width: 95%;
     margin-left: 10px;
     padding-left: 0;
@@ -90,9 +91,9 @@ export const ContentWrapper = styled.div`
 `;
 
 const BoardWrapper = styled(ContentWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
+  /* @media screen and (max-width: ${breakpoint.mobile}) {
     margin-top: 130px;
-  }
+  } */
 `;
 export const BoardItem = styled.div`
   border-bottom: 3px solid ${sub.sub300};
@@ -287,9 +288,9 @@ export default function BoardList() {
   return (
     <PageWrapper>
       <Aside />
-      <MobileAside />
       <BoardWrapper>
-        <div className="title">{urlCategory}</div>
+        <MobileAside></MobileAside>
+        <div className="title">자유게시판</div>
         <div className="titleInfo">
           자유로운 주제로 글과 의견을 공유하는 게시판입니다.
         </div>

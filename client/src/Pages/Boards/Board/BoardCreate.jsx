@@ -9,7 +9,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
 import instance from "../../../api/core/default.js";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 export const PostWrapper = styled(ContentWrapper)`
