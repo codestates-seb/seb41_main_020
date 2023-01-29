@@ -169,7 +169,9 @@ const AnswerItem = (props) => {
       alert("1글자 이상을 적어야 합니다");
       return;
     }
-    editAnswer();
+    if (window.confirm("수정하시겠습니까?")) {
+      editAnswer();
+    }
   };
 
   const handleComplete = async () => {
@@ -205,6 +207,11 @@ const AnswerItem = (props) => {
   };
 
   // 삭제 코드
+  const handleAnswerDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      deleteAnswer();
+    }
+  };
   const handleDelete = async () => {
     return await instance({
       method: "delete",
@@ -282,7 +289,7 @@ const AnswerItem = (props) => {
               <button
                 type="button"
                 className="edButton"
-                onClick={() => deleteAnswer()}
+                onClick={handleAnswerDelete}
               >
                 삭제
               </button>
