@@ -292,7 +292,6 @@ const LocationandAboutContainer = styled.div`
 
 export default function Profile() {
   const { openModal, setOpenModal } = useOpenModalStore((state) => state);
-  // const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const { profileData, setProfileData } = useProfileDataStore((state) => state);
   const navigate = useNavigate();
   const params = useParams();
@@ -300,8 +299,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (!isLogin) {
-      window.alert("잘못된 접근입니다.");
-      history.go(-1);
+      navigate("/notFound");
     }
   }, [isLogin]);
 
@@ -317,12 +315,8 @@ export default function Profile() {
   };
 
   const fetchDataOnError = (error) => {
-    if (
-      error.response.status === 400 &&
-      error.response.data.message === "Member is not the same"
-    ) {
-      window.alert("잘못된 접근입니다.");
-      navigate("/");
+    if (error.response.status === 400) {
+      navigate("/notFound");
     }
   };
 

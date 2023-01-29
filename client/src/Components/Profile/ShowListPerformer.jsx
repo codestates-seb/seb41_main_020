@@ -40,7 +40,6 @@ const ShowListInnerContainer = styled.ul`
 `;
 
 export default function ShowList({ allReservationData, dataExist }) {
-  console.log(allReservationData);
   return (
     <ShowListInnerContainer>
       {dataExist ? "" : <span>공연 목록이 없습니다</span>}

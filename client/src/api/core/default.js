@@ -50,11 +50,15 @@ instance.interceptors.response.use(
           return await axios.request(originalRequest);
         }
       } catch (error) {
-        axios({
-          url: `${process.env.REACT_APP_SERVER_URI}/members/logout`,
-          method: "GET",
-          headers
-        });
+        try{
+          axios({
+            url: `${process.env.REACT_APP_SERVER_URI}/members/logout`,
+            method: "GET",
+            headers
+          });
+        } finally {
+          localStorage.clear();
+        }
       }
       return Promise.reject(error);
     }
