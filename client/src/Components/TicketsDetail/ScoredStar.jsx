@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //로컬 모듈
 import breakpoint from "../../styles/breakpoint";
 import { sub, misc } from "../../styles/mixins";
-import useStarScoreStore from "../../store/useStarScoreStore";
-import useClickedStarStore from "../../store/useClickedStarStore";
 
 //라이브러리 및 라이브러리 메소드
 import { React, useEffect, useState } from "react";
@@ -26,15 +24,6 @@ const Star = styled.div`
 
   .star {
     color: ${sub.sub300};
-    cursor: pointer;
-  }
-
-  :hover .star {
-    color: ${misc.orange};
-  }
-
-  & :hover ~ .star {
-    color: ${sub.sub300};
   }
 
   .filled {
@@ -42,23 +31,19 @@ const Star = styled.div`
   }
 `;
 
-export default function StarRating() {
-  const starsArray = [0, 1, 2, 3, 4];
-  const { score, setScore } = useStarScoreStore((state) => state);
-  const { clicked, setClicked } = useClickedStarStore((state) => state);
-
-  const handleStarClick = (index) => {
-    let clickStates = [...clicked];
-    for (let i = 0; i < 5; i++) {
-      clickStates[i] = i <= index ? true : false;
-    }
-    setClicked(clickStates);
-    setScore(clicked.filter(Boolean).length);
-  };
+export default function ScoredStar({ score }) {
+  const starsArray = [1, 2, 3, 4, 5];
+  const [filled, setFilled] = useState([false, false, false, false, false]);
 
   useEffect(() => {
-    setScore(clicked.filter(Boolean).length);
-  }, [clicked]);
+    let filledStates = [...filled];
+    for (let i = 0; i < 5; i++) {
+      if (starsArray[i] <= score) {
+        filledStates[i] = true;
+      }
+      setFilled(filledStates);
+    }
+  }, []);
 
   return (
     <StarContainer>
@@ -67,8 +52,7 @@ export default function StarRating() {
           <FontAwesomeIcon
             icon={faStar}
             key={idx}
-            onClick={() => handleStarClick(el)}
-            className={clicked[idx] ? "star filled" : "star"}
+            className={filled[idx] ? "star filled" : "star"}
           />
         ))}
       </Star>

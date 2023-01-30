@@ -1,3 +1,4 @@
+//페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper } from "../Boards/Board/BoardList.jsx";
 import {
   PostWrapper,
@@ -7,7 +8,12 @@ import {
 } from "../Boards/Board/BoardCreate.jsx";
 import breakpoint from "../../styles/breakpoint.js";
 import CategoryDropdown from "../../Components/Board/TicketsCreate/CategoryDropdown.jsx";
+import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
+import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
+import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
+import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
 
+//로컬 모듈
 import {
   dtFontSize,
   sub,
@@ -16,23 +22,16 @@ import {
   mbFontSize,
   primary,
 } from "../../styles/mixins.js";
-import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
-import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
+import instance from "../../api/core/default.js";
 
+//라이브러리 및 라이브러리 메소드
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
-import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
-import { useMutation } from "@tanstack/react-query";
-import instance from "../../api/core/default.js";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const TicketsCreateContentWrapper = styled(PostWrapper)`
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    /* width: 90%; */
-  } ;
-`;
+const TicketsCreateContentWrapper = styled(PostWrapper)``;
 
 const TicketsBoard = styled(PostBoard)`
   height: max-content;
@@ -258,6 +257,8 @@ export default function TicketsCreate() {
   const [imageUrl, setImageUrl] = useState(
     "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
   );
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
+  const userRole = JSON.parse(localStorage.getItem("userInfoStorage"))?.role;
 
   // 티켓 post에 보낼 데이터
   const data = {
@@ -267,7 +268,7 @@ export default function TicketsCreate() {
     category: category,
     price: ticketPrice,
     address: gu,
-    detailAddress: `${place},${detailPlace}`,
+    detailAddress: `${place}/${detailPlace}`,
     expiredAt: endDate,
     showAt: startDate,
     showTime: startTime,
@@ -292,6 +293,13 @@ export default function TicketsCreate() {
       detailPlaceRef.current.focus();
       return;
     }
+
+    if (startDate > endDate) {
+      alert("시작일과 종료일을 확인해주세요");
+      window.scrollTo(0, 900);
+      return;
+    }
+
     if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
@@ -312,9 +320,7 @@ export default function TicketsCreate() {
       window.scrollTo(0, 1850);
       return;
     }
-    if (window.confirm("작성하시겠습니까?")) {
-      createTickets();
-    }
+    createTickets();
   };
   const handleCreateTickets = async () => {
     const response = await instance({
@@ -325,6 +331,7 @@ export default function TicketsCreate() {
   };
 
   const handleCreateTicketsOnSuccess = () => {
+    alert("작성하였습니다");
     navigate("/tickets");
   };
 
@@ -351,8 +358,8 @@ export default function TicketsCreate() {
       function (result, status) {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          setLatitude(result[0].x);
-          setLongitude(result[0].y);
+          setLongitude(result[0].x);
+          setLatitude(result[0].y);
         }
       },
       [place]
@@ -380,9 +387,18 @@ export default function TicketsCreate() {
       );
       setImageUrl(result.data.data);
     } catch (error) {
-      console.log(error);
+      alert("이미지 업로드에 실패하였습니다");
     }
   };
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+    if (userRole !== "PERFORMER") {
+      navigate("/notFound");
+    }
+  }, []);
 
   return (
     <PageWrapper>

@@ -18,21 +18,14 @@ import {
   mbFontSize,
 } from "../../../styles/mixins.js";
 import breakpoint from "../../../styles/breakpoint";
-import BoardDummy from "../../../DummyData/BoardDummy.js";
+import useBoardListStore from "../../../store/useBoardListStore";
 
 //라이브러리 및 라이브러리 메소드
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  useNavigate,
-  useParams,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import useBoardListStore from "../../../store/useBoardListStore";
-import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -209,9 +202,6 @@ export default function BoardList() {
   const [pageData, setPageData] = useState([]);
   const [searchParams] = useSearchParams();
   const urlPage = searchParams.get("page");
-  const urlCategory = searchParams.get("category");
-  const urlStatus = searchParams.get("status");
-  const urlSize = searchParams.get("size");
 
   const queryParams = [...searchParams.entries()];
   const params = {};

@@ -24,8 +24,12 @@ const ContentWrapper = styled.div`
   height: 100%;
   margin-top: 50px;
 
-  > img {
-    width: 100%;
+  > * img {
+    max-width: 1000px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      max-width: 300px;
+    }
   }
 `;
 
@@ -33,7 +37,9 @@ export default function TicketsDetailTapDesc() {
   const { ticketData, setTicketData } = useTicketDataStore((state) => state);
   return (
     <>
-      <ContentWrapper>{ticketData.detailImage}</ContentWrapper>
+      <ContentWrapper
+        dangerouslySetInnerHTML={{ __html: ticketData.detailDescription }} // 리액트퀼 에디터의 정보를 태그 형식으로 가져옴
+      ></ContentWrapper>{" "}
     </>
   );
 }

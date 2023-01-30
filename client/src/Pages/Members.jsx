@@ -235,17 +235,16 @@ const LocationandAboutContainer = styled.div`
 export default function Profile() {
   const [data, setData] = useState();
   const [isPerformer, setIsPerformer] = useState(false);
-  const userId = 9;
+  const params = useParams();
 
   const fetchData = () => {
-    return axios.get(`${process.env.REACT_APP_SERVER_URI}/members/${userId}`);
+    return axios.get(
+      `${process.env.REACT_APP_SERVER_URI}/members/${params.id}`
+    );
   };
 
   const fetchDataOnSuccess = (response) => {
     setData(response.data.data && response.data.data);
-    if (data && data.role === "PERFORMER") {
-      setIsPerformer(true);
-    }
   };
 
   const fetchDataOnError = (error) => {
@@ -262,9 +261,11 @@ export default function Profile() {
     retry: false,
   });
 
-  console.log(data && data.role);
-
-  console.log(isPerformer);
+  useEffect(() => {
+    if (data && data.role === "PERFORMER") {
+      setIsPerformer(true);
+    }
+  }, [data]);
   return (
     <Container>
       <ContentHeaderContainer>

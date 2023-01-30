@@ -6,8 +6,16 @@ import "./ReactDatePicker.css";
 
 const ReactDatePicker = ({ setDate }) => {
   const [startDate, setStartDate] = useState(new Date());
+  const offset = 1000 * 60 * 60 * 9;
+  const startDatewithOffset = new Date(startDate.getTime() + offset);
   useEffect(() => {
-    setDate(startDate.toISOString().substring(0, 10));
+    setDate(
+      startDatewithOffset
+        .toISOString()
+        .replace("T", " ")
+        .split(".")[0]
+        .substring(0, 10)
+    );
   }, [startDate]);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -25,7 +33,6 @@ const ReactDatePicker = ({ setDate }) => {
         dateFormat="yyyy년 MM월 dd일"
         customInput={<ExampleCustomInput />}
       />
-      {/* {console.log(startDate.toLocaleString())} */}
     </div>
   );
 };
