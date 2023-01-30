@@ -142,7 +142,7 @@ export default function TicketsDetailTapReview() {
 
   const postDataOnsuccess = (response) => {
     queryClient.invalidateQueries("fetchReviewData");
-    window.alert("한줄평 작성이 완료되었습니다!");
+    window.alert("후기 작성이 완료되었습니다!");
     setComment("");
     setClicked([false, false, false, false, false]);
   };
@@ -161,7 +161,7 @@ export default function TicketsDetailTapReview() {
       error.response.status === 403 &&
       error.response.data.message === "후기를 작성할 수 있는 권한이 없습니다."
     ) {
-      window.alert("공연을 예매한 분만 한 줄 평을 작성할 수 있습니다.");
+      window.alert("공연을 예매한 분만 후기를 작성할 수 있습니다.");
     } else if (
       error.response.status === 403 &&
       error.response.data.message === "후기를 이미 작성하셨습니다."
@@ -177,6 +177,10 @@ export default function TicketsDetailTapReview() {
   });
 
   const handlePostComment = () => {
+    if (!score) {
+      window.alert("별점이 입력되지 않았습니다.");
+      return;
+    }
     postCommentData();
   };
 
@@ -186,16 +190,14 @@ export default function TicketsDetailTapReview() {
 
   return (
     <ContentContainer>
-      <div className="sub-title">한 줄 평 남기기</div>
-      <div className="sub-description">
-        공연에 대한 한 줄 평을 별점과 함께 남겨주세요.
-      </div>
+      <div className="sub-title">공연 후기 남기기</div>
+      <div className="sub-description">공연에 대한 후기를 남겨주세요.</div>
       <ReviewWritingContainer>
         <div>
           <StarRating />
           <input
             maxLength="50"
-            placeholder="한 줄 평은 50자 이내로 제한됩니다."
+            placeholder="후기는 50자 이내로 제한됩니다."
             value={comment || ""}
             onChange={handleChangeComment}
           />
@@ -210,13 +212,13 @@ export default function TicketsDetailTapReview() {
           </PillButton>
         ) : (
           <span className="alert-message">
-            한 줄 평은 로그인한 상태에서만 작성 가능합니다
+            후기는 로그인한 상태에서만 작성 가능합니다
           </span>
         )}
       </ReviewWritingContainer>
-      <div className="sub-title">공연 한 줄 평</div>
+      <div className="sub-title">공연 후기</div>
       <div className="sub-description">
-        공연에 다녀오신 분들이 남겨주신 소중한 공연에 대한 한 줄 평입니다.
+        공연에 다녀오신 분들이 남겨주신 소중한 후기입니다.
       </div>
       <ReviewList />
     </ContentContainer>
