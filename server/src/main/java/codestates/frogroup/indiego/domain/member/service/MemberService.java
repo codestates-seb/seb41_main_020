@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.config.AES128Config;
 import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
+import codestates.frogroup.indiego.domain.member.entity.Profile;
 import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.email.event.MemberRegistrationApplicationEvent;
@@ -66,17 +67,17 @@ public class MemberService {
     // OAuth2 인증 완료후 회원가입 및 업데이트
     public Member createOauth2Member(OAuthUserProfile userProfile, List<String> roles) {
         Optional<Member> member = memberRepository.findByEmail(userProfile.getEmail());
-
         if(member.isPresent()){
-            if(member.get().getOAuthStatus().equals(OAUTH)){ // OAuth2 회원가입이 되어있는 경우
+            if(member.get().getOAuthStatus().equals(OAUTH)){ // OAuth2 회원가입이 되어있는 경우 (업데이트)
                 return member.map(m -> m.oauthUpdate(userProfile.getName(), userProfile.getEmail(),
                         userProfile.getImage(), roles, OAUTH)).orElse(null);
             } else { // 일반회원 가입이 되어있는 경우
                 throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
             }
-        } else { // 회원이 존재하지 않을 경우
-            return member.map(m -> m.oauthUpdate(userProfile.getName(), userProfile.getEmail(),
-                    userProfile.getImage(), roles, OAUTH)).get();
+        } else {
+            Member oauth2Member = userProfile.createOauth2Member(userProfile.getName(), userProfile.getEmail(),
+                    userProfile.getImage(), roles, OAUTH);
+            return memberRepository.save(oauth2Member);
         }
     }
 
