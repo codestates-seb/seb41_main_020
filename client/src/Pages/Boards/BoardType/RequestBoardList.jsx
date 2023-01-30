@@ -8,6 +8,7 @@ import Dropdown from "../../../Components/Board/BoardList/Dropdown.jsx";
 import PageNation from "../../../Components/Board/BoardList/PageNation.jsx";
 import BoardListItem from "../../../Components/Board/BoardListItem/BoardListItem";
 import Spinner from "../../../Components/Spinner";
+import { NoDataDiv } from "../Board/BoardList";
 
 //로컬 모듈
 import {
@@ -288,7 +289,9 @@ export default function RequestBoardList() {
           <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {isLoading ? (
+        {pageData.totalPages === 0 ? (
+          <NoDataDiv>데이터가 없습니다</NoDataDiv>
+        ) : isLoading ? (
           <SpinnerExtended />
         ) : (
           boardList.map((it) => <BoardListItem key={it.id} {...it} />)

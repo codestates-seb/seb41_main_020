@@ -184,6 +184,13 @@ const WriteButton = styled(OKButton)`
   }
 `;
 
+export const NoDataDiv = styled.div`
+  margin-top: 30px;
+  height: 110px;
+  font-size: ${dtFontSize.medium};
+  text-align: center;
+`;
+
 export const SpinnerExtended = styled(Spinner)`
   position: absolute;
   left: 50%;
@@ -288,7 +295,9 @@ export default function BoardList() {
           <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>
         </div>
         <div className="lineDiv"></div>
-        {isLoading ? (
+        {pageData.totalPages === 0 ? (
+          <NoDataDiv>데이터가 없습니다</NoDataDiv>
+        ) : isLoading ? (
           <SpinnerExtended />
         ) : (
           boardList.map((it) => <BoardListItem key={it.id} {...it} />)
@@ -299,10 +308,12 @@ export default function BoardList() {
             <span className="WriteButtonSpan">글 올리기</span>
           </WriteButton>
         </WriteButtonDiv>
-        <PageNation
-          location={`${pathname}?${PageNationURI}`}
-          pageData={pageData}
-        ></PageNation>
+        {pageData.totalPages > 0 && (
+          <PageNation
+            location={`${pathname}?${PageNationURI}`}
+            pageData={pageData}
+          ></PageNation>
+        )}
         <SearchBar
           placeholder="검색어를 입력해주세요"
           location={`${pathname}?${SearchBarUri}`}
