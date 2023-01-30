@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { sub, dtFontSize, primary } from "../../../styles/mixins";
@@ -57,13 +57,36 @@ const DropdownContainer = styled.div`
 
 const CreateDropdown = ({ setCategoryValue, categoryValue }) => {
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState("자유게시판");
+  const [value, setValue] = useState("");
 
   const handleDropdown = (props) => {
     setValue(props);
     setToggle(!toggle);
     setCategoryValue(props);
   };
+
+  useEffect(() => {
+    if (location.pathname.includes("free")) {
+      setValue("자유게시판");
+      setCategoryValue("자유게시판");
+    }
+    if (location.pathname.includes("employ")) {
+      setValue("구인게시판");
+      setCategoryValue("구인게시판");
+    }
+    if (location.pathname.includes("request")) {
+      setValue("초청게시판");
+      setCategoryValue("초청게시판");
+    }
+    if (location.pathname.includes("advertise")) {
+      setValue("홍보게시판");
+      setCategoryValue("홍보게시판");
+    }
+    if (location.pathname.includes("review")) {
+      setValue("후기게시판");
+      setCategoryValue("후기게시판");
+    }
+  }, []);
 
   return (
     <DropdownDiv>

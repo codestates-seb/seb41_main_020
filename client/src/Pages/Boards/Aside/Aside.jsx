@@ -5,7 +5,7 @@ import breakpoint from "../../../styles/breakpoint";
 //라이브러리 및 라이브러리 메소드
 import React from "react";
 import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Side = styled.aside`
   position: fixed;
@@ -52,9 +52,6 @@ const SideList = styled.div`
 `;
 
 const Aside = () => {
-  const { pathname } = useLocation();
-  console.log(123);
-  console.log(location.pathname);
   return (
     <Side>
       <SideList>

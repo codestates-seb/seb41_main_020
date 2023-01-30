@@ -99,7 +99,7 @@ const PostButton = styled(OKButton)`
 
 const BoardCreate = () => {
   const [contentValue, setContentValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("자유게시판");
+  const [categoryValue, setCategoryValue] = useState("");
   const [titleValue, setTitleValue] = useState("");
   const navigate = useNavigate();
   const arrayRef = useRef([""]);
@@ -157,20 +157,21 @@ const BoardCreate = () => {
 
   const handleButtonOnSuccess = () => {
     alert("작성하였습니다");
+    const Queries = "&status=최신순&page=1&size=10";
     if (categoryValue === "자유게시판") {
-      navigate(`/${newPathName[1]}/free`);
+      navigate(`/board/free?category=자유게시판${Queries}`);
     }
     if (categoryValue === "구인게시판") {
-      navigate(`/${newPathName[1]}/employ`);
+      navigate(`/board/employ?category=구인게시판${Queries}`);
     }
     if (categoryValue === "초청게시판") {
-      navigate(`/${newPathName[1]}/request`);
+      navigate(`/board/request?category=초청게시판${Queries}`);
     }
     if (categoryValue === "홍보게시판") {
-      navigate(`/${newPathName[1]}/advertise`);
+      navigate(`/board/advertise?category=홍보게시판${Queries}`);
     }
     if (categoryValue === "후기게시판") {
-      navigate(`/${newPathName[1]}/review`);
+      navigate(`/board/review?category=후기게시판${Queries}`);
     }
   };
 
