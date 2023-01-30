@@ -214,7 +214,7 @@ const TicketInfoContainer = styled.div`
   border-radius: 10px;
   justify-content: space-between;
   flex-direction: column;
-  margin-left: 10px;
+  margin-left: 30px;
   min-height: 500px;
   padding: 3%;
 
