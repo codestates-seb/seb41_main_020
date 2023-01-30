@@ -85,7 +85,9 @@ const AnswerList = ({ boardData, answerListData, refetch, id, userId }) => {
       createAnswerRef.current.focus();
       return;
     }
-    createAnswer();
+    if (window.confirm("작성하시겠습니까?")) {
+      createAnswer();
+    }
   };
 
   const handleButton = async () => {
