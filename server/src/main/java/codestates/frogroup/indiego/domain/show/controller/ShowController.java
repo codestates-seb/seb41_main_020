@@ -114,10 +114,9 @@ public class ShowController {
     }
 
     @GetMapping("/seller")
-    public ResponseEntity getShowsOfSeller(@PageableDefault(page = 1, size = 3) Pageable pageable,
-                                           @AuthenticationPrincipal Member member){
-        Page<Show> showPage = showService.findShowOfSeller(member.getId(), pageable);
-        List<Show> shows = showPage.getContent();
+    public ResponseEntity getShowsOfSeller(@AuthenticationPrincipal Member member){
+
+        List<Show> shows = showService.findShowOfSeller(member.getId());
 
         //Rssponse List생성해서 맵퍼 사용해서 데이터넣기
         //세터로 잔여좌석수, 현재 수익, 만료 여부 셋팅
