@@ -157,9 +157,21 @@ const BoardCreate = () => {
 
   const handleButtonOnSuccess = () => {
     alert("작성하였습니다");
-    navigate(
-      `/${PathNameURI}?category=${categoryValue}&status=최신순&page=1&size=10`
-    );
+    if (categoryValue === "자유게시판") {
+      navigate(`/${newPathName[1]}/free`);
+    }
+    if (categoryValue === "구인게시판") {
+      navigate(`/${newPathName[1]}/employ`);
+    }
+    if (categoryValue === "초청게시판") {
+      navigate(`/${newPathName[1]}/request`);
+    }
+    if (categoryValue === "홍보게시판") {
+      navigate(`/${newPathName[1]}/advertise`);
+    }
+    if (categoryValue === "후기게시판") {
+      navigate(`/${newPathName[1]}/review`);
+    }
   };
 
   const handleButtonOnError = () => {

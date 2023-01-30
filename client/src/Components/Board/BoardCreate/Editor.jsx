@@ -76,7 +76,7 @@ const Editor = ({ placeholder, value, setValue, arrayRef }) => {
         // 가져온 위치에 이미지를 삽입한다
         editor.insertEmbed(range.index, "image", IMG_URL);
 
-        arrayRef.push(IMG_URL);
+        arrayRef?.push(IMG_URL);
       } catch (error) {
         alert("이미지 업로드에 실패하였습니다");
       }

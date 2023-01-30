@@ -27,7 +27,7 @@ import instance from "../../api/core/default.js";
 //라이브러리 및 라이브러리 메소드
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -283,6 +283,15 @@ export default function TicketsCreate() {
   const handlePost = () => {
     if (ticketName === "") {
       ticketNameRef.current.focus();
+      return;
+    }
+
+    if (
+      imageUrl ===
+      "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
+    ) {
+      alert("공연 포스터를 올려주세요");
+      window.scrollTo(0, 250);
       return;
     }
     if (place === "어디서 공연을 하시나요?") {
