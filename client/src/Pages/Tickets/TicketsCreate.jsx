@@ -259,6 +259,7 @@ export default function TicketsCreate() {
   );
   const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
   const userRole = JSON.parse(localStorage.getItem("userInfoStorage"))?.role;
+  console.log(startDate);
 
   // 티켓 post에 보낼 데이터
   const data = {

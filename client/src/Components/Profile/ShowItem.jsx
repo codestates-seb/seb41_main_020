@@ -30,10 +30,11 @@ const ShowItemContainer = styled.li`
   all: unset;
   align-items: center;
   box-sizing: border-box;
+  box-shadow: 0 3px 3px #b9b9b9;
   display: flex;
   min-height: 130px;
   width: 100%;
-  background-color: ${sub.sub300};
+  background-color: #d0e2ff;
   border-radius: 10px;
   justify-content: space-between;
   padding: 2% 3%;
@@ -135,6 +136,7 @@ const ItemContentContainer = styled.div`
 export default function ShowItem({ reservationData }) {
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const navigate = useNavigate();
+  console.log(reservationData);
 
   const deleteReservation = () => {
     return instance({
@@ -206,20 +208,24 @@ export default function ShowItem({ reservationData }) {
             </div>
           </div>
         </div>
-        <div className="button-container">
-          <KakaoMapButton
-            detailAddress={reservationData && reservationData.detailAddress}
-            latitude={reservationData && reservationData.latitude}
-            longitude={reservationData && reservationData.longitude}
-          />
-          <PillButton
-            color={misc.red}
-            hoverColor={misc.lightred}
-            onClick={handledeleteReservation}
-          >
-            취소
-          </PillButton>
-        </div>
+        {reservationData.expired ? (
+          ""
+        ) : (
+          <div className="button-container">
+            <KakaoMapButton
+              detailAddress={reservationData && reservationData.detailAddress}
+              latitude={reservationData && reservationData.latitude}
+              longitude={reservationData && reservationData.longitude}
+            />
+            <PillButton
+              color={misc.red}
+              hoverColor={misc.lightred}
+              onClick={handledeleteReservation}
+            >
+              취소
+            </PillButton>
+          </div>
+        )}
       </ItemContentContainer>
     </ShowItemContainer>
   );

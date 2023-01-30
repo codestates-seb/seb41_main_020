@@ -74,7 +74,8 @@ const ShowListContainer = styled.div`
   height: max-content;
   min-height: 250px;
   width: 80%;
-  background-color: ${sub.sub100};
+  background-color: white;
+  border: 1px solid ${sub.sub300};
   border-radius: 10px;
   justify-content: space-between;
   flex-direction: column;

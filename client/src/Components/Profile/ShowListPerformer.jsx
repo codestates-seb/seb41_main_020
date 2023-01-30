@@ -23,7 +23,6 @@ const ShowListInnerContainer = styled.ul`
   height: 450px;
   position: relative;
   width: 100%;
-  justify-content: space-between;
   flex-direction: column;
   overflow-y: scroll;
   overflow-x: hidden;

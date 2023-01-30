@@ -150,7 +150,7 @@ const TopLeftContainer = styled.div`
   display: flex;
   justify-content: space-between;
   min-width: max-content;
-  width: 65%;
+  width: 68%;
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     flex-direction: column;
@@ -209,7 +209,7 @@ const EmptySeat = styled.span`
 
 const TicketInfoContainer = styled.div`
   display: flex;
-  width: 58%;
+  width: 60%;
   background-color: ${sub.sub100};
   border-radius: 10px;
   justify-content: space-between;
@@ -462,6 +462,8 @@ export default function TicketsDetail() {
   const params = useParams();
   const navigate = useNavigate();
 
+  console.log("예약 날짜", date);
+
   useEffect(() => {
     setDateError(false);
     setIsSameUser(false);
@@ -582,6 +584,9 @@ export default function TicketsDetail() {
   });
 
   const handleReservation = () => {
+    if (dateError || ticketCount === "") {
+      return;
+    }
     postReservation();
   };
   return (
