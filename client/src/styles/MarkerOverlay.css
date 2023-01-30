@@ -111,7 +111,7 @@
   display: flex;
   max-width: 250px;
   top: -135px;
-  left: -50px;
+  left: -100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -133,12 +133,18 @@
   overflow-x: hidden;
   -webkit-box-orient: vertical;
   white-space: normal;
+  text-align: center;
 
 }
 
 .hover_date {
   font-weight: 400;
   font-size: 12px;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow-x: hidden;
+  -webkit-box-orient: vertical;
 }
 
 .searched_data_list_container {
