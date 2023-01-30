@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 //페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper, ContentWrapper } from "./BoardList.jsx";
 import breakpoint from "../../../styles/breakpoint.js";
@@ -99,15 +100,28 @@ const PostButton = styled(OKButton)`
 
 const BoardEdit = () => {
   const { boardStoreData } = useBoardStore();
-  const [categoryValue, setCategoryValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState(boardStoreData.category);
   const [titleValue, setTitleValue] = useState(boardStoreData.title);
   const [contentValue, setContentValue] = useState(boardStoreData.content);
+  const [thumbnailURL, setThumbnailURL] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const titleRef = useRef();
   const arrayRef = useRef([""]);
   const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
+
+  useEffect(() => {
+    const newImage = new RegExp(/<img\b[^>]*>(.*?)/, "g").exec(contentValue);
+    if (newImage) {
+      const imageString = newImage[0];
+      setThumbnailURL(
+        new RegExp(
+          /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
+        ).exec(imageString)[0]
+      );
+    }
+  }, [contentValue]);
 
   useEffect(() => {
     if (!userId) {
@@ -146,13 +160,14 @@ const BoardEdit = () => {
   const data = {
     title: titleValue,
     content: contentValue,
-    image:
-      arrayRef.current.length === 1 ? arrayRef.current[0] : arrayRef.current[1],
+    image: arrayRef.current.length === 1 ? arrayRef.current[0] : thumbnailURL,
     category: categoryValue,
   };
 
   const handleEdit = () => {
+    // contentValue
     if (categoryValue === "") {
+      alert("카테고리를 선택해주세요");
       window.scrollTo(0, 0);
       return;
     }
@@ -161,7 +176,7 @@ const BoardEdit = () => {
       return;
     }
 
-    if (contentValue === "<p><br></p>") {
+    if (contentValue.length < 1 || contentValue === "<p><br></p>") {
       window.scrollTo(0, 300);
       return;
     }
@@ -182,7 +197,21 @@ const BoardEdit = () => {
 
   const handleButtonOnSuccess = () => {
     const newPathName = pathname.split("/");
-    navigate(`/${newPathName[1]}/${newPathName[2]}/${newPathName[3]}`);
+    if (categoryValue === "자유게시판") {
+      navigate(`/${newPathName[1]}/free/${newPathName[3]}`);
+    }
+    if (categoryValue === "구인게시판") {
+      navigate(`/${newPathName[1]}/employ/${newPathName[3]}`);
+    }
+    if (categoryValue === "초청게시판") {
+      navigate(`/${newPathName[1]}/request/${newPathName[3]}`);
+    }
+    if (categoryValue === "홍보게시판") {
+      navigate(`/${newPathName[1]}/advertise/${newPathName[3]}`);
+    }
+    if (categoryValue === "후기게시판") {
+      navigate(`/${newPathName[1]}/review/${newPathName[3]}`);
+    }
   };
 
   const handleButtonOnError = () => {
@@ -208,6 +237,7 @@ const BoardEdit = () => {
           <ClassificationDiv>
             <CreateDropdown
               setCategoryValue={setCategoryValue}
+              categoryValue={categoryValue}
             ></CreateDropdown>
           </ClassificationDiv>
           <div className="postDiv">제목</div>

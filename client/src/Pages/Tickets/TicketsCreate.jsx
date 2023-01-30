@@ -257,6 +257,7 @@ export default function TicketsCreate() {
   const [imageUrl, setImageUrl] = useState(
     "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png"
   );
+
   const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
   const userRole = JSON.parse(localStorage.getItem("userInfoStorage"))?.role;
 
@@ -293,6 +294,13 @@ export default function TicketsCreate() {
       detailPlaceRef.current.focus();
       return;
     }
+
+    if (startDate > endDate) {
+      alert("시작일과 종료일을 확인해주세요");
+      window.scrollTo(0, 900);
+      return;
+    }
+
     if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
@@ -313,7 +321,9 @@ export default function TicketsCreate() {
       window.scrollTo(0, 1850);
       return;
     }
-    createTickets();
+    if (window.confirm("작성하시겠습니까?")) {
+      createTickets();
+    }
   };
   const handleCreateTickets = async () => {
     const response = await instance({
