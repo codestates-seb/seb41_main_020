@@ -34,6 +34,8 @@ const BoardList = styled.ul`
   flex-direction: column;
   overflow-y: scroll;
   border-radius: 10px;
+  position: relative;
+  border: 1px solid ${primary.primary300};
 
   a {
     text-decoration: none;
@@ -42,6 +44,12 @@ const BoardList = styled.ul`
     :hover {
       color: ${primary.primary500};
     }
+  }
+
+  .null_info {
+    position: absolute;
+    top: 45%;
+    left: 30%;
   }
 `;
 
@@ -73,8 +81,7 @@ export default function Boards({ category, children, path }) {
       <BoardList>
         {isLoading ? (
           <Spinner />
-        ) : (
-          data &&
+        ) : data.length > 0 ? (
           data.map((data, index, datas) => {
             if (index === datas.length - 1) {
               return (
@@ -95,6 +102,8 @@ export default function Boards({ category, children, path }) {
               </Link>
             );
           })
+        ) : (
+          <p className="null_info">게시글이 존재하지 않습니다.</p>
         )}
       </BoardList>
     </BoardsContainer>

@@ -178,7 +178,7 @@ const UserStatus = styled.div`
     color: white;
     background-color: ${primary.primary500};
     min-width: 150px;
-    max-width: 200px;
+    max-width: 250px;
     padding: 10px 0;
     height: max-content;
     align-items: center;
@@ -378,7 +378,7 @@ export default function Header() {
       .finally((response) => {
         localStorage.clear();
         window.alert("로그아웃 되었습니다!");
-        window.location.reload();
+        window.location.replace("/");
       });
   };
 
@@ -558,6 +558,18 @@ export default function Header() {
                   to={`/mypage/${userInfo?.role.toLowerCase()}/${userInfo?.id}`}
                 >
                   마이페이지
+                </Link>
+              )}
+              {isLogin && userInfo?.role === "PERFORMER" && (
+                <Link
+                  className={
+                    location.pathname.includes("tickets/create")
+                      ? "current"
+                      : ""
+                  }
+                  to={"/tickets/create"}
+                >
+                  공연작성하기
                 </Link>
               )}
             </NavbarLinkerContainer>

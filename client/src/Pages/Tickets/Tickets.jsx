@@ -96,7 +96,7 @@ const SearchBarContainer = styled.div`
 
 const ItemListContainer = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 100px;
   display: flex;
   margin-top: 50px;
   justify-content: center;
@@ -132,6 +132,7 @@ export default function Tickets() {
   const [pageInfo, setPageInfo] = useState([]);
   const location = useLocation();
   const [searchURI, setSearchURI] = useState(location.pathname + "?");
+  const [searchFilter, setSearchFilter] = useState("공연명");
 
   const fetchShowData = () => {
     const params = {};
@@ -145,22 +146,30 @@ export default function Tickets() {
     });
   };
 
+  useEffect(() => {
+    // console.log("data changed", data);
+  }, [data]);
+
   const fetchShowDataOnSuccess = (response) => {
     const data = response.data;
     setData(data.data);
-    setPageInfo(data.pageInfo);
+    if (data.pageInfo.page > data.pageInfo.totalPages) {
+      data.pageInfo.totalPages = 0;
+      setPageInfo(data.pageInfo);
+    } else {
+      setPageInfo(data.pageInfo);
+    }
   };
 
   const { isLoading, refetch } = useQuery({
     queryKey: ["fetchShowData"],
     queryFn: fetchShowData,
     onSuccess: fetchShowDataOnSuccess,
-    retry: false,
-    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    refetch();
     let newSearchURI = location.pathname + "?";
     queryParams.forEach((paramArr) => {
       const queryKey = paramArr[0];
@@ -171,7 +180,6 @@ export default function Tickets() {
       }
     });
     setSearchURI(newSearchURI);
-    refetch();
   }, [searchParams]);
 
   return (
@@ -184,14 +192,18 @@ export default function Tickets() {
       </ContentHeaderContainer>
       <ContentContainer>
         <SearchBarContainer>
-          <SearchOptions searchURI={searchURI} setSearchURI={setSearchURI} />
-        </SearchBarContainer>
-        {isLoading ? (
-          <SpinnerExtended
+          <SearchOptions
             searchURI={searchURI}
             setSearchURI={setSearchURI}
+            setData={setData}
+            setPageInfo={setPageInfo}
             refetch={refetch}
+            searchFilter={searchFilter}
+            setSearchFilter={setSearchFilter}
           />
+        </SearchBarContainer>
+        {isLoading ? (
+          <SpinnerExtended />
         ) : (
           <ItemListContainer>
             <ItemList data={data} />

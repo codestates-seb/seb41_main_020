@@ -138,7 +138,7 @@ export default function Carousel({
   };
 
   const { isLoading } = useQuery({
-    queryKey: ["fetchShowData", status],
+    queryKey: ["fetchShowData", status, address],
     queryFn: fetchShowData,
     onSuccess: fetchShowDataOnSuccess,
     keepPreviousData: true,

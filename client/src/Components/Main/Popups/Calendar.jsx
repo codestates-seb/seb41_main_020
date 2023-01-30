@@ -415,7 +415,6 @@ export default function Calendar({ setSelectedDate, setDateInfo }) {
         ) : (
           <DateGrid>
             {daysArr.map((day, index) => {
-              console.log(selectedDay, day.day);
               return (
                 <div className="date_container" key={index}>
                   <p
