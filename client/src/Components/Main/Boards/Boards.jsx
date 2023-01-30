@@ -43,6 +43,10 @@ const BoardList = styled.ul`
 
     :hover {
       color: ${primary.primary500};
+
+      .info {
+        color: ${primary.primary500};
+      }
     }
   }
 

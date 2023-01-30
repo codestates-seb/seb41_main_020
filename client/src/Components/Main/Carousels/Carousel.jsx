@@ -186,17 +186,16 @@ export default function Carousel({
       </PrevButton>
       {isLoading ? (
         <Spinner />
+      ) : CarouselItemList && data.length > 0 ? (
+        <CarouselItemList
+          data={data}
+          currentIdx={currentIdx}
+          transition={transition}
+        />
       ) : (
-        CarouselItemList &&
-        data && (
-          <CarouselItemList
-            data={data}
-            currentIdx={currentIdx}
-            transition={transition}
-          />
-        )
+        <p>현재 지역에 공연이 존재하지 않습니다.</p>
       )}
-      {isRankMode && (
+      {isRankMode && data.length > 0 && (
         <Rank>
           {currentIdx === 0
             ? data.length - 2
