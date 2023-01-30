@@ -240,7 +240,7 @@ export default function Home() {
                   maxWidth={"480px"}
                   height={"100%"}
                   status="별점순"
-                  address={"강남구" || userInfo?.profile[0].address}
+                  address={"강남구" && userInfo?.profile[0].address}
                   carouselItemList={CarouselItemList}
                   isRankMode={true}
                 ></Carousel>
@@ -253,7 +253,7 @@ export default function Home() {
                   maxWidth={"480px"}
                   height={"100%"}
                   status="최신순"
-                  address={"강남구" || userInfo?.profile[0].address}
+                  address={"강남구" && userInfo?.profile[0].address}
                   carouselItemList={CarouselItemList}
                 ></Carousel>
               </div>
