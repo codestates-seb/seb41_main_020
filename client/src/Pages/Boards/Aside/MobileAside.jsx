@@ -102,7 +102,7 @@ const MobileAside = () => {
             );
           }}
         >
-          요청 게시판
+          초청 게시판
         </button>
         <button
           className={

@@ -26,10 +26,11 @@ const ShowItemContainer = styled.li`
   all: unset;
   align-items: center;
   box-sizing: border-box;
+  box-shadow: 0 3px 3px #b9b9b9;
   display: flex;
   min-height: 130px;
   width: 100%;
-  background-color: ${sub.sub300};
+  background-color: #f7eabc;
   border-radius: 10px;
   justify-content: space-between;
   padding: 2% 3%;
@@ -153,7 +154,7 @@ const ItemContentContainer = styled.div`
   }
 
   > .empty-seat-and-profit-container {
-    border-left: 1px solid ${sub.sub400};
+    border-left: 1px solid ${secondary.secondary600};
     display: flex;
     flex-direction: column;
     height: 100px;
@@ -167,7 +168,7 @@ const ItemContentContainer = styled.div`
     }
 
     > span {
-      color: ${sub.sub800};
+      color: ${secondary.secondary900};
       font-weight: 600;
       font-size: ${dtFontSize.medium};
 
@@ -197,8 +198,7 @@ export default function ShowItem({ reservationData }) {
           <div className="show-info-container">
             <div className="title-and-provider-container">
               <a onClick={handleMoveToShowPage}>
-                {reservationData && reservationData.title} /{" "}
-                {reservationData && reservationData.nickname}
+                {reservationData && reservationData.title}
               </a>
             </div>
             <div className="period-and-location-container">
