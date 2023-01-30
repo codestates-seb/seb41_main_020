@@ -68,7 +68,7 @@ const PostDetailContainer = styled.div`
   margin: 0 10px;
 
   .title {
-    font-size: calc(8px + 0.5vw);
+    font-size: calc(6px + 0.5vw);
     font-weight: 600;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -82,7 +82,7 @@ const PostDetailContainer = styled.div`
   }
 
   .content {
-    font-size: calc(6px + 0.5vw);
+    font-size: calc(4px + 0.5vw);
     display: -webkit-box;
     -webkit-line-clamp: 1;
     overflow: hidden;
@@ -91,7 +91,8 @@ const PostDetailContainer = styled.div`
   }
 
   .info {
-    font-size: calc(4px + 0.5vw);
+    font-size: calc(3px + 0.5vw);
+    color: ${sub.sub400};
   }
 `;
 

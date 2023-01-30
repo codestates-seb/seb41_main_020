@@ -392,11 +392,17 @@ export default function Header() {
     setUserInfo(data);
   };
 
+  const fetchUserInfoOnError = (err) => {
+    window.alert("로그인 시간이 만료되었습니다.");
+    window.location.replace("./login");
+  };
+
   useQuery({
     queryKey: ["fetchUserInfo", isLogin],
     queryFn: fetchUserInfo,
     enabled: isLogin,
     onSuccess: fetchUserInfoOnSuccess,
+    onError: fetchUserInfoOnError,
     refetchOnWindowFocus: false,
   });
 
