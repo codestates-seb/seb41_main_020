@@ -58,6 +58,7 @@ instance.interceptors.response.use(
           });
         } finally {
           localStorage.clear();
+          window.location.replace("./login");
         }
       }
       return Promise.reject(error);
