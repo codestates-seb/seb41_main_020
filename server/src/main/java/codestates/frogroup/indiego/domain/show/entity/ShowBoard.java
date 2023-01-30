@@ -36,7 +36,7 @@ public class ShowBoard {
     @Column
     private String showTime;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String detailDescription;
 
 }
