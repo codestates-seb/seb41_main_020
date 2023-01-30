@@ -55,35 +55,26 @@
 |:---:|:---:|:---:|
 |**비회원(User)**|**회원(Member)**|**퍼포머(Performer)**|
 |<img width="1888" alt="userflow-User" src="https://user-images.githubusercontent.com/80394894/215343144-0cbd0ed3-e980-43b7-ad21-e0a4844a8794.png">|<img width="2224" alt="userflow-Member" src="https://user-images.githubusercontent.com/80394894/215343162-e947cca2-b63a-4fd4-987e-98976c6b2fb1.png">|<img width="2240" alt="userflow-Performer" src="https://user-images.githubusercontent.com/80394894/215343177-c9ce7969-88f3-47e1-b65f-f35cc09dedae.png">|
-
-### 비회원(User)
-<img width="1888" alt="userflow-User" src="https://user-images.githubusercontent.com/80394894/215343144-0cbd0ed3-e980-43b7-ad21-e0a4844a8794.png">
-
-### 회원(Member)
-<img width="2224" alt="userflow-Member" src="https://user-images.githubusercontent.com/80394894/215343162-e947cca2-b63a-4fd4-987e-98976c6b2fb1.png">
-
-### 퍼포머(Performer)
-<img width="2240" alt="userflow-Performer" src="https://user-images.githubusercontent.com/80394894/215343177-c9ce7969-88f3-47e1-b65f-f35cc09dedae.png">
 </br>
 
 ## ✨ 서비스 구현
-### 회원(User, Performer)
- - Create : 멤버 회원가입
- - Read : 회원은 프로필 조회 가능
- - Update : 회원은 프로필 수정 가능
- - Delete : 회원은 프로필 삭제 가능
+### 회원(Member, Performer)
+- Create : 일반회원 또는 퍼포머회원으로 회원가입, 로그인 및 로그아웃 기능
+- Read : 회원 마이페이지 조회(회원정보, 공연예약에 대한 정보), 다른 회원의 프로필 조회 기능
+- Update : 회원 마이페이지 수정(닉네임,소개,우리동네 설정 등) 기능
+- Delete : 회원 탈퇴 기능
 
 ### 게시글(Article)
- - Create : 회원은 질문 작성 가능
- - Read : 회원/비회원 질문 조회 가능 & 게시글 검색 가능
- - Update : 회원은 게시글 수정 가능
- - Delete : 회원은 게시글 삭제 가능
+- Create : 일반 회원/퍼포머 게시글 및 댓글 작성 기능
+- Read : 비회원/일반 회원/퍼포머 게시글 조회 및 게시글 검색 기능
+- Update : 일반 회원/퍼포머 게시글 및 댓글 수정 기능
+- Delete : 일반 회원/퍼포머 게시글 및 댓글 삭제 가능
 
 ### 공연(Show)
- - Create : 회원은 답변 작성 가능
- - Read : 회원/비회원 답변 조회 가능
- - Update : 회원은 답변 수정 가능 & 질문 작성자는 답변 채택 가능
- - Delete : 회원은 답변 삭제 가능
+- Create : 퍼포머 공연 작성 기능, 일반 회원은 리뷰 작성 기능, 퍼포머/일반 회원 공연 예약 생성 기능
+- Read : 퍼포머/일반 회원/비회원 공연 조회 가능, 일반 회원/비회원 답변 조회 기능, 퍼포머 판매 공연 조회 기능, 일반 회원 공연 예약 조회 기능
+- Update : 퍼포머 공연 수정 기능, 일반 회원 답변 수정 기능
+- Delete : 퍼포머 공연 삭제 기능, 회원 답변 삭제 기능
 
 </br>
 
