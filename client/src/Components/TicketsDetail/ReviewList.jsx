@@ -14,9 +14,12 @@ import {
   dtFontSize,
   mbFontSize,
 } from "../../styles/mixins";
+import useTicketDataStore from "../../store/useTicketDataStore.js";
 
 //라이브러리 및 라이브러리 메소드
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components/macro";
 
 const ReviewListContainer = styled.ul`
@@ -49,17 +52,42 @@ const AddMoreButton = styled.div`
 `;
 
 export default function ReviewList() {
+  const [data, setData] = useState("");
+  const { ticketData, setTicketData } = useTicketDataStore((state) => state);
+
+  const fetchData = () => {
+    return axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/shows/${ticketData.id}/comments`,
+    });
+  };
+
+  const fetchDataOnSuccess = (response) => {
+    const latestData = response.data.data.reverse();
+    setData(latestData);
+  };
+
+  const fetchDataOnError = (err) => {
+    window.alert("일시적인 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.");
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["fetchReviewData"],
+    queryFn: fetchData,
+    keepPreviousData: true,
+    onSuccess: fetchDataOnSuccess,
+    onError: fetchDataOnError,
+    retry: false,
+  });
+
   return (
     <>
       <ReviewListContainer>
-        <ReviewItem />
-        <ReviewItem />
-        <ReviewItem />
+        {data &&
+          data.map((data) => (
+            <ReviewItem reviewData={data} key={data.commentId} />
+          ))}
       </ReviewListContainer>
-      <AddMoreButton>
-        <span>더보기</span>
-        <FontAwesomeIcon icon={faAngleDown} />
-      </AddMoreButton>
     </>
   );
 }

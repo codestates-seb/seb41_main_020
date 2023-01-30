@@ -2,10 +2,9 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { primary, sub } from "../../../styles/mixins";
 import search from "../../../assets/search.svg";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useBoardListStore from "../../../store/useBoardListStore";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const SearchBarDiv = styled.div`
   display: flex;
@@ -49,7 +48,6 @@ const SearchBarDiv = styled.div`
 const SearchBar = ({ location, placeholder, setPageData }) => {
   const [value, setValue] = useState("");
   const { setBoardListData } = useBoardListStore();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onKeyDown = (e) => {

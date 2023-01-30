@@ -98,19 +98,17 @@ const ModalButton = styled.button`
   }
 `;
 
-export default function TicketDeleteModal() {
-  const userId = JSON.parse(localStorage.getItem("userInfoStorage")).id;
+export default function TicketDeleteModal(ticketId) {
   const { openModal, setOpenModal } = useOpenModalStore((state) => state);
   const navigate = useNavigate();
 
   const handleTicketDelete = () => {
     return instance({
       method: "delete",
-      url: `/shows/${userId}`,
+      url: `/shows/${ticketId.ticketId}`,
     }).then((response) => {
       setOpenModal(false);
-      localStorage.clear();
-      window.alert("회원 탈퇴가 성공적으로 완료되었습니다.");
+      window.alert("공연 삭제가 성공적으로 완료되었습니다.");
       navigate("/");
     });
   };
@@ -122,7 +120,7 @@ export default function TicketDeleteModal() {
           <ModalWindow onClick={(e) => e.stopPropagation()}>
             <FontAwesomeIcon icon={faTimes} size="2x" onClick={setOpenModal} />
             <div className="modal-inner-container">
-              <span>정말로 탈퇴하시겠습니까?</span>
+              <span>정말로 삭제하시겠습니까?</span>
               <div className="button-container">
                 <ModalButton color={misc.red} onClick={handleTicketDelete}>
                   예

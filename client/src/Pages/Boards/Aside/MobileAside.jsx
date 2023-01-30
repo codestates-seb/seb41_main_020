@@ -1,14 +1,13 @@
-import React from "react";
-import styled from "styled-components";
+//로컬 모듈
+import { primary, mbFontSize, sub } from "../../../styles/mixins";
 import breakpoint from "../../../styles/breakpoint";
 
-import { primary, mbFontSize, sub } from "../../../styles/mixins";
-
+//라이브러리 및 라이브러리 메소드
+import React from "react";
+import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const MobileAsideDiv = styled.div`
-  /* z-index: 15;
-  position: fixed; */
   width: 100%;
   height: 80px;
   display: flex;
@@ -18,11 +17,6 @@ const MobileAsideDiv = styled.div`
   background-color: white;
   overflow-x: scroll;
   margin-bottom: 20px;
-
-  /* ::-webkit-scrollbar {
-    display: none;
-  } */
-
   display: none;
 
   .mobileAsideList {
@@ -108,7 +102,7 @@ const MobileAside = () => {
             );
           }}
         >
-          요청 게시판
+          초청 게시판
         </button>
         <button
           className={

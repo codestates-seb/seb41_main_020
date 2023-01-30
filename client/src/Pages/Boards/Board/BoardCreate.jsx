@@ -1,14 +1,18 @@
-import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
+//페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper, ContentWrapper } from "./BoardList.jsx";
-import breakpoint from "../../../styles/breakpoint.js";
 import Aside from "../Aside/Aside.jsx";
 import OKButton from "../../../Components/Board/BoardList/OKButton.jsx";
 import Editor from "../../../Components/Board/BoardCreate/Editor.jsx";
-import AnswerList from "../../../Components/Board/Answer/AnswerList";
+import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
+
+//로컬 모듈
+import { primary, sub, secondary, mbFontSize } from "../../../styles/mixins.js";
+import breakpoint from "../../../styles/breakpoint.js";
+import instance from "../../../api/core/default.js";
+
+//라이브러리 및 라이브러리 메소드
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import CreateDropdown from "../../../Components/Board/BoardCreate/CreateDropdown.jsx";
-import instance from "../../../api/core/default.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
@@ -101,10 +105,17 @@ const BoardCreate = () => {
   const arrayRef = useRef([""]);
   const titleRef = useRef();
   const { pathname } = useLocation();
+  const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
 
   // 기존 경로에서 /create를 빼는 작업
   const newPathName = pathname.split("/");
   const PathNameURI = `${newPathName[1]}/${newPathName[2]}`;
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+  }, []);
 
   const handlePost = () => {
     if (categoryValue === "") {
@@ -116,7 +127,7 @@ const BoardCreate = () => {
       return;
     }
 
-    if (contentValue.length < 1) {
+    if (contentValue.length < 1 || contentValue === "<p><br></p>") {
       window.scrollTo(0, 300);
       return;
     }
@@ -144,6 +155,7 @@ const BoardCreate = () => {
   };
 
   const handleButtonOnSuccess = () => {
+    alert("작성하였습니다");
     navigate(
       `/${PathNameURI}?category=${categoryValue}&status=최신순&page=1&size=10`
     );

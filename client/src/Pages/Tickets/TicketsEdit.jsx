@@ -1,3 +1,4 @@
+//페이지, 리액트 컴포넌트, 정적 파일
 import { PageWrapper } from "../Boards/Board/BoardList.jsx";
 import {
   PostWrapper,
@@ -7,7 +8,12 @@ import {
 } from "../Boards/Board/BoardCreate.jsx";
 import breakpoint from "../../styles/breakpoint.js";
 import CategoryDropdown from "../../Components/Board/TicketsCreate/CategoryDropdown.jsx";
+import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
+import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
+import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
+import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
 
+//로컬 모듈
 import {
   dtFontSize,
   sub,
@@ -16,16 +22,13 @@ import {
   mbFontSize,
   primary,
 } from "../../styles/mixins.js";
-import OKButton from "../../Components/Board/BoardList/OKButton.jsx";
-import Editor from "../../Components/Board/BoardCreate/Editor.jsx";
+import instance from "../../api/core/default.js";
 
+//라이브러리 및 라이브러리 메소드
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Postcode } from "../../Components/Board/TicketsCreate/Postcode";
-import ReactDatePicker from "../../Components/Board/TicketsCreate/ReactDatePicker.jsx";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import instance from "../../api/core/default.js";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import useTicketDataStore from "../../store/useTicketDataStore.js";
 
@@ -221,7 +224,7 @@ const CancelButton = styled(PostButton)`
 
 export default function TicketsEdit() {
   const { ticketData } = useTicketDataStore();
-  const newAdress = ticketData && ticketData?.detailAddress.split(",");
+  const newAdress = ticketData && ticketData?.detailAddress.split("/");
 
   // 카테고리
   const [category, setCategory] = useState(ticketData.category); // 사용
@@ -272,7 +275,7 @@ export default function TicketsEdit() {
     category: category,
     price: ticketPrice,
     address: gu,
-    detailAddress: `${place},${detailPlace}`,
+    detailAddress: `${place}/${detailPlace}`,
     expiredAt: endDate,
     showAt: startDate,
     showTime: startTime,
@@ -297,6 +300,13 @@ export default function TicketsEdit() {
       detailPlaceRef.current.focus();
       return;
     }
+
+    if (startDate > endDate) {
+      alert("시작일과 종료일을 확인해주세요");
+      window.scrollTo(0, 900);
+      return;
+    }
+    
     if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
@@ -387,7 +397,7 @@ export default function TicketsEdit() {
       );
       setImageUrl(result.data.data);
     } catch (error) {
-      console.log(error);
+      alert("이미지 업로드에 실패하였습니다");
     }
   };
   useEffect(() => {
@@ -417,6 +427,41 @@ export default function TicketsEdit() {
   };
 
   const { isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["getEditTickets"],
+    queryFn: getEditTickets,
+    onSuccess: getEditTicketsOnSuccess,
+    onError: getEditTicketsOnError,
+    retry: false,
+  });
+  /////////////////////////////////////////////////////
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/notFound");
+    }
+  }, []);
+
+  const getEditTickets = async () => {
+    const response = await instance({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URI}/shows/${ticketData.id}`,
+    });
+    return response.data;
+  };
+
+  const getEditTicketsOnSuccess = (response) => {
+    if (response.data.sellerId !== userId) {
+      navigate("/notFound");
+    }
+  };
+
+  const getEditTicketsOnError = (response) => {
+    if (response.response.status === 400) {
+      navigate("/notFound");
+    }
+  };
+
+  const { isLoading } = useQuery({
     queryKey: ["getEditTickets"],
     queryFn: getEditTickets,
     onSuccess: getEditTicketsOnSuccess,

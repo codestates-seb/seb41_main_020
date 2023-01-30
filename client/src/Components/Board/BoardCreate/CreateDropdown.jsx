@@ -94,7 +94,7 @@ const CreateDropdown = ({ setCategoryValue }) => {
                 handleDropdown("요청게시판");
               }}
             >
-              요청게시판
+              초청게시판
             </li>
             <li
               role="presentation"

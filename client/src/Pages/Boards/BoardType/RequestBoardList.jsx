@@ -280,9 +280,9 @@ export default function RequestBoardList() {
       <Aside />
       <BoardWrapper>
         <MobileAside />
-        <div className="title">요청게시판</div>
+        <div className="title">초청게시판</div>
         <div className="titleInfo">
-          기관 혹은 단체에서 공연을 요청하는 게시판 입니다.
+          기관 혹은 단체에서 공연을 초청하는 게시판 입니다.
         </div>
         <div className="dropboxDiv">
           <Dropdown location={`${pathname}?${DropdownURI}`}></Dropdown>

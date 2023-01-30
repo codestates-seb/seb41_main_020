@@ -28,6 +28,7 @@ const Tabs = styled.ul`
   left: 0;
   width: 100%;
   height: 70px;
+  z-index: 10;
 
   > li {
     all: unset;
@@ -54,9 +55,9 @@ const Tabs = styled.ul`
 
 const TapContent = styled.div`
   display: flex;
+  height: max-content;
   justify-content: center;
   width: 100%;
-  min-height: 1500px;
   padding: 5%;
   scroll-margin: 120px;
 `;
@@ -67,7 +68,7 @@ export default function TicketsDetailTap() {
 
   const menuArr = [
     { name: "공연 상세", content: <TicketsDetailTapDesc /> },
-    { name: "공연 한 줄 평", content: <TicketsDetailTapReview /> },
+    { name: "공연 후기", content: <TicketsDetailTapReview /> },
   ];
 
   const selectMenuHandler = (index) => {

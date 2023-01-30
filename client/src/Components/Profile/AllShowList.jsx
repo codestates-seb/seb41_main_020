@@ -74,7 +74,8 @@ const ShowListContainer = styled.div`
   height: max-content;
   min-height: 250px;
   width: 80%;
-  background-color: ${sub.sub100};
+  background-color: white;
+  border: 1px solid ${sub.sub300};
   border-radius: 10px;
   justify-content: space-between;
   flex-direction: column;
@@ -104,11 +105,7 @@ export default function AllShowList() {
   };
 
   const fetchDataOnError = (err) => {
-    console.log(err);
-    // window.alert("다시 로그인해주세요.");
-    // setIsLogin(false);
-    // localStorage.clear();
-    // navigate("/");
+    window.alert("일시적인 오류입니다. 잠시 후에 다시 시도해주세요.");
   };
 
   const { isLoading } = useQuery({

@@ -8,10 +8,8 @@ import {
 } from "./BoardList.jsx";
 import Aside from "../Aside/Aside.jsx";
 import AnswerList from "../../../Components/Board/Answer/AnswerList";
-import instance from "../../../api/core/default.js";
 import yellowHeart from "../../../assets/yellowHeart.gif";
 import blueHeart from "../../../assets/blueHeart.gif";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 //로컬 모듈
 import {
@@ -20,14 +18,14 @@ import {
   sub,
   mbFontSize,
 } from "../../../styles/mixins.js";
+import useBoardStore from "../../../store/useBoardStore.js";
+import instance from "../../../api/core/default.js";
 
 //라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import useBoardStore from "../../../store/useBoardStore.js";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 const BoardInfoWrapper = styled(ContentWrapper)`
   @media screen and (max-width: ${breakpoint.mobile}) {

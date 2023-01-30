@@ -1,3 +1,7 @@
+//페이지, 리액트 컴포넌트, 정적 파일
+import blueHeart from "../../../assets/blueHeart.gif";
+
+//로컬 모듈
 import styled from "styled-components";
 import {
   primary,
@@ -6,7 +10,8 @@ import {
   mbFontSize,
 } from "../../../styles/mixins.js";
 import breakpoint from "../../../styles/breakpoint.js";
-import blueHeart from "../../../assets/blueHeart.gif";
+
+//라이브러리 및 라이브러리 메소드
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import instance from "../../../api/core/default.js";
@@ -72,6 +77,10 @@ const AnswerListContentDiv = styled.div`
     font-size: ${dtFontSize.medium};
     width: 100%;
     padding: 2px;
+
+    @media screen and (max-width: ${breakpoint.mobile}) {
+      font-size: ${mbFontSize.medium};
+    }
   }
 
   @media screen and (max-width: ${breakpoint.mobile}) {
@@ -82,7 +91,7 @@ const AnswerListContentDiv = styled.div`
 const AnswerListFunctionDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
+  /* margin-top: 5px; */
   margin-bottom: 10px;
 
   .heartDiv {
@@ -97,6 +106,7 @@ const AnswerListFunctionDiv = styled.div`
       margin: 0;
       padding: 0;
       cursor: pointer;
+
       .heartImage {
         width: 20px;
         height: 20px;
@@ -169,9 +179,8 @@ const AnswerItem = (props) => {
       alert("1글자 이상을 적어야 합니다");
       return;
     }
-    if (window.confirm("수정하시겠습니까?")) {
-      editAnswer();
-    }
+    alert("수정하였습니다");
+    editAnswer();
   };
 
   const handleComplete = async () => {

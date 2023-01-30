@@ -36,6 +36,22 @@ public class Member extends BaseTime {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
+    @Setter
+    @Enumerated(value = EnumType.STRING)
+    private OAuthStatus oAuthStatus;
+
+    public enum OAuthStatus {
+        NORMAL("일반"),
+        OAUTH("소셜");
+
+        @Getter
+        private String status;
+
+        OAuthStatus(String status) {
+            this.status = status;
+        }
+    }
+
     @Builder
     public Member(Long id, String email, String password, Profile profile, String roles,
                   Coordinate coordinate){
@@ -67,11 +83,12 @@ public class Member extends BaseTime {
         this.roles = roles;
     }
 
-    public Member oauthUpdate(String name, String email, String image, List<String> roles) {
+    public Member oauthUpdate(String name, String email, String image, List<String> roles, OAuthStatus oAuthStatus) {
         this.email = email;
         this.profile.setNickname(name);
         this.profile.setImage(image);
         this.roles = roles;
+        this.oAuthStatus = oAuthStatus;
         return this;
     }
 
