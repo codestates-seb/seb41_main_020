@@ -209,7 +209,7 @@ const EmptySeat = styled.span`
 
 const TicketInfoContainer = styled.div`
   display: flex;
-  width: 60%;
+  width: 500px;
   background-color: ${sub.sub100};
   border-radius: 10px;
   justify-content: space-between;
@@ -221,7 +221,7 @@ const TicketInfoContainer = styled.div`
   @media screen and (max-width: ${breakpoint.mobile}) {
     margin-left: 0;
     min-height: 400px;
-    width: 100%;
+    width: 330px;
   }
 
   > div {
