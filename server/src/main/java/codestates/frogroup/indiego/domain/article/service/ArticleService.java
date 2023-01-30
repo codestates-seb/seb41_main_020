@@ -71,6 +71,7 @@ public class ArticleService {
 
 //            changeArticle(article, findArticle);
             Article updateArticle = beanUtils.copyNonNullProperties(article, findArticle);
+            updateArticle.setLikeCount(articleLikeRepository.countByArticleId(findArticle.getId()));
             Article savedArticle = articleRepository.save(updateArticle);
 
             return mapper.articleToArticleResponse(savedArticle);
