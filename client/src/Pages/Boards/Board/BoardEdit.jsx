@@ -108,12 +108,14 @@ const BoardEdit = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const titleRef = useRef();
-  const arrayRef = useRef([""]);
+  // const arrayRef = useRef([""]);
   const userId = JSON.parse(localStorage.getItem("userInfoStorage"))?.id;
 
   useEffect(() => {
     const newImage = new RegExp(/<img\b[^>]*>(.*?)/, "g").exec(contentValue);
     if (newImage) {
+      console.log(123);
+      console.log("newImage : ", newImage);
       const imageString = newImage[0];
       setThumbnailURL(
         new RegExp(
@@ -122,7 +124,7 @@ const BoardEdit = () => {
       );
     }
   }, [contentValue]);
-
+  console.log("thumbnailURL : ", thumbnailURL);
   useEffect(() => {
     if (!userId) {
       navigate("/notFound");
@@ -160,7 +162,9 @@ const BoardEdit = () => {
   const data = {
     title: titleValue,
     content: contentValue,
-    image: arrayRef.current.length === 1 ? arrayRef.current[0] : thumbnailURL,
+    image: thumbnailURL
+      ? thumbnailURL
+      : "https://elkcitychamber.com/wp-content/uploads/2022/08/Placeholder-Image-Square.png",
     category: categoryValue,
   };
 
@@ -256,7 +260,7 @@ const BoardEdit = () => {
               value={contentValue}
               setValue={setContentValue}
               placeholder={"내용을 입력해주세요."}
-              arrayRef={arrayRef.current}
+              // arrayRef={arrayRef.current}
             ></Editor>
           </ContentInputDiv>
           <PostButton type="button" onClick={handleEdit}>
