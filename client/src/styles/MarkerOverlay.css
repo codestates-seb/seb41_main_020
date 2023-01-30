@@ -18,6 +18,7 @@
   box-shadow: 0 5px 20px black;
   top: -130px;
   left: -200px;
+  
 }
 
 .marker_box:hover {
@@ -38,6 +39,7 @@
 }
 
 .marker_title {
+  width: 100%;
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -45,6 +47,10 @@
   -webkit-line-clamp: 1;
   overflow-x: hidden;
   -webkit-box-orient: vertical;
+  word-wrap:break-word;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: normal;
 
 } 
 
@@ -102,6 +108,8 @@
 
 .hover_container {
   position: absolute;
+  display: flex;
+  max-width: 250px;
   top: -135px;
   left: -50px;
   display: flex;
@@ -116,9 +124,16 @@
 }
 
 .hover_title {
+  width: 100%;
   font-weight: 600;
   color :#487EEB;
   margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow-x: hidden;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+
 }
 
 .hover_date {

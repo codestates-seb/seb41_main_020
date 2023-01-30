@@ -11,6 +11,8 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import { useSearchParams, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 import { primary, secondary, dtFontSize, sub } from "../../styles/mixins";
 import breakpoint from "../../styles/breakpoint";
@@ -245,7 +247,14 @@ const DateResetButton = styled.button`
   }
 `;
 
-export default function SearchOptions({ searchURI, setSearchURI }) {
+export default function SearchOptions({
+  searchURI,
+  setSearchURI,
+  setData,
+  setPageInfo,
+  searchFilter,
+  setSearchFilter,
+}) {
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("전체");
   const [startDate, setStartDate] = useState(new Date());
@@ -269,8 +278,8 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
   };
 
   const additionalParams = [
-    dateSelectActive && ["start", `${dateOffsetter(startDate)}`],
-    dateSelectActive && ["end", `${dateOffsetter(endDate)}`],
+    dateSelectActive && ["start", `${dateOffsetter(new Date(startDate))}`],
+    dateSelectActive && ["end", `${dateOffsetter(new Date(endDate))}`],
     location && ["address", location],
     ["category", category],
   ];
@@ -291,6 +300,12 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
     if (queryParams.length > 0) {
       newQueryParams = newQueryParams.concat(queryParams.slice(0, 2));
     }
+
+    newQueryParams.forEach((param) => {
+      if (param[0] === "filter") {
+        param[1] = searchFilter;
+      }
+    });
     additionalParams.forEach((param) => {
       if (param) {
         newQueryParams.push(param);
@@ -303,8 +318,9 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
         newSearchURI += queryKey + "=" + queryVal + "&";
       }
     });
+
     setSearchURI(newSearchURI);
-  }, [location, category, startDate, endDate]);
+  }, [location, category, startDate, endDate, searchFilter]);
 
   const locationPopupClickHandler = (e) => {
     const address = JSON.parse(e.target.attributes.value.value).address;
@@ -324,6 +340,68 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
     setStartDate(new Date());
     setEndDate(new Date());
   };
+
+  const fetchShowDataWithQuery = () => {
+    const params = {};
+
+    let search = "";
+    let pageVal = null;
+    queryParams.forEach((param) => {
+      if (param[0] === "page") {
+        pageVal = param[1];
+      } else if (param[0] === "search") {
+        search = param[1];
+      }
+    });
+
+    if (pageVal) {
+      params["page"] = pageVal;
+    }
+
+    const newQueryParams = {
+      address: location,
+      category,
+      start: dateSelectActive && dateOffsetter(new Date(startDate)),
+      end: dateSelectActive && dateOffsetter(new Date(endDate)),
+      filter: searchFilter,
+      search,
+    };
+
+    for (let key in newQueryParams) {
+      if (newQueryParams[key]) {
+        params[key] = newQueryParams[key];
+      }
+    }
+
+    return axios.get(`${process.env.REACT_APP_SERVER_URI}/shows`, {
+      params,
+    });
+  };
+
+  const fetchShowDataWithQueryOnSuccess = (response) => {
+    const data = response.data;
+    setData(data.data);
+    if (data.pageInfo.page > data.pageInfo.totalPages) {
+      data.pageInfo.totalPages = 0;
+      setPageInfo(data.pageInfo);
+    } else {
+      setPageInfo(data.pageInfo);
+    }
+  };
+
+  useQuery({
+    queryKey: [
+      "fetchShowDataWithQuery",
+      location,
+      category,
+      startDate,
+      endDate,
+      searchFilter,
+    ],
+    queryFn: fetchShowDataWithQuery,
+    onSuccess: fetchShowDataWithQueryOnSuccess,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <Container>
@@ -456,6 +534,8 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
           fetchMode={false}
           defaultValue={searchParams.get("search") || ""}
           additionalParams={additionalParams}
+          searchFilter={searchFilter}
+          setSearchFilter={setSearchFilter}
         />
       </SearchBarMainContainer>
     </Container>

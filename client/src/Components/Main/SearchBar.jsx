@@ -150,6 +150,8 @@ export default function SearchBar({
   navigateTo,
   defaultValue,
   additionalParams,
+  searchFilter,
+  setSearchFilter,
 }) {
   const [isSearchOptionsClicked, setIsSearchOptionsClicked] = useState(false);
   const [searchOption, setSearchOption] = useState("공연명");
@@ -168,8 +170,14 @@ export default function SearchBar({
     if (props === "blur") {
       const next = e.relatedTarget;
       if (next instanceof HTMLLIElement) {
-        setSearchOption(next.innerText);
-        setIsSearchOptionsClicked(false);
+        if (setSearchFilter) {
+          setSearchFilter(next.innerText);
+          setSearchOption(next.innerText);
+          setIsSearchOptionsClicked(false);
+        } else {
+          setSearchOption(next.innerText);
+          setIsSearchOptionsClicked(false);
+        }
       } else {
         setIsSearchOptionsClicked(false);
       }

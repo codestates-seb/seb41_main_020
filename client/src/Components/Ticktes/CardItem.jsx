@@ -51,6 +51,10 @@ const DetailContainer = styled.div`
   h2 {
     font-size: calc(10px + 0.3vw);
     margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow-x: hidden;
+    -webkit-box-orient: vertical;
   }
 
   h3 {
