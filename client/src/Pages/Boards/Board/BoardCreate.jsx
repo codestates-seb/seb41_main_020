@@ -127,7 +127,7 @@ const BoardCreate = () => {
       return;
     }
 
-    if (contentValue.length < 1) {
+    if (contentValue.length < 1 || contentValue === "<p><br></p>") {
       window.scrollTo(0, 300);
       return;
     }
