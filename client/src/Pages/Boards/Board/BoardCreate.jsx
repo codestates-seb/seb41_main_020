@@ -99,7 +99,7 @@ const PostButton = styled(OKButton)`
 
 const BoardCreate = () => {
   const [contentValue, setContentValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("자유게시판");
   const [titleValue, setTitleValue] = useState("");
   const navigate = useNavigate();
   const arrayRef = useRef([""]);
@@ -119,6 +119,7 @@ const BoardCreate = () => {
 
   const handlePost = () => {
     if (categoryValue === "") {
+      alert("카테고리를 선택해주세요");
       window.scrollTo(0, 0);
       return;
     }
@@ -132,7 +133,9 @@ const BoardCreate = () => {
       return;
     }
 
-    createBoard();
+    if (window.confirm("작성하시겠습니까?")) {
+      createBoard();
+    }
   };
 
   const data = {
@@ -183,6 +186,7 @@ const BoardCreate = () => {
           <ClassificationDiv>
             <CreateDropdown
               setCategoryValue={setCategoryValue}
+              categoryValue={categoryValue}
             ></CreateDropdown>
           </ClassificationDiv>
           <div className="postDiv">제목</div>

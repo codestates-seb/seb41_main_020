@@ -54,7 +54,7 @@ public class ShowReservationService {
 
     }
 
-    public Optional<ShowReservation> findShowReservation(Long showId, Long memberId){
+    public List<ShowReservation> findShowReservation(Long showId, Long memberId){
         return showReservationRepository.findByShowIdAndMemberId(showId, memberId);
     }
     

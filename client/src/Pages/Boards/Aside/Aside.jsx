@@ -53,33 +53,41 @@ const SideList = styled.div`
 
 const Aside = () => {
   const { pathname } = useLocation();
+  console.log(123);
+  console.log(location.pathname);
   return (
     <Side>
       <SideList>
         <Link
-          className={pathname === "/board/free" ? "thisLinkNav" : "linkNav"}
+          className={
+            location.pathname.includes("free") ? "thisLinkNav" : "linkNav"
+          }
           to="/board/free?category=자유게시판&status=최신순&page=1&size=10"
         >
           자유게시판
         </Link>
         <br />
         <Link
-          className={pathname === "/board/employ" ? "thisLinkNav" : "linkNav"}
+          className={
+            location.pathname.includes("employ") ? "thisLinkNav" : "linkNav"
+          }
           to="/board/employ?category=구인게시판&status=최신순&page=1&size=10"
         >
           구인게시판
         </Link>
         <br />
         <Link
-          className={pathname === "/board/request" ? "thisLinkNav" : "linkNav"}
-          to="/board/request?category=요청게시판&status=최신순&page=1&size=10"
+          className={
+            location.pathname.includes("request") ? "thisLinkNav" : "linkNav"
+          }
+          to="/board/request?category=초청게시판&status=최신순&page=1&size=10"
         >
           초청게시판
         </Link>
         <br />
         <Link
           className={
-            pathname === "/board/advertise" ? "thisLinkNav" : "linkNav"
+            location.pathname.includes("advertise") ? "thisLinkNav" : "linkNav"
           }
           to="/board/advertise?category=홍보게시판&status=최신순&page=1&size=10"
         >
@@ -87,7 +95,9 @@ const Aside = () => {
         </Link>
         <br />
         <Link
-          className={pathname === "/board/review" ? "thisLinkNav" : "linkNav"}
+          className={
+            location.pathname.includes("review") ? "thisLinkNav" : "linkNav"
+          }
           to="/board/review?category=후기게시판&status=최신순&page=1&size=10"
         >
           후기게시판
