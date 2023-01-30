@@ -257,9 +257,20 @@ export default function SearchOptions({ searchURI, setSearchURI }) {
   const [searchParams] = useSearchParams();
   const queryParams = [...searchParams.entries()];
 
+  const dateOffsetter = (date) => {
+    const offset = 1000 * 60 * 60 * 9;
+    const dateOffset = new Date(date.getTime() + offset);
+    const newDateString = dateOffset
+      .toISOString()
+      .replace("T", " ")
+      .split(".")[0]
+      .substring(0, 10);
+    return newDateString;
+  };
+
   const additionalParams = [
-    dateSelectActive && ["start", `${startDate.toISOString().split("T")[0]}`],
-    dateSelectActive && ["end", `${endDate.toISOString().split("T")[0]}`],
+    dateSelectActive && ["start", `${dateOffsetter(startDate)}`],
+    dateSelectActive && ["end", `${dateOffsetter(endDate)}`],
     location && ["address", location],
     ["category", category],
   ];
