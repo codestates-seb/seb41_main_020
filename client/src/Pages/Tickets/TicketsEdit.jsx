@@ -367,8 +367,8 @@ export default function TicketsEdit() {
       function (result, status) {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          setLatitude(result[0].x);
-          setLongitude(result[0].y);
+          setLongitude(result[0].x);
+          setLatitude(result[0].y);
         }
       },
       [place]
