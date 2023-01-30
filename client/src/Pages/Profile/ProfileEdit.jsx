@@ -401,7 +401,6 @@ export default function ProfileEdit() {
     onError: fetchDataOnError,
     retry: false,
   });
-  console.log(profileData);
 
   return (
     <>
