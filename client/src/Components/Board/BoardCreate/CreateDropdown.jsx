@@ -104,6 +104,14 @@ const CreateDropdown = ({ setCategoryValue, categoryValue }) => {
             >
               홍보게시판
             </li>
+            <li
+              role="presentation"
+              onClick={() => {
+                handleDropdown("후기게시판");
+              }}
+            >
+              후기게시판
+            </li>
           </ul>
         </DropdownContainer>
       </SelectButton>
