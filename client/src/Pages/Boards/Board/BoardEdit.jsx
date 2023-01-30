@@ -161,7 +161,7 @@ const BoardEdit = () => {
       return;
     }
 
-    if (contentValue === "<p><br></p>") {
+    if (contentValue.length < 1 || contentValue === "<p><br></p>") {
       window.scrollTo(0, 300);
       return;
     }

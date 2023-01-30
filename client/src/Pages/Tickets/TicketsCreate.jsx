@@ -293,6 +293,13 @@ export default function TicketsCreate() {
       detailPlaceRef.current.focus();
       return;
     }
+
+    if (startDate > endDate) {
+      alert("시작일과 종료일을 확인해주세요");
+      window.scrollTo(0, 900);
+      return;
+    }
+
     if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
