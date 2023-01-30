@@ -63,12 +63,13 @@ public class Member extends BaseTime {
         this.coordinate = coordinate;
     }
 
-    public Member(Long id, String email, String password, Profile profile, List<String> roles){
+    public Member(Long id, String email, String password, Profile profile, List<String> roles, OAuthStatus status){
         this.id = id;
         this.email = email;
         this.password = password;
         this.profile = profile;
         this.roles = roles;
+        this.oAuthStatus = status;
     }
 
     public void setPassword(String encryptedPassword){
