@@ -306,7 +306,7 @@ export default function TicketsEdit() {
       window.scrollTo(0, 900);
       return;
     }
-    
+
     if (startTime === "" || startTime > 24) {
       startTimeRef.current.focus();
       return;
@@ -400,40 +400,6 @@ export default function TicketsEdit() {
       alert("이미지 업로드에 실패하였습니다");
     }
   };
-  useEffect(() => {
-    if (!userId) {
-      navigate("/notFound");
-    }
-  }, []);
-
-  const getEditTickets = async () => {
-    const response = await instance({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_URI}/shows/${ticketData.id}`,
-    });
-    return response.data;
-  };
-
-  const getEditTicketsOnSuccess = (response) => {
-    if (response.data.sellerId !== userId) {
-      navigate("/notFound");
-    }
-  };
-
-  const getEditTicketsOnError = (response) => {
-    if (response.response.status === 400) {
-      navigate("/notFound");
-    }
-  };
-
-  const { isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["getEditTickets"],
-    queryFn: getEditTickets,
-    onSuccess: getEditTicketsOnSuccess,
-    onError: getEditTicketsOnError,
-    retry: false,
-  });
-  /////////////////////////////////////////////////////
 
   useEffect(() => {
     if (!userId) {
@@ -468,7 +434,6 @@ export default function TicketsEdit() {
     onError: getEditTicketsOnError,
     retry: false,
   });
-  /////////////////////////////////////////////////////
 
   return (
     <PageWrapper>
