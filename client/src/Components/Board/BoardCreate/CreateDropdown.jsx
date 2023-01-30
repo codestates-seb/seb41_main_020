@@ -55,9 +55,9 @@ const DropdownContainer = styled.div`
   }
 `;
 
-const CreateDropdown = ({ setCategoryValue }) => {
+const CreateDropdown = ({ setCategoryValue, categoryValue }) => {
   const [toggle, setToggle] = useState(false);
-  const [value, setValue] = useState("게시판 선택");
+  const [value, setValue] = useState("자유게시판");
 
   const handleDropdown = (props) => {
     setValue(props);
@@ -68,7 +68,7 @@ const CreateDropdown = ({ setCategoryValue }) => {
   return (
     <DropdownDiv>
       <SelectButton type="button" onClick={() => setToggle(!toggle)}>
-        {value}
+        {categoryValue === "" ? value : categoryValue}
 
         <DropdownContainer className={toggle ? "open" : "close"}>
           <ul>
@@ -91,7 +91,7 @@ const CreateDropdown = ({ setCategoryValue }) => {
             <li
               role="presentation"
               onClick={() => {
-                handleDropdown("요청게시판");
+                handleDropdown("초청게시판");
               }}
             >
               초청게시판

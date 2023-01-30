@@ -98,7 +98,7 @@ const MobileAside = () => {
           }
           onClick={() => {
             navigate(
-              "/board/request?category=요청게시판&status=최신순&page=1&size=10"
+              "/board/request?category=초청게시판&status=최신순&page=1&size=10"
             );
           }}
         >

@@ -4,6 +4,7 @@ import codestates.frogroup.indiego.config.AES128Config;
 import codestates.frogroup.indiego.domain.common.embedding.Coordinate;
 import codestates.frogroup.indiego.domain.common.utils.CustomBeanUtils;
 import codestates.frogroup.indiego.domain.member.entity.Member;
+import codestates.frogroup.indiego.domain.member.entity.Profile;
 import codestates.frogroup.indiego.domain.member.enums.ProfileImage;
 import codestates.frogroup.indiego.domain.member.repository.MemberRepository;
 import codestates.frogroup.indiego.global.email.event.MemberRegistrationApplicationEvent;
@@ -31,6 +32,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static codestates.frogroup.indiego.domain.member.entity.Member.OAuthStatus.NORMAL;
+import static codestates.frogroup.indiego.domain.member.entity.Member.OAuthStatus.OAUTH;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -50,6 +54,7 @@ public class MemberService {
         makeSecretPassword(member);
         createRoles(member);
         member.setCoordinate(new Coordinate(null,null));
+        member.setOAuthStatus(NORMAL);
 
         Member savedMember = memberRepository.save(member);
 
@@ -61,12 +66,19 @@ public class MemberService {
 
     // OAuth2 인증 완료후 회원가입 및 업데이트
     public Member createOauth2Member(OAuthUserProfile userProfile, List<String> roles) {
-        Member member = memberRepository.findByEmail(userProfile.getEmail())
-                .map(m -> m.oauthUpdate(userProfile.getName(), userProfile.getEmail(),
-                        userProfile.getImage(), roles)) // DB에 회원이 있을때
-                .orElse(userProfile.createOauth2Member(userProfile.getName(),
-                        userProfile.getEmail(), userProfile.getImage(), roles)); // DB에 회원이 없을때
-        return memberRepository.save(member);
+        Optional<Member> member = memberRepository.findByEmail(userProfile.getEmail());
+        if(member.isPresent()){
+            if(member.get().getOAuthStatus().equals(OAUTH)){ // OAuth2 회원가입이 되어있는 경우 (업데이트)
+                return member.map(m -> m.oauthUpdate(userProfile.getName(), userProfile.getEmail(),
+                        userProfile.getImage(), roles, OAUTH)).orElse(null);
+            } else { // 일반회원 가입이 되어있는 경우
+                throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+            }
+        } else {
+            Member oauth2Member = userProfile.createOauth2Member(userProfile.getName(), userProfile.getEmail(),
+                    userProfile.getImage(), roles, OAUTH);
+            return memberRepository.save(oauth2Member);
+        }
     }
 
     public Member updateMember(Member member, Long memberId) {

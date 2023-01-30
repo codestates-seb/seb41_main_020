@@ -30,11 +30,12 @@ public class ShowCommentService {
     private final ShowReservationService showReservationService;
     private final RedisKey redisKey;
     public ShowComment createShowComment(ShowComment showComment, Show show, Member member){
-        Optional<ShowReservation>  optionalShowReservation = showReservationService.findShowReservation(
+        List<ShowReservation>  optionalShowReservation = showReservationService.findShowReservation(
                 show.getId(), member.getId()
         );
-        optionalShowReservation.orElseThrow(()-> new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_NOT_FOUND));
-
+       if(optionalShowReservation.size()==0) {
+           new BusinessLogicException(ExceptionCode.SHOW_RESERVATION_NOT_FOUND);
+       }
         Optional<ShowComment> optionalShowComment = Optional.ofNullable(
                 showCommentRepository.findByShowIdAndMemberId(show.getId(), member.getId()));
 

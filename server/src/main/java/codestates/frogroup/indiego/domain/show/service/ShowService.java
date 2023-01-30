@@ -128,11 +128,9 @@ public class ShowService {
 
 
     //판매자용 공연 조회
-    public Page<Show> findShowOfSeller(Long memberId, Pageable pageable){
+    public List<Show> findShowOfSeller(Long memberId){
 
-        pageable = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
-
-        return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId, pageable);
+        return showRepository.findByMember_IdOrderByCreatedAtDesc(memberId);
     }
 
     public Integer getRevenue(Long showId){

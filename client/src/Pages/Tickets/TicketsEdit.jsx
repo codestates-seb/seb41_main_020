@@ -434,7 +434,6 @@ export default function TicketsEdit() {
     onError: getEditTicketsOnError,
     retry: false,
   });
-  /////////////////////////////////////////////////////
 
   return (
     <PageWrapper>
