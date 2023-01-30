@@ -74,7 +74,7 @@ const Aside = () => {
           className={pathname === "/board/request" ? "thisLinkNav" : "linkNav"}
           to="/board/request?category=요청게시판&status=최신순&page=1&size=10"
         >
-          요청게시판
+          초청게시판
         </Link>
         <br />
         <Link
