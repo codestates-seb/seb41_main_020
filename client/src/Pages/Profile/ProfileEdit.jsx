@@ -207,15 +207,14 @@ const EditContainer = styled.div`
       display: flex;
       align-items: center;
 
-      > .location-input {
-        font-size: ${dtFontSize.small};
-        height: 25px;
-        width: 250px;
-        margin-right: 10px;
+      > .location {
+        color: ${sub.sub800};
+        font-size: ${dtFontSize.medium};
+        font-weight: 600;
+        margin-right: 20px;
 
         @media screen and (max-width: ${breakpoint.mobile}) {
-          font-size: ${mbFontSize.small};
-          width: 150px;
+          font-size: ${mbFontSize.medium};
         }
       }
     }
@@ -252,26 +251,6 @@ const EditContainerSubTitle = styled.h3`
 
   @media screen and (max-width: ${breakpoint.mobile}) {
     font-size: ${mbFontSize.large};
-  }
-`;
-
-const EditProfileImageButton = styled.button`
-  all: unset;
-  border-radius: 100%;
-  cursor: pointer;
-  height: 40px;
-  text-align: center;
-  width: 40px;
-  position: absolute;
-  background-color: ${(props) => props.buttonColor};
-  bottom: -20px;
-  right: -20px;
-
-  @media screen and (max-width: ${breakpoint.mobile}) {
-    height: 26px;
-    width: 26px;
-    right: -13px;
-    bottom: -13px;
   }
 `;
 
@@ -422,6 +401,7 @@ export default function ProfileEdit() {
     onError: fetchDataOnError,
     retry: false,
   });
+  console.log(profileData);
 
   return (
     <>
@@ -490,7 +470,7 @@ export default function ProfileEdit() {
                   우리 동네
                 </EditContainerSubTitle>
                 <div>
-                  <input className="location-input" defaultValue={address} />
+                  <span className="location">{address}</span>
                   <PillButton
                     color={buttonColor}
                     hoverColor={buttonHoverColor}
