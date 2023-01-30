@@ -462,8 +462,6 @@ export default function TicketsDetail() {
   const params = useParams();
   const navigate = useNavigate();
 
-  console.log("예약 날짜", date);
-
   useEffect(() => {
     setDateError(false);
     setIsSameUser(false);

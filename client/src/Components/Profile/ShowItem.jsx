@@ -136,7 +136,6 @@ const ItemContentContainer = styled.div`
 export default function ShowItem({ reservationData }) {
   const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
   const navigate = useNavigate();
-  console.log(reservationData);
 
   const deleteReservation = () => {
     return instance({
