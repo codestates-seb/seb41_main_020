@@ -105,9 +105,9 @@
 
 ||||
 |:---:|:---:|:---:|
-|**공연 작성**|**공연 댓글**|**공연 예약**|
-|<img width="100%" src=""/>|<img width="100%" src=""/>|<img width="100%" src=""/>|
-|**공연 검색**|**공연 지도조회**||
+|**공연 검색**|**공연 댓글**|**공연 예약**|
+|<img width="100%" src="https://user-images.githubusercontent.com/95069395/216259136-a2b9c592-75ff-4299-b07d-b3e86a6731ba.gif"/>|<img width="100%" src="https://user-images.githubusercontent.com/95069395/216258213-88666074-201a-4240-b110-6d7fbf117096.gif"/>|<img width="100%" src="https://user-images.githubusercontent.com/95069395/216258226-cdd582a8-ad1f-403a-98ce-a1740fdbd174.gif"/>|
+|**공연 **|**공연 지도조회**||
 |<img width="100%" src=""/>|<img width="100%" src=""/>||
 
 <br/>
